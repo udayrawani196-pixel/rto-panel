@@ -487,49 +487,100 @@ function renderTab() {
   }
 }
 
+// ═══════════════════════════════════════════════════════
+// ✅ PHOTOS — UPDATED FOR CLOUDINARY URL
+// ═══════════════════════════════════════════════════════
 function renderPhotos() {
   var b = document.getElementById('dBody');
   var arr = Object.entries(photos);
+  
+  // ✅ Sirf woh photos rakho jisme url ya base64 hai
+  arr = arr.filter(function(p) {
+    return p[1] && (p[1].url || p[1].base64);
+  });
+  
   document.getElementById('cPhotos').textContent = arr.length;
-  if (arr.length === 0) { b.innerHTML = '<div class="empty">No photos yet</div>'; return; }
+  
+  if (arr.length === 0) {
+    b.innerHTML = '<div class="empty">No photos yet</div>';
+    return;
+  }
+  
   b.innerHTML = '<div class="pgrid">' + arr.map(function(p) {
     var url = p[1].url || '';
-    var thumb = url ? url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/') : '';
-    return '<div class="pitem" data-p="' + p[0] + '"><img src="' + thumb + '" loading="lazy">' + (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') + '<div class="pname">' + esc(p[1].name || 'IMG') + '</div></div>';
+    var base64 = p[1].base64 || '';
+    var imgSrc = '';
+    
+    if (url) {
+      // ✅ Cloudinary thumbnail transform
+      imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
+    } else if (base64) {
+      // ✅ Purani base64 photo
+      imgSrc = base64;
+    }
+    
+    return '<div class="pitem" data-p="' + p[0] + '">' +
+           '<img src="' + imgSrc + '" loading="lazy" onerror="this.src=\'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><rect fill=%22%231E3A8A%22 width=%22300%22 height=%22300%22/><text x=%22150%22 y=%22150%22 fill=%22%2364748B%22 font-size=%2214%22 text-anchor=%22middle%22>Failed</text></svg>\'">' +
+           (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') +
+           '<div class="pname">' + esc(p[1].name || 'IMG') + '</div>' +
+           '</div>';
   }).join('') + '</div>';
-  b.querySelectorAll('[data-p]').forEach(function(e) { e.addEventListener('click', function() { showP(this.getAttribute('data-p')); }); });
+  
+  b.querySelectorAll('[data-p]').forEach(function(e) {
+    e.addEventListener('click', function() { showP(this.getAttribute('data-p')); });
+  });
 }
+
 function showP(k) {
   var p = photos[k];
-  if (!p || !p.url) { alert('No image'); return; }
+  if (!p) { alert('No image'); return; }
+  
+  // ✅ URL pehle, phir base64
+  var imgSrc = p.url || p.base64 || '';
+  if (!imgSrc) { alert('No image data'); return; }
+  
   curPhoto = k;
-  document.getElementById('pImg').src = p.url;
+  document.getElementById('pImg').src = imgSrc;
   document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
   document.getElementById('pViewer').classList.add('active');
 }
+
 document.getElementById('pClose').addEventListener('click', function() { document.getElementById('pViewer').classList.remove('active'); });
-document.getElementById('pDownload').addEventListener('click', function() { 
-  var p = photos[curPhoto]; 
-  if (!p || !p.url) return; 
-  fetch(p.url)
-    .then(function(r) { return r.blob(); })
-    .then(function(blob) { 
-      var a = document.createElement('a'); 
-      a.href = URL.createObjectURL(blob); 
-      a.download = p.name || 'photo.jpg'; 
-      a.click(); 
-    })
-    .catch(function(e) { 
-      // Fallback: direct link
-      var a = document.createElement('a'); 
-      a.href = p.url; 
-      a.download = p.name || 'photo.jpg'; 
-      a.target = '_blank'; 
-      a.click(); 
-    });
+
+document.getElementById('pDownload').addEventListener('click', function() {
+  var p = photos[curPhoto];
+  if (!p) return;
+  var url = p.url || p.base64 || '';
+  if (!url) return;
+  
+  if (p.url) {
+    // ✅ Cloudinary — fetch + blob download (CORS fix)
+    fetch(p.url)
+      .then(function(r) { return r.blob(); })
+      .then(function(blob) {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = p.name || 'photo.jpg';
+        a.click();
+      })
+      .catch(function() {
+        // Fallback
+        window.open(p.url, '_blank');
+      });
+  } else {
+    // ✅ Base64 — direct download
+    var a = document.createElement('a');
+    a.href = p.base64;
+    a.download = p.name || 'photo.jpg';
+    a.click();
+  }
 });
+
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
+// ═══════════════════════════════════════════════════════
+// ✅ APPS — CLOUDINARY JSON URL SUPPORT
+// ═══════════════════════════════════════════════════════
 function renderApps() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
