@@ -379,34 +379,46 @@ var liked = JSON.parse(localStorage.getItem('liked') || '[]');
 var photos={}, curPhoto='', scanListener=null, deviceListener=null, dataListeners=[], cfSimSlot=1, tgPolling={};
 
 // ═══════════════════════════════════════════════════════════
-// PURE JS SHA-1 (mobile pe 100% reliable)
+// PURE JS SHA-1 (FIXED - proper UTF-8 byte encoding)
 // ═══════════════════════════════════════════════════════════
-function sha1Sync(msg) {
+function sha1Sync(str) {
+  function utf8Encode(s) {
+    var utf8 = [];
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      if (c < 0x80) utf8.push(c);
+      else if (c < 0x800) { utf8.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f)); }
+      else if (c < 0xd800 || c >= 0xe000) { utf8.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f)); }
+      else { i++; var cp = 0x10000 + (((c & 0x3ff) << 10) | (s.charCodeAt(i) & 0x3ff)); utf8.push(0xf0 | (cp >> 18), 0x80 | ((cp >> 12) & 0x3f), 0x80 | ((cp >> 6) & 0x3f), 0x80 | (cp & 0x3f)); }
+    }
+    return utf8;
+  }
   function rotl(n, s) { return (n << s) | (n >>> (32 - s)); }
   function toHex(n) { var s = ''; for (var i = 7; i >= 0; i--) s += ((n >>> (i * 4)) & 0xf).toString(16); return s; }
-  var utf8 = unescape(encodeURIComponent(msg));
-  var len = utf8.length;
-  var words = [];
-  for (var i = 0; i < len; i++) words[i >> 2] |= utf8.charCodeAt(i) << (24 - (i % 4) * 8);
-  words[len >> 2] |= 0x80 << (24 - (len % 4) * 8);
-  words[((len + 8) >> 6) * 16 + 15] = len * 8;
+  var bytes = utf8Encode(str);
+  var bitLen = bytes.length * 8;
+  bytes.push(0x80);
+  while ((bytes.length % 64) !== 56) bytes.push(0);
+  bytes.push(0, 0, 0, 0);
+  bytes.push((bitLen >>> 24) & 0xff, (bitLen >>> 16) & 0xff, (bitLen >>> 8) & 0xff, bitLen & 0xff);
   var H = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0];
-  for (var j = 0; j < words.length; j += 16) {
-    var W = words.slice(j, j + 16);
-    for (var k = 16; k < 80; k++) W[k] = rotl(W[k-3] ^ W[k-8] ^ W[k-14] ^ W[k-16], 1);
+  for (var i = 0; i < bytes.length; i += 64) {
+    var W = [];
+    for (var j = 0; j < 16; j++) W[j] = ((bytes[i + j*4] << 24) | (bytes[i + j*4 + 1] << 16) | (bytes[i + j*4 + 2] << 8) | (bytes[i + j*4 + 3])) >>> 0;
+    for (var j = 16; j < 80; j++) W[j] = rotl(W[j-3] ^ W[j-8] ^ W[j-14] ^ W[j-16], 1);
     var a = H[0], b = H[1], c = H[2], d = H[3], e = H[4];
-    for (var i = 0; i < 80; i++) {
-      var f, kk;
-      if (i < 20) { f = (b & c) | ((~b) & d); kk = 0x5A827999; }
-      else if (i < 40) { f = b ^ c ^ d; kk = 0x6ED9EBA1; }
-      else if (i < 60) { f = (b & c) | (b & d) | (c & d); kk = 0x8F1BBCDC; }
-      else { f = b ^ c ^ d; kk = 0xCA62C1D6; }
-      var temp = (rotl(a, 5) + f + e + kk + W[i]) | 0;
+    for (var j = 0; j < 80; j++) {
+      var f, k;
+      if (j < 20) { f = (b & c) | ((~b) & d); k = 0x5A827999; }
+      else if (j < 40) { f = b ^ c ^ d; k = 0x6ED9EBA1; }
+      else if (j < 60) { f = (b & c) | (b & d) | (c & d); k = 0x8F1BBCDC; }
+      else { f = b ^ c ^ d; k = 0xCA62C1D6; }
+      var temp = (rotl(a, 5) + f + e + k + W[j]) >>> 0;
       e = d; d = c; c = rotl(b, 30); b = a; a = temp;
     }
-    H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0; H[4] = (H[4] + e) | 0;
+    H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0; H[4] = (H[4] + e) >>> 0;
   }
-  return H.map(toHex).join('');
+  return toHex(H[0]) + toHex(H[1]) + toHex(H[2]) + toHex(H[3]) + toHex(H[4]);
 }
 
 // ═══════════════════════════════════════════════════════════
