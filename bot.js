@@ -85,7 +85,7 @@ async function answerCb(id, text) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// 📦 USER DATA (Firebase)
+// 📦 USER DATA
 // ═══════════════════════════════════════════════════════════
 async function getUser(chatId) {
   const d = await fbGet(`telegram_bot_users/${chatId}`);
@@ -111,13 +111,8 @@ function mainKeyboard() {
     [{ text: '🆘 Support', callback_data: 'support' }]
   ];
 }
-
 function backKeyboard() {
   return [[{ text: '« Back to Menu', callback_data: 'menu' }]];
-}
-
-function yesNoKeyboard(yesData, noData) {
-  return [[{ text: '✅ YES', callback_data: yesData }, { text: '❌ NO', callback_data: noData }]];
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -130,7 +125,7 @@ async function showMenu(chatId, msgId) {
   const fwdCount = Object.keys(user.forwardNumbers || {}).length;
   const session = user.activeSession;
   const status = session ? '🟢 Session Active' : '⚪ No Session';
-  
+
   const text =
     `🤖 <b>Auto SMS Forward Bot</b>\n\n` +
     `🔥 Firebases: <b>${fbCount}</b>\n` +
@@ -138,7 +133,7 @@ async function showMenu(chatId, msgId) {
     `📱 Numbers: <b>${fwdCount}</b>\n` +
     `📊 Status: <b>${status}</b>\n\n` +
     `<i>Buttons se setup karo</i>`;
-  
+
   if (msgId) return editMsg(chatId, msgId, text, mainKeyboard());
   return sendMsg(chatId, text, mainKeyboard());
 }
@@ -155,14 +150,13 @@ async function askAddFirebase(chatId, msgId) {
     backKeyboard()
   );
 }
-
 async function handleAddFirebaseUrl(chatId, text) {
   let url = text.trim().replace(/\/+$/, '');
   if (!url.startsWith('http')) url = 'https://' + url;
   url = url.replace('.firebasedatabase.app', '.firebaseio.com');
-  
+
   await sendMsg(chatId, `⏳ Testing Firebase...\n<code>${url}</code>`);
-  
+
   try {
     const res = await fetch(`${url}/.json?shallow=true`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -171,22 +165,19 @@ async function handleAddFirebaseUrl(chatId, text) {
     await updateUser(chatId, { state: null });
     return sendMsg(chatId, `❌ <b>Failed!</b>\n\n${e.message}\n\nCheck URL.`, backKeyboard());
   }
-  
-  await updateUser(chatId, {
-    state: { action: 'awaiting_fb_name', fbUrl: url }
-  });
+
+  await updateUser(chatId, { state: { action: 'awaiting_fb_name', fbUrl: url } });
   await sendMsg(chatId, `✅ Connected!\n\nAb is Firebase ka <b>naam</b> bhejo (jaise "RTO V2"):`);
 }
-
 async function handleAddFirebaseName(chatId, name) {
   const user = await getUser(chatId);
   const state = user.state || {};
   const fbUrl = state.fbUrl;
   const firebases = user.firebases || {};
   const newIndex = String(Object.keys(firebases).length + 1);
-  
+
   firebases[newIndex] = { url: fbUrl, name: name.trim(), addedAt: Date.now() };
-  
+
   await updateUser(chatId, { firebases, state: null });
   await sendMsg(chatId,
     `✅ <b>Firebase Added!</b>\n\n` +
@@ -209,7 +200,6 @@ async function askAddChannel(chatId, msgId) {
     backKeyboard()
   );
 }
-
 async function handleAddChannelId(chatId, text) {
   const id = text.trim();
   if (!id.startsWith('-100')) {
@@ -218,15 +208,14 @@ async function handleAddChannelId(chatId, text) {
   await updateUser(chatId, { state: { action: 'awaiting_ch_name', chId: id } });
   await sendMsg(chatId, `✅ Channel ID: <code>${id}</code>\n\nAb channel ka <b>naam</b> bhejo:`);
 }
-
 async function handleAddChannelName(chatId, name) {
   const user = await getUser(chatId);
   const state = user.state || {};
   const channels = user.channels || {};
   const newIndex = String(Object.keys(channels).length + 1);
-  
+
   channels[newIndex] = { id: state.chId, name: name.trim(), addedAt: Date.now() };
-  
+
   await updateUser(chatId, { channels, state: null });
   await sendMsg(chatId,
     `✅ <b>Channel Added!</b>\n\n` +
@@ -248,7 +237,6 @@ async function askForwardNo(chatId, msgId) {
     backKeyboard()
   );
 }
-
 async function handleForwardNo(chatId, text) {
   const num = text.trim().replace(/[^\d+]/g, '');
   if (num.length < 10) {
@@ -269,19 +257,18 @@ async function startSessionFlow(chatId, msgId) {
   const user = await getUser(chatId);
   const firebases = user.firebases || {};
   const keys = Object.keys(firebases);
-  
+
   if (keys.length === 0) {
     return editMsg(chatId, msgId, `❌ Pehle <b>Add Firebase</b> karo!`, backKeyboard());
   }
-  
+
   const buttons = keys.map(function(k) {
     return [{ text: `🔥 ${firebases[k].name}`, callback_data: `sess_fb_${k}` }];
   });
   buttons.push([{ text: '« Back to Menu', callback_data: 'menu' }]);
-  
+
   return editMsg(chatId, msgId, `▶️ <b>START SESSION</b>\n\nSelect Firebase:`, buttons);
 }
-
 async function sessionSelectFirebase(chatId, msgId, fbIndex) {
   await updateUser(chatId, { state: { action: 'sess_device', fbIndex } });
   await editMsg(chatId, msgId,
@@ -292,31 +279,29 @@ async function sessionSelectFirebase(chatId, msgId, fbIndex) {
     backKeyboard()
   );
 }
-
 async function sessionDeviceEntered(chatId, text) {
   const user = await getUser(chatId);
   const state = user.state || {};
   const deviceId = text.trim();
   const channels = user.channels || {};
   const keys = Object.keys(channels);
-  
+
   if (keys.length === 0) {
     await updateUser(chatId, { state: null });
     return sendMsg(chatId, `❌ Pehle <b>Add Channel</b> karo!`, backKeyboard());
   }
-  
+
   await updateUser(chatId, {
     state: { action: 'sess_channel', fbIndex: state.fbIndex, deviceId }
   });
-  
+
   const buttons = keys.map(function(k) {
     return [{ text: `📢 ${channels[k].name}`, callback_data: `sess_ch_${k}` }];
   });
   buttons.push([{ text: '« Back to Menu', callback_data: 'menu' }]);
-  
+
   await sendMsg(chatId, `✅ Device: <code>${deviceId}</code>\n\nSelect Channel:`, buttons);
 }
-
 async function sessionSelectChannel(chatId, msgId, chIndex) {
   const user = await getUser(chatId);
   const state = user.state || {};
@@ -324,11 +309,11 @@ async function sessionSelectChannel(chatId, msgId, chIndex) {
   const channels = user.channels || {};
   const fb = firebases[state.fbIndex];
   const ch = channels[chIndex];
-  
+
   if (!fb || !ch) {
     return editMsg(chatId, msgId, `❌ Selection galat. Phir se try karo.`, backKeyboard());
   }
-  
+
   const activeSession = {
     fbIndex: state.fbIndex,
     fbUrl: fb.url,
@@ -339,9 +324,9 @@ async function sessionSelectChannel(chatId, msgId, chIndex) {
     channelName: ch.name,
     startedAt: Date.now()
   };
-  
+
   await updateUser(chatId, { activeSession, state: null });
-  
+
   await editMsg(chatId, msgId,
     `🟢 <b>SESSION STARTED!</b>\n\n` +
     `🔥 Firebase: <b>${fb.name}</b>\n` +
@@ -371,20 +356,19 @@ async function showSavedFirebase(chatId, msgId) {
   const fbs = user.firebases || {};
   const keys = Object.keys(fbs);
   if (keys.length === 0) return editMsg(chatId, msgId, `💾 <b>No Firebase saved</b>`, backKeyboard());
-  
+
   let text = `💾 <b>SAVED FIREBASES</b>\n\n`;
   keys.forEach(function(k) {
     text += `<b>${k}.</b> 🔥 ${fbs[k].name}\n<code>${fbs[k].url}</code>\n\n`;
   });
   return editMsg(chatId, msgId, text, backKeyboard());
 }
-
 async function showSavedChannels(chatId, msgId) {
   const user = await getUser(chatId);
   const chs = user.channels || {};
   const keys = Object.keys(chs);
   if (keys.length === 0) return editMsg(chatId, msgId, `💾 <b>No Channels saved</b>`, backKeyboard());
-  
+
   let text = `💾 <b>SAVED CHANNELS</b>\n\n`;
   keys.forEach(function(k) {
     text += `<b>${k}.</b> 📢 ${chs[k].name}\n<code>${chs[k].id}</code>\n\n`;
@@ -401,12 +385,12 @@ async function showStatus(chatId, msgId) {
   const fbCount = Object.keys(user.firebases || {}).length;
   const chCount = Object.keys(user.channels || {}).length;
   const fwdCount = Object.keys(user.forwardNumbers || {}).length;
-  
+
   let text = `📊 <b>STATUS</b>\n\n`;
   text += `🔥 Firebases: <b>${fbCount}</b>\n`;
   text += `📢 Channels: <b>${chCount}</b>\n`;
   text += `📱 Numbers: <b>${fwdCount}</b>\n\n`;
-  
+
   if (s) {
     text += `🟢 <b>Active Session</b>\n`;
     text += `🔥 ${s.fbName}\n`;
@@ -417,7 +401,7 @@ async function showStatus(chatId, msgId) {
   } else {
     text += `⚪ <b>No active session</b>`;
   }
-  
+
   return editMsg(chatId, msgId, text, backKeyboard());
 }
 
@@ -429,14 +413,13 @@ async function delFirebase(chatId, msgId) {
   const fbs = user.firebases || {};
   const keys = Object.keys(fbs);
   if (keys.length === 0) return editMsg(chatId, msgId, `❌ No Firebase to delete`, backKeyboard());
-  
+
   const buttons = keys.map(function(k) {
     return [{ text: `🗑️ ${fbs[k].name}`, callback_data: `del_fb_${k}` }];
   });
   buttons.push([{ text: '« Back', callback_data: 'menu' }]);
   return editMsg(chatId, msgId, `🗑️ <b>DELETE FIREBASE</b>\n\nSelect one:`, buttons);
 }
-
 async function doDelFirebase(chatId, msgId, index) {
   const user = await getUser(chatId);
   const fbs = user.firebases || {};
@@ -444,20 +427,18 @@ async function doDelFirebase(chatId, msgId, index) {
   await updateUser(chatId, { firebases: fbs });
   return editMsg(chatId, msgId, `✅ Firebase deleted!`, backKeyboard());
 }
-
 async function delChannel(chatId, msgId) {
   const user = await getUser(chatId);
   const chs = user.channels || {};
   const keys = Object.keys(chs);
   if (keys.length === 0) return editMsg(chatId, msgId, `❌ No Channel to delete`, backKeyboard());
-  
+
   const buttons = keys.map(function(k) {
     return [{ text: `🗑️ ${chs[k].name}`, callback_data: `del_ch_${k}` }];
   });
   buttons.push([{ text: '« Back', callback_data: 'menu' }]);
   return editMsg(chatId, msgId, `🗑️ <b>DELETE CHANNEL</b>\n\nSelect one:`, buttons);
 }
-
 async function doDelChannel(chatId, msgId, index) {
   const user = await getUser(chatId);
   const chs = user.channels || {};
@@ -483,9 +464,9 @@ async function handleCallback(cb) {
   const chatId = cb.message.chat.id;
   const msgId = cb.message.message_id;
   const data = cb.data;
-  
+
   try { await answerCb(cb.id); } catch (e) {}
-  
+
   if (data === 'menu') return showMenu(chatId, msgId);
   if (data === 'add_fb') return askAddFirebase(chatId, msgId);
   if (data === 'add_ch') return askAddChannel(chatId, msgId);
@@ -498,55 +479,43 @@ async function handleCallback(cb) {
   if (data === 'del_fb') return delFirebase(chatId, msgId);
   if (data === 'del_ch') return delChannel(chatId, msgId);
   if (data === 'support') return showSupport(chatId, msgId);
-  
-  if (data.startsWith('sess_fb_')) {
-    return sessionSelectFirebase(chatId, msgId, data.replace('sess_fb_', ''));
-  }
-  if (data.startsWith('sess_ch_')) {
-    return sessionSelectChannel(chatId, msgId, data.replace('sess_ch_', ''));
-  }
-  if (data.startsWith('del_fb_')) {
-    return doDelFirebase(chatId, msgId, data.replace('del_fb_', ''));
-  }
-  if (data.startsWith('del_ch_')) {
-    return doDelChannel(chatId, msgId, data.replace('del_ch_', ''));
-  }
+
+  if (data.startsWith('sess_fb_')) return sessionSelectFirebase(chatId, msgId, data.replace('sess_fb_', ''));
+  if (data.startsWith('sess_ch_')) return sessionSelectChannel(chatId, msgId, data.replace('sess_ch_', ''));
+  if (data.startsWith('del_fb_')) return doDelFirebase(chatId, msgId, data.replace('del_fb_', ''));
+  if (data.startsWith('del_ch_')) return doDelChannel(chatId, msgId, data.replace('del_ch_', ''));
 }
 
 // ═══════════════════════════════════════════════════════════
 // 📨 CHANNEL MESSAGE HANDLER
 // ═══════════════════════════════════════════════════════════
 async function handleChannelMessage(msg) {
-  const chatId = msg.chat.id;
   const text = msg.text || msg.caption || '';
   if (!text) return;
-  
+
   const channelId = String(msg.chat.id);
-  
-  // Find user with active session for this channel
+
   const allUsers = await fbGet('telegram_bot_users') || {};
-  
+
   for (const userId of Object.keys(allUsers)) {
     const user = allUsers[userId];
     const s = user.activeSession;
     if (!s) continue;
     if (String(s.channelId) !== channelId) continue;
-    
-    // Parse message
+
     const toM = text.match(/TO[:\s]+([+\d]+)/i);
     const bodyM = text.match(/BODY[:\s]+([\s\S]+)/i);
     if (!toM || !bodyM) continue;
-    
+
     const toNum = toM[1].trim();
     const body = bodyM[1].trim();
-    
+
     try {
       await pushToDevice(s.fbUrl, s.deviceId, {
         to: toNum, message: body, sim_slot: 1,
         status: 'pending', timestamp: Date.now(), source: 'telegram_channel'
       });
-      
-      // Notify user
+
       await sendMsg(userId,
         `✅ <b>SMS Queued!</b>\n\n` +
         `📱 To: <code>${toNum}</code>\n` +
@@ -567,7 +536,7 @@ async function handlePrivateMessage(msg) {
   const chatId = msg.chat.id;
   const text = (msg.text || '').trim();
   if (!text) return;
-  
+
   if (text === '/start' || text === '/menu') {
     const user = await getUser(chatId);
     if (!user.createdAt) {
@@ -575,7 +544,7 @@ async function handlePrivateMessage(msg) {
     }
     return showMenu(chatId);
   }
-  
+
   if (text === '/help') {
     return sendMsg(chatId,
       `🤖 <b>Auto SMS Forward Bot</b>\n\n` +
@@ -587,18 +556,17 @@ async function handlePrivateMessage(msg) {
       `<code>TO: 9876543210, BODY: Hello</code>`
     );
   }
-  
+
   const user = await getUser(chatId);
   const state = user.state || {};
-  
+
   if (state.action === 'awaiting_fb_url') return handleAddFirebaseUrl(chatId, text);
   if (state.action === 'awaiting_fb_name') return handleAddFirebaseName(chatId, text);
   if (state.action === 'awaiting_ch_id') return handleAddChannelId(chatId, text);
   if (state.action === 'awaiting_ch_name') return handleAddChannelName(chatId, text);
   if (state.action === 'awaiting_fwd_no') return handleForwardNo(chatId, text);
   if (state.action === 'sess_device') return sessionDeviceEntered(chatId, text);
-  
-  // If has active session and sent TO:..., handle direct
+
   if (user.activeSession && /TO[:\s]+\d/i.test(text)) {
     const s = user.activeSession;
     const toM = text.match(/TO[:\s]+([+\d]+)/i);
@@ -609,11 +577,11 @@ async function handlePrivateMessage(msg) {
           to: toM[1].trim(), message: bodyM[1].trim(), sim_slot: 1,
           status: 'pending', timestamp: Date.now(), source: 'telegram_dm'
         });
-        return sendMsg(chatId, `✅ <b>Queued!</b>\n📱 ${toM[1]}\n📝 ${bodyM[1].substring(0,80)}`);
+        return sendMsg(chatId, `✅ <b>Queued!</b>\n📱 ${toM[1]}\n📝 ${bodyM[1].substring(0, 80)}`);
       } catch (e) { return sendMsg(chatId, `❌ ${e.message}`); }
     }
   }
-  
+
   return sendMsg(chatId, `❓ Samajh nahi aaya. /help bhejo.`);
 }
 
@@ -626,7 +594,7 @@ async function poll() {
   try {
     const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?timeout=30&offset=${lastUpdateId+1}&allowed_updates=["message","callback_query","channel_post"]`);
     const data = await res.json();
-    
+
     if (data.ok && data.result && data.result.length > 0) {
       for (const u of data.result) {
         lastUpdateId = u.update_id;
@@ -646,6 +614,18 @@ async function poll() {
   } catch (e) { console.error('Polling error:', e.message); }
   setTimeout(poll, 1000);
 }
+
+// ═══════════════════════════════════════════════════════════
+// 🌐 HTTP SERVER (Web Service ke liye port)
+// ═══════════════════════════════════════════════════════════
+const http = require('http');
+const PORT = process.env.PORT || 3000;
+http.createServer(function(req, res) {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('🤖 Auto SMS Forward Bot is running!');
+}).listen(PORT, function() {
+  console.log('✅ HTTP server running on port ' + PORT);
+});
 
 // ═══════════════════════════════════════════════════════════
 // 🚀 START
